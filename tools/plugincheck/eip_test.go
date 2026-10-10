@@ -7,6 +7,7 @@ package plugincheck
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -95,7 +96,7 @@ func TestEIPWaiterFixtures(t *testing.T) {
 		args := append([]string{"eip"}, tc.args...)
 		args = append(args, "--offline", "--wait", tc.id, "--output", "json", "--lang", "en-US")
 		err := cli.Run(cli.Config{Args: args, PluginRoot: t.TempDir(), Stdout: &out, Stderr: &stderr})
-		if err != nil || !strings.Contains(stderr.String(), tc.id+": "+tc.state) {
+		if err != nil || !strings.Contains(stderr.String(), fmt.Sprintf("waiter %q: %s", tc.id, tc.state)) {
 			t.Fatalf("waiter %s: err=%v stderr=%s", tc.id, err, stderr.String())
 		}
 	}

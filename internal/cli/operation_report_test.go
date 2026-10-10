@@ -15,6 +15,7 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 )
 
+// TestReportOperationResultsWritesOneSummaryAndFailureDetails emits one aggregate summary and a quoted diagnostic for each failed target.
 func TestReportOperationResultsWritesOneSummaryAndFailureDetails(t *testing.T) {
 	results := []operationResult{
 		{Target: "ecs", Outcome: operationChanged},
@@ -32,12 +33,13 @@ func TestReportOperationResultsWritesOneSummaryAndFailureDetails(t *testing.T) {
 	if got := strings.TrimSpace(stdout.String()); got != "Plugin install complete: installed 1; already installed 1; failed 1." {
 		t.Fatalf("stdout = %q", got)
 	}
-	if got := stderr.String(); !strings.Contains(got, "vpc: plugin vpc not found in registry.") {
+	if got := stderr.String(); !strings.Contains(got, "\"vpc\": plugin \"vpc\" not found in registry.") {
 		t.Fatalf("stderr = %q, want target failure", got)
 	}
 	requireDiagnosticKey(t, err, "error.operation_batch_failed")
 }
 
+// TestOperationSummariesUseLanguage renders aggregate outcome counts using the requested locale.
 func TestOperationSummariesUseLanguage(t *testing.T) {
 	counts := operationCounts{Changed: 2, Skipped: 3, Failed: 1}
 	if got := pluginInstallSummary("en-GB", nil, counts); got != "Plugin install complete: installed 2; already installed 3; failed 1." {
@@ -48,6 +50,7 @@ func TestOperationSummariesUseLanguage(t *testing.T) {
 	}
 }
 
+// TestReportOperationResultsReportsEmptyBatch reports zero outcomes for an empty operation batch.
 func TestReportOperationResultsReportsEmptyBatch(t *testing.T) {
 	var stdout bytes.Buffer
 	if err := reportOperationResults(&stdout, &bytes.Buffer{}, nil, "en-US", pluginReinstallSummary); err != nil {
@@ -58,6 +61,7 @@ func TestReportOperationResultsReportsEmptyBatch(t *testing.T) {
 	}
 }
 
+// TestReportOperationResultsReturnsFailureDetailWriteError propagates failure-detail output errors.
 func TestReportOperationResultsReturnsFailureDetailWriteError(t *testing.T) {
 	results := []operationResult{{Target: "ecs", Outcome: operationFailed, Err: errors.New("broken")}}
 	if err := reportOperationResults(io.Discard, failingWriter{}, results, "en-US", pluginInstallSummary); err == nil {
@@ -65,6 +69,7 @@ func TestReportOperationResultsReturnsFailureDetailWriteError(t *testing.T) {
 	}
 }
 
+// TestExecuteAndReportOperationTasksReturnsDisplayError returns progress setup failures before reporting operation success.
 func TestExecuteAndReportOperationTasksReturnsDisplayError(t *testing.T) {
 	originalFactory := operationProgressFactory
 	t.Cleanup(func() { operationProgressFactory = originalFactory })

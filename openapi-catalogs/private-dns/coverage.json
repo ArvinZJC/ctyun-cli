@@ -1,0 +1,41 @@
+{
+  "captured_at": "2026-09-25",
+  "service_id": 94,
+  "version_id": 88,
+  "published_api_count": 40,
+  "implemented_api_count": 40,
+  "blocked": [],
+  "fixtures_unavailable": [],
+  "example_normalisations": [
+    {
+      "api_id": "5758",
+      "section": "响应示例",
+      "normalisation": "Restored the missing enabled colon or replaced the full-width structural comma; response values unchanged."
+    },
+    {
+      "api_id": "5753",
+      "section": "响应示例",
+      "normalisation": "Restored the missing enabled colon or replaced the full-width structural comma; response values unchanged."
+    }
+  ],
+  "waiter_gaps": [],
+  "waiter_assessment": {
+    "implemented": [
+      "private-dns.record.enabled",
+      "private-dns.record.disabled",
+      "private-dns.record.legacy.enabled",
+      "private-dns.record.legacy.disabled"
+    ],
+    "notes": [
+      "Zone details do not publish a lifecycle state enum, so a successful query is not used as a readiness signal.",
+      "Record-detail enabled has no explicit numeric mapping in that operation; the waiters use the list operations whose own schemas explicitly define 1 and 0.",
+      "Record validation and metrics are stateless retrievals, not asynchronous lifecycle operations."
+    ]
+  },
+  "request_notes": [
+    "Record validation and monitoring POSTs are retryable stateless queries; mutations always require confirmation and are not retried.",
+    "VPC ID lists are published comma-separated strings, while record values are JSON arrays; their wire types remain distinct.",
+    "The old and new record-list examples differ in value shape and pagination placement; each command retains its captured response.",
+    "The historical record-detail example has lowercase ttl while the table says TTL. The display uses the captured field and avoids duplicate ttl selector keys."
+  ]
+}

@@ -16,6 +16,7 @@ import (
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
 )
 
+// TestConfigPathPrintsResolvedPath prints the selected config file path without loading its contents.
 func TestConfigPathPrintsResolvedPath(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config.json")
 	var stdout bytes.Buffer
@@ -32,6 +33,7 @@ func TestConfigPathPrintsResolvedPath(t *testing.T) {
 	}
 }
 
+// TestConfigShowRedactsCredentialValues prevents persisted AK/SK values from appearing in config output.
 func TestConfigShowRedactsCredentialValues(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config.json")
 	mustWrite(t, configPath, `{
@@ -76,6 +78,7 @@ func TestConfigShowRedactsCredentialValues(t *testing.T) {
 	}
 }
 
+// TestConfigSetUnsetAndProfileUsePersistValues persists edits and keeps profile selection after subsequent updates.
 func TestConfigSetUnsetAndProfileUsePersistValues(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config.json")
 	runConfigForTest(t, configPath, nil, "config", "set", "region", "81f7728662dd11ec810800155d307d5b", "--profile", "prod")
@@ -96,6 +99,7 @@ func TestConfigSetUnsetAndProfileUsePersistValues(t *testing.T) {
 	}
 }
 
+// TestConfigMutationStatusMessagesUseLanguage renders mutation confirmations in the requested locale with quoted keys.
 func TestConfigMutationStatusMessagesUseLanguage(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config.json")
 	var stdout bytes.Buffer
@@ -103,10 +107,10 @@ func TestConfigMutationStatusMessagesUseLanguage(t *testing.T) {
 		args []string
 		want string
 	}{
-		{args: []string{"--lang", "zh-CN", "config", "set", "region", "81f7728662dd11ec810800155d307d5b", "--profile", "prod"}, want: "已更新 region。"},
-		{args: []string{"--lang", "zh-CN", "config", "profile", "use", "prod"}, want: "当前配置档案：prod。"},
-		{args: []string{"--lang", "zh-CN", "config", "profile", "set", "prod", "language=zh-CN"}, want: "已更新配置档案 prod 的 language。"},
-		{args: []string{"--lang", "zh-CN", "config", "unset", "language", "--profile", "prod"}, want: "已取消 language。"},
+		{args: []string{"--lang", "zh-CN", "config", "set", "region", "81f7728662dd11ec810800155d307d5b", "--profile", "prod"}, want: "已更新 \"region\"。"},
+		{args: []string{"--lang", "zh-CN", "config", "profile", "use", "prod"}, want: "当前配置档案：\"prod\"。"},
+		{args: []string{"--lang", "zh-CN", "config", "profile", "set", "prod", "language=zh-CN"}, want: "已更新配置档案 \"prod\" 的 \"language\"。"},
+		{args: []string{"--lang", "zh-CN", "config", "unset", "language", "--profile", "prod"}, want: "已取消 \"language\"。"},
 	}
 	for _, step := range steps {
 		stdout.Reset()
@@ -124,6 +128,7 @@ func TestConfigMutationStatusMessagesUseLanguage(t *testing.T) {
 	}
 }
 
+// TestConfigProfileListShowsActiveProfile marks the selected profile while retaining other profile names.
 func TestConfigProfileListShowsActiveProfile(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config.json")
 	mustWrite(t, configPath, `{
@@ -149,6 +154,7 @@ func TestConfigProfileListShowsActiveProfile(t *testing.T) {
 	}
 }
 
+// TestConfigProfileSetSecretReadsFromStdin accepts secret input without requiring a command-line credential.
 func TestConfigProfileSetSecretReadsFromStdin(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config.json")
 	var stdout bytes.Buffer
@@ -170,6 +176,7 @@ func TestConfigProfileSetSecretReadsFromStdin(t *testing.T) {
 	}
 }
 
+// TestConfigResetPromptsAndCreatesBackup requires confirmation before reset and preserves the previous config in a backup.
 func TestConfigResetPromptsAndCreatesBackup(t *testing.T) {
 	dir := t.TempDir()
 	configPath := filepath.Join(dir, "config.json")
@@ -200,6 +207,7 @@ func TestConfigResetPromptsAndCreatesBackup(t *testing.T) {
 	}
 }
 
+// TestConfigProfileResetPrompts honours confirmation before clearing a selected profile.
 func TestConfigProfileResetPrompts(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config.json")
 	mustWrite(t, configPath, `{
@@ -240,6 +248,7 @@ func TestConfigProfileResetPrompts(t *testing.T) {
 	}
 }
 
+// TestConfigCommandCoversHelpAliasesAndErrors checks config dispatch aliases, arity failures, and help responses.
 func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 	var stdout bytes.Buffer
 	if err := runConfigCommand(&stdout, ioDiscardForConfigTest{}, strings.NewReader(""), nil, globalOptions{Language: "en-US"}, configCommandInput{}); err != nil {
@@ -405,6 +414,7 @@ func assertOrderedConfigHelpText(t *testing.T, output string, names ...string) {
 	}
 }
 
+// TestConfigShowBranchesAndWriterErrors covers selected-profile output and propagates output failures.
 func TestConfigShowBranchesAndWriterErrors(t *testing.T) {
 	raw := []byte(`{"profiles":{"prod":{"ak":"profile-ak","sk":"profile-sk"}}}`)
 	var stdout bytes.Buffer
@@ -440,6 +450,7 @@ func TestConfigShowBranchesAndWriterErrors(t *testing.T) {
 	}
 }
 
+// TestConfigSetUnsetGlobalBranches keeps global config edits separate from profile-scoped values.
 func TestConfigSetUnsetGlobalBranches(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config.json")
 	mustWrite(t, configPath, `{"profiles":{"prod":{"region":"cn"}}}`)
@@ -502,6 +513,7 @@ func TestConfigSetUnsetGlobalBranches(t *testing.T) {
 	}
 }
 
+// TestConfigProfileSubcommandsBranches checks profile selection, listing, and invalid subcommand handling.
 func TestConfigProfileSubcommandsBranches(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config.json")
 	mustWrite(t, configPath, `{"profiles":{"prod":{"region":"cn"}}}`)
@@ -548,6 +560,7 @@ func TestConfigProfileSubcommandsBranches(t *testing.T) {
 	}
 }
 
+// TestConfigProfileSetUnsetBranches checks profile-scoped edits and rejects unsupported keys.
 func TestConfigProfileSetUnsetBranches(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config.json")
 	mustWrite(t, configPath, `{"profiles":{"prod":{"region":"cn"}}}`)
@@ -590,6 +603,7 @@ func TestConfigProfileSetUnsetBranches(t *testing.T) {
 	}
 }
 
+// TestConfigSetSecretAndResetBranches covers secret-input failures and reset persistence paths.
 func TestConfigSetSecretAndResetBranches(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config.json")
 	mustWrite(t, configPath, `{"active_profile":"prod","profiles":{"prod":{"region":"cn"}}}`)
@@ -639,6 +653,7 @@ func TestConfigSetSecretAndResetBranches(t *testing.T) {
 	}
 }
 
+// TestConfigValueHelpersCoverSupportedKeys keeps typed config conversion aligned with supported key declarations.
 func TestConfigValueHelpersCoverSupportedKeys(t *testing.T) {
 	var cfg coreconfig.Config
 	cfg.Profiles = map[string]coreconfig.Profile{"prod": {}}
@@ -689,6 +704,7 @@ func TestConfigValueHelpersCoverSupportedKeys(t *testing.T) {
 	}
 }
 
+// TestConfigFileHelpersCoverFilesystemErrors propagates config filesystem failures instead of reporting success.
 func TestConfigFileHelpersCoverFilesystemErrors(t *testing.T) {
 	if err := writeConfigFile("", coreconfig.Config{}); err == nil {
 		t.Fatal("writeConfigFile empty path returned nil error")
@@ -726,6 +742,7 @@ func TestConfigFileHelpersCoverFilesystemErrors(t *testing.T) {
 	}
 }
 
+// TestConfigWriteValidatesBeforePersisting rejects invalid settings before replacing the saved config.
 func TestConfigWriteValidatesBeforePersisting(t *testing.T) {
 	dir := t.TempDir()
 	configPath := filepath.Join(dir, "config.json")
@@ -782,6 +799,7 @@ func TestConfigWriteValidatesBeforePersisting(t *testing.T) {
 	}
 }
 
+// runConfigForTest executes config arguments against the supplied isolated config path.
 func runConfigForTest(t *testing.T, configPath string, stdin *strings.Reader, args ...string) {
 	t.Helper()
 
@@ -797,6 +815,7 @@ func runConfigForTest(t *testing.T, configPath string, stdin *strings.Reader, ar
 	}
 }
 
+// readConfigForTest loads the persisted config for assertions.
 func readConfigForTest(t *testing.T, path string) coreconfig.Config {
 	t.Helper()
 
@@ -811,14 +830,18 @@ func readConfigForTest(t *testing.T, path string) coreconfig.Config {
 	return cfg
 }
 
+// configFailingReader injects a read failure into secret input handling.
 type configFailingReader struct{}
 
+// Read returns the configured test input failure without consuming bytes.
 func (configFailingReader) Read([]byte) (int, error) {
 	return 0, errors.New("read failed")
 }
 
+// ioDiscardForConfigTest accepts config output without retaining it.
 type ioDiscardForConfigTest struct{}
 
+// Write reports every supplied byte as written.
 func (ioDiscardForConfigTest) Write(p []byte) (int, error) {
 	return len(p), nil
 }

@@ -1,0 +1,1764 @@
+{
+  "operations": {
+    "mqtt.certificate.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/api/ssl/cert/create",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "certFile": "$param.cert_file",
+        "certKey": "$param.cert_key",
+        "certName": "$param.cert_name",
+        "encryptor": "$param.encryptor",
+        "remark": "$param.remark",
+        "type": "$param.type"
+      },
+      "retryable": false
+    },
+    "mqtt.certificate.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/api/ssl/cert/delete",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "certId": "$param.cert_id"
+      },
+      "retryable": false
+    },
+    "mqtt.certificate.download": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/api/ssl/cert/download",
+      "content_type": "application/json",
+      "query": {
+        "certId": "$param.cert_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "mqtt.certificate.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/api/ssl/cert/list",
+      "content_type": "application/json",
+      "query": {
+        "certId": "$param.cert_id",
+        "certName": "$param.cert_name",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "type": "$param.type"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "mqtt.certificate.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/api/ssl/cert/update",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "certFile": "$param.cert_file",
+        "certId": "$param.cert_id",
+        "certKey": "$param.cert_key",
+        "certName": "$param.cert_name",
+        "remark": "$param.remark"
+      },
+      "retryable": false
+    },
+    "mqtt.client.connection.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/api/connectionInfo",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "clientId": "$param.client_id",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "mqtt.client.disconnect": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/api/kickOutOneClient",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "clientId": "$param.client_id",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "mqtt.client.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/api/getAllClients",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "mqtt.client.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/api/queryClient",
+      "content_type": "application/json",
+      "query": {
+        "clientId": "$param.client_id",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "mqtt.client.status.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/api/batchClientOnLine",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "clientIds": "$param.client_ids",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": true
+    },
+    "mqtt.client.status.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/api/clientOnLine",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "clientId": "$param.client_id",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "mqtt.client.subscription.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/api/unsubscribeMqttTopic",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "clientId": "$param.client_id",
+        "prodInstId": "$param.prod_inst_id",
+        "topic": "$param.topic"
+      },
+      "retryable": false
+    },
+    "mqtt.client.subscription.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/api/subInfo",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "clientId": "$param.client_id",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "mqtt.client.trace.disable": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/api/stopClientTrack",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "mqtt.client.trace.enable": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/api/enableClientTrack",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "mqtt.client.trace.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/api/getClientTrack",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "clientId": "$param.client_id",
+        "endTime": "$param.end_time",
+        "prodInstId": "$param.prod_inst_id",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "mqtt.instance.certificate.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/api/ssl/cert/queryConfig",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "mqtt.instance.certificate.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/api/ssl/cert/config",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "authType": "$param.auth_type",
+        "certSrc": "$param.cert_src",
+        "clientCA": "$param.client_ca",
+        "serverCert": "$param.server_cert"
+      },
+      "retryable": false
+    },
+    "mqtt.instance.create.payg": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/api/createPostPayInstance",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "azInfo": "$param.az_info",
+        "clusterName": "$param.cluster_name",
+        "cpuNum": "$param.cpu_num",
+        "hostType": "$param.host_type",
+        "memSize": "$param.mem_size",
+        "nodeNum": "$param.node_num",
+        "securityGroupUuid": "$param.security_group_uuid",
+        "seriesType": "$param.series_type",
+        "subnetUuid": "$param.subnet_uuid",
+        "vpcUuid": "$param.vpc_uuid"
+      },
+      "retryable": false
+    },
+    "mqtt.instance.create.prepaid": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/api/createPrePayInstance",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "azInfo": "$param.az_info",
+        "clusterName": "$param.cluster_name",
+        "cpuNum": "$param.cpu_num",
+        "cycleCnt": "$param.cycle_cnt",
+        "hostType": "$param.host_type",
+        "memSize": "$param.mem_size",
+        "nodeNum": "$param.node_num",
+        "securityGroupUuid": "$param.security_group_uuid",
+        "seriesType": "$param.series_type",
+        "subnetUuid": "$param.subnet_uuid",
+        "vpcUuid": "$param.vpc_uuid"
+      },
+      "retryable": false
+    },
+    "mqtt.instance.eip.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/api/getEip",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "mqtt.instance.endpoint.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/api/getEndpoint",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "mqtt.instance.ipv6.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/api/getIpv6",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "mqtt.instance.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/api/instances",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "mqtt.instance.node.expand": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/api/createAddNodeOrder",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "targetNodeNum": "$param.target_node_num"
+      },
+      "retryable": false
+    },
+    "mqtt.instance.specification.expand": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/api/createChangeSpecOrder",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "cpuNum": "$param.cpu_num",
+        "memSize": "$param.mem_size",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "mqtt.instance.specification.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/api/getSpec",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "mqtt.instance.status.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/api/getStatus",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "mqtt.instance.unsubscribe": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/api/cancelInstance",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "mqtt.instance.vpc.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/api/getVpcInfo",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "mqtt.message.batch.publish": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/api/publishMessageBatch",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "data": "$param.data",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "mqtt.message.publish": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/api/sendMessage2Mqtt",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "mqttTopic": "$param.mqtt_topic",
+        "payload": "$param.payload",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "mqtt.monitor.consume-rate.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/api/getSubTpm",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "mqtt.monitor.publish-rate.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/api/getPubTpm",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "mqtt.subscription.batch.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/api/subscribeBatch",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "data": "$param.data",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "mqtt.subscription.batch.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/api/unsubscribeBatch",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "data": "$param.data",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "mqtt.subscription.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/api/subscribe",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "clientid": "$param.clientid",
+        "prodInstId": "$param.prod_inst_id",
+        "qos": "$param.qos",
+        "topics": "$param.topics"
+      },
+      "retryable": false
+    },
+    "mqtt.subscription.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/api/listAllSubscriptions",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "mqtt.subscription.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/api/querySubInfo",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "mqtt.user.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/api/addMqttUser",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "password": "$param.password",
+        "prodInstId": "$param.prod_inst_id",
+        "remark": "$param.remark",
+        "userName": "$param.user_name"
+      },
+      "retryable": false
+    },
+    "mqtt.user.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/api/delMqttUser",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "userName": "$param.user_name"
+      },
+      "retryable": false
+    },
+    "mqtt.user.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/api/mqttUserList",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "mqtt.user.password.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/api/updateMqttUser",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "password": "$param.password",
+        "prodInstId": "$param.prod_inst_id",
+        "userName": "$param.user_name"
+      },
+      "retryable": false
+    },
+    "mqtt.user.permission.grant": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/api/addMqttUserAcl",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "action": "$param.action",
+        "prodInstId": "$param.prod_inst_id",
+        "topic": "$param.topic",
+        "userName": "$param.user_name"
+      },
+      "retryable": false
+    },
+    "mqtt.user.permission.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/api/mqttUserAclList",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "prodInstId": "$param.prod_inst_id",
+        "userName": "$param.user_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "mqtt.user.permission.revoke": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/api/delMqttUserAcl",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "topic": "$param.topic",
+        "userName": "$param.user_name"
+      },
+      "retryable": false
+    },
+    "mqtt.v1.client.connection.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/api/connectionInfo",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "clientId": "$param.client_id",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": true
+    },
+    "mqtt.v1.client.disconnect": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/api/kickOutOneClient",
+      "content_type": "application/json",
+      "body": {
+        "clientId": "$param.client_id",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "mqtt.v1.client.status.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/api/batchClientOnLine",
+      "content_type": "application/json",
+      "body": {
+        "clientIds": "$param.client_ids",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": true
+    },
+    "mqtt.v1.client.status.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/api/clientOnLine",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "clientId": "$param.client_id",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": true
+    },
+    "mqtt.v1.client.subscription.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/api/unsubscribeMqttTopic",
+      "content_type": "application/json",
+      "body": {
+        "clientId": "$param.client_id",
+        "prodInstId": "$param.prod_inst_id",
+        "topic": "$param.topic"
+      },
+      "retryable": false
+    },
+    "mqtt.v1.client.subscription.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/api/subInfo",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "clientId": "$param.client_id",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": true
+    },
+    "mqtt.v1.client.trace.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/api/getClientTrack",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "clientId": "$param.client_id",
+        "endTime": "$param.end_time",
+        "prodInstId": "$param.prod_inst_id",
+        "startTime": "$param.start_time"
+      },
+      "retryable": true
+    },
+    "mqtt.v1.message.publish": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/api/sendMessage2Mqtt",
+      "content_type": "application/json",
+      "body": {
+        "mqttTopic": "$param.mqtt_topic",
+        "payload": "$param.payload",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "mqtt.v1.user.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/api/addMqttUser",
+      "content_type": "application/json",
+      "body": {
+        "password": "$param.password",
+        "prodInstId": "$param.prod_inst_id",
+        "remark": "$param.remark",
+        "userName": "$param.user_name"
+      },
+      "retryable": false
+    },
+    "mqtt.v1.user.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/api/delMqttUser",
+      "content_type": "application/json",
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "userName": "$param.user_name"
+      },
+      "retryable": false
+    },
+    "mqtt.v1.user.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/api/mqttUserList",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": true
+    },
+    "mqtt.v1.user.password.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/api/updateMqttUser",
+      "content_type": "application/json",
+      "body": {
+        "password": "$param.password",
+        "prodInstId": "$param.prod_inst_id",
+        "userName": "$param.user_name"
+      },
+      "retryable": false
+    },
+    "mqtt.v1.user.permission.grant": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/api/addMqttUserAcl",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "prodInstId": "$param.prod_inst_id",
+        "topic": "$param.topic",
+        "userName": "$param.user_name"
+      },
+      "retryable": false
+    },
+    "mqtt.v1.user.permission.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/api/mqttUserAclList",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "prodInstId": "$param.prod_inst_id",
+        "userName": "$param.user_name"
+      },
+      "retryable": true
+    },
+    "mqtt.v1.user.permission.revoke": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/api/delMqttUserAcl",
+      "content_type": "application/json",
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "topic": "$param.topic",
+        "userName": "$param.user_name"
+      },
+      "retryable": false
+    }
+  }
+}

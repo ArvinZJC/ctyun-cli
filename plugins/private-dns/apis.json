@@ -1,0 +1,1100 @@
+{
+  "operations": {
+    "private-dns.metric.vpc.current": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone/vpc-realtime-metric",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": true
+    },
+    "private-dns.metric.vpc.history": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone/vpc-history-metric",
+      "content_type": "application/json",
+      "body": {
+        "endTime": "$param.end_time",
+        "regionID": "$profile.region",
+        "startTime": "$param.start_time",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": true
+    },
+    "private-dns.metric.zone.current": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone/zone-realtime-metric",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "vpcID": "$param.vpc_id",
+        "zoneID": "$param.zone_id"
+      },
+      "retryable": true
+    },
+    "private-dns.metric.zone.history": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone/zone-history-metric",
+      "content_type": "application/json",
+      "body": {
+        "endTime": "$param.end_time",
+        "regionID": "$profile.region",
+        "startTime": "$param.start_time",
+        "vpcID": "$param.vpc_id",
+        "zoneID": "$param.zone_id"
+      },
+      "retryable": true
+    },
+    "private-dns.nameserver.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/private-zone/nameserver",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "private-dns.record.aaaa.check": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone-record/check-aaaa",
+      "content_type": "application/json",
+      "body": {
+        "aaaaRecords": "$param.aaaa_records"
+      },
+      "retryable": true
+    },
+    "private-dns.record.batch.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone-record/batch-delete",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region",
+        "zoneRecordIDs": "$param.zone_record_i_ds"
+      },
+      "retryable": false
+    },
+    "private-dns.record.cname.check": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone-record/check-cname",
+      "content_type": "application/json",
+      "body": {
+        "cnameRecords": "$param.cname_records"
+      },
+      "retryable": true
+    },
+    "private-dns.record.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone-record/create",
+      "content_type": "application/json",
+      "body": {
+        "TTL": "$param.ttl",
+        "clientToken": "$param.client_token",
+        "description": "$param.description",
+        "name": "$param.name",
+        "regionID": "$profile.region",
+        "type": "$param.type",
+        "valueList": "$param.value_list",
+        "zoneID": "$param.zone_id"
+      },
+      "retryable": false
+    },
+    "private-dns.record.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone-record/delete",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region",
+        "zoneRecordID": "$param.zone_record_id"
+      },
+      "retryable": false
+    },
+    "private-dns.record.description.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone-record/modify-desc",
+      "content_type": "application/json",
+      "body": {
+        "description": "$param.description",
+        "regionID": "$profile.region",
+        "zoneRecordID": "$param.zone_record_id"
+      },
+      "retryable": false
+    },
+    "private-dns.record.disable": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone-record/disable",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "zoneRecordID": "$param.zone_record_id"
+      },
+      "retryable": false
+    },
+    "private-dns.record.enable": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone-record/enable",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "zoneRecordID": "$param.zone_record_id"
+      },
+      "retryable": false
+    },
+    "private-dns.record.legacy.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/private-zone-record/list",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageNumber": "$param.page_number",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "zoneID": "$param.zone_id",
+        "zoneRecordID": "$param.zone_record_id",
+        "zoneRecordName": "$param.zone_record_name"
+      },
+      "retryable": true
+    },
+    "private-dns.record.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/private-zone-record/new-list",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageNumber": "$param.page_number",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "zoneID": "$param.zone_id",
+        "zoneRecordID": "$param.zone_record_id",
+        "zoneRecordName": "$param.zone_record_name"
+      },
+      "retryable": true
+    },
+    "private-dns.record.mx.check": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone-record/check-mx",
+      "content_type": "application/json",
+      "body": {
+        "mxRecords": "$param.mx_records"
+      },
+      "retryable": true
+    },
+    "private-dns.record.ptr.check": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone-record/check-ptr",
+      "content_type": "application/json",
+      "body": {
+        "ptrRecords": "$param.ptr_records"
+      },
+      "retryable": true
+    },
+    "private-dns.record.quota.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/private-zone-record/quota",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "private-dns.record.shared.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/private-zone-record/list-shared-records",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "private-dns.record.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/private-zone-record/query",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "zoneRecordID": "$param.zone_record_id"
+      },
+      "retryable": true
+    },
+    "private-dns.record.srv.check": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone-record/check-srv",
+      "content_type": "application/json",
+      "body": {
+        "srvRecords": "$param.srv_records"
+      },
+      "retryable": true
+    },
+    "private-dns.record.txt.check": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone-record/check-txt",
+      "content_type": "application/json",
+      "body": {
+        "txtRecords": "$param.txt_records"
+      },
+      "retryable": true
+    },
+    "private-dns.record.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone-record/update",
+      "content_type": "application/json",
+      "body": {
+        "TTL": "$param.ttl",
+        "clientToken": "$param.client_token",
+        "description": "$param.description",
+        "regionID": "$profile.region",
+        "valueList": "$param.value_list",
+        "zoneRecordID": "$param.zone_record_id"
+      },
+      "retryable": false
+    },
+    "private-dns.vpc.zone.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/private-zone/get-vpc-binded-zones",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": true
+    },
+    "private-dns.zone.bindings.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/private-zone/query-all",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "private-dns.zone.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone/create",
+      "content_type": "application/json",
+      "body": {
+        "TTL": "$param.ttl",
+        "clientToken": "$param.client_token",
+        "description": "$param.description",
+        "name": "$param.name",
+        "projectID": "$param.project_id",
+        "proxyPattern": "$param.proxy_pattern",
+        "regionID": "$profile.region",
+        "vpcIDList": "$param.vpc_id_list"
+      },
+      "retryable": false
+    },
+    "private-dns.zone.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone/delete",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region",
+        "zoneID": "$param.zone_id"
+      },
+      "retryable": false
+    },
+    "private-dns.zone.legacy.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/private-zone/list",
+      "content_type": "application/json",
+      "query": {
+        "clientToken": "$param.client_token",
+        "pageNo": "$param.page_no",
+        "pageNumber": "$param.page_number",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "zoneID": "$param.zone_id",
+        "zoneName": "$param.zone_name"
+      },
+      "retryable": true
+    },
+    "private-dns.zone.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/private-zone/new-list",
+      "content_type": "application/json",
+      "query": {
+        "clientToken": "$param.client_token",
+        "pageNo": "$param.page_no",
+        "pageNumber": "$param.page_number",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "zoneID": "$param.zone_id",
+        "zoneName": "$param.zone_name"
+      },
+      "retryable": true
+    },
+    "private-dns.zone.name.check": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone/check-name",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "zoneName": "$param.zone_name"
+      },
+      "retryable": true
+    },
+    "private-dns.zone.proxy-mode.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone/update-proxy-pattern",
+      "content_type": "application/json",
+      "body": {
+        "proxyPattern": "$param.proxy_pattern",
+        "regionID": "$profile.region",
+        "zoneID": "$param.zone_id"
+      },
+      "retryable": false
+    },
+    "private-dns.zone.quota.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/private-zone/quota",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "private-dns.zone.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/private-zone/query",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "zoneID": "$param.zone_id"
+      },
+      "retryable": true
+    },
+    "private-dns.zone.tag.bind": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone/bind-label",
+      "content_type": "application/json",
+      "body": {
+        "labelKey": "$param.label_key",
+        "labelValue": "$param.label_value",
+        "regionID": "$profile.region",
+        "zoneID": "$param.zone_id"
+      },
+      "retryable": false
+    },
+    "private-dns.zone.tag.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/private-zone/list-labels",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "zoneID": "$param.zone_id"
+      },
+      "retryable": true
+    },
+    "private-dns.zone.tag.unbind": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone/unbind-label",
+      "content_type": "application/json",
+      "body": {
+        "labelID": "$param.label_id",
+        "regionID": "$profile.region",
+        "zoneID": "$param.zone_id"
+      },
+      "retryable": false
+    },
+    "private-dns.zone.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone/update",
+      "content_type": "application/json",
+      "body": {
+        "TTL": "$param.ttl",
+        "clientToken": "$param.client_token",
+        "description": "$param.description",
+        "proxyPattern": "$param.proxy_pattern",
+        "regionID": "$profile.region",
+        "vpcIDList": "$param.vpc_id_list",
+        "zoneID": "$param.zone_id"
+      },
+      "retryable": false
+    },
+    "private-dns.zone.vpc.bind": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone/associate-vpc",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region",
+        "vpcIDList": "$param.vpc_id_list",
+        "zoneID": "$param.zone_id"
+      },
+      "retryable": false
+    },
+    "private-dns.zone.vpc.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/private-zone/list-vpcs",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "zoneID": "$param.zone_id"
+      },
+      "retryable": true
+    },
+    "private-dns.zone.vpc.unbind": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/private-zone/disassociate-vpc",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region",
+        "vpcIDList": "$param.vpc_id_list",
+        "zoneID": "$param.zone_id"
+      },
+      "retryable": false
+    }
+  }
+}

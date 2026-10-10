@@ -1,0 +1,1377 @@
+{
+  "operations": {
+    "vpce.cloud-service.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/vpce/query-ctyun-service",
+      "content_type": "application/json",
+      "query": {
+        "endpointServiceID": "$param.endpoint_service_id",
+        "pageNumber": "$param.page_number",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": true
+    },
+    "vpce.connection.accept": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/accept-endpoint-apply",
+      "content_type": "application/json",
+      "body": {
+        "endpointID": "$param.endpoint_id",
+        "endpointServiceID": "$param.endpoint_service_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "vpce.connection.reject": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/reject-endpoint-apply",
+      "content_type": "application/json",
+      "body": {
+        "endpointID": "$param.endpoint_id",
+        "endpointServiceID": "$param.endpoint_service_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "vpce.endpoint.create": {
+      "method": "POST",
+      "path": "/v4/vpce/create-endpoint",
+      "content_type": "application/json",
+      "body": {
+        "IP": "$param.ip",
+        "IP6": "$param.ip6",
+        "clientToken": "$param.client_token",
+        "cycleType": "$param.cycle_type",
+        "deleteProtection": "$param.delete_protection",
+        "description": "$param.description",
+        "enableDns": "$param.enable_dns",
+        "endpointName": "$param.endpoint_name",
+        "endpointServiceID": "$param.endpoint_service_id",
+        "ipVersion": "$param.ip_version",
+        "payVoucherPrice": "$param.pay_voucher_price",
+        "projectID": "$param.project_id",
+        "protectionService": "$param.protection_service",
+        "regionID": "$profile.region",
+        "subnetID": "$param.subnet_id",
+        "vpcID": "$param.vpc_id",
+        "whitelist": "$param.whitelist",
+        "whitelist6": "$param.whitelist6",
+        "whitelistFlag": "$param.whitelist_flag"
+      },
+      "retryable": false,
+      "accepted_statuses": [
+        {
+          "code": "900",
+          "required_path": "returnObj.masterOrderID"
+        }
+      ]
+    },
+    "vpce.endpoint.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/delete-endpoint",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "endpointID": "$param.endpoint_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "vpce.endpoint.ip-version.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/modify-endpoint-ip-version",
+      "content_type": "application/json",
+      "body": {
+        "endpointID": "$param.endpoint_id",
+        "ipAddress": "$param.ip_address",
+        "ipVersion": "$param.ip_version",
+        "ipv6Address": "$param.ipv6_address",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "vpce.endpoint.legacy.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/vpce/list-endpoint",
+      "content_type": "application/json",
+      "query": {
+        "endpointID": "$param.endpoint_id",
+        "endpointName": "$param.endpoint_name",
+        "endpointServiceID": "$param.endpoint_service_id",
+        "page": "$param.page",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
+        "queryContent": "$param.query_content",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "vpce.endpoint.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/vpce/new-list-endpoint",
+      "content_type": "application/json",
+      "query": {
+        "endpointID": "$param.endpoint_id",
+        "endpointName": "$param.endpoint_name",
+        "endpointServiceID": "$param.endpoint_service_id",
+        "page": "$param.page",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
+        "queryContent": "$param.query_content",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "vpce.endpoint.object-storage-policy.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/endpoint/create-oss-policy",
+      "content_type": "application/json",
+      "body": {
+        "endpointID": "$param.endpoint_id",
+        "policy": "$param.policy",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "vpce.endpoint.object-storage-policy.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/endpoint/delete-oss-policy",
+      "content_type": "application/json",
+      "body": {
+        "endpointID": "$param.endpoint_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "vpce.endpoint.object-storage-policy.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/endpoint/get-oss-policy",
+      "content_type": "application/json",
+      "query": {
+        "endpointID": "$param.endpoint_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "vpce.endpoint.price.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/query-create-endpoint-price",
+      "content_type": "application/json",
+      "body": {
+        "IP": "$param.ip",
+        "clientToken": "$param.client_token",
+        "cycleType": "$param.cycle_type",
+        "description": "$param.description",
+        "endpointName": "$param.endpoint_name",
+        "endpointServiceID": "$param.endpoint_service_id",
+        "regionID": "$profile.region",
+        "subnetID": "$param.subnet_id",
+        "vpcID": "$param.vpc_id",
+        "whitelist": "$param.whitelist",
+        "whitelistFlag": "$param.whitelist_flag"
+      },
+      "retryable": true
+    },
+    "vpce.endpoint.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/vpce/show-endpoint",
+      "content_type": "application/json",
+      "query": {
+        "endpointID": "$param.endpoint_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "vpce.endpoint.tag.bind": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/endpoint-bind-label",
+      "content_type": "application/json",
+      "body": {
+        "endpointID": "$param.endpoint_id",
+        "labelKey": "$param.label_key",
+        "labelValue": "$param.label_value",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "vpce.endpoint.tag.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/vpce/endpoint-list-label",
+      "content_type": "application/json",
+      "query": {
+        "endpointID": "$param.endpoint_id",
+        "pageNumber": "$param.page_number",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "vpce.endpoint.tag.unbind": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/endpoint-unbind-label",
+      "content_type": "application/json",
+      "body": {
+        "endpointID": "$param.endpoint_id",
+        "labelID": "$param.label_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "vpce.endpoint.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/update-endpoint",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "deleteProtection": "$param.delete_protection",
+        "description": "$param.description",
+        "enableDns": "$param.enable_dns",
+        "enableWhitelist": "$param.enable_whitelist",
+        "endpointID": "$param.endpoint_id",
+        "endpointName": "$param.endpoint_name",
+        "protectionService": "$param.protection_service",
+        "regionID": "$profile.region",
+        "whitelist": "$param.whitelist"
+      },
+      "retryable": false
+    },
+    "vpce.endpoint.whitelist.add": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/add-endpoint-whitelist",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "endpointID": "$param.endpoint_id",
+        "regionID": "$profile.region",
+        "whitelist": "$param.whitelist"
+      },
+      "retryable": false
+    },
+    "vpce.endpoint.whitelist.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/delete-endpoint-whitelist",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "endpointID": "$param.endpoint_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "vpce.endpoint.whitelist.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/vpce/show-endpoint-whitelist",
+      "content_type": "application/json",
+      "query": {
+        "endpointID": "$param.endpoint_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "vpce.service.backend.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/delete-backend",
+      "content_type": "application/json",
+      "body": {
+        "endpointServiceID": "$param.endpoint_service_id",
+        "instanceID": "$param.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "vpce.service.backend.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/vpce/list-backends",
+      "content_type": "application/json",
+      "body": {
+        "endpointServiceID": "$param.endpoint_service_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "vpce.service.backend.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/update-backend",
+      "content_type": "application/json",
+      "body": {
+        "endpointServiceID": "$param.endpoint_service_id",
+        "instanceID": "$param.instance_id",
+        "instanceType": "$param.instance_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "vpce.service.connection.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/vpce/show-endpoint-service-connections",
+      "content_type": "application/json",
+      "query": {
+        "endpointID": "$param.endpoint_id",
+        "endpointServiceID": "$param.endpoint_service_id",
+        "page": "$param.page",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "vpce.service.connection.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/update-endpoint-service-connections",
+      "content_type": "application/json",
+      "body": {
+        "autoConnection": "$param.auto_connection",
+        "clientToken": "$param.client_token",
+        "endpointServiceID": "$param.endpoint_service_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "vpce.service.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/create-endpoint-service",
+      "content_type": "application/json",
+      "body": {
+        "autoConnection": "$param.auto_connection",
+        "clientToken": "$param.client_token",
+        "description": "$param.description",
+        "dnsName": "$param.dns_name",
+        "forceEnableDns": "$param.force_enable_dns",
+        "instanceID": "$param.instance_id",
+        "instanceID6": "$param.instance_id6",
+        "instanceType": "$param.instance_type",
+        "ipVersion": "$param.ip_version",
+        "name": "$param.name",
+        "oaType": "$param.oa_type",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "reverseIsUnderlay": "$param.reverse_is_underlay",
+        "rules": "$param.rules",
+        "serviceCharge": "$param.service_charge",
+        "subnetID": "$param.subnet_id",
+        "transitIP": "$param.transit_ip",
+        "transitIP6": "$param.transit_ip6",
+        "type": "$param.type",
+        "underlayIP": "$param.underlay_ip",
+        "underlayIP6": "$param.underlay_ip6",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "vpce.service.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/delete-endpoint-service",
+      "content_type": "application/json",
+      "body": {
+        "ID": "$param.id",
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "vpce.service.ip-version.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/modify-endpoint-service-ip-version",
+      "content_type": "application/json",
+      "body": {
+        "endpointServiceID": "$param.endpoint_service_id",
+        "instanceIDV6": "$param.instance_idv6",
+        "ipVersion": "$param.ip_version",
+        "ipv6Address": "$param.ipv6_address",
+        "regionID": "$profile.region",
+        "subnetID": "$param.subnet_id",
+        "underlayIp6": "$param.underlay_ip6"
+      },
+      "retryable": false
+    },
+    "vpce.service.legacy.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/vpce/list-endpoint-service",
+      "content_type": "application/json",
+      "query": {
+        "endpointServiceName": "$param.endpoint_service_name",
+        "id": "$param.id",
+        "page": "$param.page",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "queryContent": "$param.query_content",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "vpce.service.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/vpce/new-list-endpoint-service",
+      "content_type": "application/json",
+      "query": {
+        "endpointServiceName": "$param.endpoint_service_name",
+        "id": "$param.id",
+        "page": "$param.page",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "queryContent": "$param.query_content",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "vpce.service.port-rule.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/create-endpoint-service-rule",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "endpointPort": "$param.endpoint_port",
+        "endpointServiceID": "$param.endpoint_service_id",
+        "protocol": "$param.protocol",
+        "regionID": "$profile.region",
+        "serverPort": "$param.server_port"
+      },
+      "retryable": false
+    },
+    "vpce.service.port-rule.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/delete-endpoint-service-rule",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "endpointPort": "$param.endpoint_port",
+        "endpointServiceID": "$param.endpoint_service_id",
+        "protocol": "$param.protocol",
+        "regionID": "$profile.region",
+        "serverPort": "$param.server_port"
+      },
+      "retryable": false
+    },
+    "vpce.service.reverse-rule.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/create-endpoint-service-reverse-rule",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "endpointID": "$param.endpoint_id",
+        "endpointServiceID": "$param.endpoint_service_id",
+        "protocol": "$param.protocol",
+        "regionID": "$profile.region",
+        "targetIPAddress": "$param.target_ip_address",
+        "targetPort": "$param.target_port",
+        "transitIPAddress": "$param.transit_ip_address",
+        "transitPort": "$param.transit_port"
+      },
+      "retryable": false
+    },
+    "vpce.service.reverse-rule.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/delete-endpoint-service-reverse-rule",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region",
+        "reverseRuleID": "$param.reverse_rule_id"
+      },
+      "retryable": false
+    },
+    "vpce.service.reverse-rule.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/vpce/list-endpoint-service-reverse-rule",
+      "content_type": "application/json",
+      "query": {
+        "endpointServiceID": "$param.endpoint_service_id",
+        "page": "$param.page",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "vpce.service.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/vpce/show-endpoint-service",
+      "content_type": "application/json",
+      "query": {
+        "endpointServiceID": "$param.endpoint_service_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "vpce.service.tag.bind": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/service-bind-label",
+      "content_type": "application/json",
+      "body": {
+        "endpointServiceID": "$param.endpoint_service_id",
+        "labelKey": "$param.label_key",
+        "labelValue": "$param.label_value",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "vpce.service.tag.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/vpce/service-list-label",
+      "content_type": "application/json",
+      "query": {
+        "endpointServiceID": "$param.endpoint_service_id",
+        "pageNumber": "$param.page_number",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "vpce.service.tag.unbind": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/service-unbind-label",
+      "content_type": "application/json",
+      "body": {
+        "endpointServiceID": "$param.endpoint_service_id",
+        "labelID": "$param.label_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "vpce.service.transit-ip.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/create-endpoint-service-transit-ip",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "endpointServiceID": "$param.endpoint_service_id",
+        "regionID": "$profile.region",
+        "subnetID": "$param.subnet_id",
+        "transitIP": "$param.transit_ip"
+      },
+      "retryable": false
+    },
+    "vpce.service.transit-ip.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/delete-endpoint-service-transit-ip",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "endpointServiceID": "$param.endpoint_service_id",
+        "regionID": "$profile.region",
+        "transitIP": "$param.transit_ip"
+      },
+      "retryable": false
+    },
+    "vpce.service.transit-ip.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/vpce/list-endpoint-service-transit-ip",
+      "content_type": "application/json",
+      "query": {
+        "endpointServiceID": "$param.endpoint_service_id",
+        "page": "$param.page",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "vpce.service.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/modify-endpoint-service",
+      "content_type": "application/json",
+      "body": {
+        "autoConnection": "$param.auto_connection",
+        "description": "$param.description",
+        "dnsName": "$param.dns_name",
+        "endpointServiceID": "$param.endpoint_service_id",
+        "name": "$param.name",
+        "oaType": "$param.oa_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "vpce.service.whitelist.add": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/create-endpoint-service-whitelist",
+      "content_type": "application/json",
+      "body": {
+        "bssAccountID": "$param.bss_account_id",
+        "clientToken": "$param.client_token",
+        "email": "$param.email",
+        "endpointServiceID": "$param.endpoint_service_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "vpce.service.whitelist.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpce/delete-endpoint-service-whitelist",
+      "content_type": "application/json",
+      "body": {
+        "bssAccountID": "$param.bss_account_id",
+        "clientToken": "$param.client_token",
+        "email": "$param.email",
+        "endpointServiceID": "$param.endpoint_service_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "vpce.service.whitelist.legacy.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/vpce/list-endpoint-service-whitelist",
+      "content_type": "application/json",
+      "query": {
+        "endpointServiceID": "$param.endpoint_service_id",
+        "page": "$param.page",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "vpce.service.whitelist.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/vpce/new-list-endpoint-service-whitelist",
+      "content_type": "application/json",
+      "query": {
+        "endpointServiceID": "$param.endpoint_service_id",
+        "page": "$param.page",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    }
+  }
+}

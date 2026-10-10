@@ -26,7 +26,7 @@ func TestRDSSQLServerCapturedSurface(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(bundle.Commands.Commands) != 114 || len(bundle.APIs.Operations) != 114 || len(bundle.Waiters.Waiters) != 6 {
+	if len(bundle.Commands.Commands) != 116 || len(bundle.APIs.Operations) != 116 || len(bundle.Waiters.Waiters) != 6 {
 		t.Fatalf("captured surface: commands=%d operations=%d waiters=%d", len(bundle.Commands.Commands), len(bundle.APIs.Operations), len(bundle.Waiters.Waiters))
 	}
 	if bundle.Manifest.API.CtyunProductID != 153 || bundle.Manifest.API.SourceRevision != "284" || bundle.Manifest.API.EndpointURL != "https://ctsqlserver-global.ctapi.ctyun.cn" {
@@ -34,6 +34,12 @@ func TestRDSSQLServerCapturedSurface(t *testing.T) {
 	}
 	for _, command := range bundle.Commands.Commands {
 		operation := bundle.APIs.Operations[command.Operation]
+		if command.ID == "rds-sqlserver.order.convert-to-demand" || command.ID == "rds-sqlserver.order.convert-to-package" {
+			if command.FixtureResponse != "" || operation.Retryable || command.Dangerous.Confirm != "yes" {
+				t.Fatal("new billing mutations must require confirmation without retry or fabricated fixtures")
+			}
+			continue
+		}
 		if operation.Path == "/sqlserver/api/v1/xevent/log_download" {
 			if !command.Download || command.FixtureResponse != "" || operation.Response == nil || operation.Response.Variants[0].Format != "binary" {
 				t.Fatal("documented download must use binary transport without a fabricated fixture")

@@ -1,0 +1,77 @@
+{
+  "captured_at": "2026-09-25",
+  "service_id": 1,
+  "version_id": 1,
+  "published_api_count": 138,
+  "implemented_api_count": 138,
+  "blocked": [],
+  "fixtures_unavailable": [],
+  "example_normalisations": [
+    {
+      "api_id": "5992",
+      "section": "响应示例",
+      "normalisation": "Restored missing JSON commas or replaced full-width structural commas; values unchanged."
+    },
+    {
+      "api_id": "6008",
+      "section": "响应示例",
+      "normalisation": "Restored missing JSON commas or replaced full-width structural commas; values unchanged."
+    },
+    {
+      "api_id": "6008",
+      "section": "响应示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "6529",
+      "section": "响应示例",
+      "normalisation": "Restored missing JSON commas or replaced full-width structural commas; values unchanged."
+    },
+    {
+      "api_id": "11631",
+      "section": "响应示例",
+      "normalisation": "Restored missing JSON commas or replaced full-width structural commas; values unchanged."
+    },
+    {
+      "api_id": "11927",
+      "section": "响应示例",
+      "normalisation": "Restored missing JSON commas or replaced full-width structural commas; values unchanged."
+    },
+    {
+      "api_id": "11927",
+      "section": "响应示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "5909",
+      "section": "request example",
+      "normalisation": "Represented dhcpDisable as its documented string type; value unchanged."
+    },
+    {
+      "api_id": "5998",
+      "section": "request example",
+      "normalisation": "Omitted the blank string published for required integer-array deleteRuleList. No rule IDs are invented; the CLI example uses an explicitly unavailable typed placeholder."
+    }
+  ],
+  "waiter_gaps": [],
+  "waiter_review": {
+    "waiter_count": 1,
+    "notes": [
+      "Task status retrieval selects the exact operationID; it never resubmits the initiating mutation.",
+      "Gateway status APIs return collections whose published rows omit an exact gateway identity field; input edgeID alone cannot justify selecting the first row. No such waiter is invented.",
+      "LAN/link and dedicated-line status queries lack scalar port or line selection inputs. Access control rule queries do not accept rule IDs. These collections cannot safely supply per-resource readiness."
+    ]
+  },
+  "request_notes": [
+    "Preserve nested JSON objects and arrays for gateway form factors, routing, QoS and order details.",
+    "Gateway hardware is the documented deviceType enum; the conditional prose misspelling hareware is normalized to hardware.",
+    "Prepaid billing defaults activate required cycle inputs. Inline gateway activation preserves the documented string dhcpDisable=false default.",
+    "The time-range requirements reference time_from/time_till while declared inputs are startTime/endTime; help retains the evidence and the server validates the alternative range forms."
+  ],
+  "response_notes": [
+    "All operations use the explicit 800-success/900-failure response contract; pricing also requires returnObj.isSucceed=true.",
+    "Five malformed responses are normalized through punctuation repairs only; all original values remain captured.",
+    "The topology and gateway detail APIs publish arrays even for an exact input; no singleton result assumption is introduced.",
+    "API 5925 table metadata preserves the captured LTE_type spelling instead of adding a duplicate LTEType schema column."
+  ]
+}

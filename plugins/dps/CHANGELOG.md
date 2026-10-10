@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.0-beta.4 - 2026-10-10
+
+### Added
+
+- Added subscription physical-server batch renewal with documented inputs, confirmation, and no automatic retries.
+
 ## 0.1.0-beta.3 - 2026-09-23
 
 ### Added

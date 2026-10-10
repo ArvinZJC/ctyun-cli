@@ -403,6 +403,60 @@
       },
       "retryable": false
     },
+    "vpc.delegation.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/delegate/create-role",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "delegateType": "$param.delegate_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "vpc.delegation.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/delegate/query-role",
+      "content_type": "application/json",
+      "query": {
+        "clientToken": "$param.client_token",
+        "delegateType": "$param.delegate_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
     "vpc.delete": {
       "response": {
         "variants": [
@@ -704,6 +758,32 @@
       },
       "retryable": true
     },
+    "vpc.flow-log.authorization.check": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/log/check-log-auth",
+      "content_type": "application/json",
+      "query": {
+        "delegateType": "$param.delegate_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
     "vpc.flow-log.create": {
       "response": {
         "variants": [
@@ -792,6 +872,61 @@
         "page": "$param.page",
         "pageSize": "$param.page_size",
         "queryText": "$param.query_text",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "vpc.flow-log.project.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/log/query-log-project-list",
+      "content_type": "application/json",
+      "query": {
+        "delegateType": "$param.delegate_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "vpc.flow-log.unit.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/log/query-log-unit-list",
+      "content_type": "application/json",
+      "query": {
+        "delegateType": "$param.delegate_type",
+        "page": "$param.page",
+        "pageSize": "$param.page_size",
+        "projectCode": "$param.project_code",
         "regionID": "$profile.region"
       },
       "retryable": true
@@ -2857,6 +2992,146 @@
         "name": "$param.name",
         "regionID": "$profile.region",
         "vni": "$param.vni"
+      },
+      "retryable": false
+    },
+    "vpc.order.cycle.price": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/order/query-to-cycle-price",
+      "content_type": "application/json",
+      "body": {
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "regionID": "$profile.region",
+        "resourceID": "$param.resource_id",
+        "resourceType": "$param.resource_type"
+      },
+      "retryable": true
+    },
+    "vpc.order.cycle.switch": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/order/change-to-cycle",
+      "content_type": "application/json",
+      "body": {
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "regionID": "$profile.region",
+        "resourceID": "$param.resource_id",
+        "resourceType": "$param.resource_type"
+      },
+      "retryable": false
+    },
+    "vpc.order.cycle.terminate": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/order/terminate-cycle",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "resourceID": "$param.resource_id",
+        "resourceType": "$param.resource_type"
+      },
+      "retryable": false
+    },
+    "vpc.order.on-demand.price": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/order/query-to-need-price",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "resourceID": "$param.resource_id",
+        "resourceType": "$param.resource_type"
+      },
+      "retryable": true
+    },
+    "vpc.order.on-demand.switch": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/order/change-to-need",
+      "content_type": "application/json",
+      "body": {
+        "autoToNeed": "$param.auto_to_need",
+        "regionID": "$profile.region",
+        "resourceID": "$param.resource_id",
+        "resourceType": "$param.resource_type"
       },
       "retryable": false
     },
@@ -5312,6 +5587,122 @@
         "subnetID": "$param.subnet_id"
       },
       "retryable": true
+    },
+    "vpc.tag.bind": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/labels/resource_bind_label",
+      "content_type": "application/json",
+      "body": {
+        "labelKey": "$param.label_key",
+        "labelValue": "$param.label_value",
+        "regionID": "$profile.region",
+        "resourceID": "$param.resource_id",
+        "resourceType": "$param.resource_type"
+      },
+      "retryable": false
+    },
+    "vpc.tag.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/labels/query_labels_by_resource",
+      "content_type": "application/json",
+      "query": {
+        "pageNumber": "$param.page_number",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "resourceID": "$param.resource_id",
+        "resourceType": "$param.resource_type"
+      },
+      "retryable": true
+    },
+    "vpc.tag.resource.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/labels/query_resources_by_label",
+      "content_type": "application/json",
+      "query": {
+        "labelID": "$param.label_id",
+        "labelKey": "$param.label_key",
+        "labelValue": "$param.label_value",
+        "pageNumber": "$param.page_number",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "vpc.tag.unbind": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/labels/resource_unbind_label",
+      "content_type": "application/json",
+      "body": {
+        "labelID": "$param.label_id",
+        "regionID": "$profile.region",
+        "resourceID": "$param.resource_id",
+        "resourceType": "$param.resource_type"
+      },
+      "retryable": false
     },
     "vpc.update": {
       "response": {

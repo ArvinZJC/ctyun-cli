@@ -20,6 +20,7 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
+// TestPluginInstallAndList shows a successfully installed bundle through installed-plugin discovery.
 func TestPluginInstallAndList(t *testing.T) {
 	bundleDir := testBundleDir(t)
 	pluginRoot := t.TempDir()
@@ -51,6 +52,7 @@ func TestPluginInstallAndList(t *testing.T) {
 	}
 }
 
+// TestPluginListShowsOnlyInstalledPlugins excludes bundled-only metadata from the installed-plugin listing.
 func TestPluginListShowsOnlyInstalledPlugins(t *testing.T) {
 	var stdout bytes.Buffer
 	if err := Run(Config{
@@ -123,6 +125,7 @@ func TestPluginListFollowsOutputOptions(t *testing.T) {
 	}
 }
 
+// TestPluginInstallRejectsLocalPath rejects filesystem paths where a registry plugin name is required.
 func TestPluginInstallRejectsLocalPath(t *testing.T) {
 	bundleDir := testBundleDir(t)
 	pluginRoot := t.TempDir()
@@ -158,6 +161,7 @@ func TestInstallPluginSourceRejectsInvalidBundleBeforeCopy(t *testing.T) {
 	}
 }
 
+// TestPluginRemove deletes the selected installed bundle after confirmation.
 func TestPluginRemove(t *testing.T) {
 	bundleDir := testBundleDir(t)
 	pluginRoot := t.TempDir()
@@ -182,6 +186,7 @@ func TestPluginRemove(t *testing.T) {
 	}
 }
 
+// TestPluginRemoveRejectsUnsafeName rejects traversal-shaped names before touching installed paths.
 func TestPluginRemoveRejectsUnsafeName(t *testing.T) {
 	parent := t.TempDir()
 	pluginRoot := filepath.Join(parent, "plugins")
@@ -204,6 +209,7 @@ func TestPluginRemoveRejectsUnsafeName(t *testing.T) {
 	}
 }
 
+// TestPluginReinstallUsageErrors rejects missing or conflicting reinstall targets.
 func TestPluginReinstallUsageErrors(t *testing.T) {
 	for _, tc := range []struct {
 		name string
@@ -228,6 +234,7 @@ func TestPluginReinstallUsageErrors(t *testing.T) {
 	}
 }
 
+// TestPluginLintValidatesBundle reports successful validation of a synthetic bundle.
 func TestPluginLintValidatesBundle(t *testing.T) {
 	bundleDir := testBundleDir(t)
 
@@ -239,11 +246,12 @@ func TestPluginLintValidatesBundle(t *testing.T) {
 	if err != nil {
 		t.Fatalf("plugin lint returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "Valid plugin ecs") {
-		t.Fatalf("lint output = %q, want Valid plugin ecs", stdout.String())
+	if !strings.Contains(stdout.String(), "Valid plugin \"ecs\"") {
+		t.Fatalf("lint output = %q, want Valid plugin \"ecs\"", stdout.String())
 	}
 }
 
+// TestPluginLintIsDevOnly rejects lint commands in released builds.
 func TestPluginLintIsDevOnly(t *testing.T) {
 	bundleDir := testBundleDir(t)
 	restoreVersion := patchVersion("0.1.0")
@@ -254,6 +262,7 @@ func TestPluginLintIsDevOnly(t *testing.T) {
 	}
 }
 
+// TestPluginLintRejectsInvalidBundle surfaces bundle validation failures instead of reporting success.
 func TestPluginLintRejectsInvalidBundle(t *testing.T) {
 	bundleDir := testBundleDir(t)
 	mustWrite(t, filepath.Join(bundleDir, "plugin.json"), `{
@@ -275,6 +284,7 @@ func TestPluginLintRejectsInvalidBundle(t *testing.T) {
 	requireDiagnosticKey(t, err, "error.plugin_unsupported_channel")
 }
 
+// TestPluginListUpdatesUsesRegistryIndex compares installed versions with the verified registry index.
 func TestPluginListUpdatesUsesRegistryIndex(t *testing.T) {
 	bundleDir := testBundleDir(t)
 	pluginRoot := t.TempDir()
@@ -299,11 +309,12 @@ func TestPluginListUpdatesUsesRegistryIndex(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("list --updates returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "Update available for ecs: 0.1.0 -> 0.2.0.") {
+	if !strings.Contains(stdout.String(), "Update available for \"ecs\": \"0.1.0\" -> \"0.2.0\".") {
 		t.Fatalf("updates output = %q", stdout.String())
 	}
 }
 
+// TestPluginListUpdatesUsesSelectedChannel limits update suggestions to the requested release channel.
 func TestPluginListUpdatesUsesSelectedChannel(t *testing.T) {
 	bundleDir := testBundleDir(t)
 	pluginRoot := t.TempDir()
@@ -329,11 +340,12 @@ func TestPluginListUpdatesUsesSelectedChannel(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("list --updates returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "Update available for ecs: 0.1.0 -> 0.3.0.") {
+	if !strings.Contains(stdout.String(), "Update available for \"ecs\": \"0.1.0\" -> \"0.3.0\".") {
 		t.Fatalf("updates output = %q", stdout.String())
 	}
 }
 
+// TestPluginSearchUsesRegistryStorefront renders matching registry artifacts without installing them.
 func TestPluginSearchUsesRegistryStorefront(t *testing.T) {
 	index := []byte(`{
   "plugins": [
@@ -362,6 +374,7 @@ func TestPluginSearchUsesRegistryStorefront(t *testing.T) {
 	}
 }
 
+// TestPluginSourceCanComeFromEnv uses the configured environment source when no option overrides it.
 func TestPluginSourceCanComeFromEnv(t *testing.T) {
 	bundleDir := testBundleDir(t)
 	pluginRoot := t.TempDir()
@@ -394,11 +407,12 @@ func TestPluginSourceCanComeFromEnv(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("list updates from env source: %v", err)
 	}
-	if !strings.Contains(envOut.String(), "Update available for ecs: 0.1.0 -> 0.2.0.") {
+	if !strings.Contains(envOut.String(), "Update available for \"ecs\": \"0.1.0\" -> \"0.2.0\".") {
 		t.Fatalf("env registry updates output = %q", envOut.String())
 	}
 }
 
+// TestPluginInstallByNameFromRegistry resolves a plugin name into its registry artifact before installation.
 func TestPluginInstallByNameFromRegistry(t *testing.T) {
 	pluginRoot := t.TempDir()
 	artifactName, artifactBytes, checksum := hostedPluginArtifact(t, "ecs", "0.2.0")
@@ -428,6 +442,7 @@ func TestPluginInstallByNameFromRegistry(t *testing.T) {
 	}
 }
 
+// TestPluginInstallByNameFromRegistryVerifiesChecksum rejects an archive whose bytes do not match the selected registry checksum.
 func TestPluginInstallByNameFromRegistryVerifiesChecksum(t *testing.T) {
 	pluginRoot := t.TempDir()
 	artifactName, artifactBytes, checksum := hostedPluginArtifact(t, "ecs", "0.2.0")
@@ -462,6 +477,7 @@ func TestPluginInstallByNameFromRegistryVerifiesChecksum(t *testing.T) {
 	}
 }
 
+// TestPluginInstallByNameFromHTTPRegistry fetches registry metadata and its referenced plugin archive over HTTP.
 func TestPluginInstallByNameFromHTTPRegistry(t *testing.T) {
 	pluginRoot := t.TempDir()
 	artifactName, artifactBytes, checksum := hostedPluginArtifact(t, "ecs", "0.3.0")
@@ -488,6 +504,7 @@ func TestPluginInstallByNameFromHTTPRegistry(t *testing.T) {
 	}
 }
 
+// TestPluginInstallFromLocalRegistryDownloadsHTTPArtifact supports an absolute HTTP artifact reference from a local index.
 func TestPluginInstallFromLocalRegistryDownloadsHTTPArtifact(t *testing.T) {
 	pluginRoot := t.TempDir()
 	artifactName, artifactBytes, checksum := hostedPluginArtifact(t, "ecs", "0.3.0")
@@ -522,6 +539,7 @@ func TestPluginInstallFromLocalRegistryDownloadsHTTPArtifact(t *testing.T) {
 	}
 }
 
+// TestPluginInstallFromHTTPRegistryRequiresChecksum rejects remote artifacts without integrity metadata.
 func TestPluginInstallFromHTTPRegistryRequiresChecksum(t *testing.T) {
 	pluginRoot := t.TempDir()
 	index := []byte(`{"plugins":[{"name":"ecs","version":"0.3.0","channel":"stable","quality":"reviewed","url":"ecs-0.3.0.tar.gz"}]}`)
@@ -554,6 +572,7 @@ func TestPluginInstallFromHTTPRegistryRequiresChecksum(t *testing.T) {
 	}
 }
 
+// TestPluginHTTPRegistryRequiresSignedIndex rejects an untrusted remote index before plugin installation.
 func TestPluginHTTPRegistryRequiresSignedIndex(t *testing.T) {
 	pluginRoot := t.TempDir()
 	downloaded := false
@@ -598,6 +617,7 @@ func TestPluginHTTPRegistryRequiresSignedIndex(t *testing.T) {
 	}
 }
 
+// TestPluginInstallFromHostedSourceFallsBackToGitee tries the alternate hosted source after the preferred source fails.
 func TestPluginInstallFromHostedSourceFallsBackToGitee(t *testing.T) {
 	t.Cleanup(patchVersion("0.1.0"))
 	pluginRoot := t.TempDir()
@@ -655,6 +675,7 @@ func TestPluginInstallFromHostedSourceFallsBackToGitee(t *testing.T) {
 	}
 }
 
+// TestPluginUpdateRejectsCustomLocalSource enforces the supported source boundary for update operations.
 func TestPluginUpdateRejectsCustomLocalSource(t *testing.T) {
 	t.Cleanup(patchVersion("0.1.0"))
 	pluginRoot := t.TempDir()
@@ -667,6 +688,7 @@ func TestPluginUpdateRejectsCustomLocalSource(t *testing.T) {
 	}
 }
 
+// TestPluginUpdateAllFromRegistry updates each installed target with an eligible newer registry artifact.
 func TestPluginUpdateAllFromRegistry(t *testing.T) {
 	oldBundle := testBundleDir(t)
 	pluginRoot := t.TempDir()
@@ -693,6 +715,7 @@ func TestPluginUpdateAllFromRegistry(t *testing.T) {
 	}
 }
 
+// TestPluginUpdateOneFromRegistry restricts update replacement to the selected installed plugin.
 func TestPluginUpdateOneFromRegistry(t *testing.T) {
 	oldBundle := testBundleDir(t)
 	pluginRoot := t.TempDir()
@@ -723,6 +746,7 @@ func TestPluginUpdateOneFromRegistry(t *testing.T) {
 	}
 }
 
+// TestPluginUpdateUsesSelectedChannel chooses the update artifact from the requested channel.
 func TestPluginUpdateUsesSelectedChannel(t *testing.T) {
 	oldBundle := testBundleDir(t)
 	pluginRoot := t.TempDir()
@@ -757,6 +781,7 @@ func TestPluginUpdateUsesSelectedChannel(t *testing.T) {
 	}
 }
 
+// TestPluginReinstallFromRegistryReplacesSameVersion replaces installed files even when reinstall selects the same version.
 func TestPluginReinstallFromRegistryReplacesSameVersion(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.2.0")
@@ -797,6 +822,7 @@ func TestPluginReinstallFromRegistryReplacesSameVersion(t *testing.T) {
 	}
 }
 
+// TestPluginReinstallAllFromRegistryTargetsInstalledPlugins excludes uninstalled registry entries from bulk reinstall.
 func TestPluginReinstallAllFromRegistryTargetsInstalledPlugins(t *testing.T) {
 	pluginRoot := t.TempDir()
 	for _, name := range []string{"ecs", "vpc"} {
@@ -838,6 +864,7 @@ func TestPluginReinstallAllFromRegistryTargetsInstalledPlugins(t *testing.T) {
 	}
 }
 
+// TestPluginAndPluginsUpgradeAliasesUpdatePlugins dispatches both plugin spellings and upgrade aliases consistently.
 func TestPluginAndPluginsUpgradeAliasesUpdatePlugins(t *testing.T) {
 	for _, tc := range []struct {
 		name string

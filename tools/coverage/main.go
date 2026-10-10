@@ -26,7 +26,8 @@ func main() {
 	}
 }
 
-// run executes tests, filters the coverage profile, and enforces 100% coverage.
+// run executes tests with time for the complete plugin fixture catalog, filters
+// the coverage profile, and enforces 100% coverage.
 func run() error {
 	root, err := repoRoot()
 	if err != nil {
@@ -39,7 +40,7 @@ func run() error {
 	rawProfile := filepath.Join(coverDir, "raw.out")
 	filteredProfile := filepath.Join(coverDir, "coverage.out")
 
-	if err := runGo(root, os.Stdout, os.Stderr, "test", "-coverprofile="+rawProfile, "./..."); err != nil {
+	if err := runGo(root, os.Stdout, os.Stderr, "test", "-timeout=30m", "-coverprofile="+rawProfile, "./..."); err != nil {
 		return err
 	}
 	if err := filter(rawProfile, filteredProfile); err != nil {

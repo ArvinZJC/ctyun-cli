@@ -52,11 +52,16 @@ func operationLifecycleTexts(operation Operation) []string {
 	return texts
 }
 
-// operationLifecycleActionTitle reports titles where 弃用 is the operation
+// operationLifecycleActionTitle reports titles where resource retirement is the operation
 // being performed on a resource rather than a status of the API itself.
 func operationLifecycleActionTitle(title string) bool {
 	title = normalizedOperationLifecycleText(title)
-	return title == "弃用私有镜像" || title == "取消弃用私有镜像"
+	switch title {
+	case "弃用私有镜像", "取消弃用私有镜像", "废弃技术栈", "踢用户下线", "客户端下线", "下线MCP服务", "下线API", "下线路由", "下线AgentAPI路由", "Eureka服务下线", "批量下线API", "下线网关路由", "获取应用的无损上下线规则", "为应用配置无损上下线规则":
+		return true
+	default:
+		return false
+	}
 }
 
 // normalizedOperationLifecycleText removes sentence punctuation when comparing
@@ -185,11 +190,16 @@ func deprecationTexts(description string, descriptions map[string]string) []stri
 // whose use of 弃用 does not announce retirement of the containing API field.
 var imageLifecycleValuePattern = regexp.MustCompile(`(?:deactivated\s*[:：]\s*已弃用|deactivating\s*[:：]\s*弃用中|reactivating\s*[:：]\s*取消弃用中)(?:[。.,，;；]|$)`)
 
+// resourceOfflineValuePattern recognizes explicit offline state labels and
+// forced session logout, which do not retire the containing API field.
+var resourceOfflineValuePattern = regexp.MustCompile(`(?:offline\s*[:：]\s*(?:已)?下线|drain\s*[:：]\s*节点已下线|1\s*[:：]\s*下线|登录将被强制下线|无损上下线)`)
+
 // hasDeprecationText reports whether any source text looks like an upstream
 // deprecation notice.
 func hasDeprecationText(texts []string) bool {
 	for _, text := range texts {
 		lower := imageLifecycleValuePattern.ReplaceAllString(strings.ToLower(text), "")
+		lower = resourceOfflineValuePattern.ReplaceAllString(lower, "")
 		for _, term := range []string{"弃用", "废弃", "下线", "退役", "deprecated", "obsolete"} {
 			if strings.Contains(lower, term) {
 				return true

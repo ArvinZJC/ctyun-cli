@@ -1,0 +1,3380 @@
+{
+  "commands": [
+    {
+      "id": "iam.user.create",
+      "path": [
+        "iam",
+        "user",
+        "create"
+      ],
+      "operation": "iam.user.create",
+      "table": "iam.user.create",
+      "parameters": [
+        {
+          "name": "login_email",
+          "flag": "login-email",
+          "target": "loginEmail",
+          "required": false,
+          "description": "Login Email"
+        },
+        {
+          "name": "password",
+          "flag": "password",
+          "target": "password",
+          "required": false,
+          "description": "Password"
+        },
+        {
+          "name": "mobile_phone",
+          "flag": "mobile-phone",
+          "target": "mobilePhone",
+          "required": true,
+          "description": "Mobile Phone"
+        },
+        {
+          "name": "user_name",
+          "flag": "user-name",
+          "target": "userName",
+          "required": true,
+          "description": "User Name"
+        },
+        {
+          "name": "groups",
+          "flag": "groups",
+          "target": "groups",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Groups as a JSON array"
+        },
+        {
+          "name": "remark",
+          "flag": "remark",
+          "target": "remark",
+          "required": false,
+          "description": "Remark"
+        },
+        {
+          "name": "source_password",
+          "flag": "source-password",
+          "target": "sourcePassword",
+          "required": false,
+          "description": "Source Password"
+        },
+        {
+          "name": "generate_password",
+          "flag": "generate-password",
+          "target": "generatePassword",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Generate Password"
+        },
+        {
+          "name": "login_reset_password",
+          "flag": "login-reset-password",
+          "target": "loginResetPassword",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Login Reset Password"
+        },
+        {
+          "name": "access_control",
+          "flag": "access-control",
+          "target": "accessControl",
+          "required": false,
+          "value_type": "json",
+          "description": "Access Control as a JSON object"
+        },
+        {
+          "name": "user_nick_name",
+          "flag": "user-nick-name",
+          "target": "userNickName",
+          "required": false,
+          "description": "User Nick Name"
+        }
+      ],
+      "fixture_response": "fixtures/iam-user-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=8135&isNormal=1",
+      "examples": [
+        "ctyun iam user create --mobile-phone '131****990' --user-name TEST4"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "iam.group.create",
+      "path": [
+        "iam",
+        "group",
+        "create"
+      ],
+      "operation": "iam.group.create",
+      "table": "iam.group.create",
+      "parameters": [
+        {
+          "name": "group_name",
+          "flag": "group-name",
+          "target": "groupName",
+          "required": true,
+          "description": "Group Name"
+        },
+        {
+          "name": "group_intro",
+          "flag": "group-intro",
+          "target": "groupIntro",
+          "required": true,
+          "description": "Group Intro"
+        }
+      ],
+      "fixture_response": "fixtures/iam-group-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=8136&isNormal=1",
+      "examples": [
+        "ctyun iam group create --group-name openapi测试9 --group-intro 描述"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "iam.user.update",
+      "path": [
+        "iam",
+        "user",
+        "update"
+      ],
+      "operation": "iam.user.update",
+      "table": "iam.user.update",
+      "parameters": [
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        },
+        {
+          "name": "remark",
+          "flag": "remark",
+          "target": "remark",
+          "required": false,
+          "description": "Remark"
+        },
+        {
+          "name": "login_email",
+          "flag": "login-email",
+          "target": "loginEmail",
+          "required": false,
+          "description": "Login Email"
+        },
+        {
+          "name": "mobile_phone",
+          "flag": "mobile-phone",
+          "target": "mobilePhone",
+          "required": true,
+          "description": "Mobile Phone"
+        },
+        {
+          "name": "user_name",
+          "flag": "user-name",
+          "target": "userName",
+          "required": true,
+          "description": "User Name"
+        },
+        {
+          "name": "user_nick_name",
+          "flag": "user-nick-name",
+          "target": "userNickName",
+          "required": false,
+          "description": "User Nick Name"
+        },
+        {
+          "name": "prohibit",
+          "flag": "prohibit",
+          "target": "prohibit",
+          "required": true,
+          "value_type": "integer",
+          "description": "Prohibit"
+        }
+      ],
+      "fixture_response": "fixtures/iam-user-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9148&isNormal=1",
+      "examples": [
+        "ctyun iam user update --user-id '06a4d*******f75f7f8187c' --mobile-phone '135****3156' --user-name 1 --prohibit 0"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "iam.user.deactivate",
+      "path": [
+        "iam",
+        "user",
+        "deactivate"
+      ],
+      "operation": "iam.user.deactivate",
+      "table": "iam.user.deactivate",
+      "parameters": [
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-user-deactivate.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9147&isNormal=1",
+      "examples": [
+        "ctyun iam user deactivate --user-id 6a184d6xxxxxxxc4a"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "deactivate"
+      }
+    },
+    {
+      "id": "iam.user.show",
+      "path": [
+        "iam",
+        "user",
+        "show"
+      ],
+      "operation": "iam.user.show",
+      "table": "iam.user.show",
+      "parameters": [
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-user-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9149&isNormal=1",
+      "examples": [
+        "ctyun iam user show --user-id {user_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.user.password.reset",
+      "path": [
+        "iam",
+        "user",
+        "password",
+        "reset"
+      ],
+      "operation": "iam.user.password.reset",
+      "table": "iam.user.password.reset",
+      "parameters": [
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        },
+        {
+          "name": "old_password",
+          "flag": "old-password",
+          "target": "oldPassword",
+          "required": true,
+          "description": "Old Password"
+        },
+        {
+          "name": "new_password",
+          "flag": "new-password",
+          "target": "newPassword",
+          "required": true,
+          "description": "New Password"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=13939&isNormal=1",
+      "examples": [
+        "ctyun iam user password reset --user-id {user_id} --old-password {old_password} --new-password {new_password}"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "reset"
+      }
+    },
+    {
+      "id": "iam.user.creation.check",
+      "path": [
+        "iam",
+        "user",
+        "creation",
+        "check"
+      ],
+      "operation": "iam.user.creation.check",
+      "table": "iam.user.creation.check",
+      "parameters": [
+        {
+          "name": "user_list",
+          "flag": "user-list",
+          "target": "userList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "User List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/iam-user-creation-check.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=14030&isNormal=1",
+      "examples": [
+        "ctyun iam user creation check --user-list '[{\"id\":1,\"loginEmail\":\"1@qq.com\",\"mobilePhone\":\"131****4985\"},{\"id\":2,\"loginEmail\":\"12@qq.com\",\"mobilePhone\":\"131****4986\"}]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.user.update-input.check",
+      "path": [
+        "iam",
+        "user",
+        "update-input",
+        "check"
+      ],
+      "operation": "iam.user.update-input.check",
+      "table": "iam.user.update-input.check",
+      "parameters": [
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        },
+        {
+          "name": "login_email",
+          "flag": "login-email",
+          "target": "loginEmail",
+          "required": false,
+          "description": "Login Email"
+        },
+        {
+          "name": "mobile_phone",
+          "flag": "mobile-phone",
+          "target": "mobilePhone",
+          "required": false,
+          "description": "Mobile Phone"
+        }
+      ],
+      "fixture_response": "fixtures/iam-user-update-input-check.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=14031&isNormal=1",
+      "examples": [
+        "ctyun iam user update-input check --user-id 7a0cd6b6cb3e4b2c918273fa01765c87"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.user.access-control.set",
+      "path": [
+        "iam",
+        "user",
+        "access-control",
+        "set"
+      ],
+      "operation": "iam.user.access-control.set",
+      "table": "iam.user.access-control.set",
+      "parameters": [
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        },
+        {
+          "name": "console_access",
+          "flag": "console-access",
+          "target": "consoleAccess",
+          "required": true,
+          "description": "Console Access"
+        }
+      ],
+      "fixture_response": "fixtures/iam-user-access-control-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=14028&isNormal=1",
+      "examples": [
+        "ctyun iam user access-control set --user-id '8b0a79e14f7d4b8*********d8de09613' --console-access PUB_100_02_0001"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "iam.user.access-control.show",
+      "path": [
+        "iam",
+        "user",
+        "access-control",
+        "show"
+      ],
+      "operation": "iam.user.access-control.show",
+      "table": "iam.user.access-control.show",
+      "parameters": [
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-user-access-control-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=14029&isNormal=1",
+      "examples": [
+        "ctyun iam user access-control show --user-id '8b0a79e14*********b8bd8de09613'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.user.login-password.set",
+      "path": [
+        "iam",
+        "user",
+        "login-password",
+        "set"
+      ],
+      "operation": "iam.user.login-password.set",
+      "table": "iam.user.login-password.set",
+      "parameters": [
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        },
+        {
+          "name": "password",
+          "flag": "password",
+          "target": "password",
+          "required": false,
+          "description": "Password"
+        }
+      ],
+      "fixture_response": "fixtures/iam-user-login-password-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=14024&isNormal=1",
+      "examples": [
+        "ctyun iam user login-password set --user-id '8b0a79e*****f94b8bd8de09613' --type 2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "iam.user.login-authentication.set",
+      "path": [
+        "iam",
+        "user",
+        "login-authentication",
+        "set"
+      ],
+      "operation": "iam.user.login-authentication.set",
+      "table": "iam.user.login-authentication.set",
+      "parameters": [
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        },
+        {
+          "name": "enable",
+          "flag": "enable",
+          "target": "enable",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Enable"
+        }
+      ],
+      "fixture_response": "fixtures/iam-user-login-authentication-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=14025&isNormal=1",
+      "examples": [
+        "ctyun iam user login-authentication set --user-id 8b0a79e14f7d4b809f94b8bd8de09613 --enable true"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "iam.user.login-authentication.show",
+      "path": [
+        "iam",
+        "user",
+        "login-authentication",
+        "show"
+      ],
+      "operation": "iam.user.login-authentication.show",
+      "table": "iam.user.login-authentication.show",
+      "parameters": [
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-user-login-authentication-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=14026&isNormal=1",
+      "examples": [
+        "ctyun iam user login-authentication show --user-id '8b0a79e14f******8de09613'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.access-key.recover",
+      "path": [
+        "iam",
+        "access-key",
+        "recover"
+      ],
+      "operation": "iam.access-key.recover",
+      "table": "iam.access-key.recover",
+      "parameters": [
+        {
+          "name": "ak",
+          "flag": "ak",
+          "target": "ak",
+          "required": true,
+          "description": "Ak"
+        },
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-access-key-recover.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=10408&isNormal=1",
+      "examples": [
+        "ctyun iam access-key recover --ak 12121222222222222222 --user-id 31aba2014d2e463a9af8fc94908d2a49"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "recover"
+      }
+    },
+    {
+      "id": "iam.credential.token.create",
+      "path": [
+        "iam",
+        "credential",
+        "token",
+        "create"
+      ],
+      "operation": "iam.credential.token.create",
+      "table": "iam.credential.token.create",
+      "fixture_response": "fixtures/iam-credential-token-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=13083&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "iam.user.list",
+      "path": [
+        "iam",
+        "user",
+        "list"
+      ],
+      "operation": "iam.user.list",
+      "table": "iam.user.list",
+      "parameters": [
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/iam-user-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=13017&isNormal=1",
+      "examples": [
+        "ctyun iam user list --page-num 1 --page-size 10"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.project.permission.grant",
+      "path": [
+        "iam",
+        "project",
+        "permission",
+        "grant"
+      ],
+      "operation": "iam.project.permission.grant",
+      "table": "iam.project.permission.grant",
+      "parameters": [
+        {
+          "name": "group_name",
+          "flag": "group-name",
+          "target": "groupName",
+          "required": false,
+          "description": "Group Name"
+        },
+        {
+          "name": "group_intro",
+          "flag": "group-intro",
+          "target": "groupIntro",
+          "required": false,
+          "description": "Group Intro"
+        },
+        {
+          "name": "group_id",
+          "flag": "group-id",
+          "target": "groupId",
+          "required": false,
+          "description": "Group ID"
+        },
+        {
+          "name": "assume_user_ids",
+          "flag": "assume-user-ids",
+          "target": "assumeUserIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Assume User IDs as a JSON array"
+        },
+        {
+          "name": "project_name",
+          "flag": "project-name",
+          "target": "projectName",
+          "required": false,
+          "description": "Project Name"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        },
+        {
+          "name": "ep_id",
+          "flag": "ep-id",
+          "target": "epId",
+          "required": false,
+          "description": "Ep ID"
+        },
+        {
+          "name": "ploy_ids",
+          "flag": "ploy-ids",
+          "target": "ployIds",
+          "required": true,
+          "description": "Ploy IDs"
+        }
+      ],
+      "fixture_response": "fixtures/iam-project-permission-grant.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=12851&isNormal=1",
+      "examples": [
+        "ctyun iam project permission grant --assume-user-ids '[\"3b13243******ddb5713ce755ce\"]' --ploy-ids '4470c7e1e***********50b8b33d8a7e'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "grant"
+      }
+    },
+    {
+      "id": "iam.organization.policy.unbind",
+      "path": [
+        "iam",
+        "organization",
+        "policy",
+        "unbind"
+      ],
+      "operation": "iam.organization.policy.unbind",
+      "table": "iam.organization.policy.unbind",
+      "parameters": [
+        {
+          "name": "privilege_id",
+          "flag": "privilege-id",
+          "target": "privilegeId",
+          "required": true,
+          "description": "Privilege ID"
+        },
+        {
+          "name": "account_id",
+          "flag": "account-id",
+          "target": "accountId",
+          "required": true,
+          "description": "Account ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-organization-policy-unbind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=11386&isNormal=1",
+      "examples": [
+        "ctyun iam organization policy unbind --privilege-id 8e3a1454a8ee43b6bf647d992112df4a --account-id 790251264f2341dfb372a79963688b17"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unbind"
+      }
+    },
+    {
+      "id": "iam.user.root-verified-password.reset",
+      "path": [
+        "iam",
+        "user",
+        "root-verified-password",
+        "reset"
+      ],
+      "operation": "iam.user.root-verified-password.reset",
+      "table": "iam.user.root-verified-password.reset",
+      "parameters": [
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        },
+        {
+          "name": "password",
+          "flag": "password",
+          "target": "password",
+          "required": true,
+          "description": "Password"
+        },
+        {
+          "name": "code",
+          "flag": "code",
+          "target": "code",
+          "required": true,
+          "description": "Code"
+        }
+      ],
+      "fixture_response": "fixtures/iam-user-root-verified-password-reset.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=10411&isNormal=1",
+      "examples": [
+        "ctyun iam user root-verified-password reset --user-id '427098***********8eabe' --password '8632cd8e**********2dada8dcccd12' --code 666666"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "reset"
+      }
+    },
+    {
+      "id": "iam.user.password-verification.send",
+      "path": [
+        "iam",
+        "user",
+        "password-verification",
+        "send"
+      ],
+      "operation": "iam.user.password-verification.send",
+      "table": "iam.user.password-verification.send",
+      "parameters": [
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-user-password-verification-send.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=10410&isNormal=1",
+      "examples": [
+        "ctyun iam user password-verification send --user-id '427098031*************60cfa1e8eabe'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "send"
+      }
+    },
+    {
+      "id": "iam.access-key.recycle-bin.list",
+      "path": [
+        "iam",
+        "access-key",
+        "recycle-bin",
+        "list"
+      ],
+      "operation": "iam.access-key.recycle-bin.list",
+      "table": "iam.access-key.recycle-bin.list",
+      "parameters": [
+        {
+          "name": "user_id_list",
+          "flag": "user-id-list",
+          "target": "userIdList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "User ID List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/iam-access-key-recycle-bin-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=10409&isNormal=1",
+      "examples": [
+        "ctyun iam access-key recycle-bin list --user-id-list '[\"4e4a35aafc***********b7a3bfc16f77798\",\"63d85**************930e1319d30b84be\"]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.access-key.enable",
+      "path": [
+        "iam",
+        "access-key",
+        "enable"
+      ],
+      "operation": "iam.access-key.enable",
+      "table": "iam.access-key.enable",
+      "parameters": [
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        },
+        {
+          "name": "ak",
+          "flag": "ak",
+          "target": "ak",
+          "required": true,
+          "description": "Ak"
+        }
+      ],
+      "fixture_response": "fixtures/iam-access-key-enable.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=10406&isNormal=1",
+      "examples": [
+        "ctyun iam access-key enable --user-id 31aba2014d2e463a9af8fc94908d2a49 --ak 12121222222222222222"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "enable"
+      }
+    },
+    {
+      "id": "iam.project.status.update",
+      "path": [
+        "iam",
+        "project",
+        "status",
+        "update"
+      ],
+      "operation": "iam.project.status.update",
+      "table": "iam.project.status.update",
+      "parameters": [
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectId",
+          "required": true,
+          "description": "Project ID"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": true,
+          "value_type": "integer",
+          "description": "Status"
+        }
+      ],
+      "fixture_response": "fixtures/iam-project-status-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=23714&isNormal=1",
+      "examples": [
+        "ctyun iam project status update --project-id 0c48e3c11f404945ae8f39d835f2762e --status 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "iam.access-key.disable",
+      "path": [
+        "iam",
+        "access-key",
+        "disable"
+      ],
+      "operation": "iam.access-key.disable",
+      "table": "iam.access-key.disable",
+      "parameters": [
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        },
+        {
+          "name": "ak",
+          "flag": "ak",
+          "target": "ak",
+          "required": true,
+          "description": "Ak"
+        }
+      ],
+      "fixture_response": "fixtures/iam-access-key-disable.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=10405&isNormal=1",
+      "examples": [
+        "ctyun iam access-key disable --user-id 31aba2014d2e463a9af8fc94908d2a49 --ak aaaaaa12112121"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "disable"
+      }
+    },
+    {
+      "id": "iam.access-key.delete",
+      "path": [
+        "iam",
+        "access-key",
+        "delete"
+      ],
+      "operation": "iam.access-key.delete",
+      "table": "iam.access-key.delete",
+      "parameters": [
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        },
+        {
+          "name": "ak",
+          "flag": "ak",
+          "target": "ak",
+          "required": true,
+          "description": "Ak"
+        }
+      ],
+      "fixture_response": "fixtures/iam-access-key-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=10404&isNormal=1",
+      "examples": [
+        "ctyun iam access-key delete --user-id 31aba2014d2e463a9af8fc94908d2a49 --ak '312·21·3212312312'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "iam.access-key.recycle",
+      "path": [
+        "iam",
+        "access-key",
+        "recycle"
+      ],
+      "operation": "iam.access-key.recycle",
+      "table": "iam.access-key.recycle",
+      "parameters": [
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        },
+        {
+          "name": "ak",
+          "flag": "ak",
+          "target": "ak",
+          "required": true,
+          "description": "Ak"
+        }
+      ],
+      "fixture_response": "fixtures/iam-access-key-recycle.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=10407&isNormal=1",
+      "examples": [
+        "ctyun iam access-key recycle --user-id '31aba20*************2a49' --ak '121212***********22222'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "recycle"
+      }
+    },
+    {
+      "id": "iam.user.inherited-policy.list",
+      "path": [
+        "iam",
+        "user",
+        "inherited-policy",
+        "list"
+      ],
+      "operation": "iam.user.inherited-policy.list",
+      "table": "iam.user.inherited-policy.list",
+      "parameters": [
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-user-inherited-policy-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=14019&isNormal=1",
+      "examples": [
+        "ctyun iam user inherited-policy list --user-id {user_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.project.policy.revoke",
+      "path": [
+        "iam",
+        "project",
+        "policy",
+        "revoke"
+      ],
+      "operation": "iam.project.policy.revoke",
+      "table": "iam.project.policy.revoke",
+      "parameters": [
+        {
+          "name": "privilege_id",
+          "flag": "privilege-id",
+          "target": "privilegeId",
+          "required": true,
+          "description": "Privilege ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-project-policy-revoke.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=14126&isNormal=1",
+      "examples": [
+        "ctyun iam project policy revoke --privilege-id a88d8931adca4e98bf4149f76fe73d92"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "revoke"
+      }
+    },
+    {
+      "id": "iam.project.policy.grant",
+      "path": [
+        "iam",
+        "project",
+        "policy",
+        "grant"
+      ],
+      "operation": "iam.project.policy.grant",
+      "table": "iam.project.policy.grant",
+      "parameters": [
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "description": "ID"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectId",
+          "required": true,
+          "description": "Project ID"
+        },
+        {
+          "name": "ploy_ids",
+          "flag": "ploy-ids",
+          "target": "ployIds",
+          "required": true,
+          "description": "Ploy IDs"
+        },
+        {
+          "name": "value",
+          "flag": "value",
+          "target": "value",
+          "required": true,
+          "description": "Value"
+        }
+      ],
+      "fixture_response": "fixtures/iam-project-policy-grant.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=14125&isNormal=1",
+      "examples": [
+        "ctyun iam project policy grant --id {id} --project-id {project_id} --ploy-ids {ploy_ids} --value {value}"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "grant"
+      }
+    },
+    {
+      "id": "iam.security.operation-verification.show",
+      "path": [
+        "iam",
+        "security",
+        "operation-verification",
+        "show"
+      ],
+      "operation": "iam.security.operation-verification.show",
+      "table": "iam.security.operation-verification.show",
+      "fixture_response": "fixtures/iam-security-operation-verification-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=14022&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.security.operation-verification.set",
+      "path": [
+        "iam",
+        "security",
+        "operation-verification",
+        "set"
+      ],
+      "operation": "iam.security.operation-verification.set",
+      "table": "iam.security.operation-verification.set",
+      "parameters": [
+        {
+          "name": "op_verify",
+          "flag": "op-verify",
+          "target": "opVerify",
+          "required": true,
+          "description": "Op Verify"
+        }
+      ],
+      "fixture_response": "fixtures/iam-security-operation-verification-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=14021&isNormal=1",
+      "examples": [
+        "ctyun iam security operation-verification set --op-verify 2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "iam.delegation.switch",
+      "path": [
+        "iam",
+        "delegation",
+        "switch"
+      ],
+      "operation": "iam.delegation.switch",
+      "table": "iam.delegation.switch",
+      "parameters": [
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Name"
+        },
+        {
+          "name": "assume_user_id",
+          "flag": "assume-user-id",
+          "target": "assumeUserId",
+          "required": false,
+          "description": "Assume User ID"
+        },
+        {
+          "name": "account_id",
+          "flag": "account-id",
+          "target": "accountId",
+          "required": true,
+          "description": "Account ID"
+        },
+        {
+          "name": "valid_time",
+          "flag": "valid-time",
+          "target": "validTime",
+          "required": false,
+          "value_type": "integer",
+          "description": "Valid Time"
+        },
+        {
+          "name": "support_s3",
+          "flag": "support-s3",
+          "target": "supportS3",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Support S3"
+        }
+      ],
+      "fixture_response": "fixtures/iam-delegation-switch.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=8954&isNormal=1",
+      "examples": [
+        "ctyun iam delegation switch --account-id '202d18a*******************5d973d' --support-s3 true"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "switch"
+      }
+    },
+    {
+      "id": "iam.user.contact.update",
+      "path": [
+        "iam",
+        "user",
+        "contact",
+        "update"
+      ],
+      "operation": "iam.user.contact.update",
+      "table": "iam.user.contact.update",
+      "parameters": [
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        },
+        {
+          "name": "login_email",
+          "flag": "login-email",
+          "target": "loginEmail",
+          "required": false,
+          "description": "Login Email"
+        },
+        {
+          "name": "mobile_phone",
+          "flag": "mobile-phone",
+          "target": "mobilePhone",
+          "required": false,
+          "description": "Mobile Phone"
+        }
+      ],
+      "fixture_response": "fixtures/iam-user-contact-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=14027&isNormal=1",
+      "examples": [
+        "ctyun iam user contact update --user-id '8b0a79e******f94b8bd8de09613'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "iam.security.event.list",
+      "path": [
+        "iam",
+        "security",
+        "event",
+        "list"
+      ],
+      "operation": "iam.security.event.list",
+      "table": "iam.security.event.list",
+      "parameters": [
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": true,
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": true,
+          "description": "End Time"
+        }
+      ],
+      "fixture_response": "fixtures/iam-security-event-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=14023&isNormal=1",
+      "examples": [
+        "ctyun iam security event list --page-num 1 --page-size 10 --start-time '2024-03-19 15:27:42' --end-time '2024-03-26 15:27:42'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.user.own-policy.list",
+      "path": [
+        "iam",
+        "user",
+        "own-policy",
+        "list"
+      ],
+      "operation": "iam.user.own-policy.list",
+      "table": "iam.user.own-policy.list",
+      "parameters": [
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-user-own-policy-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=14020&isNormal=1",
+      "examples": [
+        "ctyun iam user own-policy list --user-id {user_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.delegation.account.list",
+      "path": [
+        "iam",
+        "delegation",
+        "account",
+        "list"
+      ],
+      "operation": "iam.delegation.account.list",
+      "table": "iam.delegation.account.list",
+      "parameters": [
+        {
+          "name": "account_id",
+          "flag": "account-id",
+          "target": "accountId",
+          "required": true,
+          "description": "Account ID"
+        },
+        {
+          "name": "service_code",
+          "flag": "service-code",
+          "target": "serviceCode",
+          "required": false,
+          "description": "Service Code"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": false,
+          "value_type": "integer",
+          "description": "Type"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Name"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=13235&isNormal=1",
+      "examples": [
+        "ctyun iam delegation account list --account-id {account_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.delegation.cloud-service.list",
+      "path": [
+        "iam",
+        "delegation",
+        "cloud-service",
+        "list"
+      ],
+      "operation": "iam.delegation.cloud-service.list",
+      "table": "iam.delegation.cloud-service.list",
+      "fixture_response": "fixtures/iam-delegation-cloud-service-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=14018&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.permission.show",
+      "path": [
+        "iam",
+        "permission",
+        "show"
+      ],
+      "operation": "iam.permission.show",
+      "table": "iam.permission.show",
+      "parameters": [
+        {
+          "name": "privilege_id",
+          "flag": "privilege-id",
+          "target": "privilegeId",
+          "required": true,
+          "description": "Privilege ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-permission-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=13979&isNormal=1",
+      "examples": [
+        "ctyun iam permission show --privilege-id {privilege_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.user.policy.grant",
+      "path": [
+        "iam",
+        "user",
+        "policy",
+        "grant"
+      ],
+      "operation": "iam.user.policy.grant",
+      "table": "iam.user.policy.grant",
+      "parameters": [
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        },
+        {
+          "name": "range_type",
+          "flag": "range-type",
+          "target": "rangeType",
+          "required": true,
+          "description": "Range Type"
+        },
+        {
+          "name": "policy_ids",
+          "flag": "policy-ids",
+          "target": "policyIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Policy IDs as a JSON array"
+        },
+        {
+          "name": "region_ids",
+          "flag": "region-ids",
+          "target": "regionIds",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Region IDs as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/iam-user-policy-grant.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=13946&isNormal=1",
+      "examples": [
+        "ctyun iam user policy grant --user-id 'dcd590*********524c37a164' --range-type PROJECT_SERVICE --policy-ids '[\"29a8feb********d6149e\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "grant"
+      }
+    },
+    {
+      "id": "iam.user.group.remove",
+      "path": [
+        "iam",
+        "user",
+        "group",
+        "remove"
+      ],
+      "operation": "iam.user.group.remove",
+      "table": "iam.user.group.remove",
+      "parameters": [
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        },
+        {
+          "name": "group_ids",
+          "flag": "group-ids",
+          "target": "groupIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Group IDs as a JSON array"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=13945&isNormal=1",
+      "examples": [
+        "ctyun iam user group remove --user-id {user_id} --group-ids '[\"{group_ids}\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "remove"
+      }
+    },
+    {
+      "id": "iam.user.group.add",
+      "path": [
+        "iam",
+        "user",
+        "group",
+        "add"
+      ],
+      "operation": "iam.user.group.add",
+      "table": "iam.user.group.add",
+      "parameters": [
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        },
+        {
+          "name": "group_ids",
+          "flag": "group-ids",
+          "target": "groupIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Group IDs as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/iam-user-group-add.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=13944&isNormal=1",
+      "examples": [
+        "ctyun iam user group add --user-id '9d4310df**214c382f911a40' --group-ids '[\"a5afbe377c7349b4**e5d1c1b8e2e\",\"134a603dc7**f9d4493e14\",\"9ddbdffc4**98774d24e08\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "add"
+      }
+    },
+    {
+      "id": "iam.service.permission.list",
+      "path": [
+        "iam",
+        "service",
+        "permission",
+        "list"
+      ],
+      "operation": "iam.service.permission.list",
+      "table": "iam.service.permission.list",
+      "parameters": [
+        {
+          "name": "service_id",
+          "flag": "service-id",
+          "target": "serviceId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Service ID"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=13943&isNormal=1",
+      "examples": [
+        "ctyun iam service permission list --service-id 0"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.service.list",
+      "path": [
+        "iam",
+        "service",
+        "list"
+      ],
+      "operation": "iam.service.list",
+      "table": "iam.service.list",
+      "parameters": [
+        {
+          "name": "service_name",
+          "flag": "service-name",
+          "target": "serviceName",
+          "required": false,
+          "description": "Service Name"
+        },
+        {
+          "name": "service_type",
+          "flag": "service-type",
+          "target": "serviceType",
+          "required": false,
+          "value_type": "integer",
+          "description": "Service Type"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=13942&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.group.policy.revoke",
+      "path": [
+        "iam",
+        "group",
+        "policy",
+        "revoke"
+      ],
+      "operation": "iam.group.policy.revoke",
+      "table": "iam.group.policy.revoke",
+      "parameters": [
+        {
+          "name": "privilege_id",
+          "flag": "privilege-id",
+          "target": "privilegeId",
+          "required": true,
+          "description": "Privilege ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-group-policy-revoke.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9157&isNormal=1",
+      "examples": [
+        "ctyun iam group policy revoke --privilege-id '3b411d3*********41097ca'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "revoke"
+      }
+    },
+    {
+      "id": "iam.access-key.create",
+      "path": [
+        "iam",
+        "access-key",
+        "create"
+      ],
+      "operation": "iam.access-key.create",
+      "table": "iam.access-key.create",
+      "parameters": [
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-access-key-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9174&isNormal=1",
+      "examples": [
+        "ctyun iam access-key create --user-id '1********1'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "iam.policy.show",
+      "path": [
+        "iam",
+        "policy",
+        "show"
+      ],
+      "operation": "iam.policy.show",
+      "table": "iam.policy.show",
+      "parameters": [
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyId",
+          "required": true,
+          "description": "Policy ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-policy-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9173&isNormal=1",
+      "examples": [
+        "ctyun iam policy show --policy-id {policy_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.policy.list",
+      "path": [
+        "iam",
+        "policy",
+        "list"
+      ],
+      "operation": "iam.policy.list",
+      "table": "iam.policy.list",
+      "parameters": [
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "description": "Page Size"
+        },
+        {
+          "name": "policy_type",
+          "flag": "policy-type",
+          "target": "policyType",
+          "required": false,
+          "value_type": "integer",
+          "description": "Policy Type"
+        },
+        {
+          "name": "policy_range",
+          "flag": "policy-range",
+          "target": "policyRange",
+          "required": false,
+          "value_type": "integer",
+          "description": "Policy Range"
+        },
+        {
+          "name": "policy_name",
+          "flag": "policy-name",
+          "target": "policyName",
+          "required": false,
+          "description": "Policy Name"
+        },
+        {
+          "name": "policy_description",
+          "flag": "policy-description",
+          "target": "policyDescription",
+          "required": false,
+          "description": "Policy Description"
+        }
+      ],
+      "fixture_response": "fixtures/iam-policy-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9171&isNormal=1",
+      "examples": [
+        "ctyun iam policy list --page-num 1 --page-size 10"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.policy.delete",
+      "path": [
+        "iam",
+        "policy",
+        "delete"
+      ],
+      "operation": "iam.policy.delete",
+      "table": "iam.policy.delete",
+      "parameters": [
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyId",
+          "required": true,
+          "description": "Policy ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-policy-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9169&isNormal=1",
+      "examples": [
+        "ctyun iam policy delete --policy-id 'ed8acb***********275b22c978'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "iam.policy.update",
+      "path": [
+        "iam",
+        "policy",
+        "update"
+      ],
+      "operation": "iam.policy.update",
+      "table": "iam.policy.update",
+      "parameters": [
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyId",
+          "required": true,
+          "description": "Policy ID"
+        },
+        {
+          "name": "policy_name",
+          "flag": "policy-name",
+          "target": "policyName",
+          "required": true,
+          "description": "Policy Name"
+        },
+        {
+          "name": "policy_content",
+          "flag": "policy-content",
+          "target": "policyContent",
+          "required": true,
+          "description": "Policy Content"
+        },
+        {
+          "name": "policy_range",
+          "flag": "policy-range",
+          "target": "policyRange",
+          "required": true,
+          "description": "Policy Range"
+        },
+        {
+          "name": "policy_description",
+          "flag": "policy-description",
+          "target": "policyDescription",
+          "required": false,
+          "description": "Policy Description"
+        }
+      ],
+      "fixture_response": "fixtures/iam-policy-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9168&isNormal=1",
+      "examples": [
+        "ctyun iam policy update --policy-id 'aaf83f9f*************a418aa' --policy-name 测试自定义策略多产品55 --policy-content '{\"Version\":\"1.1\",\"Statement\":[{\"Resource\":[\"ctrn1:ctiam:hab-j:202d18a69ecf4f2b91780f50ae5d973d:11\"],\"Action\":[\"ecs:cloudServers:put\",\"ecs1:cloudServerNics:binding\",\"ecs:ServersGroups:list\"],\"Effect\":\"allow\"}]}' --policy-range 2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "iam.policy.create",
+      "path": [
+        "iam",
+        "policy",
+        "create"
+      ],
+      "operation": "iam.policy.create",
+      "table": "iam.policy.create",
+      "parameters": [
+        {
+          "name": "policy_name",
+          "flag": "policy-name",
+          "target": "policyName",
+          "required": true,
+          "description": "Policy Name"
+        },
+        {
+          "name": "policy_content",
+          "flag": "policy-content",
+          "target": "policyContent",
+          "required": true,
+          "description": "Policy Content"
+        },
+        {
+          "name": "policy_range",
+          "flag": "policy-range",
+          "target": "policyRange",
+          "required": true,
+          "value_type": "integer",
+          "description": "Policy Range"
+        },
+        {
+          "name": "policy_description",
+          "flag": "policy-description",
+          "target": "policyDescription",
+          "required": false,
+          "description": "Policy Description"
+        }
+      ],
+      "fixture_response": "fixtures/iam-policy-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9167&isNormal=1",
+      "examples": [
+        "ctyun iam policy create --policy-name 创建策略6 --policy-content '{\"Version\":\"1.1\",\"Statement\":[{\"Resource\":[\"ctrn:ctiam:hab-j:202d18a69ecf4f2b91780f50ae5d973d:11\"],\"Action\":[\"ecs:cloudServers:put\",\"ecs:cloudServerNics:binding\",\"ecs:ServersGroups:list\"],\"Effect\":\"allow\"}]}' --policy-range 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "iam.delegation.policy.revoke",
+      "path": [
+        "iam",
+        "delegation",
+        "policy",
+        "revoke"
+      ],
+      "operation": "iam.delegation.policy.revoke",
+      "table": "iam.delegation.policy.revoke",
+      "parameters": [
+        {
+          "name": "permission_id",
+          "flag": "permission-id",
+          "target": "permissionId",
+          "required": true,
+          "description": "Permission ID"
+        },
+        {
+          "name": "assume_user_id",
+          "flag": "assume-user-id",
+          "target": "assumeUserId",
+          "required": true,
+          "description": "Assume User ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-delegation-policy-revoke.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9166&isNormal=1",
+      "examples": [
+        "ctyun iam delegation policy revoke --permission-id '6a2bb9********ba024' --assume-user-id '5b46***********c65f466ee52f9'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "revoke"
+      }
+    },
+    {
+      "id": "iam.delegation.policy.grant",
+      "path": [
+        "iam",
+        "delegation",
+        "policy",
+        "grant"
+      ],
+      "operation": "iam.delegation.policy.grant",
+      "table": "iam.delegation.policy.grant",
+      "parameters": [
+        {
+          "name": "assume_user_id",
+          "flag": "assume-user-id",
+          "target": "assumeUserId",
+          "required": true,
+          "description": "Assume User ID"
+        },
+        {
+          "name": "range_type",
+          "flag": "range-type",
+          "target": "rangeType",
+          "required": true,
+          "description": "Range Type"
+        },
+        {
+          "name": "policy_ids",
+          "flag": "policy-ids",
+          "target": "policyIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Policy IDs as a JSON array"
+        },
+        {
+          "name": "region_ids",
+          "flag": "region-ids",
+          "target": "regionIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Region IDs as a JSON array"
+        },
+        {
+          "name": "principal_type",
+          "flag": "principal-type",
+          "target": "principalType",
+          "required": true,
+          "description": "Principal Type"
+        }
+      ],
+      "fixture_response": "fixtures/iam-delegation-policy-grant.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9161&isNormal=1",
+      "examples": [
+        "ctyun iam delegation policy grant --assume-user-id '9b662********ecf' --range-type PROJECT_SERVICE --policy-ids '[\"193f***********3637664\"]' --region-ids '[\"h***-a\",\"b***\",\"gz***a\"]' --principal-type 2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "grant"
+      }
+    },
+    {
+      "id": "iam.permission.list",
+      "path": [
+        "iam",
+        "permission",
+        "list"
+      ],
+      "operation": "iam.permission.list",
+      "table": "iam.permission.list",
+      "parameters": [
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/iam-permission-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9160&isNormal=1",
+      "examples": [
+        "ctyun iam permission list --page-num 1 --page-size 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.user.policy.list",
+      "path": [
+        "iam",
+        "user",
+        "policy",
+        "list"
+      ],
+      "operation": "iam.user.policy.list",
+      "table": "iam.user.policy.list",
+      "parameters": [
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-user-policy-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9159&isNormal=1",
+      "examples": [
+        "ctyun iam user policy list --user-id {user_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.group.policy.list",
+      "path": [
+        "iam",
+        "group",
+        "policy",
+        "list"
+      ],
+      "operation": "iam.group.policy.list",
+      "table": "iam.group.policy.list",
+      "parameters": [
+        {
+          "name": "group_id",
+          "flag": "group-id",
+          "target": "groupId",
+          "required": true,
+          "description": "Group ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-group-policy-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9158&isNormal=1",
+      "examples": [
+        "ctyun iam group policy list --group-id {group_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.access-key.list",
+      "path": [
+        "iam",
+        "access-key",
+        "list"
+      ],
+      "operation": "iam.access-key.list",
+      "table": "iam.access-key.list",
+      "parameters": [
+        {
+          "name": "user_id_list",
+          "flag": "user-id-list",
+          "target": "userIdList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "User ID List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/iam-access-key-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9175&isNormal=1",
+      "examples": [
+        "ctyun iam access-key list --user-id-list '[\"1*************1\"]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.group.policy.grant",
+      "path": [
+        "iam",
+        "group",
+        "policy",
+        "grant"
+      ],
+      "operation": "iam.group.policy.grant",
+      "table": "iam.group.policy.grant",
+      "parameters": [
+        {
+          "name": "user_group_id",
+          "flag": "user-group-id",
+          "target": "userGroupId",
+          "required": true,
+          "description": "User Group ID"
+        },
+        {
+          "name": "range_type",
+          "flag": "range-type",
+          "target": "rangeType",
+          "required": true,
+          "description": "Range Type"
+        },
+        {
+          "name": "policy_ids",
+          "flag": "policy-ids",
+          "target": "policyIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Policy IDs as a JSON array"
+        },
+        {
+          "name": "region_ids",
+          "flag": "region-ids",
+          "target": "regionIds",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Region IDs as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/iam-group-policy-grant.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9156&isNormal=1",
+      "examples": [
+        "ctyun iam group policy grant --user-group-id 'dcd590*********524c37a164' --range-type PROJECT_SERVICE --policy-ids '[\"29a8feb********d6149e\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "grant"
+      }
+    },
+    {
+      "id": "iam.group.user.list",
+      "path": [
+        "iam",
+        "group",
+        "user",
+        "list"
+      ],
+      "operation": "iam.group.user.list",
+      "table": "iam.group.user.list",
+      "parameters": [
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "groups",
+          "flag": "groups",
+          "target": "groups",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Groups as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/iam-group-user-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9155&isNormal=1",
+      "examples": [
+        "ctyun iam group user list --page-num 1 --page-size 10 --groups '[{\"id\":\"d41f17********f541d19\"}]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.group.user.remove",
+      "path": [
+        "iam",
+        "group",
+        "user",
+        "remove"
+      ],
+      "operation": "iam.group.user.remove",
+      "table": "iam.group.user.remove",
+      "parameters": [
+        {
+          "name": "group_id",
+          "flag": "group-id",
+          "target": "groupId",
+          "required": true,
+          "description": "Group ID"
+        },
+        {
+          "name": "user_ids",
+          "flag": "user-ids",
+          "target": "userIds",
+          "required": true,
+          "value_type": "object_array",
+          "description": "User IDs as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/iam-group-user-remove.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9154&isNormal=1",
+      "examples": [
+        "ctyun iam group user remove --group-id 'dcd**********7a164' --user-ids '[{\"id\":\"e2fe38*************fe081e52fcc5be\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "remove"
+      }
+    },
+    {
+      "id": "iam.group.update",
+      "path": [
+        "iam",
+        "group",
+        "update"
+      ],
+      "operation": "iam.group.update",
+      "table": "iam.group.update",
+      "parameters": [
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "description": "ID"
+        },
+        {
+          "name": "group_name",
+          "flag": "group-name",
+          "target": "groupName",
+          "required": true,
+          "description": "Group Name"
+        },
+        {
+          "name": "group_intro",
+          "flag": "group-intro",
+          "target": "groupIntro",
+          "required": true,
+          "description": "Group Intro"
+        }
+      ],
+      "fixture_response": "fixtures/iam-group-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9153&isNormal=1",
+      "examples": [
+        "ctyun iam group update --id 'dcd59***********37a164' --group-name 222 --group-intro 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "iam.group.list",
+      "path": [
+        "iam",
+        "group",
+        "list"
+      ],
+      "operation": "iam.group.list",
+      "table": "iam.group.list",
+      "parameters": [
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "group_name",
+          "flag": "group-name",
+          "target": "groupName",
+          "required": false,
+          "description": "Group Name"
+        }
+      ],
+      "fixture_response": "fixtures/iam-group-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9152&isNormal=1",
+      "examples": [
+        "ctyun iam group list --page-num 1 --page-size 10"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.identity-provider.user.show",
+      "path": [
+        "iam",
+        "identity-provider",
+        "user",
+        "show"
+      ],
+      "operation": "iam.identity-provider.user.show",
+      "table": "iam.identity-provider.user.show",
+      "parameters": [
+        {
+          "name": "id_p_id",
+          "flag": "id-p-id",
+          "target": "idPId",
+          "required": true,
+          "description": "ID P ID"
+        },
+        {
+          "name": "entity_id",
+          "flag": "entity-id",
+          "target": "entityId",
+          "required": true,
+          "description": "Entity ID"
+        },
+        {
+          "name": "name_id",
+          "flag": "name-id",
+          "target": "nameId",
+          "required": false,
+          "description": "Name ID"
+        },
+        {
+          "name": "login_email",
+          "flag": "login-email",
+          "target": "loginEmail",
+          "required": false,
+          "description": "Login Email"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "always": true
+          },
+          "any_of": [
+            "name_id",
+            "login_email"
+          ]
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9151&isNormal=1",
+      "examples": [
+        "ctyun iam identity-provider user show --id-p-id 1 --entity-id {entity_id} --name-id {name_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.group.deactivate",
+      "path": [
+        "iam",
+        "group",
+        "deactivate"
+      ],
+      "operation": "iam.group.deactivate",
+      "table": "iam.group.deactivate",
+      "parameters": [
+        {
+          "name": "group_id",
+          "flag": "group-id",
+          "target": "groupId",
+          "required": true,
+          "description": "Group ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-group-deactivate.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9150&isNormal=1",
+      "examples": [
+        "ctyun iam group deactivate --group-id 'd9a1185ec4c*******a4a135b0e'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "deactivate"
+      }
+    },
+    {
+      "id": "iam.group.show",
+      "path": [
+        "iam",
+        "group",
+        "show"
+      ],
+      "operation": "iam.group.show",
+      "table": "iam.group.show",
+      "parameters": [
+        {
+          "name": "group_id",
+          "flag": "group-id",
+          "target": "groupId",
+          "required": true,
+          "description": "Group ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-group-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=8142&isNormal=1",
+      "examples": [
+        "ctyun iam group show --group-id {group_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.group.user.add",
+      "path": [
+        "iam",
+        "group",
+        "user",
+        "add"
+      ],
+      "operation": "iam.group.user.add",
+      "table": "iam.group.user.add",
+      "parameters": [
+        {
+          "name": "group_id",
+          "flag": "group-id",
+          "target": "groupId",
+          "required": true,
+          "description": "Group ID"
+        },
+        {
+          "name": "user_ids",
+          "flag": "user-ids",
+          "target": "userIds",
+          "required": true,
+          "value_type": "object_array",
+          "description": "User IDs as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/iam-group-user-add.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=8140&isNormal=1",
+      "examples": [
+        "ctyun iam group user add --group-id 'a69************510' --user-ids '[{\"id\":\"1c599************7a1d0e\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "add"
+      }
+    },
+    {
+      "id": "iam.project.list",
+      "path": [
+        "iam",
+        "project",
+        "list"
+      ],
+      "operation": "iam.project.list",
+      "table": "iam.project.list",
+      "parameters": [
+        {
+          "name": "account_id",
+          "flag": "account-id",
+          "target": "accountId",
+          "required": true,
+          "description": "Account ID"
+        },
+        {
+          "name": "current_page",
+          "flag": "current-page",
+          "target": "currentPage",
+          "required": true,
+          "value_type": "integer",
+          "description": "Current Page"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/iam-project-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=7246&isNormal=1",
+      "examples": [
+        "ctyun iam project list --account-id '79025126*********688b17' --current-page 1 --page-size 10"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.delegation.delete",
+      "path": [
+        "iam",
+        "delegation",
+        "delete"
+      ],
+      "operation": "iam.delegation.delete",
+      "table": "iam.delegation.delete",
+      "parameters": [
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": false,
+          "value_type": "integer",
+          "description": "ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Name"
+        }
+      ],
+      "fixture_response": "fixtures/iam-delegation-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9187&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "iam.resource.list",
+      "path": [
+        "iam",
+        "resource",
+        "list"
+      ],
+      "operation": "iam.resource.list",
+      "table": "iam.resource.list",
+      "parameters": [
+        {
+          "name": "project_set_id",
+          "flag": "project-set-id",
+          "target": "projectSetId",
+          "required": true,
+          "description": "Project Set ID"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/iam-resource-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9432&isNormal=1",
+      "examples": [
+        "ctyun iam resource list --project-set-id 0 --page-num 1 --page-size 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.project.group-policy.set",
+      "path": [
+        "iam",
+        "project",
+        "group-policy",
+        "set"
+      ],
+      "operation": "iam.project.group-policy.set",
+      "table": "iam.project.group-policy.set",
+      "parameters": [
+        {
+          "name": "group_id",
+          "flag": "group-id",
+          "target": "groupId",
+          "required": true,
+          "description": "Group ID"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectId",
+          "required": true,
+          "description": "Project ID"
+        },
+        {
+          "name": "ploy_ids",
+          "flag": "ploy-ids",
+          "target": "ployIds",
+          "required": true,
+          "description": "Ploy IDs"
+        }
+      ],
+      "fixture_response": "fixtures/iam-project-group-policy-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9431&isNormal=1",
+      "examples": [
+        "ctyun iam project group-policy set --group-id 'ac7a57b2**************8be0e8953' --project-id 'dc310a2***********3d07c36fac4' --ploy-ids 'f7c4a34************aa3af90a77e7a，f7c4a34************aa3af90a77e7a'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "iam.project.group.remove",
+      "path": [
+        "iam",
+        "project",
+        "group",
+        "remove"
+      ],
+      "operation": "iam.project.group.remove",
+      "table": "iam.project.group.remove",
+      "parameters": [
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectId",
+          "required": true,
+          "description": "Project ID"
+        },
+        {
+          "name": "group_ids",
+          "flag": "group-ids",
+          "target": "groupIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Group IDs as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/iam-project-group-remove.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9430&isNormal=1",
+      "examples": [
+        "ctyun iam project group remove --project-id 'dc310***************6fac4' --group-ids '[\"ac7a5*****************d198be0e8953\",\"dcd5****************c37a164\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "remove"
+      }
+    },
+    {
+      "id": "iam.project.group-policy.show",
+      "path": [
+        "iam",
+        "project",
+        "group-policy",
+        "show"
+      ],
+      "operation": "iam.project.group-policy.show",
+      "table": "iam.project.group-policy.show",
+      "parameters": [
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectId",
+          "required": true,
+          "description": "Project ID"
+        },
+        {
+          "name": "group_id",
+          "flag": "group-id",
+          "target": "groupId",
+          "required": true,
+          "description": "Group ID"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9429&isNormal=1",
+      "examples": [
+        "ctyun iam project group-policy show --project-id 'd1b85**********511f66' --group-id 'd91d9****************1e4b86f9eba998e'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.project.group.add",
+      "path": [
+        "iam",
+        "project",
+        "group",
+        "add"
+      ],
+      "operation": "iam.project.group.add",
+      "table": "iam.project.group.add",
+      "parameters": [
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectId",
+          "required": true,
+          "description": "Project ID"
+        },
+        {
+          "name": "group_ids",
+          "flag": "group-ids",
+          "target": "groupIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Group IDs as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/iam-project-group-add.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9428&isNormal=1",
+      "examples": [
+        "ctyun iam project group add --project-id 'd1b8556*************d4511f66' --group-ids '[\"d91d9c83**************6f9eba998e\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "add"
+      }
+    },
+    {
+      "id": "iam.project.group.list",
+      "path": [
+        "iam",
+        "project",
+        "group",
+        "list"
+      ],
+      "operation": "iam.project.group.list",
+      "table": "iam.project.group.list",
+      "parameters": [
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "description": "ID"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/iam-project-group-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9427&isNormal=1",
+      "examples": [
+        "ctyun iam project group list --id 'd1b85****************511f66' --page-num 1 --page-size 10"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.project.activation.update",
+      "path": [
+        "iam",
+        "project",
+        "activation",
+        "update"
+      ],
+      "operation": "iam.project.activation.update",
+      "table": "iam.project.activation.update",
+      "parameters": [
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectId",
+          "required": true,
+          "description": "Project ID"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": true,
+          "value_type": "integer",
+          "description": "Status"
+        }
+      ],
+      "fixture_response": "fixtures/iam-project-activation-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9426&isNormal=1",
+      "examples": [
+        "ctyun iam project activation update --project-id {project_id} --status 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "iam.project.show",
+      "path": [
+        "iam",
+        "project",
+        "show"
+      ],
+      "operation": "iam.project.show",
+      "table": "iam.project.show",
+      "parameters": [
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "description": "ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-project-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9425&isNormal=1",
+      "examples": [
+        "ctyun iam project show --id {id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.project.update",
+      "path": [
+        "iam",
+        "project",
+        "update"
+      ],
+      "operation": "iam.project.update",
+      "table": "iam.project.update",
+      "parameters": [
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "description": "ID"
+        },
+        {
+          "name": "project_name",
+          "flag": "project-name",
+          "target": "projectName",
+          "required": false,
+          "description": "Project Name"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        }
+      ],
+      "fixture_response": "fixtures/iam-project-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9424&isNormal=1",
+      "examples": [
+        "ctyun iam project update --id 'd1b85565***************511f66'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "iam.project.create",
+      "path": [
+        "iam",
+        "project",
+        "create"
+      ],
+      "operation": "iam.project.create",
+      "table": "iam.project.create",
+      "parameters": [
+        {
+          "name": "project_name",
+          "flag": "project-name",
+          "target": "projectName",
+          "required": true,
+          "description": "Project Name"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": true,
+          "description": "Description"
+        }
+      ],
+      "fixture_response": "fixtures/iam-project-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9423&isNormal=1",
+      "examples": [
+        "ctyun iam project create --project-name 测试88 --description 测试"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "iam.resource.project.move",
+      "path": [
+        "iam",
+        "resource",
+        "project",
+        "move"
+      ],
+      "operation": "iam.resource.project.move",
+      "table": "iam.resource.project.move",
+      "parameters": [
+        {
+          "name": "project_set_id",
+          "flag": "project-set-id",
+          "target": "projectSetId",
+          "required": true,
+          "description": "Project Set ID"
+        },
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceId",
+          "required": true,
+          "description": "Resource ID"
+        },
+        {
+          "name": "is_ecs",
+          "flag": "is-ecs",
+          "target": "isEcs",
+          "required": true,
+          "description": "Is Ecs"
+        }
+      ],
+      "fixture_response": "fixtures/iam-resource-project-move.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9433&isNormal=1",
+      "examples": [
+        "ctyun iam resource project move --project-set-id 'dc310a2*********c4' --resource-id '25d5a6***********527c' --is-ecs 0"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "move"
+      }
+    },
+    {
+      "id": "iam.identity-provider.show",
+      "path": [
+        "iam",
+        "identity-provider",
+        "show"
+      ],
+      "operation": "iam.identity-provider.show",
+      "table": "iam.identity-provider.show",
+      "parameters": [
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "description": "ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-identity-provider-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9186&isNormal=1",
+      "examples": [
+        "ctyun iam identity-provider show --id {id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.identity-provider.list",
+      "path": [
+        "iam",
+        "identity-provider",
+        "list"
+      ],
+      "operation": "iam.identity-provider.list",
+      "table": "iam.identity-provider.list",
+      "parameters": [
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Name"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9185&isNormal=1",
+      "examples": [
+        "ctyun iam identity-provider list --page-num 1 --page-size 10"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.identity-provider.delete",
+      "path": [
+        "iam",
+        "identity-provider",
+        "delete"
+      ],
+      "operation": "iam.identity-provider.delete",
+      "table": "iam.identity-provider.delete",
+      "parameters": [
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "value_type": "integer",
+          "description": "ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-identity-provider-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9184&isNormal=1",
+      "examples": [
+        "ctyun iam identity-provider delete --id 22"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "iam.identity-provider.create",
+      "path": [
+        "iam",
+        "identity-provider",
+        "create"
+      ],
+      "operation": "iam.identity-provider.create",
+      "table": "iam.identity-provider.create",
+      "parameters": [
+        {
+          "name": "file_name",
+          "flag": "file-name",
+          "target": "fileName",
+          "required": true,
+          "description": "File Name"
+        },
+        {
+          "name": "file",
+          "flag": "file",
+          "target": "file",
+          "required": true,
+          "value_type": "integer_array",
+          "description": "File as a JSON array"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "value_type": "integer",
+          "description": "Type"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "protocol",
+          "flag": "protocol",
+          "target": "protocol",
+          "required": true,
+          "value_type": "integer",
+          "description": "Protocol"
+        },
+        {
+          "name": "remark",
+          "flag": "remark",
+          "target": "remark",
+          "required": false,
+          "description": "Remark"
+        }
+      ],
+      "fixture_response": "fixtures/iam-identity-provider-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9183&isNormal=1",
+      "examples": [
+        "ctyun iam identity-provider create --file-name 111.xml --file '[60,63,120,109,108,32,118,101,114,115,105,111,110,61,34,49,46,48,34,32,101,110,99,111,100,105,110,103,61,34,85,84,70,45,56,34,63,62,13,10,60,109,100,58,69,110,116,105,116,121,68,101,115,99,114,105,112,116,111,114,32,101,110,116,105,116,121,73,68,61,34,115,97]' --type 0 --name 测试openapi --protocol 0"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "iam.delegation.show",
+      "path": [
+        "iam",
+        "delegation",
+        "show"
+      ],
+      "operation": "iam.delegation.show",
+      "table": "iam.delegation.show",
+      "parameters": [
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "description": "ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-delegation-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9181&isNormal=1",
+      "examples": [
+        "ctyun iam delegation show --id {id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.delegation.list",
+      "path": [
+        "iam",
+        "delegation",
+        "list"
+      ],
+      "operation": "iam.delegation.list",
+      "table": "iam.delegation.list",
+      "parameters": [
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/iam-delegation-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9180&isNormal=1",
+      "examples": [
+        "ctyun iam delegation list --page-num 1 --page-size 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.delegation.create",
+      "path": [
+        "iam",
+        "delegation",
+        "create"
+      ],
+      "operation": "iam.delegation.create",
+      "table": "iam.delegation.create",
+      "parameters": [
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "value_type": "integer",
+          "description": "Type"
+        },
+        {
+          "name": "assume_account_id",
+          "flag": "assume-account-id",
+          "target": "assumeAccountId",
+          "required": false,
+          "description": "Assume Account ID"
+        },
+        {
+          "name": "remark",
+          "flag": "remark",
+          "target": "remark",
+          "required": false,
+          "description": "Remark"
+        },
+        {
+          "name": "identity_provider_id",
+          "flag": "identity-provider-id",
+          "target": "identityProviderId",
+          "required": false,
+          "description": "Identity Provider ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-delegation-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9178&isNormal=1",
+      "examples": [
+        "ctyun iam delegation create --name 测试委托 --type 2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "iam.region.list",
+      "path": [
+        "iam",
+        "region",
+        "list"
+      ],
+      "operation": "iam.region.list",
+      "table": "iam.region.list",
+      "parameters": [
+        {
+          "name": "zone_name",
+          "flag": "zone-name",
+          "target": "zoneName",
+          "required": false,
+          "description": "Zone Name"
+        },
+        {
+          "name": "zone_id",
+          "flag": "zone-id",
+          "target": "zoneId",
+          "required": false,
+          "description": "Zone ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-region-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9177&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.quota.list",
+      "path": [
+        "iam",
+        "quota",
+        "list"
+      ],
+      "operation": "iam.quota.list",
+      "table": "iam.quota.list",
+      "parameters": [
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "value_type": "integer",
+          "description": "Type"
+        }
+      ],
+      "fixture_response": "fixtures/iam-quota-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9176&isNormal=1",
+      "examples": [
+        "ctyun iam quota list --type 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    }
+  ]
+}

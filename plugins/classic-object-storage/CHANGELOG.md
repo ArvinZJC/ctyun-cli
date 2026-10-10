@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.0-beta.2 - 2026-10-10
+
+### Fixed
+
+- Remove incorrect option deprecation warnings from the concurrent-login policy that disconnects older sessions.
+
 ## 0.1.0-beta.1 - 2026-09-23
 
 ### Added

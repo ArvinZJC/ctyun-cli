@@ -1,0 +1,3982 @@
+{
+  "schema_version": 1,
+  "product": {
+    "plugin_name": "service-mesh",
+    "api_product": "service-mesh",
+    "ctyun_product_id": 150,
+    "source_revision": "142",
+    "display_name": {
+      "en-GB": "Application Service Mesh",
+      "en-US": "Application Service Mesh",
+      "zh-CN": "应用服务网格"
+    },
+    "display_name_policy": {
+      "kind": "descriptive"
+    },
+    "endpoint_url": "https://csm-global.ctapi.ctyun.cn",
+    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=150&vid=142&data=149",
+    "api_scope": {
+      "include_uri_prefixes": [
+        "/v1/open/"
+      ],
+      "notes": "Published self-operated customer-side APIs; legacy API families retain separate command groups. See coverage.json for reviewed evidence and remaining gaps."
+    }
+  },
+  "operations": [
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIkNTTV8yMDAwIiwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7InBvZExpc3QiOiBbInZpZXdzIiwgInByb2R1Y3RwYWdlIiwgInJhdGluZ3MiXX0sICJzdGF0dXNDb2RlIjogMjAwMH0="
+      },
+      "id": "service-mesh.cluster.pod.list",
+      "api_id": "9445",
+      "title": "获取集群的Pod列表",
+      "description": {
+        "en-GB": "List pods in a mesh cluster",
+        "en-US": "List pods in a mesh cluster",
+        "zh-CN": "获取集群的Pod列表"
+      },
+      "category": "cluster",
+      "command_path": [
+        "cluster",
+        "pod",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v1/open/cluster/show_pods",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=150&vid=142&data=149&api=9445&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "service_mesh_id",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务网格id",
+          "descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "help_descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "service_mesh_id",
+          "cli_flag": "service-mesh-id",
+          "table_target": "",
+          "example": "e779bd8*****"
+        },
+        {
+          "name": "cluster_id",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "集群id",
+          "descriptions": {
+            "en-GB": "Cluster ID",
+            "en-US": "Cluster ID",
+            "zh-CN": "集群id"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster ID",
+            "en-US": "Cluster ID",
+            "zh-CN": "集群id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cluster_id",
+          "cli_flag": "cluster-id",
+          "table_target": "",
+          "example": "kjye*******"
+        },
+        {
+          "name": "namespace",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命名空间",
+          "descriptions": {
+            "en-GB": "Namespace",
+            "en-US": "Namespace",
+            "zh-CN": "命名空间"
+          },
+          "help_descriptions": {
+            "en-GB": "Namespace",
+            "en-US": "Namespace",
+            "zh-CN": "命名空间"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "namespace",
+          "cli_flag": "namespace",
+          "table_target": "",
+          "example": "default"
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9xxx"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "2000"
+              ]
+            }
+          ]
+        },
+        "success_code": "2000",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "pod_list"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "pod_list",
+            "path": "podList",
+            "label_en": "Pods",
+            "label_zh": "容器组列表",
+            "description": "pod名称"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIkNTTV8yMDAwIiwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7InZlcnNpb25DUkRzIjogW3siY3JkcyI6IFt7ImFwaUdyb3VwIjogIm5ldHdvcmtpbmcuaXN0aW8uaW8iLCAiYXBpVmVyc2lvbiI6ICJ2MWFscGhhMyIsICJraW5kIjogIkRlc3RpbmF0aW9uUnVsZSJ9XSwgInZlcnNpb24iOiAiMS4xNi4yIn1dfSwgInN0YXR1c0NvZGUiOiAyMDAwfQ=="
+      },
+      "id": "service-mesh.metadata.show",
+      "api_id": "9434",
+      "title": "获取服务网格CSM的基本信息",
+      "description": {
+        "en-GB": "Show service mesh platform metadata",
+        "en-US": "Show service mesh platform metadata",
+        "zh-CN": "获取服务网格CSM的基本信息"
+      },
+      "category": "metadata",
+      "command_path": [
+        "metadata",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v1/open/metadata/get",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=150&vid=142&data=149&api=9434&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9xxx"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "2000"
+              ]
+            }
+          ]
+        },
+        "success_code": "2000",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "version_cr_ds"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "version_cr_ds",
+            "path": "versionCRDs",
+            "label_en": "Versioned Resource Definitions",
+            "label_zh": "各版本资源定义",
+            "description": "各版本网格包含的crd资源"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIkNTTV8yMDAwIiwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7fSwgInN0YXR1c0NvZGUiOiAyMDAwfQ=="
+      },
+      "id": "service-mesh.mesh.rename",
+      "api_id": "9435",
+      "title": "修改服务网格实例名称",
+      "description": {
+        "en-GB": "Rename a service mesh",
+        "en-US": "Rename a service mesh",
+        "zh-CN": "修改服务网格实例名称"
+      },
+      "category": "mesh",
+      "command_path": [
+        "mesh",
+        "rename"
+      ],
+      "method": "POST",
+      "path": "/v1/open/servicemesh/update_name",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=150&vid=142&data=149&api=9435&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9xxx"
+        },
+        {
+          "name": "name",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务网格的新名称",
+          "descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "服务网格的新名称"
+          },
+          "help_descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "服务网格的新名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "name",
+          "cli_flag": "name",
+          "table_target": "",
+          "example": "NewName"
+        },
+        {
+          "name": "serviceMeshId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务网格id",
+          "descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "help_descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "service_mesh_id",
+          "cli_flag": "service-mesh-id",
+          "table_target": "",
+          "example": "e779bd8*****"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "2000"
+              ]
+            }
+          ]
+        },
+        "success_code": "2000",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message",
+          "return_obj",
+          "status_code"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Response Code",
+            "label_zh": "响应码",
+            "description": "错误码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "错误提示信息"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果",
+            "description": "API返回数据体，接口如果没有返回字段时也可能返回{}或[]"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "调用错误时返回的错误编码"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "name": "NewName",
+        "serviceMeshId": "e779bd8*****"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIkNTTV8yMDAwIiwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7Im1lc2hJbmZvcyI6IFt7ImNsdXN0ZXJUeXBlIjogIkVOVEVSUFJJU0UiLCAiY3JlYXRlZFRpbWUiOiAiMjAyMy0wNy0xOFQxMDoyMToyMCswODowMCIsICJuYW1lIjogIk5hbWUiLCAicmVnaW9uQ29kZSI6ICJkOGJiZDEzMmI1KioqKiIsICJyZWdpb25OYW1lIjogIuWGheiSmTYiLCAic2VydmljZU1lc2hJZCI6ICJlNzc5YmQ4KioqKioiLCAic3RhdHVzIjogIlJFQURZIiwgInZlcnNpb24iOiAiMS4xNiJ9XX0sICJzdGF0dXNDb2RlIjogMjAwMH0="
+      },
+      "id": "service-mesh.mesh.list",
+      "api_id": "9436",
+      "title": "获取服务网格列表",
+      "description": {
+        "en-GB": "List service meshes",
+        "en-US": "List service meshes",
+        "zh-CN": "获取服务网格列表"
+      },
+      "category": "mesh",
+      "command_path": [
+        "mesh",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v1/open/servicemesh/list",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=150&vid=142&data=149&api=9436&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9xxx"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "2000"
+              ]
+            }
+          ]
+        },
+        "success_code": "2000",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "mesh_infos"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "mesh_infos",
+            "path": "meshInfos",
+            "label_en": "Service Meshes",
+            "label_zh": "服务网格列表",
+            "description": "服务网格信息"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIkNTTV8yMDAwIiwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7ImVuZFBvaW50cyI6IFt7ImludHJhbmV0QXBpU2VydmVyRW5kcG9pbnQiOiAiaHR0cHM6Ly8xOTIuMTY4Lnh4Lnh4OjY0NDMiLCAiaW50cmFuZXRQaWxvdEVuZHBvaW50IjogIjE5Mi4xNjgueHgueHg6MTUwMTIifV0sICJtZXNoSW5mbyI6IHsiY2x1c3RlclR5cGUiOiAiRU5URVJQUklTRSIsICJjcmVhdGVkVGltZSI6ICIyMDIzLTA3LTE4VDEwOjIxOjIwKzA4OjAwIiwgIm5hbWUiOiAiTmFtZSIsICJyZWdpb25Db2RlIjogImQ4YmJkMTMyYjUqKioqIiwgInJlZ2lvbk5hbWUiOiAi5YaF6JKZNiIsICJzZXJ2aWNlTWVzaElkIjogImU3NzliZDgqKioqKiIsICJzdGF0dXMiOiAiUkVBRFkiLCAidmVyc2lvbiI6ICIxLjE2In0sICJtZXNoU3BlYyI6IHsiY2x1c3RlcnMiOiBbeyJjbHVzdGVySWQiOiAiZWZkc2FmZSoqKioqIiwgImNsdXN0ZXJOYW1lIjogImNjc2UtKioqKioifV0sICJtZXNoQ29uZmlnIjogeyJhY2Nlc3NMb2dTZXR0aW5ncyI6IFt7ImVuYWJsZWQiOiB0cnVlLCAicHJvamVjdCI6ICJpc3Rpb2QtYWNjZXNzbG9nLXh4eHh4IiwgInR5cGUiOiAiZGF0YS1wbGFuZWwifV0sICJpbmplY3RvckNvbmZpZyI6IHsiY25pQ29uZmlnIjogeyJlbmFibGVkIjogZmFsc2UsICJleGNsdWRlTmFtZXNwYWNlcyI6IFsia3ViZS1zeXN0ZW0iLCAiaXN0aW8tc3lzdGVtIl19LCAiZ2xvYmFsQ29uZmlnIjogeyJwcm94eUNvbmZpZyI6IHsiY2x1c3RlckRvbWFpbiI6ICJjbHVzdGVyLmRvbWFpbiIsICJlbmFibGVDb3JlRHVtcCI6IGZhbHNlLCAiZXhjbHVkZUlQUmFuZ2VzIjogIjEyNy4wLjAuMSIsICJleGNsdWRlSW5ib3VuZFBvcnRzIjogIjgwLDgwODAiLCAiZXhjbHVkZU91dGJvdW5kUG9ydHMiOiAiODAsODA4MCIsICJpbmNsdWRlSVBSYW5nZXMiOiAiMTkyLjE2OC4wLjAvMTYiLCAiaW5jbHVkZUluYm91bmRQb3J0cyI6ICI0NDMiLCAiaW5jbHVkZU91dGJvdW5kUG9ydHMiOiAiNDQzIiwgImxvZ0xldmVsIjogInRyYWNlIiwgInJlc291cmNlQ1BVTGltaXQiOiAiMjBtIiwgInJlc291cmNlQ1BVUmVxdWVzdCI6ICIxMG0iLCAicmVzb3VyY2VNZW1vcnlMaW1pdCI6ICIyMDBNaSIsICJyZXNvdXJjZU1lbW9yeVJlcXVlc3QiOiAiMTAwTWkifSwgInByb3h5SW5pdENvbmZpZyI6IHsicmVzb3VyY2VDUFVMaW1pdCI6ICIyMG0iLCAicmVzb3VyY2VDUFVSZXF1ZXN0IjogIjEwbSIsICJyZXNvdXJjZU1lbW9yeUxpbWl0IjogIjIwME1pIiwgInJlc291cmNlTWVtb3J5UmVxdWVzdCI6ICIxMDBNaSJ9fSwgIlNpZGVjYXJJbmplY3RvcldlYmhvb2siOiB7ImFsd2F5c0luamVjdFNlbGVjdG9yIjogW3siZmllbGRzIjogeyJwcm9wZXJ0eTEiOiB7ImtpbmQiOiB7fX0sICJwcm9wZXJ0eTIiOiB7ImtpbmQiOiB7fX19fV0sICJkZWZhdWx0VGVtcGxhdGVzIjogWyJzdHJpbmciXSwgImVuYWJsZU5hbWVzcGFjZXNCeURlZmF1bHQiOiB7InZhbHVlIjogdHJ1ZX0sICJpbmplY3RlZEFubm90YXRpb25zIjogeyJmaWVsZHMiOiB7InByb3BlcnR5MSI6IHsia2luZCI6IHt9fSwgInByb3BlcnR5MiI6IHsia2luZCI6IHt9fX19LCAiaW5qZWN0aW9uVVJMIjogInN0cmluZyIsICJuZXZlckluamVjdFNlbGVjdG9yIjogW3siZmllbGRzIjogeyJwcm9wZXJ0eTEiOiB7ImtpbmQiOiB7fX0sICJwcm9wZXJ0eTIiOiB7ImtpbmQiOiB7fX19fV0sICJvYmplY3RTZWxlY3RvciI6IHsiZmllbGRzIjogeyJwcm9wZXJ0eTEiOiB7ImtpbmQiOiB7fX0sICJwcm9wZXJ0eTIiOiB7ImtpbmQiOiB7fX19fSwgInJld3JpdGVBcHBIVFRQUHJvYmUiOiB7InZhbHVlIjogdHJ1ZX0sICJ0ZW1wbGF0ZXMiOiB7ImZpZWxkcyI6IHsicHJvcGVydHkxIjogeyJraW5kIjoge319LCAicHJvcGVydHkyIjogeyJraW5kIjoge319fX0sICJ1c2VMZWdhY3lTZWxlY3RvcnMiOiB7InZhbHVlIjogdHJ1ZX19fSwgImlzdGlvQ29uZmlnIjogeyJhY2Nlc3NMb2dFbmNvZGluZyI6ICJURVhUIiwgImFjY2Vzc0xvZ0ZpbGUiOiAiL2Rldi9zdGRvdXQiLCAiYWNjZXNzTG9nRm9ybWF0IjogIlslU1RBUlRfVElNRSVdIFwiJVJFUSg6TUVUSE9EKSUgJVJFUShYLUVOVk9ZLU9SSUdJTkFMLVBBVEg/OlBBVEgpJSAlUFJPVE9DT0wlXCIgJVJFU1BPTlNFX0NPREUlICVSRVNQT05TRV9GTEFHUyUgJVJFU1BPTlNFX0NPREVfREVUQUlMUyUgJUNPTk5FQ1RJT05fVEVSTUlOQVRJT05fREVUQUlMUyVcIiVVUFNUUkVBTV9UUkFOU1BPUlRfRkFJTFVSRV9SRUFTT04lXCIgJUJZVEVTX1JFQ0VJVkVEJSAlQllURVNfU0VOVCUgJURVUkFUSU9OJSAlUkVTUChYLUVOVk9ZLVVQU1RSRUFNLVNFUlZJQ0UtVElNRSklIFwiJVJFUShYLUZPUldBUkRFRC1GT1IpJVwiIFwiJVJFUShVU0VSLUFHRU5UKSVcIiBcIiVSRVEoWC1SRVFVRVNULUlEKSVcIiBcIiVSRVEoOkFVVEhPUklUWSklXCIgXCIlVVBTVFJFQU1fSE9TVCVcIiAlVVBTVFJFQU1fQ0xVU1RFUiUgJVVQU1RSRUFNX0xPQ0FMX0FERFJFU1MlICVET1dOU1RSRUFNX0xPQ0FMX0FERFJFU1MlICVET1dOU1RSRUFNX1JFTU9URV9BRERSRVNTJSAlUkVRVUVTVEVEX1NFUlZFUl9OQU1FJSAlUk9VVEVfTkFNRSVcbiIsICJkZWZhdWx0Q29uZmlnIjogeyJjb25jdXJyZW5jeSI6IDIsICJlbmFibGVEbnNDYXB0dXJlIjogZmFsc2UsICJob2xkQXBwbGljYXRpb25VbnRpbFByb3h5U3RhcnRzIjogdHJ1ZSwgImludGVyY2VwdGlvbk1vZGUiOiAiUkVESVJFQ1QiLCAicHJveHlNZXRhZGF0YSI6IHsiSVNUSU9fTUVUQV9ETlNfQVVUT19BTExPQ0FURSI6ICJ0cnVlIiwgIklTVElPX01FVEFfRE5TX0NBUFRVUkUiOiAidHJ1ZSJ9LCAidGVybWluYXRpb25EcmFpbkR1cmF0aW9uIjogIjVzIn0sICJvdXRib3VuZFRyYWZmaWNQb2xpY3kiOiAiQUxMT1dfQU5ZIiwgInRlbGVtZXRyeSI6IHRydWV9LCAibW9uaXRvclNldHRpbmciOiB7ImVuYWJsZU1ldHJpY3MiOiB0cnVlLCAidHJhY2VTYW1wbGluZyI6IDF9LCAib3BhIjogeyJlbmFibGVkIjogdHJ1ZSwgImxvZ0xldmVsIjogImVycm9yIn19LCAibmV0d29yayI6IHsiU2VjdXJpdHlHcm91cElkIjogImNnLSoqKioiLCAidnBjSWQiOiAidnBjLSoqKioifX19LCAic3RhdHVzQ29kZSI6IDIwMDB9"
+      },
+      "id": "service-mesh.mesh.show",
+      "api_id": "9437",
+      "title": "获取服务网格详情",
+      "description": {
+        "en-GB": "Show service mesh details",
+        "en-US": "Show service mesh details",
+        "zh-CN": "获取服务网格详情"
+      },
+      "category": "mesh",
+      "command_path": [
+        "mesh",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v1/open/servicemesh/detail",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=150&vid=142&data=149&api=9437&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "service_mesh_id",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务网格id",
+          "descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "help_descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "service_mesh_id",
+          "cli_flag": "service-mesh-id",
+          "table_target": "",
+          "example": "e779bd8*****"
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9xxx"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "2000"
+              ]
+            }
+          ]
+        },
+        "success_code": "2000",
+        "result_path": "returnObj.meshInfo",
+        "row_path": "returnObj.meshInfo",
+        "layout": "vertical",
+        "default_columns": [
+          "mesh_id",
+          "name",
+          "status",
+          "version",
+          "region_name"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "mesh_id",
+            "path": "serviceMeshId",
+            "label_en": "Mesh ID",
+            "label_zh": "网格 ID"
+          },
+          {
+            "key": "name",
+            "path": "name",
+            "label_en": "Name",
+            "label_zh": "名称"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态"
+          },
+          {
+            "key": "version",
+            "path": "version",
+            "label_en": "Version",
+            "label_zh": "版本"
+          },
+          {
+            "key": "region_code",
+            "path": "regionCode",
+            "label_en": "Region Code",
+            "label_zh": "资源池编码"
+          },
+          {
+            "key": "region_name",
+            "path": "regionName",
+            "label_en": "Region Name",
+            "label_zh": "资源池名称"
+          },
+          {
+            "key": "cluster_type",
+            "path": "clusterType",
+            "label_en": "Cluster Type",
+            "label_zh": "集群类型"
+          },
+          {
+            "key": "created_time",
+            "path": "createdTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIkNTTV8yMDAwIiwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7Imt1YmVDb25maWciOiAiYXBpVmVyc2lvbjogdjEgY2x1c3RlcnM6IC0gY2x1c3Rlcjogc2VydmVyOiBodHRwczovL3h4Lnh4Lnh4Lnh4OjY0NDMgY2VydGlmaWNhdGUtYXV0aG9yaXR5LWRhdGE6ICoqKioifSwgInN0YXR1c0NvZGUiOiAyMDAwfQ=="
+      },
+      "id": "service-mesh.mesh.kubeconfig.show",
+      "api_id": "9438",
+      "title": "获取KubeConfig配置",
+      "description": {
+        "en-GB": "Retrieve the service mesh Kubernetes configuration",
+        "en-US": "Retrieve the service mesh Kubernetes configuration",
+        "zh-CN": "获取KubeConfig配置"
+      },
+      "category": "mesh",
+      "command_path": [
+        "mesh",
+        "kubeconfig",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v1/open/servicemesh/get_kube_config",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=150&vid=142&data=149&api=9438&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "service_mesh_id",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务网格id",
+          "descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "help_descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "service_mesh_id",
+          "cli_flag": "service-mesh-id",
+          "table_target": "",
+          "example": "e779bd8*****"
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9xxx"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "2000"
+              ]
+            }
+          ]
+        },
+        "success_code": "2000",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "kube_config"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "kube_config",
+            "path": "kubeConfig",
+            "label_en": "Kubernetes Configuration",
+            "label_zh": "集群访问配置",
+            "description": "kubeconfig配置内容"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIkNTTV8yMDAwIiwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7InRlbXBsYXRlcyI6IFt7ImNoaW5lc2VOYW1lIjogIkhUVFDln7rnoYDot6/nlLEiLCAiZW5nbGlzaE5hbWUiOiAiSFRUUCBiYXNpYyByb3V0aW5nIiwgInlhbWwiOiAiYXBpVmVyc2lvbjogbmV0d29ya2luZy5pc3Rpby5pby92MWJldGExXG4gKioqKioifV19LCAic3RhdHVzQ29kZSI6IDIwMDB9"
+      },
+      "id": "service-mesh.resource.template.list",
+      "api_id": "9439",
+      "title": "查询Istio资源YAML模板",
+      "description": {
+        "en-GB": "List Istio resource YAML templates",
+        "en-US": "List Istio resource YAML templates",
+        "zh-CN": "查询Istio资源YAML模板"
+      },
+      "category": "resource",
+      "command_path": [
+        "resource",
+        "template",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v1/open/resource/crd_template/list",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=150&vid=142&data=149&api=9439&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "kind",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "需要获取常见模板的istio资源类型AuthorizationPolicy, RequestAuthentication, PeerAuthentication, WorkloadGroup, WorkloadEntry, Sidecar, EnvoyFilter, ServiceEntry, Gateway, DestinationRule, VirtualService",
+          "descriptions": {
+            "en-GB": "Kind",
+            "en-US": "Kind",
+            "zh-CN": "需要获取常见模板的istio资源类型AuthorizationPolicy, RequestAuthentication, PeerAuthentication, WorkloadGroup, WorkloadEntry, Sidecar, EnvoyFilter, ServiceEntry, Gateway, DestinationRule, VirtualService"
+          },
+          "help_descriptions": {
+            "en-GB": "Kind",
+            "en-US": "Kind",
+            "zh-CN": "需要获取常见模板的istio资源类型AuthorizationPolicy, RequestAuthentication, PeerAuthentication, WorkloadGroup, WorkloadEntry, Sidecar, EnvoyFilter, ServiceEntry, Gateway, DestinationRule, VirtualService"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "kind",
+          "cli_flag": "kind",
+          "table_target": "",
+          "example": "String"
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9xxx"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "2000"
+              ]
+            }
+          ]
+        },
+        "success_code": "2000",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "templates"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "templates",
+            "path": "templates",
+            "label_en": "Resource Templates",
+            "label_zh": "资源模板",
+            "description": "指定Istio资源类型的资源常用YAML模板"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIkNTTV8yMDAwIiwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7fSwgInN0YXR1c0NvZGUiOiAyMDAwfQ=="
+      },
+      "id": "service-mesh.sidecar.show",
+      "api_id": "9440",
+      "title": "查询Sidecar配置",
+      "description": {
+        "en-GB": "Show service mesh sidecar settings",
+        "en-US": "Show service mesh sidecar settings",
+        "zh-CN": "查询Sidecar配置"
+      },
+      "category": "sidecar",
+      "command_path": [
+        "sidecar",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v1/open/sidecar/config/get",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=150&vid=142&data=149&api=9440&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "service_mesh_id",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务网格id",
+          "descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "help_descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "service_mesh_id",
+          "cli_flag": "service-mesh-id",
+          "table_target": "",
+          "example": "e779bd8*****"
+        },
+        {
+          "name": "namespace",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命名空间，不填则默认为istio-system",
+          "descriptions": {
+            "en-GB": "Namespace",
+            "en-US": "Namespace",
+            "zh-CN": "命名空间，不填则默认为istio-system"
+          },
+          "help_descriptions": {
+            "en-GB": "Namespace",
+            "en-US": "Namespace",
+            "zh-CN": "命名空间，不填则默认为istio-system"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "namespace",
+          "cli_flag": "namespace",
+          "table_target": "",
+          "example": "default"
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9xxx"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "2000"
+              ]
+            }
+          ]
+        },
+        "success_code": "2000",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "custom_proxy_config"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "custom_proxy_config",
+            "path": "customProxyConfig",
+            "label_en": "Proxy Configuration",
+            "label_zh": "代理配置"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "code": "CSM_2000",
+        "message": "SUCCESS",
+        "returnObj": {
+          "customProxyConfig": {
+            "concurrency": 2,
+            "enableDnsCapture": false,
+            "excludeIPRanges": "127.0.0.1",
+            "excludeInboundPorts": "80,8080",
+            "excludeOutboundPorts": "80,8080",
+            "holdApplicationUntilProxyStarts": true,
+            "includeIPRanges": "192.168.0.0/16",
+            "includeInboundPorts": "443",
+            "includeOutboundPorts": "443",
+            "interceptionMode": "REDIRECT",
+            "logLevel": "trace",
+            "outboundTrafficPolicy": "ALLOW_ANY",
+            "proxyMetadata": {
+              "ISTIO_META_DNS_AUTO_ALLOCATE": "true",
+              "ISTIO_META_DNS_CAPTURE": "true"
+            },
+            "proxyStatsMatcher": {
+              "inclusion_prefixes": [
+                "string"
+              ],
+              "inclusion_regexps": [
+                "string"
+              ],
+              "inclusion_suffixes": [
+                "string"
+              ]
+            },
+            "SidecarProxyInitResourceLimit": {
+              "resourceCPULimit": "100 m",
+              "resourceMemoryLimit": "60 Mi"
+            },
+            "SidecarProxyInitResourceRequest": {
+              "resourceCPURequest": "60 m",
+              "resourceMemoryRequest": "30 Mi"
+            },
+            "SidecarProxyResourceLimit": {
+              "resourceCPULimit": "100 m",
+              "resourceMemoryLimit": "60 Mi"
+            },
+            "SidecarProxyResourceRequest": {
+              "resourceCPURequest": "60 m",
+              "resourceMemoryRequest": "30 Mi"
+            },
+            "terminationDrainDuration": "5s"
+          }
+        },
+        "statusCode": 2000
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJlcnJvciI6ICJDU01fMjAwMCIsICJyZXR1cm5PYmoiOiB7fSwgInN0YXR1c0NvZGUiOiAyMDAwLCAibWVzc2FnZSI6ICJTVUNDRVNTIn0="
+      },
+      "id": "service-mesh.sidecar.update",
+      "api_id": "9441",
+      "title": "更新Sidecar配置",
+      "description": {
+        "en-GB": "Update service mesh sidecar settings",
+        "en-US": "Update service mesh sidecar settings",
+        "zh-CN": "更新Sidecar配置"
+      },
+      "category": "sidecar",
+      "command_path": [
+        "sidecar",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v1/open/sidecar/config/update",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=150&vid=142&data=149&api=9441&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池 ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056xxxeda1610242ac1xxxxx"
+        },
+        {
+          "name": "customProxyConfig",
+          "location": "body",
+          "required": true,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "sidecar配置",
+          "descriptions": {
+            "en-GB": "Custom Proxy Config as a JSON object",
+            "en-US": "Custom Proxy Config as a JSON object",
+            "zh-CN": "sidecar配置"
+          },
+          "help_descriptions": {
+            "en-GB": "Custom Proxy Config as a JSON object",
+            "en-US": "Custom Proxy Config as a JSON object",
+            "zh-CN": "sidecar配置"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "custom_proxy_config",
+          "cli_flag": "custom-proxy-config",
+          "table_target": ""
+        },
+        {
+          "name": "name",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "配置名称",
+          "descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "配置名称"
+          },
+          "help_descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "配置名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "name",
+          "cli_flag": "name",
+          "table_target": "",
+          "example": "test-sidecar"
+        },
+        {
+          "name": "namespace",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务网格命名空间,当scale为NAMESPACE 、WORKLOAD时必填",
+          "descriptions": {
+            "en-GB": "Namespace",
+            "en-US": "Namespace",
+            "zh-CN": "服务网格命名空间,当scale为NAMESPACE 、WORKLOAD时必填"
+          },
+          "help_descriptions": {
+            "en-GB": "Namespace",
+            "en-US": "Namespace",
+            "zh-CN": "服务网格命名空间,当scale为NAMESPACE 、WORKLOAD时必填"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "namespace",
+          "cli_flag": "namespace",
+          "table_target": "",
+          "example": "default"
+        },
+        {
+          "name": "scale",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "sidecar配置作用范围，选择GLOBAL 、NAMESPACE、WORKLOAD",
+          "descriptions": {
+            "en-GB": "Scale",
+            "en-US": "Scale",
+            "zh-CN": "sidecar配置作用范围，选择GLOBAL 、NAMESPACE、WORKLOAD"
+          },
+          "help_descriptions": {
+            "en-GB": "Scale",
+            "en-US": "Scale",
+            "zh-CN": "sidecar配置作用范围，选择GLOBAL 、NAMESPACE、WORKLOAD"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "scale",
+          "cli_flag": "scale",
+          "table_target": "",
+          "example": "GLOBAL,NAMESPACE,WORKLOAD"
+        },
+        {
+          "name": "serviceMeshId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务网格id",
+          "descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "help_descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "service_mesh_id",
+          "cli_flag": "service-mesh-id",
+          "table_target": "",
+          "example": "e779bd8*****"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "2000"
+              ]
+            }
+          ]
+        },
+        "success_code": "2000",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "error",
+          "return_obj",
+          "status_code",
+          "message"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误",
+            "description": "错误码"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果",
+            "description": "API返回数据体,接口如果没有返回字段时也可能可能返回{}或[]"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "返回码状态"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "错误提示信息"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "customProxyConfig": {
+          "concurrency": 2,
+          "enableCoreDump": false,
+          "enableDnsCapture": true,
+          "enableElegantTermination": true,
+          "excludeIPRanges": "169.254.7.127/32",
+          "excludeInboundPorts": "15020,15021,15090",
+          "excludeOutboundPorts": "53",
+          "holdApplicationUntilProxyStarts": true,
+          "includeIPRanges": "*",
+          "includeInboundPorts": "*",
+          "includeOutboundPorts": "80,443",
+          "interceptionMode": "REDIRECT",
+          "lifecycleStr": "{\"preStop\":{\"exec\":{\"command\":[\"/bin/sh\",\"-c\",\"sleep 10\"]}}}",
+          "logLevel": "info",
+          "outboundTrafficPolicy": "ALLOW_ANY",
+          "proxyMetadata": {
+            "ISTIO_META_DNS_AUTO_ALLOCATE": "true",
+            "ISTIO_META_DNS_CAPTURE": "true"
+          },
+          "proxyStatsMatcher": {
+            "inclusion_prefixes": [
+              "cluster.outbound",
+              "listener"
+            ],
+            "inclusion_regexps": [
+              ".*upstream_rq.*"
+            ],
+            "inclusion_suffixes": [
+              "cx_total"
+            ]
+          },
+          "selector": {},
+          "sidecarProxyInitResourceLimit": {
+            "resourceCPULimit": "200m",
+            "resourceMemoryLimit": "256Mi"
+          },
+          "sidecarProxyInitResourceRequest": {
+            "resourceCPURequest": "50m",
+            "resourceMemoryRequest": "64Mi"
+          },
+          "sidecarProxyResourceLimit": {
+            "resourceCPULimit": "1000m",
+            "resourceMemoryLimit": "1024Mi"
+          },
+          "sidecarProxyResourceRequest": {
+            "resourceCPURequest": "200m",
+            "resourceMemoryRequest": "256Mi"
+          },
+          "terminationDrainDuration": "30s"
+        },
+        "name": "namespace-sidecar-default",
+        "namespace": "default",
+        "scale": "NAMESPACE",
+        "serviceMeshId": "e779bd8*****"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIkNTTV8yMDAwIiwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7fSwgInN0YXR1c0NvZGUiOiAyMDAwfQ=="
+      },
+      "id": "service-mesh.sidecar.injection.update",
+      "api_id": "9442",
+      "title": "更新Sidecar注入配置",
+      "description": {
+        "en-GB": "Update sidecar injection settings",
+        "en-US": "Update sidecar injection settings",
+        "zh-CN": "更新Sidecar注入配置"
+      },
+      "category": "sidecar",
+      "command_path": [
+        "sidecar",
+        "injection",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v1/open/sidecar/inject_config/update",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=150&vid=142&data=149&api=9442&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9xxx"
+        },
+        {
+          "name": "namespace",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命名空间",
+          "descriptions": {
+            "en-GB": "Namespace",
+            "en-US": "Namespace",
+            "zh-CN": "命名空间"
+          },
+          "help_descriptions": {
+            "en-GB": "Namespace",
+            "en-US": "Namespace",
+            "zh-CN": "命名空间"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "namespace",
+          "cli_flag": "namespace",
+          "table_target": "",
+          "example": "default"
+        },
+        {
+          "name": "serviceMeshId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务网格id",
+          "descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "help_descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "service_mesh_id",
+          "cli_flag": "service-mesh-id",
+          "table_target": "",
+          "example": "e779bd8*****"
+        },
+        {
+          "name": "enableIstioInjection",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "是否开启注入",
+          "descriptions": {
+            "en-GB": "Enable Istio Injection",
+            "en-US": "Enable Istio Injection",
+            "zh-CN": "是否开启注入"
+          },
+          "help_descriptions": {
+            "en-GB": "Enable Istio Injection",
+            "en-US": "Enable Istio Injection",
+            "zh-CN": "是否开启注入"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "enable_istio_injection",
+          "cli_flag": "enable-istio-injection",
+          "table_target": "",
+          "example": true
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "2000"
+              ]
+            }
+          ]
+        },
+        "success_code": "2000",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message",
+          "return_obj",
+          "status_code"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Response Code",
+            "label_zh": "响应码",
+            "description": "错误码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "错误提示信息"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果",
+            "description": "API返回数据体，接口如果没有返回字段时也可能返回{}或[]"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "调用错误时返回的错误编码"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "enableIstioInjection": true,
+        "namespace": "default",
+        "serviceMeshId": "e779bd8*****"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIkNTTV8yMDAwIiwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7ImNsdXN0ZXJzIjogW3siY2x1c3RlckRvbWFpbiI6ICJleGFtcGxlLmNvbSIsICJjbHVzdGVySWQiOiAia2p5ZSoqKioqKioiLCAiY3JlYXRlZFRpbWUiOiAiMjAyMy0wNy0yNCoqKioqIiwgIm5hbWUiOiAiTmFtZSIsICJyZWdpb25JZCI6ICJyZWdpb25Db2RlIiwgInNlcnZpY2VNZXNoSWQiOiAiZTc3OWJkOCoqKioqIiwgInNnSWQiOiAiZGppYTU0KioqKiIsICJzdGF0ZSI6ICJydW5uaW5nIiwgInRvdGFsIjogMjAwLCAidXBkYXRlVGltZSI6ICIyMDIzLTA3LTI0KioqKioiLCAidmVyc2lvbiI6ICJ2MS4xIiwgInZwY0lkIjogIjlqZioqKioqIn1dfSwgInN0YXR1c0NvZGUiOiAyMDAwfQ=="
+      },
+      "id": "service-mesh.cluster.available.list",
+      "api_id": "9443",
+      "title": "获取服务网格的可用集群",
+      "description": {
+        "en-GB": "List clusters available to the service mesh",
+        "en-US": "List clusters available to the service mesh",
+        "zh-CN": "获取服务网格的可用集群"
+      },
+      "category": "cluster",
+      "command_path": [
+        "cluster",
+        "available",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v1/open/cluster/list_available",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=150&vid=142&data=149&api=9443&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "service_mesh_id",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务网格id",
+          "descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "help_descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "service_mesh_id",
+          "cli_flag": "service-mesh-id",
+          "table_target": "",
+          "example": "e779bd8*****"
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9xxx"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "2000"
+              ]
+            }
+          ]
+        },
+        "success_code": "2000",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "clusters"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "clusters",
+            "path": "clusters",
+            "label_en": "Clusters",
+            "label_zh": "集群列表",
+            "description": "集群列表"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIkNTTV8yMDAwIiwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7ImNsdXN0ZXJzIjogW3siY2x1c3RlckRvbWFpbiI6ICJleGFtcGxlLmNvbSIsICJjbHVzdGVySWQiOiAia2p5ZSoqKioqKioiLCAiY3JlYXRlZFRpbWUiOiAiMjAyMy0wNy0yNCoqKioqIiwgIm5hbWUiOiAiTmFtZSIsICJyZWdpb25JZCI6ICJyZWdpb25Db2RlIiwgInNlcnZpY2VNZXNoSWQiOiAiZTc3OWJkOCoqKioqIiwgInNnSWQiOiAiZGppYTU0KioqKiIsICJzdGF0ZSI6ICJydW5uaW5nIiwgInRvdGFsIjogMjAwLCAidXBkYXRlVGltZSI6ICIyMDIzLTA3LTI0KioqKioiLCAidmVyc2lvbiI6ICJ2MS4xIiwgInZwY0lkIjogIjlqZioqKioqIn1dfSwgInN0YXR1c0NvZGUiOiAyMDAwfQ=="
+      },
+      "id": "service-mesh.cluster.list",
+      "api_id": "9444",
+      "title": "获取服务网格所在集群的信息列表",
+      "description": {
+        "en-GB": "List clusters joined to a service mesh",
+        "en-US": "List clusters joined to a service mesh",
+        "zh-CN": "获取服务网格所在集群的信息列表"
+      },
+      "category": "cluster",
+      "command_path": [
+        "cluster",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v1/open/cluster/list",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=150&vid=142&data=149&api=9444&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "service_mesh_id",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务网格id",
+          "descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "help_descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "service_mesh_id",
+          "cli_flag": "service-mesh-id",
+          "table_target": "",
+          "example": "e779bd8*****"
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9xxx"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "2000"
+              ]
+            }
+          ]
+        },
+        "success_code": "2000",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "clusters"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "clusters",
+            "path": "clusters",
+            "label_en": "Clusters",
+            "label_zh": "集群列表",
+            "description": "集群列表"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIkNTTV8yMDAwIiwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7fSwgInN0YXR1c0NvZGUiOiAyMDAwfQ=="
+      },
+      "id": "service-mesh.gateway.disable",
+      "api_id": "12529",
+      "title": "停用网关",
+      "description": {
+        "en-GB": "Disable a service mesh gateway",
+        "en-US": "Disable a service mesh gateway",
+        "zh-CN": "停用网关"
+      },
+      "category": "gateway",
+      "command_path": [
+        "gateway",
+        "disable"
+      ],
+      "method": "POST",
+      "path": "/v1/open/gateway/disable",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=150&vid=142&data=149&api=12529&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9xxx"
+        },
+        {
+          "name": "gatewayType",
+          "location": "body",
+          "required": true,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "网关类型，取值Ingres：入口网关，Egress：出口网关",
+          "descriptions": {
+            "en-GB": "Gateway Type as a JSON array",
+            "en-US": "Gateway Type as a JSON array",
+            "zh-CN": "网关类型，取值Ingres：入口网关，Egress：出口网关"
+          },
+          "help_descriptions": {
+            "en-GB": "Gateway Type as a JSON array",
+            "en-US": "Gateway Type as a JSON array",
+            "zh-CN": "网关类型，取值Ingres：入口网关，Egress：出口网关"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "gateway_type",
+          "cli_flag": "gateway-type",
+          "table_target": "",
+          "example": [
+            "Ingress"
+          ]
+        },
+        {
+          "name": "serviceMeshId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务网格id",
+          "descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "help_descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "service_mesh_id",
+          "cli_flag": "service-mesh-id",
+          "table_target": "",
+          "example": "e779bd8*****"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "2000"
+              ]
+            }
+          ]
+        },
+        "success_code": "2000",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message",
+          "return_obj",
+          "status_code"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Response Code",
+            "label_zh": "响应码",
+            "description": "错误码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "错误提示信息"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果",
+            "description": "API返回数据体，接口如果没有返回字段时也可能返回{}或[]"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "调用错误时返回的错误编码"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "gatewayType": [
+          "Ingress"
+        ],
+        "serviceMeshId": "d4a618d******"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMjAwMCwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJjb2RlIjogIkNTTV8yMDAwIiwgInJldHVybk9iaiI6IHsibmFtZXNwYWNlTGlzdCI6IFt7Im5hbWUiOiAiZGVmYXVsdCIsICJsYWJlbHMiOiB7ImlzdGlvLWluamVjdGlvbiI6ICJlbmFibGVkIiwgImt1YmVybmV0ZXMuaW8vbWV0YWRhdGEubmFtZSI6ICJkZWZhdWx0In19LCB7Im5hbWUiOiAiaXN0aW8taW5ncmVzcyIsICJsYWJlbHMiOiB7Imt1YmVybmV0ZXMuaW8vbWV0YWRhdGEubmFtZSI6ICJpc3Rpby1pbmdyZXNzIn19LCB7Im5hbWUiOiAiaXN0aW8tc3lzdGVtIiwgImxhYmVscyI6IHsiaXN0aW8taW5qZWN0aW9uIjogImVuYWJsZWQiLCAia3ViZXJuZXRlcy5pby9tZXRhZGF0YS5uYW1lIjogImlzdGlvLXN5c3RlbSJ9fSwgeyJuYW1lIjogIm9wYS1pc3RpbyIsICJsYWJlbHMiOiB7Imt1YmVybmV0ZXMuaW8vbWV0YWRhdGEubmFtZSI6ICJvcGEtaXN0aW8ifX0sIHsibmFtZSI6ICJ0ZXN0IiwgImxhYmVscyI6IHsiaXN0aW8taW5qZWN0aW9uIjogImVuYWJsZWQiLCAia3ViZXJuZXRlcy5pby9tZXRhZGF0YS5uYW1lIjogInRlc3QifX1dfX0="
+      },
+      "id": "service-mesh.cluster.namespace.list",
+      "api_id": "9446",
+      "title": "获取集群内的命名空间列表",
+      "description": {
+        "en-GB": "List namespaces in a mesh cluster",
+        "en-US": "List namespaces in a mesh cluster",
+        "zh-CN": "获取集群内的命名空间列表"
+      },
+      "category": "cluster",
+      "command_path": [
+        "cluster",
+        "namespace",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v1/open/cluster/show_namespaces",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=150&vid=142&data=149&api=9446&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "service_mesh_id",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务网格id",
+          "descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "help_descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "service_mesh_id",
+          "cli_flag": "service-mesh-id",
+          "table_target": "",
+          "example": "e779bd8*****"
+        },
+        {
+          "name": "cluster_id",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "集群id",
+          "descriptions": {
+            "en-GB": "Cluster ID",
+            "en-US": "Cluster ID",
+            "zh-CN": "集群id"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster ID",
+            "en-US": "Cluster ID",
+            "zh-CN": "集群id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cluster_id",
+          "cli_flag": "cluster-id",
+          "table_target": "",
+          "example": "kjye*******"
+        },
+        {
+          "name": "show_labels",
+          "location": "query",
+          "required": false,
+          "type": "Boolean",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "是否同时返回命名空间的标签",
+          "descriptions": {
+            "en-GB": "Show Labels",
+            "en-US": "Show Labels",
+            "zh-CN": "是否同时返回命名空间的标签"
+          },
+          "help_descriptions": {
+            "en-GB": "Show Labels",
+            "en-US": "Show Labels",
+            "zh-CN": "是否同时返回命名空间的标签"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "show_labels",
+          "cli_flag": "show-labels",
+          "table_target": "",
+          "example": false
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9xxx"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "2000"
+              ]
+            }
+          ]
+        },
+        "success_code": "2000",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "namespace_list"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "namespace_list",
+            "path": "namespaceList",
+            "label_en": "Namespace List",
+            "label_zh": "集群命名空间列表",
+            "description": "集群命名空间列表"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIkNTTV8yMDAwIiwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7fSwgInN0YXR1c0NvZGUiOiAyMDAwfQ=="
+      },
+      "id": "service-mesh.gateway.update",
+      "api_id": "9448",
+      "title": "修改CSM网关",
+      "description": {
+        "en-GB": "Update a service mesh gateway",
+        "en-US": "Update a service mesh gateway",
+        "zh-CN": "修改CSM网关"
+      },
+      "category": "gateway",
+      "command_path": [
+        "gateway",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v1/open/gateway/update",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=150&vid=142&data=149&api=9448&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9xxx"
+        },
+        {
+          "name": "gatewayType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "网关类型，取值 Ingres：入口网关，Egress：出口网关",
+          "descriptions": {
+            "en-GB": "Gateway Type",
+            "en-US": "Gateway Type",
+            "zh-CN": "网关类型，取值 Ingres：入口网关，Egress：出口网关"
+          },
+          "help_descriptions": {
+            "en-GB": "Gateway Type",
+            "en-US": "Gateway Type",
+            "zh-CN": "网关类型，取值 Ingres：入口网关，Egress：出口网关"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "gateway_type",
+          "cli_flag": "gateway-type",
+          "table_target": "",
+          "example": "Ingress"
+        },
+        {
+          "name": "yamlStr",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "网关配置的YAML内容",
+          "descriptions": {
+            "en-GB": "Yaml Str",
+            "en-US": "Yaml Str",
+            "zh-CN": "网关配置的YAML内容"
+          },
+          "help_descriptions": {
+            "en-GB": "Yaml Str",
+            "en-US": "Yaml Str",
+            "zh-CN": "网关配置的YAML内容"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "yaml_str",
+          "cli_flag": "yaml-str",
+          "table_target": "",
+          "example": "String"
+        },
+        {
+          "name": "serviceMeshId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务网格id",
+          "descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "help_descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "service_mesh_id",
+          "cli_flag": "service-mesh-id",
+          "table_target": "",
+          "example": "e779bd8*****"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "2000"
+              ]
+            }
+          ]
+        },
+        "success_code": "2000",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message",
+          "return_obj",
+          "status_code"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Response Code",
+            "label_zh": "响应码",
+            "description": "错误码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "错误提示信息"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果",
+            "description": "API返回数据体，接口如果没有返回字段时也可能返回{}或[]"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "调用错误时返回的错误编码"
+          }
+        ]
+      },
+      "dangerous": true,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIkNTTV8yMDAwIiwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7fSwgInN0YXR1c0NvZGUiOiAyMDAwfQ=="
+      },
+      "id": "service-mesh.opa.enable",
+      "api_id": "9490",
+      "title": "开启opa注入",
+      "description": {
+        "en-GB": "Enable policy agent injection",
+        "en-US": "Enable policy agent injection",
+        "zh-CN": "开启opa注入"
+      },
+      "category": "opa",
+      "command_path": [
+        "opa",
+        "enable"
+      ],
+      "method": "POST",
+      "path": "/v1/open/opa/enable",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=150&vid=142&data=149&api=9490&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9xxx"
+        },
+        {
+          "name": "serviceMeshId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务网格id",
+          "descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "help_descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "service_mesh_id",
+          "cli_flag": "service-mesh-id",
+          "table_target": "",
+          "example": "e779bd8*****"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "2000"
+              ]
+            }
+          ]
+        },
+        "success_code": "2000",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message",
+          "return_obj",
+          "status_code"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Response Code",
+            "label_zh": "响应码",
+            "description": "错误码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "错误提示信息"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果",
+            "description": "API返回数据体，接口如果没有返回字段时也可能返回{}或[]"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "调用错误时返回的错误编码"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "serviceMeshId": "e779bd8*****"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIkNTTV8yMDAwIiwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7fSwgInN0YXR1c0NvZGUiOiAyMDAwfQ=="
+      },
+      "id": "service-mesh.opa.update",
+      "api_id": "9491",
+      "title": "修改opa注入配置",
+      "description": {
+        "en-GB": "Update policy agent injection settings",
+        "en-US": "Update policy agent injection settings",
+        "zh-CN": "修改opa注入配置"
+      },
+      "category": "opa",
+      "command_path": [
+        "opa",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v1/open/opa/update",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=150&vid=142&data=149&api=9491&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9xxx"
+        },
+        {
+          "name": "namespace",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命名空间，不传默认为default",
+          "descriptions": {
+            "en-GB": "Namespace",
+            "en-US": "Namespace",
+            "zh-CN": "命名空间，不传默认为default"
+          },
+          "help_descriptions": {
+            "en-GB": "Namespace",
+            "en-US": "Namespace",
+            "zh-CN": "命名空间，不传默认为default"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "namespace",
+          "cli_flag": "namespace",
+          "table_target": "",
+          "example": "default"
+        },
+        {
+          "name": "serviceMeshId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务网格id",
+          "descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "help_descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "service_mesh_id",
+          "cli_flag": "service-mesh-id",
+          "table_target": "",
+          "example": "e779bd8*****"
+        },
+        {
+          "name": "enableOpaInject",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "开启opa注入开关，默认为false",
+          "descriptions": {
+            "en-GB": "Enable Opa Inject",
+            "en-US": "Enable Opa Inject",
+            "zh-CN": "开启opa注入开关，默认为false"
+          },
+          "help_descriptions": {
+            "en-GB": "Enable Opa Inject",
+            "en-US": "Enable Opa Inject",
+            "zh-CN": "开启opa注入开关，默认为false"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "enable_opa_inject",
+          "cli_flag": "enable-opa-inject",
+          "table_target": "",
+          "example": true
+        },
+        {
+          "name": "clusterId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "集群id",
+          "descriptions": {
+            "en-GB": "Cluster ID",
+            "en-US": "Cluster ID",
+            "zh-CN": "集群id"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster ID",
+            "en-US": "Cluster ID",
+            "zh-CN": "集群id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cluster_id",
+          "cli_flag": "cluster-id",
+          "table_target": "",
+          "example": "kjye*******"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "2000"
+              ]
+            }
+          ]
+        },
+        "success_code": "2000",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message",
+          "return_obj",
+          "status_code"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Response Code",
+            "label_zh": "响应码",
+            "description": "错误码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "错误提示信息"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果",
+            "description": "API返回数据体，接口如果没有返回字段时也可能返回{}或[]"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "调用错误时返回的错误编码"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "clusterId": " kjye*******",
+        "enableOpaInject": true,
+        "namespace": "default",
+        "serviceMeshId": "e779bd8*****"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIkNTTV8yMDAwIiwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7fSwgInN0YXR1c0NvZGUiOiAyMDAwfQ=="
+      },
+      "id": "service-mesh.opa.disable",
+      "api_id": "9492",
+      "title": "关闭opa注入",
+      "description": {
+        "en-GB": "Disable policy agent injection",
+        "en-US": "Disable policy agent injection",
+        "zh-CN": "关闭opa注入"
+      },
+      "category": "opa",
+      "command_path": [
+        "opa",
+        "disable"
+      ],
+      "method": "POST",
+      "path": "/v1/open/opa/disable",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=150&vid=142&data=149&api=9492&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9xxx"
+        },
+        {
+          "name": "serviceMeshId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务网格id",
+          "descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "help_descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "service_mesh_id",
+          "cli_flag": "service-mesh-id",
+          "table_target": "",
+          "example": "e779bd8*****"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "2000"
+              ]
+            }
+          ]
+        },
+        "success_code": "2000",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message",
+          "return_obj",
+          "status_code"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Response Code",
+            "label_zh": "响应码",
+            "description": "错误码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "错误提示信息"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果",
+            "description": "API返回数据体，接口如果没有返回字段时也可能返回{}或[]"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "调用错误时返回的错误编码"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "serviceMeshId": "e779bd8*****"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIkNTTV8yMDAwIiwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7fSwgInN0YXR1c0NvZGUiOiAyMDAwfQ=="
+      },
+      "id": "service-mesh.opa.policy.create",
+      "api_id": "9498",
+      "title": "配置opa策略",
+      "description": {
+        "en-GB": "Create a policy agent rule",
+        "en-US": "Create a policy agent rule",
+        "zh-CN": "配置opa策略"
+      },
+      "category": "opa",
+      "command_path": [
+        "opa",
+        "policy",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v1/open/opa/policy/create",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=150&vid=142&data=149&api=9498&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9xxx"
+        },
+        {
+          "name": "namespace",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命名空间",
+          "descriptions": {
+            "en-GB": "Namespace",
+            "en-US": "Namespace",
+            "zh-CN": "命名空间"
+          },
+          "help_descriptions": {
+            "en-GB": "Namespace",
+            "en-US": "Namespace",
+            "zh-CN": "命名空间"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "namespace",
+          "cli_flag": "namespace",
+          "table_target": "",
+          "example": "default"
+        },
+        {
+          "name": "serviceMeshId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务网格id",
+          "descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "help_descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "service_mesh_id",
+          "cli_flag": "service-mesh-id",
+          "table_target": "",
+          "example": "e779bd8*****"
+        },
+        {
+          "name": "crContent",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "Opa policy",
+          "descriptions": {
+            "en-GB": "Cr Content",
+            "en-US": "Cr Content",
+            "zh-CN": "Opa policy"
+          },
+          "help_descriptions": {
+            "en-GB": "Cr Content",
+            "en-US": "Cr Content",
+            "zh-CN": "Opa policy"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cr_content",
+          "cli_flag": "cr-content",
+          "table_target": "",
+          "example": "String"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "2000"
+              ]
+            }
+          ]
+        },
+        "success_code": "2000",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message",
+          "return_obj",
+          "status_code"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Response Code",
+            "label_zh": "响应码",
+            "description": "错误码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "错误提示信息"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果",
+            "description": "API返回数据体，接口如果没有返回字段时也可能返回{}或[]"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "调用错误时返回的错误编码"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "crContent": "string",
+        "namespace": "string",
+        "serviceMeshId": "e779bd8*****"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMjAwMCwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJjb2RlIjogIkNTTV8yMDAwIiwgInJldHVybk9iaiI6IHsibGlzdCI6IFt7ImNyZWF0aW9uVGltZXN0YW1wIjogIjIwMjMtMTAtMThUMDQ6MjA6MDJaIiwgImxhYmVsIjogeyJ2ZXJzaW9uIjogInYxIn0sICJuYW1lIjogIm9iamVjdC1wb2xpY3kiLCAibmFtZXNwYWNlIjogImRlZmF1bHQiLCAicmVzb3VyY2VWZXJzaW9uIjogIjg4OTk0OTQifSwgeyJjcmVhdGlvblRpbWVzdGFtcCI6ICIyMDIzLTEwLTE4VDAyOjAxOjE3WiIsICJsYWJlbCI6IHsidmVyc2lvbiI6ICJ2MiJ9LCAibmFtZSI6ICJyZXZpZXdzMSIsICJuYW1lc3BhY2UiOiAiZGVmYXVsdCIsICJyZXNvdXJjZVZlcnNpb24iOiAiODgzMzYzNiJ9XX19"
+      },
+      "id": "service-mesh.opa.policy.list",
+      "api_id": "9499",
+      "title": "查询opa策略列表",
+      "description": {
+        "en-GB": "List policy agent rules",
+        "en-US": "List policy agent rules",
+        "zh-CN": "查询opa策略列表"
+      },
+      "category": "opa",
+      "command_path": [
+        "opa",
+        "policy",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v1/open/opa/policy/list",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=150&vid=142&data=149&api=9499&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "service_mesh_id",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务网格id",
+          "descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "help_descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "service_mesh_id",
+          "cli_flag": "service-mesh-id",
+          "table_target": "",
+          "example": "e779bd8*****"
+        },
+        {
+          "name": "namespace",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命名空间",
+          "descriptions": {
+            "en-GB": "Namespace",
+            "en-US": "Namespace",
+            "zh-CN": "命名空间"
+          },
+          "help_descriptions": {
+            "en-GB": "Namespace",
+            "en-US": "Namespace",
+            "zh-CN": "命名空间"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "namespace",
+          "cli_flag": "namespace",
+          "table_target": "",
+          "example": "default"
+        },
+        {
+          "name": "keyword",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "搜索关键词",
+          "descriptions": {
+            "en-GB": "Keyword",
+            "en-US": "Keyword",
+            "zh-CN": "搜索关键词"
+          },
+          "help_descriptions": {
+            "en-GB": "Keyword",
+            "en-US": "Keyword",
+            "zh-CN": "搜索关键词"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "keyword",
+          "cli_flag": "keyword",
+          "table_target": "",
+          "example": "String"
+        },
+        {
+          "name": "page_code",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "分页code",
+          "descriptions": {
+            "en-GB": "Page Code",
+            "en-US": "Page Code",
+            "zh-CN": "分页code"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Code",
+            "en-US": "Page Code",
+            "zh-CN": "分页code"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_code",
+          "cli_flag": "page-code",
+          "table_target": "",
+          "example": "String"
+        },
+        {
+          "name": "page_size",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "分页大小",
+          "descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "分页大小"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "分页大小"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9xxx"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "2000"
+              ]
+            }
+          ]
+        },
+        "success_code": "2000",
+        "result_path": "returnObj.list",
+        "row_path": "returnObj.list",
+        "default_columns": [
+          "creation_timestamp",
+          "label",
+          "name",
+          "namespace",
+          "resource_version"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "creation_timestamp",
+            "path": "creationTimestamp",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间"
+          },
+          {
+            "key": "label",
+            "path": "label",
+            "label_en": "Labels",
+            "label_zh": "标签"
+          },
+          {
+            "key": "name",
+            "path": "name",
+            "label_en": "Name",
+            "label_zh": "名称"
+          },
+          {
+            "key": "namespace",
+            "path": "namespace",
+            "label_en": "Namespace",
+            "label_zh": "命名空间"
+          },
+          {
+            "key": "resource_version",
+            "path": "resourceVersion",
+            "label_en": "Resource Version",
+            "label_zh": "资源版本"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIkNTTV8yMDAwIiwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7Im1ldGFkYXRhIjogeyJjcmVhdGlvblRpbWVzdGFtcCI6ICJzdHJpbmciLCAibGFiZWxzIjogeyJ2ZXJzaW9uIjogInN0cmluZyJ9LCAibmFtZSI6ICJzdHJpbmciLCAibmFtZXNwYWNlIjogInN0cmluZyIsICJyZXNvdXJjZVZlcnNpb24iOiAic3RyaW5nIn0sICJzcGVjIjogeyJwb2xpY3kiOiAicGFja2FnZSBpc3Rpby5hdXRoelxuaW1wb3J0IGlucHV0LmF0dHJpYnV0ZXMucmVxdWVzdC5odHRwIGFzIGh0dHBfcmVxdWVzdFxuZGVmYXVsdCBhbGxvdyA9IGZhbHNlIiwgIndvcmtsb2FkU2VsZWN0b3IiOiB7ImxhYmVscyI6IHsidmVyc2lvbiI6ICJzdHJpbmcifX19fSwgInN0YXR1c0NvZGUiOiAyMDAwfQ=="
+      },
+      "id": "service-mesh.opa.policy.show",
+      "api_id": "9500",
+      "title": "查询opa策略详情",
+      "description": {
+        "en-GB": "Show a policy agent rule",
+        "en-US": "Show a policy agent rule",
+        "zh-CN": "查询opa策略详情"
+      },
+      "category": "opa",
+      "command_path": [
+        "opa",
+        "policy",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v1/open/opa/policy/detail",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=150&vid=142&data=149&api=9500&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "namespace",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命名空间",
+          "descriptions": {
+            "en-GB": "Namespace",
+            "en-US": "Namespace",
+            "zh-CN": "命名空间"
+          },
+          "help_descriptions": {
+            "en-GB": "Namespace",
+            "en-US": "Namespace",
+            "zh-CN": "命名空间"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "namespace",
+          "cli_flag": "namespace",
+          "table_target": "",
+          "example": "default"
+        },
+        {
+          "name": "service_mesh_id",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务网格id",
+          "descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "help_descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "service_mesh_id",
+          "cli_flag": "service-mesh-id",
+          "table_target": "",
+          "example": "e779bd8*****"
+        },
+        {
+          "name": "name",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "OPA策略名称",
+          "descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "OPA策略名称"
+          },
+          "help_descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "OPA策略名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "name",
+          "cli_flag": "name",
+          "table_target": "",
+          "example": "object-policy-dd"
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池Id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example_unavailable": true
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "2000"
+              ]
+            }
+          ]
+        },
+        "success_code": "2000",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "metadata",
+          "spec"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "metadata",
+            "path": "metadata",
+            "label_en": "Metadata",
+            "label_zh": "元数据"
+          },
+          {
+            "key": "spec",
+            "path": "spec",
+            "label_en": "Specification",
+            "label_zh": "配置"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIkNTTV8yMDAwIiwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7fSwgInN0YXR1c0NvZGUiOiAyMDAwfQ=="
+      },
+      "id": "service-mesh.opa.policy.update",
+      "api_id": "9501",
+      "title": "修改opa策略",
+      "description": {
+        "en-GB": "Update a policy agent rule",
+        "en-US": "Update a policy agent rule",
+        "zh-CN": "修改opa策略"
+      },
+      "category": "opa",
+      "command_path": [
+        "opa",
+        "policy",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v1/open/opa/policy/update",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=150&vid=142&data=149&api=9501&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "namespace",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命名空间",
+          "descriptions": {
+            "en-GB": "Namespace",
+            "en-US": "Namespace",
+            "zh-CN": "命名空间"
+          },
+          "help_descriptions": {
+            "en-GB": "Namespace",
+            "en-US": "Namespace",
+            "zh-CN": "命名空间"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "namespace",
+          "cli_flag": "namespace",
+          "table_target": "",
+          "example": "default"
+        },
+        {
+          "name": "serviceMeshId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务网格id",
+          "descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "help_descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "service_mesh_id",
+          "cli_flag": "service-mesh-id",
+          "table_target": "",
+          "example": "e779bd8*****"
+        },
+        {
+          "name": "crContent",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "Opa policy",
+          "descriptions": {
+            "en-GB": "Cr Content",
+            "en-US": "Cr Content",
+            "zh-CN": "Opa policy"
+          },
+          "help_descriptions": {
+            "en-GB": "Cr Content",
+            "en-US": "Cr Content",
+            "zh-CN": "Opa policy"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cr_content",
+          "cli_flag": "cr-content",
+          "table_target": "",
+          "example": "String"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "2000"
+              ]
+            }
+          ]
+        },
+        "success_code": "2000",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message",
+          "return_obj",
+          "status_code"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Response Code",
+            "label_zh": "响应码",
+            "description": "错误码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "错误提示信息"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果",
+            "description": "API返回数据体，接口如果没有返回字段时也可能返回{}或[]"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "调用错误时返回的错误编码"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "crContent": "string",
+        "namespace": "string",
+        "serviceMeshId": "e779bd8*****"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIkNTTV8yMDAwIiwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7fSwgInN0YXR1c0NvZGUiOiAyMDAwfQ=="
+      },
+      "id": "service-mesh.opa.policy.delete",
+      "api_id": "9502",
+      "title": "删除opa策略",
+      "description": {
+        "en-GB": "Delete a policy agent rule",
+        "en-US": "Delete a policy agent rule",
+        "zh-CN": "删除opa策略"
+      },
+      "category": "opa",
+      "command_path": [
+        "opa",
+        "policy",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/v1/open/opa/policy/delete",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=150&vid=142&data=149&api=9502&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "namespace",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命名空间",
+          "descriptions": {
+            "en-GB": "Namespace",
+            "en-US": "Namespace",
+            "zh-CN": "命名空间"
+          },
+          "help_descriptions": {
+            "en-GB": "Namespace",
+            "en-US": "Namespace",
+            "zh-CN": "命名空间"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "namespace",
+          "cli_flag": "namespace",
+          "table_target": "",
+          "example": "default"
+        },
+        {
+          "name": "serviceMeshId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务网格id",
+          "descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "help_descriptions": {
+            "en-GB": "Service Mesh ID",
+            "en-US": "Service Mesh ID",
+            "zh-CN": "服务网格id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "service_mesh_id",
+          "cli_flag": "service-mesh-id",
+          "table_target": "",
+          "example": "e779bd8*****"
+        },
+        {
+          "name": "name",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "OPA策略名称",
+          "descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "OPA策略名称"
+          },
+          "help_descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "OPA策略名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "name",
+          "cli_flag": "name",
+          "table_target": "",
+          "example": "object-policy-dd"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "2000"
+              ]
+            }
+          ]
+        },
+        "success_code": "2000",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message",
+          "return_obj",
+          "status_code"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Response Code",
+            "label_zh": "响应码",
+            "description": "错误码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "错误提示信息"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果",
+            "description": "API返回数据体，接口如果没有返回字段时也可能返回{}或[]"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "调用错误时返回的错误编码"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "name": "object-policy-dd",
+        "namespace": "string",
+        "serviceMeshId": "e779bd8*****"
+      },
+      "example_response": null
+    }
+  ]
+}

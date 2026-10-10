@@ -1,0 +1,64 @@
+{
+  "waiters": {
+    "private-dns.record.disabled": {
+      "selector": {
+        "path": "returnObj.zoneRecords",
+        "key": "zoneRecordID",
+        "value": "$param.zone_record_id"
+      },
+      "commands": [
+        "private-dns.record.list"
+      ],
+      "path": "enabled",
+      "success": "0",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "private-dns.record.enabled": {
+      "selector": {
+        "path": "returnObj.zoneRecords",
+        "key": "zoneRecordID",
+        "value": "$param.zone_record_id"
+      },
+      "commands": [
+        "private-dns.record.list"
+      ],
+      "path": "enabled",
+      "success": "1",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "private-dns.record.legacy.disabled": {
+      "selector": {
+        "path": "returnObj.zoneRecords",
+        "key": "zoneRecordID",
+        "value": "$param.zone_record_id"
+      },
+      "commands": [
+        "private-dns.record.legacy.list"
+      ],
+      "path": "enabled",
+      "success": "0",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "private-dns.record.legacy.enabled": {
+      "selector": {
+        "path": "returnObj.zoneRecords",
+        "key": "zoneRecordID",
+        "value": "$param.zone_record_id"
+      },
+      "commands": [
+        "private-dns.record.legacy.list"
+      ],
+      "path": "enabled",
+      "success": "1",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    }
+  }
+}

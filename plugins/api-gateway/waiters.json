@@ -1,0 +1,130 @@
+{
+  "waiters": {
+    "api-gateway.bandwidth.bound": {
+      "commands": [
+        "api-gateway.bandwidth.show"
+      ],
+      "failure_values": [
+        "-1",
+        "9999"
+      ],
+      "path": "returnObj.ipStatus",
+      "success": "1",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "api-gateway.bandwidth.unbound": {
+      "commands": [
+        "api-gateway.bandwidth.show"
+      ],
+      "failure_values": [
+        "-1",
+        "9999"
+      ],
+      "path": "returnObj.ipStatus",
+      "success": "0",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "api-gateway.desktop.activation-task.completed": {
+      "commands": [
+        "api-gateway.desktop.service.task.show"
+      ],
+      "failure_values": [
+        "FAILED"
+      ],
+      "path": "returnObj.status",
+      "success": "SUCCESS",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "api-gateway.desktop.nat.frozen": {
+      "selector": {
+        "path": "returnObj.nat_gateways",
+        "key": "id",
+        "value": "$param.nat_gateway_id"
+      },
+      "commands": [
+        "api-gateway.desktop.nat.list"
+      ],
+      "path": "admin_state_up",
+      "success": "false",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "api-gateway.desktop.nat.unfrozen": {
+      "selector": {
+        "path": "returnObj.nat_gateways",
+        "key": "id",
+        "value": "$param.nat_gateway_id"
+      },
+      "commands": [
+        "api-gateway.desktop.nat.list"
+      ],
+      "path": "admin_state_up",
+      "success": "true",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "api-gateway.desktop.service.active": {
+      "commands": [
+        "api-gateway.desktop.service.show"
+      ],
+      "failure_values": [
+        "SUBSCRIPTION_FAILED",
+        "DEREGISTRATION_FAILED"
+      ],
+      "path": "returnObj.status",
+      "success": "SUBSCRIBED",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "api-gateway.order.completed": {
+      "commands": [
+        "api-gateway.order.show"
+      ],
+      "failure_values": [
+        "4",
+        "5",
+        "10",
+        "11",
+        "13",
+        "15",
+        "22",
+        "0",
+        "999"
+      ],
+      "path": "returnObj.status",
+      "success": "3",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "api-gateway.security-zone.resource.ready": {
+      "selector": {
+        "path": "returnObj.list",
+        "key": "masterResourceId",
+        "value": "$param.master_resource_id"
+      },
+      "commands": [
+        "api-gateway.security-zone.resource.list"
+      ],
+      "failure_values": [
+        "6",
+        "7",
+        "9999"
+      ],
+      "path": "resourceStatus",
+      "success": "2",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    }
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "waiters": {
+    "drds.ddl-task.succeeded": {
+      "commands": [
+        "drds.ddl-task.show"
+      ],
+      "failure_values": [
+        "2",
+        "3",
+        "4"
+      ],
+      "path": "returnObj.result",
+      "success": "0",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "drds.instance.paused": {
+      "commands": [
+        "drds.instance.show"
+      ],
+      "failure_values": [
+        "disable"
+      ],
+      "path": "returnObj.status",
+      "success": "pause",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "drds.instance.released": {
+      "commands": [
+        "drds.instance.show"
+      ],
+      "path": "returnObj.status",
+      "success": "disable",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "drds.instance.running": {
+      "commands": [
+        "drds.instance.show"
+      ],
+      "failure_values": [
+        "disable"
+      ],
+      "path": "returnObj.status",
+      "success": "enable",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "drds.node.running": {
+      "commands": [
+        "drds.node.status.show"
+      ],
+      "path": "returnObj.status",
+      "success": "0",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "drds.node.stopped": {
+      "commands": [
+        "drds.node.status.show"
+      ],
+      "path": "returnObj.status",
+      "success": "1",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "drds.redistribution.ready-to-switch": {
+      "commands": [
+        "drds.redistribution.status.show"
+      ],
+      "failure_values": [
+        "2",
+        "9"
+      ],
+      "path": "returnObj.result",
+      "success": "8",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "drds.redistribution.succeeded": {
+      "commands": [
+        "drds.redistribution.status.show"
+      ],
+      "failure_values": [
+        "2",
+        "9"
+      ],
+      "path": "returnObj.result",
+      "success": "0",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    }
+  }
+}

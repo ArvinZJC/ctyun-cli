@@ -1,0 +1,102 @@
+{
+  "captured_at": "2026-09-25",
+  "service_id": 74,
+  "version_id": 68,
+  "published_api_count": 126,
+  "implemented_api_count": 125,
+  "blocked": [
+    {
+      "api_id": "8256",
+      "title": "公有云_查询变更DRDS实例价格",
+      "path": "/teledb-acceptor/v2/openapi/accept-order-info/inquiryForUpgrade",
+      "reason": "No response parameter schema is published and the entire response example is the literal 1; no envelope or useful result contract can be established."
+    }
+  ],
+  "fixtures_unavailable": [
+    {
+      "api_id": "8194",
+      "reason": "The captured example uses statusCode=0, contradicting the explicit authoritative 800-success/900-failure schema. Preserve the raw evidence and support the documented contract without rewriting its status into a fabricated success fixture."
+    },
+    {
+      "api_id": "8198",
+      "reason": "The captured example uses statusCode=0, contradicting the explicit authoritative 800-success/900-failure schema. Preserve the raw evidence and support the documented contract without rewriting its status into a fabricated success fixture."
+    },
+    {
+      "api_id": "8210",
+      "reason": "The captured example uses statusCode=0, contradicting the explicit authoritative 800-success/900-failure schema. Preserve the raw evidence and support the documented contract without rewriting its status into a fabricated success fixture."
+    },
+    {
+      "api_id": "8236",
+      "reason": "The captured example uses statusCode=0, contradicting the explicit authoritative 800-success/900-failure schema. Preserve the raw evidence and support the documented contract without rewriting its status into a fabricated success fixture."
+    },
+    {
+      "api_id": "8265",
+      "reason": "The malformed response example describes disk types instead of the documented order result. The explicit statusCode=200 response schema is supported; no order fixture is fabricated."
+    }
+  ],
+  "example_normalisations": [
+    {
+      "api_id": "8179",
+      "section": "响应示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "8196",
+      "section": "响应示例",
+      "normalisation": "Removed a duplicated result-key token after returnObj and corrected the returnObj spelling to the published schema; response values unchanged."
+    },
+    {
+      "api_id": "8197",
+      "section": "响应示例",
+      "normalisation": "Removed a duplicated result-key token after returnObj and corrected the returnObj spelling to the published schema; response values unchanged."
+    },
+    {
+      "api_id": "8220",
+      "section": "响应示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "8248",
+      "section": "响应示例",
+      "normalisation": "Removed a duplicated result-key token after returnObj and corrected the returnObj spelling to the published schema; response values unchanged."
+    },
+    {
+      "api_id": "8265",
+      "section": "请求体body示例",
+      "normalisation": "Removed explanatory line comments outside JSON strings; values unchanged."
+    },
+    {
+      "api_id": "8263",
+      "section": "请求体body示例",
+      "normalisation": "Removed explanatory line comments outside JSON strings; values unchanged."
+    },
+    {
+      "api_id": "8263",
+      "section": "请求体body示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "8265",
+      "section": "request example",
+      "normalisation": "Represented billMode as its documented string type; value unchanged."
+    }
+  ],
+  "waiter_gaps": [],
+  "waiter_review": {
+    "waiter_count": 8,
+    "notes": [
+      "Instance, node, DDL-task and redistribution detail queries expose explicit identity inputs and documented terminal states.",
+      "Redistribution readiness for switching is distinct from successful completion. DDL warnings are not clean success.",
+      "Order submission is not provisioning or renewal completion. Health-check counts and metrics do not define asynchronous lifecycle readiness."
+    ]
+  },
+  "request_notes": [
+    "GET renewal and unsubscribe remain confirmed mutations without retries. Health and connectivity checks are read-only diagnostics.",
+    "Table creation and schema permissions preserve conditional requirements. Property-value requirements that depend on previously retrieved property metadata remain server-validated."
+  ],
+  "response_notes": [
+    "Use authoritative statusCode=800/900 for DRDS operations; deprecated code/result aliases remain captured data, not alternate success predicates.",
+    "Commercial operations use their documented statusCode=200, with nested submitted or isSucceed guards when those fields explicitly indicate business success.",
+    "Five contradictory or unrelated response examples are retained only as raw evidence; no synthetic successful responses are substituted."
+  ]
+}

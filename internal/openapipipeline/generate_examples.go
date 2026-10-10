@@ -36,7 +36,7 @@ func parameterValueType(sourceType string) (plugin.ParameterValueType, error) {
 		return plugin.ParameterValueObjectArray, nil
 	case "map of string":
 		return plugin.ParameterValueStringMap, nil
-	case "object", "json":
+	case "object", "json", "map of integer":
 		return plugin.ParameterValueJSON, nil
 	default:
 		return "", fmt.Errorf("unsupported parameter type %q", sourceType)

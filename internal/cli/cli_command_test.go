@@ -38,6 +38,7 @@ func TestPluginCommandDispatchUsesMetadataWithoutProductBranch(t *testing.T) {
 	}
 }
 
+// TestDangerousCommandPromptsForConfirmation blocks dangerous execution until the user confirms.
 func TestDangerousCommandPromptsForConfirmation(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeDangerBundle(t, filepath.Join(pluginRoot, "ecs"))
@@ -95,6 +96,7 @@ func TestDangerousCommandPromptsForConfirmation(t *testing.T) {
 	}
 }
 
+// TestDangerousCommandLocalizesConfirmationPrompt uses the selected locale for the confirmation question.
 func TestDangerousCommandLocalizesConfirmationPrompt(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeDangerBundle(t, filepath.Join(pluginRoot, "ecs"))
@@ -115,6 +117,7 @@ func TestDangerousCommandLocalizesConfirmationPrompt(t *testing.T) {
 	}
 }
 
+// TestWaitFlagEvaluatesWaiterMetadata evaluates terminal states from the selected waiter definition.
 func TestWaitFlagEvaluatesWaiterMetadata(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeWaitBundle(t, filepath.Join(pluginRoot, "ecs"))
@@ -128,11 +131,12 @@ func TestWaitFlagEvaluatesWaiterMetadata(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "waiter ecs.instance.running: success") {
+	if !strings.Contains(stdout.String(), "waiter \"ecs.instance.running\": success") {
 		t.Fatalf("waiter output missing success:\n%s", stdout.String())
 	}
 }
 
+// TestWaitFlagPollsUntilWaiterSucceeds repeats retrieval until a documented success state appears.
 func TestWaitFlagPollsUntilWaiterSucceeds(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writePollingWaitBundle(t, filepath.Join(pluginRoot, "ecs"))
@@ -188,11 +192,12 @@ func TestWaitFlagPollsUntilWaiterSucceeds(t *testing.T) {
 	if attempts != 2 {
 		t.Fatalf("attempts = %d, want 2", attempts)
 	}
-	if !strings.Contains(stdout.String(), "waiter ecs.instance.running: success") {
+	if !strings.Contains(stdout.String(), "waiter \"ecs.instance.running\": success") {
 		t.Fatalf("waiter output missing success:\n%s", stdout.String())
 	}
 }
 
+// TestWaitFlagReportsTimeoutAfterMaxAttempts stops pending polling at the configured attempt limit.
 func TestWaitFlagReportsTimeoutAfterMaxAttempts(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writePollingWaitBundle(t, filepath.Join(pluginRoot, "ecs"))
@@ -244,11 +249,12 @@ func TestWaitFlagReportsTimeoutAfterMaxAttempts(t *testing.T) {
 	if attempts != 3 {
 		t.Fatalf("attempts = %d, want timeout after max attempts", attempts)
 	}
-	if !strings.Contains(stdout.String(), "waiter ecs.instance.running: timeout") {
+	if !strings.Contains(stdout.String(), "waiter \"ecs.instance.running\": timeout") {
 		t.Fatalf("waiter output missing timeout:\n%s", stdout.String())
 	}
 }
 
+// TestTimeoutFlagOverridesProfileRequestTimeout applies the explicit request timeout over the profile default.
 func TestTimeoutFlagOverridesProfileRequestTimeout(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writePollingWaitBundle(t, filepath.Join(pluginRoot, "ecs"))
@@ -306,6 +312,7 @@ func TestTimeoutFlagOverridesProfileRequestTimeout(t *testing.T) {
 	}
 }
 
+// TestPluginCommandWithoutFixtureUsesAPIMetadataAndEnvCredentials constructs live requests from metadata and environment credentials.
 func TestPluginCommandWithoutFixtureUsesAPIMetadataAndEnvCredentials(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeIMSBundleWithoutFixture(t, filepath.Join(pluginRoot, "ims"))
@@ -369,6 +376,7 @@ func TestPluginCommandWithoutFixtureUsesAPIMetadataAndEnvCredentials(t *testing.
 	}
 }
 
+// TestPluginCommandWarnsWhenLiveRequestUsesConfigCredentials warns when persisted credentials supply a live request.
 func TestPluginCommandWarnsWhenLiveRequestUsesConfigCredentials(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeIMSBundleWithoutFixture(t, filepath.Join(pluginRoot, "ims"))
@@ -410,6 +418,7 @@ func TestPluginCommandWarnsWhenLiveRequestUsesConfigCredentials(t *testing.T) {
 	}
 }
 
+// TestPluginCommandLocalizesConfigCredentialWarning renders the credential source warning in the selected locale.
 func TestPluginCommandLocalizesConfigCredentialWarning(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeIMSBundleWithoutFixture(t, filepath.Join(pluginRoot, "ims"))
@@ -451,6 +460,7 @@ func TestPluginCommandLocalizesConfigCredentialWarning(t *testing.T) {
 	}
 }
 
+// TestPluginCommandDoesNotWarnForEnvCredentialsOrDisabledConfigWarning avoids config credential warnings when their trigger is absent or disabled.
 func TestPluginCommandDoesNotWarnForEnvCredentialsOrDisabledConfigWarning(t *testing.T) {
 	cases := []struct {
 		name   string
@@ -551,6 +561,7 @@ func TestPluginCommandDoesNotWarnForEnvCredentialsOrDisabledConfigWarning(t *tes
 	}
 }
 
+// TestPluginCommandBindsPathArgumentsIntoAPIBody resolves positional bindings into the declared request fields.
 func TestPluginCommandBindsPathArgumentsIntoAPIBody(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeArgumentBundle(t, filepath.Join(pluginRoot, "ims"))
@@ -607,6 +618,7 @@ func TestPluginCommandBindsPathArgumentsIntoAPIBody(t *testing.T) {
 	}
 }
 
+// TestPluginCommandBindsMetadataFlagsIntoAPIBody resolves option values into metadata-declared body fields.
 func TestPluginCommandBindsMetadataFlagsIntoAPIBody(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeFlagBundle(t, filepath.Join(pluginRoot, "ecs"))
@@ -663,6 +675,7 @@ func TestPluginCommandBindsMetadataFlagsIntoAPIBody(t *testing.T) {
 	}
 }
 
+// TestPluginCommandBindsQueryAndHeaderMetadata places values in the declared query and header locations.
 func TestPluginCommandBindsQueryAndHeaderMetadata(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeQueryHeaderBundle(t, filepath.Join(pluginRoot, "ecs"))
@@ -723,6 +736,7 @@ func TestPluginCommandBindsQueryAndHeaderMetadata(t *testing.T) {
 	}
 }
 
+// TestPluginCommandRequiresMetadataFlags rejects missing required options before executing a request.
 func TestPluginCommandRequiresMetadataFlags(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeFlagBundle(t, filepath.Join(pluginRoot, "ecs"))
@@ -749,6 +763,7 @@ func TestPluginCommandRequiresMetadataFlags(t *testing.T) {
 	}
 }
 
+// TestPluginCommandValidatesAllowedParameterValues rejects values outside the metadata enum.
 func TestPluginCommandValidatesAllowedParameterValues(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeValidationBundle(t, filepath.Join(pluginRoot, "ecs"))
@@ -766,6 +781,7 @@ func TestPluginCommandValidatesAllowedParameterValues(t *testing.T) {
 	}
 }
 
+// TestPluginCommandValidatesParameterPattern enforces metadata regular-expression validation before requests.
 func TestPluginCommandValidatesParameterPattern(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeValidationBundle(t, filepath.Join(pluginRoot, "ecs"))
@@ -783,6 +799,7 @@ func TestPluginCommandValidatesParameterPattern(t *testing.T) {
 	}
 }
 
+// TestPluginCommandLocalizesValidationErrors renders invalid option diagnostics in the selected locale.
 func TestPluginCommandLocalizesValidationErrors(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeValidationBundle(t, filepath.Join(pluginRoot, "ecs"))
@@ -800,12 +817,14 @@ func TestPluginCommandLocalizesValidationErrors(t *testing.T) {
 	}
 }
 
+// TestDefaultExecutionBypassesFixtureForRetrievalCommand uses the live transport unless fixture mode is explicitly selected.
 func TestDefaultExecutionBypassesFixtureForRetrievalCommand(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	var seen bool
 	transport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
 		seen = true
-		if req.URL.Path != "/v4/ecs/list-instances" {
-			t.Fatalf("path = %q, want /v4/ecs/list-instances", req.URL.Path)
+		if req.URL.Path != "/test/instances" {
+			t.Fatalf("path = %q, want /test/instances", req.URL.Path)
 		}
 		return &http.Response{
 			StatusCode: http.StatusOK,
@@ -816,6 +835,7 @@ func TestDefaultExecutionBypassesFixtureForRetrievalCommand(t *testing.T) {
 
 	var stdout bytes.Buffer
 	err := Run(Config{
+		PluginRoot:    pluginRoot,
 		Args:          []string{"--lang", "en-US", "ecs", "instance", "list", "--cols", "instance_id,name"},
 		Stdout:        &stdout,
 		HTTPTransport: transport,
@@ -850,7 +870,9 @@ func TestDefaultExecutionBypassesFixtureForRetrievalCommand(t *testing.T) {
 	}
 }
 
+// TestOptionalMetadataFlagIsOmittedWhenUnset keeps absent optional values out of the request body.
 func TestOptionalMetadataFlagIsOmittedWhenUnset(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	var seenBody string
 	transport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
 		body, err := io.ReadAll(req.Body)
@@ -866,6 +888,7 @@ func TestOptionalMetadataFlagIsOmittedWhenUnset(t *testing.T) {
 	})
 
 	err := Run(Config{
+		PluginRoot:    pluginRoot,
 		Args:          []string{"ecs", "instance", "list", "--cols", "instance_id,name"},
 		Stdout:        io.Discard,
 		HTTPTransport: transport,
@@ -900,7 +923,9 @@ func TestOptionalMetadataFlagIsOmittedWhenUnset(t *testing.T) {
 	}
 }
 
+// TestDebugFlagWritesRedactedHTTPDetailsToStderr redacts credentials and request identifiers without contaminating stdout.
 func TestDebugFlagWritesRedactedHTTPDetailsToStderr(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	transport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
 		return &http.Response{
 			StatusCode: http.StatusBadRequest,
@@ -911,6 +936,7 @@ func TestDebugFlagWritesRedactedHTTPDetailsToStderr(t *testing.T) {
 
 	var stdout, stderr bytes.Buffer
 	err := Run(Config{
+		PluginRoot:    pluginRoot,
 		Args:          []string{"--debug", "ecs", "instance", "list"},
 		Stdout:        &stdout,
 		Stderr:        &stderr,
@@ -944,7 +970,7 @@ func TestDebugFlagWritesRedactedHTTPDetailsToStderr(t *testing.T) {
 			t.Fatalf("debug stderr still contains %q: %s", secret, got)
 		}
 	}
-	if !strings.Contains(got, "request POST https://ctapi.example.test/v4/ecs/list-instances") {
+	if !strings.Contains(got, "request POST https://ctapi.example.test/test/instances") {
 		t.Fatalf("debug stderr missing request line: %s", got)
 	}
 	if !strings.Contains(got, "response 400") {

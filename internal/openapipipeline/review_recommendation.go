@@ -89,8 +89,9 @@ func targetAPIOwners(catalogs []Catalog, target APIReference) []catalogOperation
 }
 
 // reviewOperationRecommendation validates source evidence, tracked ownership,
-// promoted visible-command resolution, and generated metadata agreement.
-func (workspace Workspace) reviewOperationRecommendation(report *ReviewReport, catalogs []Catalog, _ Catalog, operation Operation, command plugin.Command, draftI18N map[string]map[string]string) {
+// visible-command resolution in the current draft or promoted external bundle,
+// and generated metadata agreement.
+func (workspace Workspace) reviewOperationRecommendation(report *ReviewReport, catalogs []Catalog, source Catalog, operation Operation, command plugin.Command, draftI18N map[string]map[string]string) {
 	defer reviewGeneratedRecommendation(report, operation, command, draftI18N)
 	if operationHasUnclassifiedRecommendation(operation) {
 		addReviewFinding(report, fmt.Sprintf("operation %s has recommendation wording without recommendation metadata", operation.ID))
@@ -131,14 +132,20 @@ func (workspace Workspace) reviewOperationRecommendation(report *ReviewReport, c
 		addReviewFinding(report, fmt.Sprintf("operation %s target command plugin %s does not match tracked owner %s for %s", operation.ID, target.Plugin, ownerPlugin, targetLabel))
 		return
 	}
-	bundle, err := plugin.LoadBundle(filepath.Join(workspace.Root, "plugins", ownerPlugin), coreversion.Version)
+	bundlePath := filepath.Join(workspace.Root, "plugins", ownerPlugin)
+	bundleStage := "promoted"
+	if ownerPlugin == source.Product.PluginName {
+		bundlePath = workspace.ProductPath(ownerPlugin, "draft")
+		bundleStage = "draft"
+	}
+	bundle, err := plugin.LoadBundle(bundlePath, coreversion.Version)
 	if err != nil {
-		addReviewFinding(report, fmt.Sprintf("operation %s target command %s has no valid promoted plugin %s", operation.ID, commandTargetLabel(target), ownerPlugin))
+		addReviewFinding(report, fmt.Sprintf("operation %s target command %s has no valid %s plugin %s", operation.ID, commandTargetLabel(target), bundleStage, ownerPlugin))
 		return
 	}
 	resolvedBundle, resolvedCommand, ok := plugin.FindCommandTarget([]plugin.Bundle{bundle}, target)
 	if !ok {
-		addReviewFinding(report, fmt.Sprintf("operation %s target command %s does not resolve in promoted plugin %s", operation.ID, commandTargetLabel(target), ownerPlugin))
+		addReviewFinding(report, fmt.Sprintf("operation %s target command %s does not resolve in %s plugin %s", operation.ID, commandTargetLabel(target), bundleStage, ownerPlugin))
 		return
 	}
 	targetOperation, ok := resolvedBundle.APIs.Operations[resolvedCommand.Operation]

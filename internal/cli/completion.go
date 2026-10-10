@@ -181,7 +181,7 @@ func inlineOptionValueCompletions(prefix string, context completionContext) ([]s
 			values = append(values, name+"="+value)
 		}
 	}
-	sortStrings(values)
+	slices.Sort(values)
 	return values, true
 }
 
@@ -281,7 +281,7 @@ func configCommandCompletions(path []string) []string {
 	case "explain":
 		if len(path) == 2 {
 			keys := coreconfig.SettingKeys()
-			sortStrings(keys)
+			slices.Sort(keys)
 			return keys
 		}
 	case "profile", "profiles":
@@ -341,7 +341,7 @@ func configOptionNames(options []pluginOptionSummary) []string {
 	for _, option := range options {
 		names = append(names, option.Name)
 	}
-	sortStrings(names)
+	slices.Sort(names)
 	return names
 }
 
@@ -635,7 +635,7 @@ func tableColumnKeys(context completionContext, suffix string) []string {
 	for _, column := range table.Columns {
 		values = append(values, column.Key+suffix)
 	}
-	sortStrings(values)
+	slices.Sort(values)
 	return values
 }
 
@@ -752,7 +752,7 @@ func sortedCompletionSet(seen map[string]struct{}) []string {
 	for value := range seen {
 		values = append(values, value)
 	}
-	sortStrings(values)
+	slices.Sort(values)
 	return values
 }
 

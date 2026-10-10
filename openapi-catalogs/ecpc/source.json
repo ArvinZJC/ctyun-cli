@@ -3760,16 +3760,16 @@
         {
           "name": "subnetOidList",
           "location": "body",
-          "required": true,
+          "required": false,
           "type": "Array of Strings",
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "子网ID列表，长度至少为1",
+          "description": "子网ID列表。创建普通带宽时必填，长度至少为1；创建共享带宽（isShareType=true）时可以不传。",
           "descriptions": {
-            "en-GB": "Subnet Oid List",
-            "en-US": "Subnet Oid List",
-            "zh-CN": "子网ID列表，长度至少为1"
+            "en-GB": "Subnet IDs; at least one is required for ordinary bandwidth; optional for shared bandwidth",
+            "en-US": "Subnet IDs; at least one is required for ordinary bandwidth; optional for shared bandwidth",
+            "zh-CN": "子网ID列表。创建普通带宽时必填，长度至少为1；创建共享带宽（isShareType=true）时可以不传。"
           },
           "profile": "",
           "argument": "",
@@ -3778,7 +3778,12 @@
           "table_target": "",
           "example": [
             "sn-xx"
-          ]
+          ],
+          "help_descriptions": {
+            "en-GB": "Subnet IDs; at least one is required for ordinary bandwidth; optional for shared bandwidth",
+            "en-US": "Subnet IDs; at least one is required for ordinary bandwidth; optional for shared bandwidth",
+            "zh-CN": "子网 ID 列表；普通带宽至少填写一个，共享带宽可不填"
+          }
         },
         {
           "name": "billMode",
@@ -3899,6 +3904,27 @@
           "cli_name": "auto_pay",
           "cli_flag": "auto-pay",
           "table_target": ""
+        },
+        {
+          "name": "isShareType",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "default": "false",
+          "description": "是否订购共享带宽（仅资源包订购时有效）。取值范围： - true：是（订购共享带宽）。 - false/不传：否（订购普通带宽）。",
+          "descriptions": {
+            "en-GB": "Create shared bandwidth; applies only to resource-pack purchases",
+            "en-US": "Create shared bandwidth; applies only to resource-pack purchases",
+            "zh-CN": "是否订购共享带宽（仅资源包订购时有效）。取值范围： - true：是（订购共享带宽）。 - false/不传：否（订购普通带宽）。"
+          },
+          "help_descriptions": {
+            "en-GB": "Create shared bandwidth; applies only to resource-pack purchases",
+            "en-US": "Create shared bandwidth; applies only to resource-pack purchases",
+            "zh-CN": "是否创建共享带宽；仅资源包订购时有效"
+          },
+          "cli_name": "is_share_type",
+          "cli_flag": "is-share-type",
+          "example_unavailable": true
         }
       ],
       "response": {
@@ -3978,7 +4004,18 @@
           "submitted": true,
           "errorMessage": ""
         }
-      }
+      },
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "is_share_type",
+            "equals": "false"
+          },
+          "required": [
+            "subnet_oid_list"
+          ]
+        }
+      ]
     },
     {
       "id": "v4.ecpc.bandwidth.delete-bandwidth",
@@ -4222,6 +4259,27 @@
           "cli_name": "page_size",
           "cli_flag": "page-size",
           "table_target": ""
+        },
+        {
+          "name": "isShareType",
+          "location": "query",
+          "required": false,
+          "type": "Boolean",
+          "default": "false",
+          "description": "是否查询共享带宽。取值范围： - true：是，查询共享带宽。 - false/不传：否，查询普通带宽。",
+          "descriptions": {
+            "en-GB": "Query shared bandwidth instead of ordinary bandwidth",
+            "en-US": "Query shared bandwidth instead of ordinary bandwidth",
+            "zh-CN": "是否查询共享带宽。取值范围： - true：是，查询共享带宽。 - false/不传：否，查询普通带宽。"
+          },
+          "help_descriptions": {
+            "en-GB": "Query shared bandwidth instead of ordinary bandwidth",
+            "en-US": "Query shared bandwidth instead of ordinary bandwidth",
+            "zh-CN": "是否查询共享带宽"
+          },
+          "cli_name": "is_share_type",
+          "cli_flag": "is-share-type",
+          "example_unavailable": true
         }
       ],
       "response": {
@@ -4367,6 +4425,20 @@
             "descriptions": {
               "zh-CN": "计费方式（仅单独付费的按需带宽有效）：Bandwidth-固定带宽，Traffic-按流量使用"
             }
+          },
+          {
+            "key": "is_share_type",
+            "path": "isShareType",
+            "label_en": "Shared Bandwidth",
+            "label_zh": "是否共享带宽",
+            "description": "是否共享带宽（仅共享带宽时有效）。取值范围： - true：是（共享带宽）。 - false/不传：否。"
+          },
+          {
+            "key": "shared_floating_ips",
+            "path": "shareFipIpList",
+            "label_en": "Shared Floating IPs",
+            "label_zh": "共享弹性 IP 列表",
+            "description": "加入共享带宽的弹性IP列表（仅共享带宽时有效）"
           }
         ]
       },
@@ -27590,9 +27662,9 @@
       "api_id": "20853",
       "title": "修改弹性IP带宽v3",
       "description": {
-        "en-GB": "Update Floating IP.",
-        "en-US": "Update Floating IP.",
-        "zh-CN": "修改弹性IP带宽v3。"
+        "en-GB": "Update a floating IP. On-demand fixed bandwidth can only be expanded; shared-bandwidth floating IPs cannot be resized individually.",
+        "en-US": "Update a floating IP. On-demand fixed bandwidth can only be expanded; shared-bandwidth floating IPs cannot be resized individually.",
+        "zh-CN": "修改弹性 IP。按需固定带宽仅支持扩容；共享带宽弹性 IP 不支持单独扩缩容。"
       },
       "category": "floating-ip",
       "command_path": [
@@ -50858,16 +50930,16 @@
         {
           "name": "band",
           "location": "body",
-          "required": true,
+          "required": false,
           "type": "Object",
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "带宽信息",
+          "description": "带宽信息（订购类型为按需且计费方式为共享带宽的共享弹性IP场景下非必传，其他场景必传）",
           "descriptions": {
-            "en-GB": "Band",
-            "en-US": "Band",
-            "zh-CN": "带宽信息"
+            "en-GB": "Bandwidth details; required except for on-demand shared-bandwidth floating IPs",
+            "en-US": "Bandwidth details; required except for on-demand shared-bandwidth floating IPs",
+            "zh-CN": "带宽信息（订购类型为按需且计费方式为共享带宽的共享弹性IP场景下非必传，其他场景必传）"
           },
           "profile": "",
           "argument": "",
@@ -50877,6 +50949,11 @@
           "example": {
             "bandName": "bandwidth-7zfp",
             "bandWidth": 5
+          },
+          "help_descriptions": {
+            "en-GB": "Bandwidth details; required except for on-demand shared-bandwidth floating IPs",
+            "en-US": "Bandwidth details; required except for on-demand shared-bandwidth floating IPs",
+            "zh-CN": "带宽信息（订购类型为按需且计费方式为共享带宽的共享弹性IP场景下非必传，其他场景必传）"
           }
         },
         {
@@ -50905,20 +50982,29 @@
           "location": "body",
           "required": false,
           "type": "String",
-          "enum": null,
+          "enum": [
+            "Bandwidth",
+            "Traffic",
+            "shareBandWidth"
+          ],
           "default": "",
           "pattern": "",
-          "description": "计费方式（仅订购类型为按需时有效）：Bandwidth-固定带宽，Traffic-按流量使用",
+          "description": "计费方式（仅订购类型为按需时有效）。取值范围： - Bandwidth：固定带宽。 - Traffic：按流量使用。 - shareBandWidth：共享带宽。",
           "descriptions": {
-            "en-GB": "Charge Type",
-            "en-US": "Charge Type",
-            "zh-CN": "计费方式（仅订购类型为按需时有效）：Bandwidth-固定带宽，Traffic-按流量使用"
+            "en-GB": "Charging method; applies to on-demand purchases",
+            "en-US": "Charging method; applies to on-demand purchases",
+            "zh-CN": "计费方式（仅订购类型为按需时有效）。取值范围： - Bandwidth：固定带宽。 - Traffic：按流量使用。 - shareBandWidth：共享带宽。"
           },
           "profile": "",
           "argument": "",
           "cli_name": "charge_type",
           "cli_flag": "charge-type",
-          "table_target": ""
+          "table_target": "",
+          "help_descriptions": {
+            "en-GB": "Charging method; applies to on-demand purchases",
+            "en-US": "Charging method; applies to on-demand purchases",
+            "zh-CN": "计费方式；仅按需订购时有效"
+          }
         },
         {
           "name": "cycleType",
@@ -50961,6 +51047,26 @@
           "cli_flag": "cycle-cnt",
           "table_target": "",
           "example": 1
+        },
+        {
+          "name": "shareBandWidthOid",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "description": "共享带宽OID（仅订购类型为按需且计费方式为共享带宽时有效）",
+          "descriptions": {
+            "en-GB": "Shared bandwidth ID; applies to on-demand shared-bandwidth floating IPs",
+            "en-US": "Shared bandwidth ID; applies to on-demand shared-bandwidth floating IPs",
+            "zh-CN": "共享带宽OID（仅订购类型为按需且计费方式为共享带宽时有效）"
+          },
+          "help_descriptions": {
+            "en-GB": "Shared bandwidth ID; applies to on-demand shared-bandwidth floating IPs",
+            "en-US": "Shared bandwidth ID; applies to on-demand shared-bandwidth floating IPs",
+            "zh-CN": "共享带宽OID（仅订购类型为按需且计费方式为共享带宽时有效）"
+          },
+          "cli_name": "share_bandwidth_oid",
+          "cli_flag": "share-bandwidth-oid",
+          "example_unavailable": true
         }
       ],
       "response": {
@@ -51072,16 +51178,57 @@
             }
           ]
         }
-      }
+      },
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "bill_mode",
+            "equals": "Cycle"
+          },
+          "required": [
+            "band"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "bill_mode",
+            "equals": "OnDemand"
+          },
+          "any_of": [
+            "band",
+            "charge_type"
+          ]
+        },
+        {
+          "when": {
+            "all": [
+              {
+                "parameter": "bill_mode",
+                "equals": "OnDemand"
+              },
+              {
+                "parameter": "charge_type",
+                "in": [
+                  "Bandwidth",
+                  "Traffic"
+                ]
+              }
+            ]
+          },
+          "required": [
+            "band"
+          ]
+        }
+      ]
     },
     {
       "id": "v4.ecpc.floating-ip.describe-floating-ip-modify-price",
       "api_id": "23392",
       "title": "修改弹性IP询价v3",
       "description": {
-        "en-GB": "Describe Floating IP Modify Price.",
-        "en-US": "Describe Floating IP Modify Price.",
-        "zh-CN": "修改弹性IP询价v3。"
+        "en-GB": "Query the resize price of a separately billed floating IP. On-demand traffic-billed and shared-bandwidth floating IPs do not support this query.",
+        "en-US": "Query the resize price of a separately billed floating IP. On-demand traffic-billed and shared-bandwidth floating IPs do not support this query.",
+        "zh-CN": "查询单独付费弹性 IP 的变配价格。按需流量计费和共享带宽弹性 IP 暂不支持该询价。"
       },
       "category": "floating-ip",
       "command_path": [

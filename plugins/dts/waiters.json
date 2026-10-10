@@ -1,0 +1,86 @@
+{
+  "waiters": {
+    "dts.instance.ready": {
+      "commands": [
+        "dts.job.show"
+      ],
+      "failure_values": [
+        "FROZEN",
+        "REFUNDING",
+        "CANCELING",
+        "RELEASED"
+      ],
+      "path": "data.instanceStatus",
+      "success": "RUNNING",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "dts.job.finished": {
+      "commands": [
+        "dts.job.show"
+      ],
+      "failure_values": [
+        "PAUSE",
+        "PRECHECKFAILURE"
+      ],
+      "path": "data.jobStatus",
+      "success": "FINISH",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "dts.job.prechecked": {
+      "commands": [
+        "dts.job.show"
+      ],
+      "failure_values": [
+        "PAUSE",
+        "PRECHECKFAILURE"
+      ],
+      "path": "data.jobStatus",
+      "success": "PRECHECKPASS",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "dts.job.stopped": {
+      "commands": [
+        "dts.job.show"
+      ],
+      "failure_values": [
+        "PAUSE",
+        "PRECHECKFAILURE"
+      ],
+      "path": "data.jobStatus",
+      "success": "STOP",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "dts.legacy.job.finished": {
+      "commands": [
+        "dts.legacy.job.show"
+      ],
+      "path": "returnObj.status",
+      "success": "FINISH",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "dts.precheck.completed": {
+      "commands": [
+        "dts.job.precheck.show"
+      ],
+      "failure_values": [
+        "FAIL",
+        "STOP"
+      ],
+      "path": "data.status",
+      "success": "DONE",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
+}

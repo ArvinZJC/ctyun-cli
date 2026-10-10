@@ -1,0 +1,6215 @@
+{
+  "operations": {
+    "redis.account.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/userMgr/createAccount",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "accountDescription": "$param.account_description",
+        "accountName": "$param.account_name",
+        "accountPassword": "$param.account_password",
+        "accountPrivilege": "$param.account_privilege",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.account.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/userMgr/deleteAccount",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "accountName": "$param.account_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.account.description.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/userMgr/modifyAccountDescription",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "accountDescription": "$param.account_description",
+        "accountName": "$param.account_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.account.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/userMgr/describeAccounts",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.account.password.reset": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/userMgr/resetAccountPassword",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "accountName": "$param.account_name",
+        "accountPassword": "$param.account_password",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.account.password.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/userMgr/modifyAccountPassword",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "accountName": "$param.account_name",
+        "accountPassword": "$param.account_password",
+        "oldAccountPassword": "$param.old_account_password",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.account.privilege.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/userMgr/grantAccountPrivilege",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "accountName": "$param.account_name",
+        "accountPrivilege": "$param.account_privilege",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.audit.config.set": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/commandAuditLog/modifyCommandAuditLogConfig",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "degradeStrategy": "$param.degrade_strategy",
+        "logExpireDay": "$param.log_expire_day",
+        "logSubType": "$param.log_sub_type",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.audit.config.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/commandAuditLog/describeCommandAuditLogConfig",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.audit.disable": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/logMgr/closeCommandAuditLog",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.audit.enable": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/logMgr/openCommandAuditLog",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "degradeStrategy": "$param.degrade_strategy",
+        "logExpireDay": "$param.log_expire_day",
+        "logSubType": "$param.log_sub_type",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.audit.export.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/commandAuditLog/createCommandAuditExportTask",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "customLogNum": "$param.custom_log_num",
+        "endTime": "$param.end_time",
+        "format": "$param.format",
+        "prodInstId": "$param.prod_inst_id",
+        "query": "$param.query",
+        "startTime": "$param.start_time"
+      },
+      "retryable": false
+    },
+    "redis.audit.export.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/commandAuditLog/deleteCommandAuditExportTask",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "taskCode": "$param.task_code"
+      },
+      "retryable": false
+    },
+    "redis.audit.export.download-url.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/commandAuditLog/getDataDownloadSignUrl",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id",
+        "taskCode": "$param.task_code"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.audit.export.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/commandAuditLog/describeCommandAuditExportTasks",
+      "content_type": "application/json",
+      "query": {
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.audit.log.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/commandAuditLog/describeCommandAuditLogs",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "endTime": "$param.end_time",
+        "order": "$param.order",
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size",
+        "prodInstId": "$param.prod_inst_id",
+        "query": "$param.query",
+        "startTime": "$param.start_time"
+      },
+      "retryable": true
+    },
+    "redis.audit.status.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/logMgr/describeCommandAuditLog",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.auto-renew.set": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          },
+          {
+            "path": "returnObj.statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/res/spuInst/changeAutoRenewStatus",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoRenewCycleCount": "$param.auto_renew_cycle_count",
+        "autoRenewCycleType": "$param.auto_renew_cycle_type",
+        "autoRenewStatus": "$param.auto_renew_status",
+        "prodInstIds": "$param.prod_inst_ids"
+      },
+      "retryable": false
+    },
+    "redis.auto-renew.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/res/spuInst/queryInstAutoRenewStatus",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.auto-scale.disable": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/instanceManageMgrServant/closeAutoScale",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.auto-scale.enable": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/instanceManageMgrServant/openAutoScale",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.backup.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/redisMgr/createBackup",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "remark": "$param.remark"
+      },
+      "retryable": false
+    },
+    "redis.backup.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/redisMgr/deleteBackup",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "restoreName": "$param.restore_name"
+      },
+      "retryable": false
+    },
+    "redis.backup.download-url.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/redisMgr/getRdbDownLoadUrl",
+      "content_type": "application/json",
+      "query": {
+        "ipType": "$param.ip_type",
+        "prodInstId": "$param.prod_inst_id",
+        "restoreName": "$param.restore_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.backup.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/redisMgr/describeBackups",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id",
+        "restoreName": "$param.restore_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.backup.policy.set": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/redisMgr/modifyBackupPolicy",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "backupRetentionPeriod": "$param.backup_retention_period",
+        "enableAutoBackup": "$param.enable_auto_backup",
+        "preferredBackupPeriod": "$param.preferred_backup_period",
+        "preferredBackupTime": "$param.preferred_backup_time",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.backup.policy.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/redisMgr/describeBackupPolicy",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.backup.restore": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/redisMgr/restoreInstance",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "restoreName": "$param.restore_name"
+      },
+      "retryable": false
+    },
+    "redis.backup.task.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/redisMgr/describeBackupTasks",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id",
+        "restoreName": "$param.restore_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.billing.convert-to-demand": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/lifeCycleServant/transformToPostPaid",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.billing.convert-to-package": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/lifeCycleServant/transformToPrePaid",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "period": "$param.period",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.command-rename.disable": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/securityMgrServant/disableRenameCommand",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.command-rename.set": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2.1/securityMgrServant/enableRenameCommand",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "renameCommands": "$param.rename_commands"
+      },
+      "retryable": false
+    },
+    "redis.command-rename.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/securityMgrServant/queryRenameCommand",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.diagnosis.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/keyAnalysisMgrServant/doAnalysisInstanceTasks",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "nodeName": "$param.node_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.diagnosis.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/keyAnalysisMgrServant/delAnalysisInstanceTask",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "taskId": "$param.task_id"
+      },
+      "retryable": false
+    },
+    "redis.diagnosis.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/keyAnalysisMgrServant/queryAnalysisInstanceTasks",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.diagnosis.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/keyAnalysisMgrServant/queryAnalysisInstanceTasksInfo",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id",
+        "taskId": "$param.task_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.eip.bind": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/eip/bindElasticIP",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "elasticIp": "$param.elastic_ip",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.eip.unbind": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/eip/unBindElasticIP",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "elasticIp": "$param.elastic_ip",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.fault.disk-hang.inject": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/inject/diskHangFaultInject",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "actionCode": "$param.action_code",
+        "duration": "$param.duration",
+        "nodes": "$param.nodes",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.fault.failover.inject": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/inject/msSwitchFaultInject",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "actionCode": "$param.action_code",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.fault.host-down.inject": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/inject/hostDownFaultInject",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "actionCode": "$param.action_code",
+        "duration": "$param.duration",
+        "nodes": "$param.nodes",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.fault.host-resource.inject": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/inject/hostTypeFaultInject",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "actionCode": "$param.action_code",
+        "duration": "$param.duration",
+        "nodes": "$param.nodes",
+        "prodInstId": "$param.prod_inst_id",
+        "value": "$param.value"
+      },
+      "retryable": false
+    },
+    "redis.fault.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/inject/listInstanceExperiments",
+      "content_type": "application/json",
+      "query": {
+        "actionCode": "$param.action_code",
+        "page": "$param.page",
+        "prodInstId": "$param.prod_inst_id",
+        "size": "$param.size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.fault.network-loss.inject": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/inject/networkLossFaultInject",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "actionCode": "$param.action_code",
+        "duration": "$param.duration",
+        "lossPercent": "$param.loss_percent",
+        "nodes": "$param.nodes",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.fault.proxy-stop.inject": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/inject/shutDownProxyFaultInject",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "actionCode": "$param.action_code",
+        "duration": "$param.duration",
+        "nodes": "$param.nodes",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.fault.recover": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/inject/faultRecovery",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "experimentId": "$param.experiment_id",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.fault.redis-stop.inject": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/inject/shutDownRedisFaultInject",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "actionCode": "$param.action_code",
+        "nodes": "$param.nodes",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.flashback.clone": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/redisMgr/dataFlashBackToOtherInstance",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "selectTime": "$param.select_time",
+        "targetAccountName": "$param.target_account_name",
+        "targetPassword": "$param.target_password",
+        "targetProdInstId": "$param.target_prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.flashback.restore": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/redisMgr/doDataFlashBack",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "selectTime": "$param.select_time"
+      },
+      "retryable": false
+    },
+    "redis.flashback.set": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/redisMgr/dataFlashBackSwitch",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "flashSwitch": "$param.flash_switch",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.flashback.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/redisMgr/queryDataFlashBack",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.flavor.capacity.check": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/lifeCycleServant/checkDemand",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "copiesCount": "$param.copies_count",
+        "cpuType": "$param.cpu_type",
+        "dataDiskType": "$param.data_disk_type",
+        "engineVersion": "$param.engine_version",
+        "flavorCode": "$param.flavor_code",
+        "goodsNum": "$param.goods_num",
+        "hostFlavorType": "$param.host_flavor_type",
+        "hostType": "$param.host_type",
+        "orderType": "$param.order_type",
+        "secondaryZoneName": "$param.secondary_zone_name",
+        "shardCount": "$param.shard_count",
+        "shardMemSize": "$param.shard_mem_size",
+        "skuCode": "$param.sku_code",
+        "subnetId": "$param.subnet_id",
+        "vpcId": "$param.vpc_id",
+        "zoneName": "$param.zone_name"
+      },
+      "retryable": true
+    },
+    "redis.flavor.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/lifeCycleServant/describeFlavors",
+      "content_type": "application/json",
+      "query": {
+        "cpuType": "$param.cpu_type",
+        "hostType": "$param.host_type",
+        "skuCode": "$param.sku_code"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.flavor.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/lifeCycleServant/queryFlavor",
+      "content_type": "application/json",
+      "query": {
+        "copiesCount": "$param.copies_count",
+        "flavorCode": "$param.flavor_code",
+        "shardCount": "$param.shard_count"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.instance.attribute.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/instanceManageMgrServant/modifyInstanceAttribute",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "description": "$param.description",
+        "maintenanceTime": "$param.maintenance_time",
+        "prodInstId": "$param.prod_inst_id",
+        "protectionStatus": "$param.protection_status"
+      },
+      "retryable": false
+    },
+    "redis.instance.change-risk.check": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/lifeCycleServant/checkInstanceModifyRisk",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "orderType": "$param.order_type",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": true
+    },
+    "redis.instance.change-rule.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/lifeCycleServant/describeInstanceModifyRules",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.instance.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/lifeCycleServant/createInstances",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "autoRenew": "$param.auto_renew",
+        "autoRenewPeriod": "$param.auto_renew_period",
+        "backupPolicy": "$param.backup_policy",
+        "chargeType": "$param.charge_type",
+        "copiesCount": "$param.copies_count",
+        "cpuType": "$param.cpu_type",
+        "dataDiskType": "$param.data_disk_type",
+        "deployMode": "$param.deploy_mode",
+        "engineVersion": "$param.engine_version",
+        "extendedParams": "$param.extended_params",
+        "flavorCode": "$param.flavor_code",
+        "goodsNum": "$param.goods_num",
+        "hostFlavorType": "$param.host_flavor_type",
+        "hostType": "$param.host_type",
+        "instanceName": "$param.instance_name",
+        "password": "$param.password",
+        "period": "$param.period",
+        "port": "$param.port",
+        "projectId": "$param.project_id",
+        "secondaryZoneName": "$param.secondary_zone_name",
+        "securityGroupId": "$param.security_group_id",
+        "shardCount": "$param.shard_count",
+        "shardMemSize": "$param.shard_mem_size",
+        "skuCode": "$param.sku_code",
+        "subnetId": "$param.subnet_id",
+        "tags": "$param.tags",
+        "vpcId": "$param.vpc_id",
+        "zoneName": "$param.zone_name"
+      },
+      "retryable": false
+    },
+    "redis.instance.data.clear": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/instanceManageMgrServant/flushData",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.instance.destroy": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/lifeCycleServant/destroyInstance",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.instance.engine.patch": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/instanceManageMgrServant/upgradeInstanceMinorVersion",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "minorEngineVersion": "$param.minor_engine_version",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.instance.engine.upgrade": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/instanceManageMgrServant/modifyInstanceMajorVersion",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "engineVersion": "$param.engine_version",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.instance.export.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/instanceManageMgrServant/asyncExportInstances",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "capacity": "$param.capacity",
+        "cpuArchType": "$param.cpu_arch_type",
+        "engineVersion": "$param.engine_version",
+        "instanceName": "$param.instance_name",
+        "labelIds": "$param.label_ids",
+        "payType": "$param.pay_type",
+        "prodInstId": "$param.prod_inst_id",
+        "projectId": "$param.project_id",
+        "queryDeleted": "$param.query_deleted",
+        "status": "$param.status",
+        "type": "$param.type",
+        "vip": "$param.vip"
+      },
+      "retryable": false
+    },
+    "redis.instance.export.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/instanceManageMgrServant/queryExportInstanceTask",
+      "content_type": "application/json",
+      "query": {
+        "taskId": "$param.task_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.instance.failover": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/instanceManageMgrServant/switchInstanceHA",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "masterNodeIp": "$param.master_node_ip",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.instance.history.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/instanceManageMgrServant/describeHistoryInstanceInfo",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.instance.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/instanceManageMgrServant/describeInstances",
+      "content_type": "application/json",
+      "query": {
+        "deployMode": "$param.deploy_mode",
+        "endCreateTime": "$param.end_create_time",
+        "engineVersion": "$param.engine_version",
+        "instanceName": "$param.instance_name",
+        "ip": "$param.ip",
+        "labelIds": "$param.label_ids",
+        "orderBy": "$param.order_by",
+        "orderByType": "$param.order_by_type",
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size",
+        "payType": "$param.pay_type",
+        "prodInstId": "$param.prod_inst_id",
+        "projectId": "$param.project_id",
+        "queryDeleted": "$param.query_deleted",
+        "queryLabel": "$param.query_label",
+        "startCreateTime": "$param.start_create_time",
+        "status": "$param.status"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.instance.network.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/instanceManageMgrServant/describeDBInstanceNetInfo",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.instance.password.reset": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/instanceManageMgrServant/resetInstancePassword",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "newPassword": "$param.new_password",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.instance.password.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/instanceManageMgrServant/modifyInstancePassword",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "newPassword": "$param.new_password",
+        "oldPassword": "$param.old_password",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.instance.port-range.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/component/getCachePortModifyRange",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.instance.port.set": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/component/modifyCachePort",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "cachePort": "$param.cache_port",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.instance.proxy.upgrade": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/instanceManageMgrServant/upgradeInstanceProxyMinorVersion",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "proxyMinorVersion": "$param.proxy_minor_version"
+      },
+      "retryable": false
+    },
+    "redis.instance.rename": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/userMgr/changeInstanceName",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "newInstanceName": "$param.new_instance_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.instance.renew": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/lifeCycleServant/renewInstance",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "period": "$param.period",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.instance.replication.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/instanceManageMgrServant/queryFragmentReplicationState",
+      "content_type": "application/json",
+      "query": {
+        "fragmentName": "$param.fragment_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.instance.resize": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/lifeCycleServant/modifyInstanceSpec",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "copiesCount": "$param.copies_count",
+        "flavorCode": "$param.flavor_code",
+        "orderType": "$param.order_type",
+        "prodInstId": "$param.prod_inst_id",
+        "secondaryZoneName": "$param.secondary_zone_name",
+        "shardCount": "$param.shard_count",
+        "shardMemSize": "$param.shard_mem_size"
+      },
+      "retryable": false
+    },
+    "redis.instance.resize-restriction.set": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/feature/modifyInstanceFeature",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "status": "$param.status"
+      },
+      "retryable": false
+    },
+    "redis.instance.restart": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/instanceManageMgrServant/restartInstance",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.instance.resume": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/lifeCycleServant/resumeInstance",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "period": "$param.period",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.instance.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/instanceManageMgrServant/describeInstanceOverview",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.instance.statistics.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/instanceManageMgrServant/statistic",
+      "content_type": "application/json",
+      "query": {
+        "includeFailure": "$param.include_failure"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.instance.status.count": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/instanceManageMgrServant/statusNumber",
+      "content_type": "application/json",
+      "query": {
+        "includeFailure": "$param.include_failure"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.instance.topology.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/instanceManageMgrServant/describeLogicInstanceTopology",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.instance.unsubscribe": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/lifeCycleServant/deleteInstance",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.instance.unsubscribe-batch": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/lifeCycleServant/deleteInstances",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstIds": "$param.prod_inst_ids"
+      },
+      "retryable": false
+    },
+    "redis.instance.version.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/instanceManageMgrServant/describeInstanceVersion",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.instance.zone.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/lifeCycleServant/modifyInstanceAz",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "backAzNum": "$param.back_az_num",
+        "mainAzNum": "$param.main_az_num",
+        "prodInstId": "$param.prod_inst_id",
+        "secondaryZoneName": "$param.secondary_zone_name",
+        "zoneName": "$param.zone_name"
+      },
+      "retryable": false
+    },
+    "redis.ip.used.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/resource/getUsedIpAddrList",
+      "content_type": "application/json",
+      "query": {
+        "subnetId": "$param.subnet_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.key.analysis.history": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/resourceMonitor/findHistoryBigAndHotKey",
+      "content_type": "application/json",
+      "query": {
+        "endTime": "$param.end_time",
+        "nodeName": "$param.node_name",
+        "prodInstId": "$param.prod_inst_id",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.key.analysis.result.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/keyAnalysisMgrServant/describeKeyTaskRecord",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id",
+        "taskId": "$param.task_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.key.big-analysis.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/keyAnalysisMgrServant/describeTopBigKeys",
+      "content_type": "application/json",
+      "query": {
+        "nodeName": "$param.node_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "redis.key.big-analysis.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/keyAnalysisMgrServant/deleteBigKeyTask",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "taskId": "$param.task_id"
+      },
+      "retryable": false
+    },
+    "redis.key.big-analysis.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/keyAnalysisMgrServant/describeBigKeyTasks",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.key.big-analysis.policy.set": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/keyAnalysisMgrServant/modifyBigKeyPolicy",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoCycleType": "$param.auto_cycle_type",
+        "days": "$param.days",
+        "hours": "$param.hours",
+        "modifyType": "$param.modify_type",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.key.big-analysis.policy.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/keyAnalysisMgrServant/describeTopBigKeysPolicy",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.key.eviction-policy.set": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/keyAnalysisMgrServant/modifyInstanceStrategy",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "policy": "$param.policy",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.key.eviction-policy.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/keyAnalysisMgrServant/describeInstanceStrategy",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.key.expired-scan.history": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/redisDataMgr/queryScanLogs",
+      "content_type": "application/json",
+      "query": {
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.key.expired-scan.set": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/redisMgr/autoScanExpiredKeys",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "enableAutoScan": "$param.enable_auto_scan",
+        "firstScanAt": "$param.first_scan_at",
+        "interval": "$param.interval",
+        "prodInstId": "$param.prod_inst_id",
+        "scanKeysCount": "$param.scan_keys_count",
+        "timeout": "$param.scan_timeout"
+      },
+      "retryable": false
+    },
+    "redis.key.expired-scan.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/redisMgr/queryAutoScanConfSetting",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.key.expired.clear": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/instanceManageMgrServant/flushExpireKeys",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "scanKeysCount": "$param.scan_keys_count",
+        "timeOut": "$param.time_out"
+      },
+      "retryable": false
+    },
+    "redis.key.hit-rate.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/resourceMonitor/getKeyMisslog",
+      "content_type": "application/json",
+      "query": {
+        "nodeName": "$param.node_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.key.hot-analysis.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/keyAnalysisMgrServant/describeHotKeys",
+      "content_type": "application/json",
+      "query": {
+        "nodeName": "$param.node_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "redis.key.hot-analysis.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/keyAnalysisMgrServant/deleteHotKeyTask",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "taskId": "$param.task_id"
+      },
+      "retryable": false
+    },
+    "redis.key.hot-analysis.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/keyAnalysisMgrServant/describeHotKeyTasks",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.key.hot-analysis.policy.set": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/keyAnalysisMgrServant/modifyHotKeyPolicy",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoCycleType": "$param.auto_cycle_type",
+        "days": "$param.days",
+        "hours": "$param.hours",
+        "modifyType": "$param.modify_type",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.key.hot-analysis.policy.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/keyAnalysisMgrServant/describeTopHotKeysPolicy",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.key.offline-analysis.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/keyAnalysisMgrServant/executeOffLineKeyAnalysisTask",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "nodeName": "$param.node_name",
+        "prodInstId": "$param.prod_inst_id",
+        "rdbType": "$param.rdb_type",
+        "restoreName": "$param.restore_name"
+      },
+      "retryable": false
+    },
+    "redis.key.offline-analysis.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/keyAnalysisMgrServant/deleteOffLineKeyAnalysisTaskInfo",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "taskId": "$param.task_id"
+      },
+      "retryable": false
+    },
+    "redis.key.offline-analysis.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/keyAnalysisMgrServant/describeOffLineKeyAnalysisTaskList",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.key.offline-analysis.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/keyAnalysisMgrServant/describeOffLineKeyAnalysisTaskInfo",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id",
+        "taskId": "$param.task_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.legacy.billing.convert-to-demand": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/res/spuInst/transToPrePaid",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.legacy.billing.convert-to-package": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/res/spuInst/transChargeType",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "cycleCnt": "$param.cycle_cnt",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.legacy.command-rename.enable": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/securityMgrServant/enableRenameCommand",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.legacy.dedicated-cluster.instance.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/instanceManageMgrServant/describeDedicatedClusterInstanceList",
+      "content_type": "application/json",
+      "query": {
+        "instanceName": "$param.instance_name",
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.legacy.engine-version.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/instanceManageMgrServant/describeEngineVersion",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.legacy.flavor.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/lifeCycleServant/describeAvailableResource",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.legacy.group.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/groupManageMgrServant/createDbGroup",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "db": "$param.db",
+        "groupId": "$param.group_id",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.legacy.group.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/groupManageMgrServant/deleteDbGroup",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "groupids": "$param.groupids",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.legacy.group.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/groupManageMgrServant/describeDbGroup",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.legacy.instance.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/lifeCycleServant/createInstance",
+      "content_type": "application/json",
+      "headers": {
+        "projectID": "$param.project_id",
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "autoRenew": "$param.auto_renew",
+        "autoRenewPeriod": "$param.auto_renew_period",
+        "cacheServerPort": "$param.cache_server_port",
+        "capacity": "$param.capacity",
+        "chargeType": "$param.charge_type",
+        "copiesCount": "$param.copies_count",
+        "dataDiskType": "$param.data_disk_type",
+        "edition": "$param.edition",
+        "engineVersion": "$param.engine_version",
+        "hostType": "$param.host_type",
+        "instanceName": "$param.instance_name",
+        "memUnit": "$param.mem_unit",
+        "password": "$param.password",
+        "period": "$param.period",
+        "secgroups": "$param.secgroups",
+        "secondaryZoneName": "$param.secondary_zone_name",
+        "shardCount": "$param.shard_count",
+        "shardMemSize": "$param.shard_mem_size",
+        "size": "$param.size",
+        "subnetId": "$param.subnet_id",
+        "version": "$param.product_version",
+        "vpcId": "$param.vpc_id",
+        "zoneName": "$param.zone_name"
+      },
+      "retryable": false
+    },
+    "redis.legacy.instance.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/instanceManageMgrServant/describeInstances",
+      "content_type": "application/json",
+      "query": {
+        "deployMode": "$param.deploy_mode",
+        "endCreateTime": "$param.end_create_time",
+        "engineVersion": "$param.engine_version",
+        "instanceName": "$param.instance_name",
+        "ip": "$param.ip",
+        "labelIds": "$param.label_ids",
+        "orderBy": "$param.order_by",
+        "orderByType": "$param.order_by_type",
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size",
+        "payType": "$param.pay_type",
+        "prodInstId": "$param.prod_inst_id",
+        "projectId": "$param.project_id",
+        "queryDeleted": "$param.query_deleted",
+        "queryLabel": "$param.query_label",
+        "startCreateTime": "$param.start_create_time",
+        "status": "$param.status"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.legacy.instance.resize": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/lifeCycleServant/modifyInstanceSpec",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "capacity": "$param.capacity",
+        "copiesCount": "$param.copies_count",
+        "edition": "$param.edition",
+        "memUnit": "$param.mem_unit",
+        "orderType": "$param.order_type",
+        "prodInstId": "$param.prod_inst_id",
+        "secondaryZoneName": "$param.secondary_zone_name",
+        "shardCount": "$param.shard_count",
+        "shardMemSize": "$param.shard_mem_size"
+      },
+      "retryable": false
+    },
+    "redis.legacy.instance.resize.check": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/check/checkInstanceOperate",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "copiesCount": "$param.copies_count",
+        "memSize": "$param.mem_size",
+        "operate": "$param.operate",
+        "prodInstId": "$param.prod_inst_id",
+        "shardCount": "$param.shard_count",
+        "shardMemSize": "$param.shard_mem_size"
+      },
+      "retryable": true
+    },
+    "redis.legacy.instance.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/instanceManageMgrServant/describeInstancesOverview",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.legacy.instance.type-change.check": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/check/checkInstanceProdModify",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "copiesCount": "$param.copies_count",
+        "edition": "$param.edition",
+        "memSize": "$param.mem_size",
+        "prodInstId": "$param.prod_inst_id",
+        "shardCount": "$param.shard_count",
+        "shardMemSize": "$param.shard_mem_size",
+        "version": "$param.product_version"
+      },
+      "retryable": true
+    },
+    "redis.legacy.instance.write.lock": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/instanceManageMgrServant/lockDBInstanceWrite",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "lockReason": "$param.lock_reason",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.legacy.instance.write.unlock": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/instanceManageMgrServant/unlockDBInstanceWrite",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.legacy.key.analysis.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/keyAnalysisMgrServant/describeBigAndHotKeys",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.legacy.key.count": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/instanceManageMgrServant/describeDbKeyCount",
+      "content_type": "application/json",
+      "query": {
+        "groups": "$param.groups",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.legacy.maintenance.set": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/instanceManageMgrServant/modifyInstanceMaintainTime",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "maintenanceTime": "$param.maintenance_time",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.legacy.node.status.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/redisMgr/describeNodeRunningState",
+      "content_type": "application/json",
+      "query": {
+        "nodeType": "$param.node_type",
+        "prodInstId": "$param.prod_inst_id",
+        "vpcUrl": "$param.vpc_url"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.legacy.parameter.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/instanceParam/describeInstanceConfig",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.legacy.parameter.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/instanceParam/modifyInstanceConfig",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appendfsync": "$param.appendfsync",
+        "loglevel": "$param.loglevel",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.legacy.price.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/lifeCycleServant/describePrice",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "capacity": "$param.capacity",
+        "chargeType": "$param.charge_type",
+        "copiesCount": "$param.copies_count",
+        "dataDiskType": "$param.data_disk_type",
+        "edition": "$param.edition",
+        "engineVersion": "$param.engine_version",
+        "hostType": "$param.host_type",
+        "memUnit": "$param.mem_unit",
+        "orderType": "$param.order_type",
+        "period": "$param.period",
+        "prodInstId": "$param.prod_inst_id",
+        "shardCount": "$param.shard_count",
+        "shardMemSize": "$param.shard_mem_size",
+        "size": "$param.size",
+        "version": "$param.product_version"
+      },
+      "retryable": true
+    },
+    "redis.legacy.recycle-bin.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/instanceManageMgrServant/describeCycleBinInstances",
+      "content_type": "application/json",
+      "query": {
+        "instanceName": "$param.instance_name",
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.legacy.tag.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/label/batchAdd",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "labelKVList": "$param.label_kv_list"
+      },
+      "retryable": false
+    },
+    "redis.log.download-url.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/logMgr/downloadRedisRunLog",
+      "content_type": "application/json",
+      "query": {
+        "date": "$param.date",
+        "logType": "$param.log_type",
+        "nodeName": "$param.node_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.log.running.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/logMgr/describeRunningLogRecords",
+      "content_type": "application/json",
+      "query": {
+        "nodeName": "$param.node_name",
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.log.slow.clear": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/logMgr/slowLogReset",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "nodeName": "$param.node_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.log.slow.history": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/resourceMonitor/findHistorySlowLog",
+      "content_type": "application/json",
+      "query": {
+        "endTime": "$param.end_time",
+        "maxCost": "$param.max_cost",
+        "minCost": "$param.min_cost",
+        "nodeName": "$param.node_name",
+        "page": "$param.page",
+        "prodInstId": "$param.prod_inst_id",
+        "rows": "$param.rows",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.log.slow.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/logMgr/describeTopSlowLogRecords",
+      "content_type": "application/json",
+      "query": {
+        "maxCost": "$param.max_cost",
+        "minCost": "$param.min_cost",
+        "nodeName": "$param.node_name",
+        "prodInstId": "$param.prod_inst_id",
+        "size": "$param.size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.maintenance.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/instanceManageMgrServant/describeInstanceMaintainTime",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.metric.command-family.history": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/monitorManageMgrServant/describeNodeMonitorValues",
+      "content_type": "application/json",
+      "query": {
+        "endTime": "$param.end_time",
+        "nodeName": "$param.node_name",
+        "prodInstId": "$param.prod_inst_id",
+        "startTime": "$param.start_time",
+        "type": "$param.type"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.metric.command-family.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/monitorManageMgrServant/describeNodeMonitorItems",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.metric.instance.history": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/resourceMonitor/describeInstanceHistoryMonitorValues",
+      "content_type": "application/json",
+      "query": {
+        "endTime": "$param.end_time",
+        "prodInstId": "$param.prod_inst_id",
+        "startTime": "$param.start_time",
+        "type": "$param.type"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.metric.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/resourceMonitor/describeHistoryMonitorItems",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.metric.node-command.history": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/resourceMonitor/describeNodeCommandMonitorValues",
+      "content_type": "application/json",
+      "query": {
+        "cmd": "$param.cmd",
+        "endTime": "$param.end_time",
+        "nodeName": "$param.node_name",
+        "prodInstId": "$param.prod_inst_id",
+        "startTime": "$param.start_time",
+        "type": "$param.type"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.metric.node-command.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/resourceMonitor/describeNodeCommandList",
+      "content_type": "application/json",
+      "query": {
+        "endTime": "$param.end_time",
+        "nodeName": "$param.node_name",
+        "prodInstId": "$param.prod_inst_id",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.metric.node.history": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/resourceMonitor/describeNodeHistoryMonitorValues",
+      "content_type": "application/json",
+      "query": {
+        "endTime": "$param.end_time",
+        "nodeName": "$param.node_name",
+        "prodInstId": "$param.prod_inst_id",
+        "startTime": "$param.start_time",
+        "type": "$param.type"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.metric.proxy.history": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/resourceMonitor/describeProxyHistoryMonitorValues",
+      "content_type": "application/json",
+      "query": {
+        "endTime": "$param.end_time",
+        "nodeName": "$param.node_name",
+        "prodInstId": "$param.prod_inst_id",
+        "startTime": "$param.start_time",
+        "type": "$param.type"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.migration.auto-retry.set": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/transfer/configAutoRetryType",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoRetryTimeRange": "$param.auto_retry_time_range",
+        "autoRetryType": "$param.auto_retry_type",
+        "taskId": "$param.task_id"
+      },
+      "retryable": false
+    },
+    "redis.migration.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/transfer/createTransferTask",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "advancedOption": "$param.advanced_option",
+        "sourceDbInfo": "$param.source_db_info",
+        "syncMode": "$param.sync_mode",
+        "syncModule": "$param.sync_module",
+        "targetDbInfo": "$param.target_db_info",
+        "taskSetting": "$param.task_setting"
+      },
+      "retryable": false
+    },
+    "redis.migration.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/transfer/deleteTransferTask",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "taskIdList": "$param.task_id_list"
+      },
+      "retryable": false
+    },
+    "redis.migration.ip.exchange": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/transfer/exchangeVip",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "taskId": "$param.task_id"
+      },
+      "retryable": false
+    },
+    "redis.migration.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/transfer/listTaskInfo",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "status": "$param.status"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.migration.log.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/transfer/uploadSyncRunningLog",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "searchDate": "$param.search_date",
+        "taskId": "$param.task_id"
+      },
+      "retryable": true
+    },
+    "redis.migration.operate": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/transfer/operateTransferTask",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "operateType": "$param.operate_type",
+        "taskId": "$param.task_id"
+      },
+      "retryable": false
+    },
+    "redis.migration.progress.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/transfer/getTaskProgressDetailInfo",
+      "content_type": "application/json",
+      "query": {
+        "taskId": "$param.task_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.migration.restart": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/transfer/restartTransferTask",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "taskIdList": "$param.task_id_list"
+      },
+      "retryable": false
+    },
+    "redis.migration.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/transfer/getTaskInfo",
+      "content_type": "application/json",
+      "query": {
+        "taskId": "$param.task_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.migration.stop": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/transfer/stopTransferTask",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "taskIdList": "$param.task_id_list"
+      },
+      "retryable": false
+    },
+    "redis.node.batch.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/instanceManageMgrServant/describeInstancesClusterMemberInfo",
+      "content_type": "application/json",
+      "query": {
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size",
+        "projectId": "$param.project_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.node.cluster.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/instanceManageMgrServant/describeClusterMemberInfo",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.node.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/instanceManageMgrServant/getRedisNodeList",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.node.memory.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/instanceManageMgrServant/describeMemoryInfo",
+      "content_type": "application/json",
+      "query": {
+        "ip": "$param.ip",
+        "port": "$param.port",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.node.recover": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/instanceManageMgrServant/batchRestartVm",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "vpcIps": "$param.vpc_ips"
+      },
+      "retryable": false
+    },
+    "redis.node.standby-priority.set": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/instanceParam/updateSlavePriority",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "nodeName": "$param.node_name",
+        "prodInstId": "$param.prod_inst_id",
+        "slavePriority": "$param.slave_priority"
+      },
+      "retryable": false
+    },
+    "redis.node.status.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/redisMgr/describeNodeRunningState",
+      "content_type": "application/json",
+      "query": {
+        "nodeName": "$param.node_name",
+        "nodeType": "$param.node_type",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.parameter-template.apply": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/redisTemplate/applyTemplateToInstance",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstIds": "$param.prod_inst_ids",
+        "templateId": "$param.template_id"
+      },
+      "retryable": false
+    },
+    "redis.parameter-template.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/redisTemplate/createRedisTemplate",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "params": "$param.params",
+        "template": "$param.template"
+      },
+      "retryable": false
+    },
+    "redis.parameter-template.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/redisTemplate/deleteRedisTemplate",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "templateId": "$param.template_id"
+      },
+      "retryable": false
+    },
+    "redis.parameter-template.export": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/redisTemplate/convertInstanceCurrentConfigToTemplate",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "description": "$param.description",
+        "name": "$param.name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.parameter-template.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/redisTemplate/describeRedisTemplate",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "type": "$param.type"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.parameter-template.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/redisTemplate/describeRedisTemplateDetail",
+      "content_type": "application/json",
+      "query": {
+        "templateId": "$param.template_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.parameter-template.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/redisTemplate/editRedisTemplate",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "params": "$param.params",
+        "template": "$param.template"
+      },
+      "retryable": false
+    },
+    "redis.parameter.history.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/instanceParam/describeParameterModificationHistory",
+      "content_type": "application/json",
+      "query": {
+        "endTime": "$param.end_time",
+        "historyId": "$param.history_id",
+        "page": "$param.page",
+        "prodInstId": "$param.prod_inst_id",
+        "rows": "$param.rows",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.parameter.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/instanceParam/describeInstanceConfig",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.parameter.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/instanceParam/modifyInstanceConfig",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "params": "$param.params",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.price.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/lifeCycleServant/describePrice",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "chargeType": "$param.charge_type",
+        "copiesCount": "$param.copies_count",
+        "cpuType": "$param.cpu_type",
+        "dataDiskType": "$param.data_disk_type",
+        "deployMode": "$param.deploy_mode",
+        "engineVersion": "$param.engine_version",
+        "flavorCode": "$param.flavor_code",
+        "goodsNum": "$param.goods_num",
+        "hostType": "$param.host_type",
+        "orderType": "$param.order_type",
+        "period": "$param.period",
+        "prodInstId": "$param.prod_inst_id",
+        "shardCount": "$param.shard_count",
+        "shardMemSize": "$param.shard_mem_size",
+        "skuCode": "$param.sku_code"
+      },
+      "retryable": true
+    },
+    "redis.primary-zone.lock.set": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/instanceManageMgrServant/updateMaintainAz",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "azName": "$param.az_name",
+        "enable": "$param.enable",
+        "prodInstId": "$param.prod_inst_id",
+        "time": "$param.time"
+      },
+      "retryable": false
+    },
+    "redis.primary-zone.lock.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/instanceManageMgrServant/queryMaintainAz",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.product.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/lifeCycleServant/describeProductInfo",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.quota.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/quota/queryQuotaTotalAndUsed",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.read-write-separation.set": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/instanceManageMgrServant/enableRWSep",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "enable": "$param.enable",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.read-write-separation.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/instanceManageMgrServant/queryRWSep",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.recycle-bin.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/instanceManageMgrServant/describeCycleBinInstances",
+      "content_type": "application/json",
+      "query": {
+        "instanceName": "$param.instance_name",
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.region.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/region/getAvailableRegion",
+      "content_type": "application/json",
+      "query": {
+        "resPoolCode": "$param.res_pool_code"
+      },
+      "retryable": true
+    },
+    "redis.session.close": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/resourceMonitor/killSelectedClient",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "addr": "$param.addr",
+        "nodeName": "$param.node_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.session.close-all": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/resourceMonitor/killAllClient",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "nodeName": "$param.node_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.session.count": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/resourceMonitor/getClientMap",
+      "content_type": "application/json",
+      "query": {
+        "nodeName": "$param.node_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.session.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/resourceMonitor/getClientIPInfo",
+      "content_type": "application/json",
+      "query": {
+        "nodeName": "$param.node_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.ssl.certificate.download-url.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/securityMgrServant/downloadSslCert",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.ssl.set": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/securityMgrServant/modifyInstanceSSL",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "sslEnabled": "$param.ssl_enabled"
+      },
+      "retryable": false
+    },
+    "redis.ssl.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/securityMgrServant/describeInstanceSSL",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.tag.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/label/pageList",
+      "content_type": "application/json",
+      "query": {
+        "labelKey": "$param.label_key",
+        "labelVal": "$param.label_val",
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.tag.resource.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/label/getLabelListByResources",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstIds": "$param.prod_inst_ids"
+      },
+      "retryable": true
+    },
+    "redis.tag.resource.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/label/updateLabelResource",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "labelResourceRel": "$param.label_resource_rel",
+        "operateType": "$param.operate_type"
+      },
+      "retryable": false
+    },
+    "redis.task.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/taskCenter/delTasks",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "taskIdList": "$param.task_id_list"
+      },
+      "retryable": false
+    },
+    "redis.task.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/taskCenter/listTasks",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "condition": "$param.condition",
+        "endTime": "$param.end_time",
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size",
+        "startTime": "$param.start_time"
+      },
+      "retryable": true
+    },
+    "redis.task.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/taskCenter/getTaskInfo",
+      "content_type": "application/json",
+      "query": {
+        "taskId": "$param.task_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.whitelist.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/securityMgrServant/describeSecurityIps",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "redis.whitelist.set": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/securityMgrServant/modifySecurityIps",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "group": "$param.group",
+        "ip": "$param.ip",
+        "mode": "$param.mode",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "redis.zone.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/lifeCycleServant/getZones",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    }
+  }
+}

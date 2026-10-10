@@ -1,0 +1,2095 @@
+{
+  "operations": {
+    "model-training.cluster.specification.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v3/aipaas/model/train/api/v3/envSpec/getClusterEnvSpec",
+      "content_type": "application/json",
+      "query": {
+        "clusterId": "$param.cluster_id",
+        "envSpecType": "$param.env_spec_type",
+        "quotaId": "$param.quota_id"
+      },
+      "retryable": true
+    },
+    "model-training.dataset.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v3/aipaas/model/train/datasets",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "clusterId": "$param.cluster_id",
+        "customS3StorageForm": "$param.custom_s3_storage_form",
+        "datasetName": "$param.dataset_name",
+        "tags": "$param.tags",
+        "visibleRange": "$param.visible_range"
+      },
+      "retryable": false
+    },
+    "model-training.dataset.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "DELETE",
+      "path": "/api/v3/aipaas/model/train/datasets/{id}",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "model-training.dataset.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v3/aipaas/model/train/datasets",
+      "content_type": "application/json",
+      "query": {
+        "clusterId": "$param.cluster_id",
+        "idList": "$param.id_list",
+        "name": "$param.name",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region",
+        "sortBy": "$param.sort_by",
+        "sortOrder": "$param.sort_order",
+        "status": "$param.status",
+        "storageType": "$param.storage_type",
+        "tagKey": "$param.tag_key",
+        "tagValue": "$param.tag_value"
+      },
+      "retryable": true
+    },
+    "model-training.dataset.running-task.count": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v3/aipaas/model/train/datasets/taskNum/{id}",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "model-training.dataset.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v3/aipaas/model/train/datasets/{id}",
+      "content_type": "application/json",
+      "query": {
+        "clusterId": "$param.cluster_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "model-training.dataset.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "PATCH",
+      "path": "/api/v3/aipaas/model/train/datasets/{id}",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "clusterId": "$param.cluster_id",
+        "datasetName": "$param.dataset_name",
+        "tags": "$param.tags",
+        "visibleRange": "$param.visible_range"
+      },
+      "retryable": false
+    },
+    "model-training.ide.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v3/aipaas/mlp/train/api/v3/ide",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "basicDataIdList": "$param.basic_data_id_list",
+        "bigModelIds": "$param.big_model_ids",
+        "clusterId": "$param.cluster_id",
+        "codePackageId": "$param.code_package_id",
+        "customerEnvSpecConfig": "$param.customer_env_spec_config",
+        "delegateStorageList": "$param.delegate_storage_list",
+        "ideName": "$param.ide_name",
+        "ideSpec": "$param.ide_spec",
+        "ideType": "$param.ide_type",
+        "imageId": "$param.image_id",
+        "imageType": "$param.image_type",
+        "isUseCustomerEnv": "$param.is_use_customer_env",
+        "modelSource": "$param.model_source",
+        "otherImageInfo": "$param.other_image_info",
+        "protectedOutputDatasetId": "$param.protected_output_dataset_id",
+        "quotaId": "$param.quota_id",
+        "trainDatasetIdList": "$param.train_dataset_id_list",
+        "workStorage": "$param.work_storage",
+        "workStorageDefine": "$param.work_storage_define",
+        "workspaceId": "$param.workspace_id"
+      },
+      "retryable": false
+    },
+    "model-training.ide.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "DELETE",
+      "path": "/api/v3/aipaas/mlp/train/api/v3/ide/delete",
+      "content_type": "application/json",
+      "query": {
+        "ideId": "$param.ide_id",
+        "regionId": "$profile.region"
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "retryable": false
+    },
+    "model-training.ide.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v3/aipaas/mlp/train/api/v3/ide/idePage",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "clusterId": "$param.cluster_id",
+        "ideName": "$param.ide_name",
+        "ideType": "$param.ide_type",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "status": "$param.status"
+      },
+      "retryable": true
+    },
+    "model-training.ide.name.check": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v3/aipaas/mlp/train/api/v3/ide/checkUnique",
+      "content_type": "application/json",
+      "query": {
+        "clusterId": "$param.cluster_id",
+        "ideName": "$param.ide_name",
+        "ideType": "$param.ide_type",
+        "regionId": "$profile.region"
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "retryable": true
+    },
+    "model-training.ide.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v3/aipaas/mlp/train/api/v3/ide/detail",
+      "content_type": "application/json",
+      "query": {
+        "ideId": "$param.ide_id",
+        "regionId": "$profile.region"
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "retryable": true
+    },
+    "model-training.ide.start": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v3/aipaas/mlp/train/api/v3/ide/start",
+      "content_type": "application/json",
+      "query": {
+        "ideId": "$param.ide_id",
+        "regionId": "$profile.region"
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "retryable": false
+    },
+    "model-training.ide.stop": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "DELETE",
+      "path": "/api/v3/aipaas/mlp/train/api/v3/ide/stop",
+      "content_type": "application/json",
+      "query": {
+        "ideId": "$param.ide_id",
+        "regionId": "$profile.region"
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "retryable": false
+    },
+    "model-training.image.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v3/aipaas/model/train/images",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "clusterId": "$param.cluster_id",
+        "extInfo": "$param.ext_info",
+        "hardwareType": "$param.hardware_type",
+        "imageName": "$param.image_name",
+        "imageTag": "$param.image_tag",
+        "imageType": "$param.image_type",
+        "importType": "$param.import_type",
+        "instanceId": "$param.instance_id",
+        "namespace": "$param.namespace",
+        "tags": "$param.tags"
+      },
+      "retryable": false
+    },
+    "model-training.image.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "DELETE",
+      "path": "/api/v3/aipaas/model/train/images/{image_id}",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "model-training.image.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v3/aipaas/model/train/images",
+      "content_type": "application/json",
+      "query": {
+        "clusterId": "$param.cluster_id",
+        "hardwareType": "$param.hardware_type",
+        "imageTag": "$param.image_tag",
+        "imageType": "$param.image_type",
+        "importType": "$param.import_type",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region",
+        "sortBy": "$param.sort_by",
+        "sortOrder": "$param.sort_order",
+        "status": "$param.status",
+        "tagKey": "$param.tag_key",
+        "tagValue": "$param.tag_value"
+      },
+      "retryable": true
+    },
+    "model-training.image.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v3/aipaas/model/train/images/{image_id}",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "model-training.image.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "PATCH",
+      "path": "/api/v3/aipaas/model/train/images/{image_id}",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "model-training.model.configuration.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v3/aipaas/model/train/modelManage/configs",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "inferenceConfig": "$param.inference_config",
+        "modelId": "$param.model_id",
+        "modelVersion": "$param.model_version",
+        "trainingConfig": "$param.training_config"
+      },
+      "retryable": false
+    },
+    "model-training.model.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v3/aipaas/model/train/modelManage/shells",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "clusterId": "$param.cluster_id",
+        "extInfo": "$param.ext_info",
+        "modelShellName": "$param.model_shell_name",
+        "modelShellTags": "$param.model_shell_tags",
+        "storageType": "$param.storage_type"
+      },
+      "retryable": false
+    },
+    "model-training.model.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "DELETE",
+      "path": "/api/v3/aipaas/model/train/modelManage/shells/{model_shell_id}",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "model-training.model.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v3/aipaas/model/train/modelManage/shells/page",
+      "content_type": "application/json",
+      "query": {
+        "modelShellId": "$param.model_shell_id",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "model-training.model.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "PUT",
+      "path": "/api/v3/aipaas/model/train/modelManage/shells/{model_shell_id}",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "clusterId": "$param.cluster_id",
+        "extInfo": "$param.ext_info",
+        "modelShellId": "$param.model_shell_id",
+        "modelShellName": "$param.model_shell_name",
+        "modelShellTags": "$param.model_shell_tags"
+      },
+      "retryable": false
+    },
+    "model-training.model.version.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v3/aipaas/model/train/modelManage/versions",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "apiInfo": "$param.api_info",
+        "bucket": "$param.bucket",
+        "extInfo": "$param.ext_info",
+        "filePath": "$param.file_path",
+        "framework": "$param.framework",
+        "inferenceConfig": "$param.inference_config",
+        "introduction": "$param.introduction",
+        "modelFormat": "$param.model_format",
+        "modelName": "$param.model_name",
+        "modelOrder": "$param.model_order",
+        "modelParams": "$param.model_params",
+        "modelShellId": "$param.model_shell_id",
+        "source": "$param.source",
+        "storageType": "$param.storage_type",
+        "tags": "$param.tags",
+        "trainConfig": "$param.train_config"
+      },
+      "retryable": false
+    },
+    "model-training.model.version.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "DELETE",
+      "path": "/api/v3/aipaas/model/train/modelManage/versions/{model_id}",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "model-training.model.version.download-url.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v3/aipaas/model/train/modelManage/versions/export/{model_id}",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "model-training.model.version.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v3/aipaas/model/train/modelManage/versions/page",
+      "content_type": "application/json",
+      "query": {
+        "modelShellId": "$param.model_shell_id",
+        "modelTag": "$param.model_tag",
+        "pageNum": "$param.query_page_num",
+        "pageSize": "$param.query_page_size",
+        "regionId": "$profile.region"
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size"
+      },
+      "retryable": true
+    },
+    "model-training.model.version.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v3/aipaas/model/train/modelManage/versions/{model_id}",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "model-training.monitor.pod.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v3/aipaas/operation/vm/getPodsMetrics",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "clusterId": "$param.cluster_id",
+        "end": "$param.end",
+        "granularity": "$param.granularity",
+        "metrics": "$param.metrics",
+        "podNames": "$param.pod_names",
+        "start": "$param.start"
+      },
+      "retryable": true
+    },
+    "model-training.quota.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v3/aipaas/model/train/api/v3/quota/getQuotaList",
+      "content_type": "application/json",
+      "query": {
+        "clusterId": "$param.cluster_id",
+        "quotaType": "$param.quota_type"
+      },
+      "retryable": true
+    },
+    "model-training.service-group.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v3/aipaas/model/infer/api/v3/serviceGroup/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "clusterId": "$param.cluster_id",
+        "name": "$param.name"
+      },
+      "retryable": false
+    },
+    "model-training.service-group.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "DELETE",
+      "path": "/api/v3/aipaas/model/infer/api/v3/serviceGroup/{app_id}",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "model-training.service-group.key.reset": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "PUT",
+      "path": "/api/v3/aipaas/model/infer/api/v3/serviceGroup/resetAppkey/{app_id}",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "model-training.service-group.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v3/aipaas/model/infer/api/v3/serviceGroup/groupList",
+      "content_type": "application/json",
+      "query": {
+        "clusterId": "$param.cluster_id",
+        "name": "$param.name",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region",
+        "sortOrder": "$param.sort_order",
+        "userId": "$param.user_id"
+      },
+      "retryable": true
+    },
+    "model-training.service-group.service.bind": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "PUT",
+      "path": "/api/v3/aipaas/model/infer/api/v3/serviceGroup/bind",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appId": "$param.app_id",
+        "bindServiceIdList": "$param.bind_service_id_list",
+        "clusterId": "$param.cluster_id",
+        "serviceId": "$param.service_id"
+      },
+      "retryable": false
+    },
+    "model-training.service-group.service.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v3/aipaas/model/infer/api/v3/serviceGroup/bindServList",
+      "content_type": "application/json",
+      "query": {
+        "appId": "$param.app_id",
+        "clusterId": "$param.cluster_id",
+        "name": "$param.name",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "model-training.service-group.service.unbind": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "PUT",
+      "path": "/api/v3/aipaas/model/infer/api/v3/serviceGroup/unbind",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appId": "$param.app_id",
+        "clusterId": "$param.cluster_id",
+        "serviceId": "$param.service_id",
+        "unbindServiceIdList": "$param.unbind_service_id_list"
+      },
+      "retryable": false
+    },
+    "model-training.service.authorized-group.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v3/aipaas/model/infer/api/v3/serviceGroup/serviceAuthList",
+      "content_type": "application/json",
+      "query": {
+        "clusterId": "$param.cluster_id",
+        "modelId": "$param.model_id",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "model-training.service.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v3/aipaas/model/infer/api/v3/modelServ",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "ModelSizeType": "$param.model_size_type",
+        "appIdList": "$param.app_id_list",
+        "calculateSpecParams": "$param.calculate_spec_params",
+        "clusterId": "$param.cluster_id",
+        "deployType": "$param.deploy_type",
+        "deploymentConfig": "$param.deployment_config",
+        "env": "$param.env",
+        "framework": "$param.framework",
+        "imageConfig": "$param.image_config",
+        "modelId": "$param.model_id",
+        "modelServiceName": "$param.model_service_name",
+        "modelVersion": "$param.model_version",
+        "port": "$param.port",
+        "serviceUrl": "$param.service_url",
+        "startCommand": "$param.start_command",
+        "storageConfig": "$param.storage_config",
+        "tags": "$param.tags"
+      },
+      "retryable": false
+    },
+    "model-training.service.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "DELETE",
+      "path": "/api/v3/aipaas/model/infer/api/v3/modelServ/{id}",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "model-training.service.execution.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v3/aipaas/model/infer/api/v3/modelServ/runRecord",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "id": "$param.id",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size"
+      },
+      "retryable": true
+    },
+    "model-training.service.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v3/aipaas/model/infer/api/v3/modelServ/modelServList",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "clusterId": "$param.cluster_id",
+        "modelId": "$param.model_id",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "queryStr": "$param.query_str",
+        "sort": "$param.server_sort",
+        "status": "$param.status"
+      },
+      "retryable": true
+    },
+    "model-training.service.pod.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v3/aipaas/model/infer/api/v3/modelServ/pods",
+      "content_type": "application/json",
+      "query": {
+        "id": "$param.id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "model-training.service.running-pod.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v3/aipaas/model/infer/api/v3/modelServ/pods/k8s",
+      "content_type": "application/json",
+      "query": {
+        "id": "$param.id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "model-training.service.scale": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v3/aipaas/model/infer/api/v3/modelServ/scale",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "calculateSpecParams": "$param.calculate_spec_params",
+        "id": "$param.id"
+      },
+      "retryable": false
+    },
+    "model-training.service.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v3/aipaas/model/infer/api/v3/modelServ/{id}",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "model-training.service.start": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v3/aipaas/model/infer/api/v3/modelServ/start/{id}",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "model-training.service.stop": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v3/aipaas/model/infer/api/v3/modelServ/stop/{id}",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "model-training.service.update-and-start": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "PATCH",
+      "path": "/api/v3/aipaas/model/infer/api/v3/modelServ",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appIdList": "$param.app_id_list",
+        "calculateSpecDetail": "$param.calculate_spec_detail",
+        "calculateSpecParams": "$param.calculate_spec_params",
+        "clusterId": "$param.cluster_id",
+        "createdAt": "$param.created_at",
+        "deployType": "$param.deploy_type",
+        "deploymentConfig": "$param.deployment_config",
+        "env": "$param.env",
+        "framework": "$param.framework",
+        "imageConfig": "$param.image_config",
+        "lastBindModelId": "$param.last_bind_model_id",
+        "modelId": "$param.model_id",
+        "modelServiceId": "$param.model_service_id",
+        "modelServiceName": "$param.model_service_name",
+        "modelSizeType": "$param.model_size_type",
+        "modelVersion": "$param.model_version",
+        "modifiedAt": "$param.modified_at",
+        "port": "$param.port",
+        "serviceUrl": "$param.service_url",
+        "startCommand": "$param.start_command",
+        "storageConfig": "$param.storage_config",
+        "tags": "$param.tags",
+        "userId": "$param.user_id"
+      },
+      "retryable": false
+    },
+    "model-training.storage.hpfs.file.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v3/aipaas/model/train/api/v3/storage/queryHpfsFileList",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size"
+      },
+      "retryable": true
+    },
+    "model-training.storage.zos.bucket.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v3/aipaas/model/train/api/v3/user/queryUserZosBucketList",
+      "content_type": "application/json",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "storageType": "$param.storage_type"
+      },
+      "retryable": true
+    },
+    "model-training.task.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v3/aipaas/model/train/api/v3/task/task",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "basicDataIdList": "$param.basic_data_id_list",
+        "bigModelIds": "$param.big_model_ids",
+        "calculateSpecParam": "$param.calculate_spec_param",
+        "clusterId": "$param.cluster_id",
+        "codePackageId": "$param.code_package_id",
+        "delegateStorageList": "$param.delegate_storage_list",
+        "enableDeepspeed": "$param.enable_deepspeed",
+        "faultRetryStrategy": "$param.fault_retry_strategy",
+        "faultRetryTimes": "$param.fault_retry_times",
+        "faultScheduledEnable": "$param.fault_scheduled_enable",
+        "gpuDetectOverTimeProcess": "$param.gpu_detect_over_time_process",
+        "gpuDetectTime": "$param.gpu_detect_time",
+        "graceFaultScheduledEnable": "$param.grace_fault_scheduled_enable",
+        "imageId": "$param.image_id",
+        "imageType": "$param.image_type",
+        "isEnableGpuDetect": "$param.is_enable_gpu_detect",
+        "isTensorboard": "$param.is_tensorboard",
+        "maxGpuDetectTime": "$param.max_gpu_detect_time",
+        "modelSource": "$param.model_source",
+        "protectedOutputDatasetId": "$param.protected_output_dataset_id",
+        "quotaId": "$param.quota_id",
+        "remark": "$param.remark",
+        "startCommand": "$param.start_command",
+        "taskName": "$param.task_name",
+        "tensorboardStorage": "$param.tensorboard_storage",
+        "terminationGracePeriodSeconds": "$param.termination_grace_period_seconds",
+        "trainDatasetIdList": "$param.train_dataset_id_list",
+        "trainFramework": "$param.train_framework",
+        "trainMode": "$param.train_mode",
+        "workspaceId": "$param.workspace_id"
+      },
+      "retryable": false
+    },
+    "model-training.task.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "DELETE",
+      "path": "/api/v3/aipaas/model/train/api/v3/task/delete/{task_id}",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "model-training.task.event.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v3/aipaas/model/train/log/eventLogPage",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "endTime": "$param.end_time",
+        "eventLogId": "$param.event_log_id",
+        "eventType": "$param.event_type",
+        "instanceId": "$param.instance_id",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "sOrder": "$param.s_order",
+        "startTime": "$param.start_time"
+      },
+      "retryable": true
+    },
+    "model-training.task.instance.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v3/aipaas/model/train/api/v3/task/instance/page",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "clusterId": "$param.cluster_id",
+        "instanceId": "$param.instance_id",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "taskId": "$param.task_id"
+      },
+      "retryable": true
+    },
+    "model-training.task.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v3/aipaas/model/train/api/v3/task/task/page",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "clusterId": "$param.cluster_id",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "status": "$param.status",
+        "taskName": "$param.task_name"
+      },
+      "retryable": true
+    },
+    "model-training.task.log.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v3/aipaas/model/train/log/logPage",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "endTime": "$param.end_time",
+        "instanceId": "$param.instance_id",
+        "jobType": "$param.job_type",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "podName": "$param.pod_name",
+        "sOrder": "$param.s_order",
+        "startTime": "$param.start_time"
+      },
+      "retryable": true
+    },
+    "model-training.task.name.check": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v3/aipaas/model/train/api/v3/task/checkUnique",
+      "content_type": "application/json",
+      "query": {
+        "clusterId": "$param.cluster_id",
+        "regionId": "$profile.region",
+        "taskName": "$param.task_name"
+      },
+      "retryable": true
+    },
+    "model-training.task.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v3/aipaas/model/train/api/v3/task/detail/{task_id}",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "model-training.task.start": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v3/aipaas/model/train/api/v3/task/start/{task_id}",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "model-training.task.stop": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v3/aipaas/model/train/api/v3/task/stop/{task_id}",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "model-training.v2.storage.delegate.authorize": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/api/v2/aipaas/model/train/userDelegate/authorizeCtIam",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "retryable": false
+    },
+    "model-training.v2.task.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v2/aipaas/model/train/task/task",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "bigModelIds": "$param.big_model_ids",
+        "calculateSpecParam": "$param.calculate_spec_param",
+        "clusterId": "$param.cluster_id",
+        "codePackageId": "$param.code_package_id",
+        "delegateStorageList": "$param.delegate_storage_list",
+        "enableDeepspeed": "$param.enable_deepspeed",
+        "faultRetryStrategy": "$param.fault_retry_strategy",
+        "faultRetryTimes": "$param.fault_retry_times",
+        "faultScheduledEnable": "$param.fault_scheduled_enable",
+        "graceFaultScheduledEnable": "$param.grace_fault_scheduled_enable",
+        "imageId": "$param.image_id",
+        "imageType": "$param.image_type",
+        "isEnableGpuDetect": "$param.is_enable_gpu_detect",
+        "isEnablePersonalStorage": "$param.is_enable_personal_storage",
+        "modelSource": "$param.model_source",
+        "quotaId": "$param.quota_id",
+        "remark": "$param.remark",
+        "startCommand": "$param.start_command",
+        "taskName": "$param.task_name",
+        "terminationGracePeriodSeconds": "$param.termination_grace_period_seconds",
+        "testDatasetIdList": "$param.test_dataset_id_list",
+        "trainDatasetIdList": "$param.train_dataset_id_list",
+        "trainFramework": "$param.train_framework",
+        "trainMode": "$param.train_mode"
+      },
+      "retryable": false
+    },
+    "model-training.v2.task.instance.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v2/aipaas/model/train/task/instance/page",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "instanceId": "$param.instance_id",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "stauts": "$param.stauts"
+      },
+      "retryable": true
+    },
+    "model-training.v2.task.log.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v2/aipaas/model/train/log/log/page",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "beginOffset": "$param.begin_offset",
+        "endOffset": "$param.end_offset",
+        "endTime": "$param.end_time",
+        "instanceId": "$param.instance_id",
+        "jobType": "$param.job_type",
+        "pageSize": "$param.page_size",
+        "podName": "$param.pod_name",
+        "startTime": "$param.start_time"
+      },
+      "retryable": true
+    },
+    "model-training.v2.tenant.user.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/v2/aipaas/operation/tenant/user/list",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "userGroupName": "$param.user_group_name",
+        "userId": "$param.user_id",
+        "userName": "$param.user_name",
+        "workspaceId": "$param.workspace_id"
+      },
+      "retryable": true
+    }
+  }
+}

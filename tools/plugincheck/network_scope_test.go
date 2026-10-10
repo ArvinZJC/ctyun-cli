@@ -33,7 +33,7 @@ func TestNetworkProductOwnership(t *testing.T) {
 			owners[op.APIID] = name
 		}
 	}
-	if len(owners) != 407 {
-		t.Fatalf("network API inventory=%d, want407", len(owners))
+	if len(owners) != 421 {
+		t.Fatalf("network API inventory=%d, want 421", len(owners))
 	}
 }

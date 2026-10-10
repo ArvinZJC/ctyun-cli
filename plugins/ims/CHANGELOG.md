@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.0-beta.4 - 2026-10-10
+
+### Changed
+
+- Preserve the import-task listing deprecation notice and image-list replacement; show the multi-AZ-only deletion notice and image-delete replacement as scoped help guidance.
+
 ## 0.1.0-beta.3 - 2026-09-23
 
 ### Added

@@ -15707,6 +15707,254 @@
         "description": "成功",
         "statusCode": 800
       }
+    },
+    {
+      "id": "v4.dps.instance.renew-batch",
+      "api_id": "24161",
+      "title": "批量续订物理机",
+      "description": {
+        "en-GB": "Renew up to 10 subscription physical servers in running, stopped, or expired states when the account balance covers the order.",
+        "en-US": "Renew up to 10 subscription physical servers in running, stopped, or expired states when the account balance covers the order.",
+        "zh-CN": "批量续订运行中、已关机或已到期的包周期物理机，单次最多 10 台，账户余额需覆盖订单金额。"
+      },
+      "category": "instance",
+      "command_path": [
+        "instance",
+        "renew-batch"
+      ],
+      "method": "POST",
+      "path": "/v4/ebm/batch-renew",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=16&api=24161&data=97&isNormal=1&vid=91",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看<a href=\"https://www.ctyun.cn/document/10026730/10028695\">地域和可用区</a>来了解资源池<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87&vid=81\">资源池列表查询</a>获取最新的天翼云资源池列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池ID，您可以查看<a href=\"https://www.ctyun.cn/document/10026730/10028695\">地域和可用区</a>来了解资源池<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87&vid=81\">资源池列表查询</a>获取最新的天翼云资源池列表"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "azName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可用区名称，您可以查看地域和可用区来了解可用区<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87\">资源池可用区查询</a><br/>注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）",
+          "descriptions": {
+            "en-GB": "Availability zone name; use default for a region with no zones",
+            "en-US": "Availability zone name; use default for a region with no zones",
+            "zh-CN": "可用区名称，您可以查看地域和可用区来了解可用区<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87\">资源池可用区查询</a><br/>注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）"
+          },
+          "help_descriptions": {
+            "en-GB": "Availability zone name; use default for a region with no zones",
+            "en-US": "Availability zone name; use default for a region with no zones",
+            "zh-CN": "可用区名称，单可用区资源池填写 default"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "az_name",
+          "cli_flag": "az-name",
+          "table_target": "",
+          "example": "az2"
+        },
+        {
+          "name": "instanceUUIDList",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例UUID 用,分隔，单次请求最多指定10个实例；您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9715&data=87&isNormal=1\">根据订单号查询uuid</a>获取实例UUID",
+          "descriptions": {
+            "en-GB": "Comma-separated physical-server UUIDs, up to 10 per request",
+            "en-US": "Comma-separated physical-server UUIDs, up to 10 per request",
+            "zh-CN": "实例UUID 用,分隔，单次请求最多指定10个实例；您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9715&data=87&isNormal=1\">根据订单号查询uuid</a>获取实例UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Comma-separated physical-server UUIDs, up to 10 per request",
+            "en-US": "Comma-separated physical-server UUIDs, up to 10 per request",
+            "zh-CN": "物理机 UUID，多个以逗号分隔，单次最多 10 个"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_uuid_list",
+          "cli_flag": "instance-uuid-list",
+          "table_target": "",
+          "example": "ss-eztbrc1j541lb2pim0lxr3uctdfo,ss-0bmsde9loclfnzhck4mj4g9ck9hg"
+        },
+        {
+          "name": "payVoucherPrice",
+          "location": "body",
+          "required": false,
+          "type": "Float",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "拓展券，满足以下规则：两位小数，不足两位自动补0，超过两位小数无效；不可为负数；字段为0时表示不使用拓展券",
+          "descriptions": {
+            "en-GB": "Expansion voucher amount, nonnegative with at most two decimal places; 0 disables voucher use",
+            "en-US": "Expansion voucher amount, nonnegative with at most two decimal places; 0 disables voucher use",
+            "zh-CN": "拓展券，满足以下规则：两位小数，不足两位自动补0，超过两位小数无效；不可为负数；字段为0时表示不使用拓展券"
+          },
+          "help_descriptions": {
+            "en-GB": "Expansion voucher amount, nonnegative with at most two decimal places; 0 disables voucher use",
+            "en-US": "Expansion voucher amount, nonnegative with at most two decimal places; 0 disables voucher use",
+            "zh-CN": "拓展券金额，不可为负数，最多两位小数，0 表示不使用"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "pay_voucher_price",
+          "cli_flag": "pay-voucher-price",
+          "table_target": "",
+          "example": 20.55
+        },
+        {
+          "name": "cycleType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "MONTH",
+            "YEAR"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "订购周期类型，取值范围:[MONTH=按月,YEAR=按年]<br/>注：cycleType与cycleCount一起填写",
+          "descriptions": {
+            "en-GB": "Renewal period type",
+            "en-US": "Renewal period type",
+            "zh-CN": "订购周期类型，取值范围:[MONTH=按月,YEAR=按年]<br/>注：cycleType与cycleCount一起填写"
+          },
+          "help_descriptions": {
+            "en-GB": "Renewal period type",
+            "en-US": "Renewal period type",
+            "zh-CN": "续订周期类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_type",
+          "cli_flag": "cycle-type",
+          "table_target": "",
+          "example": "MONTH"
+        },
+        {
+          "name": "cycleCount",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "订购时长，该参数需要与cycleType一同使用<br/>注：最长订购周期为60个月（5年）；cycleType与cycleCount一起填写",
+          "descriptions": {
+            "en-GB": "Renewal duration with cycle type, up to 60 months or 5 years",
+            "en-US": "Renewal duration with cycle type, up to 60 months or 5 years",
+            "zh-CN": "订购时长，该参数需要与cycleType一同使用<br/>注：最长订购周期为60个月（5年）；cycleType与cycleCount一起填写"
+          },
+          "help_descriptions": {
+            "en-GB": "Renewal duration with cycle type, up to 60 months or 5 years",
+            "en-US": "Renewal duration with cycle type, up to 60 months or 5 years",
+            "zh-CN": "续订时长，与周期类型配合使用，最长 60 个月或 5 年"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_count",
+          "cli_flag": "cycle-count",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "clientToken",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "客户端存根，用于保证订单幂等性。要求单个云平台账户内唯一，使用同一个ClientToken值，其他请求参数相同时，则代表为同一个请求。保留时间为24小时",
+          "descriptions": {
+            "en-GB": "Account-unique idempotency token retained for 24 hours",
+            "en-US": "Account-unique idempotency token retained for 24 hours",
+            "zh-CN": "客户端存根，用于保证订单幂等性。要求单个云平台账户内唯一，使用同一个ClientToken值，其他请求参数相同时，则代表为同一个请求。保留时间为24小时"
+          },
+          "help_descriptions": {
+            "en-GB": "Account-unique idempotency token retained for 24 hours",
+            "en-US": "Account-unique idempotency token retained for 24 hours",
+            "zh-CN": "账户内唯一的幂等令牌，保留 24 小时"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "client_token",
+          "cli_flag": "client-token",
+          "table_target": "",
+          "example": "uGTWoCHLiO"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "结果信息"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "azName": "az2",
+        "clientToken": "ea1b9004-f450-11ec-8d4f-00155de3fd73",
+        "cycleCount": 3,
+        "cycleType": "MONTH",
+        "instanceUUIDList": "ss-eztbrc1j541lb2pim0lxr3uctdfo,ss-0bmsde9loclfnzhck4mj4g9ck9hg",
+        "regionID": "100054c0416811e9a6690242ac110002"
+      },
+      "example_response": {
+        "returnObj": {},
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
     }
   ]
 }

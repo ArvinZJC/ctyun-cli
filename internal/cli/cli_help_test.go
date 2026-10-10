@@ -14,11 +14,14 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/output"
 )
 
+// TestMainHelpShowsDescriptionCommandsAndGlobalOptions keeps root help focused on core commands, aligned descriptions, and shared global options.
 func TestMainHelpShowsDescriptionCommandsAndGlobalOptions(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	var stdout bytes.Buffer
 	if err := Run(Config{
-		Args:   []string{"--lang", "en-US", "help"},
-		Stdout: &stdout,
+		PluginRoot: pluginRoot,
+		Args:       []string{"--lang", "en-US", "help"},
+		Stdout:     &stdout,
 	}); err != nil {
 		t.Fatalf("help returned error: %v", err)
 	}
@@ -79,11 +82,14 @@ func TestMainHelpShowsDescriptionCommandsAndGlobalOptions(t *testing.T) {
 	}
 }
 
+// TestMainHelpUsesI18N renders root help entirely in the requested language.
 func TestMainHelpUsesI18N(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	var stdout bytes.Buffer
 	if err := Run(Config{
-		Args:   []string{"--lang", "zh-CN", "help"},
-		Stdout: &stdout,
+		PluginRoot: pluginRoot,
+		Args:       []string{"--lang", "zh-CN", "help"},
+		Stdout:     &stdout,
 	}); err != nil {
 		t.Fatalf("help returned error: %v", err)
 	}
@@ -101,11 +107,14 @@ func TestMainHelpUsesI18N(t *testing.T) {
 	}
 }
 
+// TestHelpFlagShowsCommandHelp renders metadata descriptions, options, and examples without leaking internal IDs.
 func TestHelpFlagShowsCommandHelp(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	var stdout bytes.Buffer
 	if err := Run(Config{
-		Args:   []string{"--lang", "en-US", "ecs", "instance", "list", "--help"},
-		Stdout: &stdout,
+		PluginRoot: pluginRoot,
+		Args:       []string{"--lang", "en-US", "ecs", "instance", "list", "--help"},
+		Stdout:     &stdout,
 	}); err != nil {
 		t.Fatalf("command help returned error: %v", err)
 	}
@@ -125,7 +134,9 @@ func TestHelpFlagShowsCommandHelp(t *testing.T) {
 	}
 }
 
+// TestCommandHelpOmitsRedundantExamplesAndLocalizesColumnLabels renders an example-free command with localized table selectors.
 func TestCommandHelpOmitsRedundantExamplesAndLocalizesColumnLabels(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	for _, tc := range []struct {
 		name     string
 		args     []string
@@ -147,7 +158,8 @@ func TestCommandHelpOmitsRedundantExamplesAndLocalizesColumnLabels(t *testing.T)
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			var stdout bytes.Buffer
-			if err := Run(Config{Args: tc.args, Stdout: &stdout}); err != nil {
+			if err := Run(Config{
+				PluginRoot: pluginRoot, Args: tc.args, Stdout: &stdout}); err != nil {
 				t.Fatalf("command help returned error: %v", err)
 			}
 			got := stdout.String()
@@ -165,6 +177,7 @@ func TestCommandHelpOmitsRedundantExamplesAndLocalizesColumnLabels(t *testing.T)
 	}
 }
 
+// TestLocalizedExampleSelectorsCoversTableControlForms translates stable selector keys without changing option syntax.
 func TestLocalizedExampleSelectorsCoversTableControlForms(t *testing.T) {
 	columns := []output.Column{
 		{Key: "instance_id", Label: "Instance ID"},
@@ -193,6 +206,7 @@ func TestLocalizedExampleSelectorsCoversTableControlForms(t *testing.T) {
 	}
 }
 
+// firstNonEmptyLine returns the first visible line used to check standalone help descriptions.
 func firstNonEmptyLine(text string) string {
 	for line := range strings.SplitSeq(text, "\n") {
 		if strings.TrimSpace(line) != "" {
@@ -202,6 +216,7 @@ func firstNonEmptyLine(text string) string {
 	return ""
 }
 
+// helpUsageLines extracts usage rows until the next section boundary.
 func helpUsageLines(text string) []string {
 	lines := strings.Split(text, "\n")
 	var usageLines []string
@@ -221,7 +236,9 @@ func helpUsageLines(text string) []string {
 	return usageLines
 }
 
+// TestHelpPageLeadDescriptionsEndWithPunctuation requires sentence punctuation on core and plugin page descriptions.
 func TestHelpPageLeadDescriptionsEndWithPunctuation(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	for _, tc := range []struct {
 		name     string
 		args     []string
@@ -246,7 +263,8 @@ func TestHelpPageLeadDescriptionsEndWithPunctuation(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			var stdout bytes.Buffer
 			args := append([]string{"--lang", tc.language}, tc.args...)
-			if err := Run(Config{Args: args, Stdout: &stdout}); err != nil {
+			if err := Run(Config{
+				PluginRoot: pluginRoot, Args: args, Stdout: &stdout}); err != nil {
 				t.Fatalf("help returned error: %v", err)
 			}
 			first := firstNonEmptyLine(stdout.String())
@@ -257,6 +275,7 @@ func TestHelpPageLeadDescriptionsEndWithPunctuation(t *testing.T) {
 	}
 }
 
+// TestHelpPageDescriptionFormatsSentencePunctuation normalizes standalone description endings without duplicating punctuation.
 func TestHelpPageDescriptionFormatsSentencePunctuation(t *testing.T) {
 	for _, tc := range []struct {
 		name     string
@@ -278,6 +297,7 @@ func TestHelpPageDescriptionFormatsSentencePunctuation(t *testing.T) {
 	}
 }
 
+// helpDescriptionColumn locates the description after a help row's separating spaces.
 func helpDescriptionColumn(line string) int {
 	spaceRun := 0
 	for i := 2; i < len(line); i++ {
@@ -293,11 +313,14 @@ func helpDescriptionColumn(line string) int {
 	return -1
 }
 
+// TestHelpFlagShowsCoreSubcommandHelp checks shared usage declarations and hides development-only install options.
 func TestHelpFlagShowsCoreSubcommandHelp(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	var stdout bytes.Buffer
 	if err := Run(Config{
-		Args:   []string{"--lang", "en-US", "plugin", "install", "--help"},
-		Stdout: &stdout,
+		PluginRoot: pluginRoot,
+		Args:       []string{"--lang", "en-US", "plugin", "install", "--help"},
+		Stdout:     &stdout,
 	}); err != nil {
 		t.Fatalf("core subcommand help returned error: %v", err)
 	}
@@ -314,7 +337,9 @@ func TestHelpFlagShowsCoreSubcommandHelp(t *testing.T) {
 	}
 }
 
+// TestExecutableHelpUsageUsesGlobalOptionsPrefix requires consistent global-option placement across executable command pages.
 func TestExecutableHelpUsageUsesGlobalOptionsPrefix(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	for _, args := range [][]string{
 		{"help", "completion"},
 		{"help", "version"},
@@ -342,8 +367,9 @@ func TestExecutableHelpUsageUsesGlobalOptionsPrefix(t *testing.T) {
 		t.Run(strings.Join(args, "_"), func(t *testing.T) {
 			var stdout bytes.Buffer
 			if err := Run(Config{
-				Args:   append([]string{"--lang", "en-US"}, args...),
-				Stdout: &stdout,
+				PluginRoot: pluginRoot,
+				Args:       append([]string{"--lang", "en-US"}, args...),
+				Stdout:     &stdout,
 			}); err != nil {
 				t.Fatalf("help returned error: %v", err)
 			}
@@ -356,7 +382,9 @@ func TestExecutableHelpUsageUsesGlobalOptionsPrefix(t *testing.T) {
 	}
 }
 
+// TestCommandGroupHelpUsageIncludesGlobalOptions checks core and metadata group usage prefixes.
 func TestCommandGroupHelpUsageIncludesGlobalOptions(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	for _, args := range [][]string{
 		{"help", "config"},
 		{"help", "config", "profile"},
@@ -368,8 +396,9 @@ func TestCommandGroupHelpUsageIncludesGlobalOptions(t *testing.T) {
 		t.Run(strings.Join(args, "_"), func(t *testing.T) {
 			var stdout bytes.Buffer
 			if err := Run(Config{
-				Args:   append([]string{"--lang", "en-US"}, args...),
-				Stdout: &stdout,
+				PluginRoot: pluginRoot,
+				Args:       append([]string{"--lang", "en-US"}, args...),
+				Stdout:     &stdout,
 			}); err != nil {
 				t.Fatalf("help returned error: %v", err)
 			}
@@ -386,7 +415,9 @@ func TestCommandGroupHelpUsageIncludesGlobalOptions(t *testing.T) {
 	}
 }
 
+// TestHelpShowsPluginManagementSubcommands keeps management aliases, positional arguments, defaults, and option usage consistent.
 func TestHelpShowsPluginManagementSubcommands(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	for _, tc := range []struct {
 		args     []string
 		want     []string
@@ -404,8 +435,9 @@ func TestHelpShowsPluginManagementSubcommands(t *testing.T) {
 		t.Run(strings.Join(tc.args, "_"), func(t *testing.T) {
 			var stdout bytes.Buffer
 			if err := Run(Config{
-				Args:   append([]string{"--lang", "en-US"}, tc.args...),
-				Stdout: &stdout,
+				PluginRoot: pluginRoot,
+				Args:       append([]string{"--lang", "en-US"}, tc.args...),
+				Stdout:     &stdout,
 			}); err != nil {
 				t.Fatalf("help returned error: %v", err)
 			}
@@ -429,7 +461,9 @@ func TestHelpShowsPluginManagementSubcommands(t *testing.T) {
 	}
 }
 
+// TestPluginAllOptionHelpDescribesCommandScope distinguishes the target scope of each management command's all option.
 func TestPluginAllOptionHelpDescribesCommandScope(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	for _, tc := range []struct {
 		name string
 		args []string
@@ -443,8 +477,9 @@ func TestPluginAllOptionHelpDescribesCommandScope(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			var stdout bytes.Buffer
 			if err := Run(Config{
-				Args:   append([]string{"--lang", "en-US"}, tc.args...),
-				Stdout: &stdout,
+				PluginRoot: pluginRoot,
+				Args:       append([]string{"--lang", "en-US"}, tc.args...),
+				Stdout:     &stdout,
 			}); err != nil {
 				t.Fatalf("help returned error: %v", err)
 			}
@@ -456,8 +491,9 @@ func TestPluginAllOptionHelpDescribesCommandScope(t *testing.T) {
 
 	var stdout bytes.Buffer
 	if err := Run(Config{
-		Args:   []string{"--lang", "zh-CN", "help", "plugin", "install"},
-		Stdout: &stdout,
+		PluginRoot: pluginRoot,
+		Args:       []string{"--lang", "zh-CN", "help", "plugin", "install"},
+		Stdout:     &stdout,
 	}); err != nil {
 		t.Fatalf("Chinese help returned error: %v", err)
 	}
@@ -466,13 +502,16 @@ func TestPluginAllOptionHelpDescribesCommandScope(t *testing.T) {
 	}
 }
 
+// TestHelpShowsCoreUpdateGuidance separates core update usage from plugin update guidance.
 func TestHelpShowsCoreUpdateGuidance(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	for _, command := range []string{"update", "upgrade"} {
 		t.Run(command, func(t *testing.T) {
 			var stdout bytes.Buffer
 			if err := Run(Config{
-				Args:   []string{"--lang", "en-US", "help", command},
-				Stdout: &stdout,
+				PluginRoot: pluginRoot,
+				Args:       []string{"--lang", "en-US", "help", command},
+				Stdout:     &stdout,
 			}); err != nil {
 				t.Fatalf("help %s returned error: %v", command, err)
 			}
@@ -499,11 +538,14 @@ func TestHelpShowsCoreUpdateGuidance(t *testing.T) {
 	}
 }
 
+// TestHelpShowsDoctorSubcommands renders the diagnostic group with shared help sections.
 func TestHelpShowsDoctorSubcommands(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	var stdout bytes.Buffer
 	if err := Run(Config{
-		Args:   []string{"--lang", "en-US", "help", "doctor"},
-		Stdout: &stdout,
+		PluginRoot: pluginRoot,
+		Args:       []string{"--lang", "en-US", "help", "doctor"},
+		Stdout:     &stdout,
 	}); err != nil {
 		t.Fatalf("doctor help returned error: %v", err)
 	}
@@ -521,7 +563,9 @@ func TestHelpShowsDoctorSubcommands(t *testing.T) {
 	}
 }
 
+// TestCoreHelpPagesRenderOneGlobalOptionsSection prevents duplicated global options on nested core help pages.
 func TestCoreHelpPagesRenderOneGlobalOptionsSection(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	commands := [][]string{
 		{"help", "config"},
 		{"help", "config", "path"},
@@ -537,8 +581,9 @@ func TestCoreHelpPagesRenderOneGlobalOptionsSection(t *testing.T) {
 	for _, args := range commands {
 		var stdout bytes.Buffer
 		if err := Run(Config{
-			Args: append([]string{"--lang", "en-US"}, args...), Stdout: &stdout,
-			Config: []byte(`{}`), PluginRoot: t.TempDir(), Env: func(string) string { return "" },
+			PluginRoot: pluginRoot,
+			Args:       append([]string{"--lang", "en-US"}, args...), Stdout: &stdout,
+			Config: []byte(`{}`), Env: func(string) string { return "" },
 		}); err != nil {
 			t.Fatalf("Run(%v) = %v", args, err)
 		}
@@ -548,11 +593,14 @@ func TestCoreHelpPagesRenderOneGlobalOptionsSection(t *testing.T) {
 	}
 }
 
+// TestHelpShowsDoctorNetworkDetailAndRejectsUnknownSubcommands checks diagnostic help details and extra-argument classification.
 func TestHelpShowsDoctorNetworkDetailAndRejectsUnknownSubcommands(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	var stdout bytes.Buffer
 	if err := Run(Config{
-		Args:   []string{"--lang", "en-US", "help", "doctor", "network"},
-		Stdout: &stdout,
+		PluginRoot: pluginRoot,
+		Args:       []string{"--lang", "en-US", "help", "doctor", "network"},
+		Stdout:     &stdout,
 	}); err != nil {
 		t.Fatalf("doctor network help returned error: %v", err)
 	}

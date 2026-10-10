@@ -1,0 +1,77 @@
+{
+  "waiters": {
+    "cce.extension.deployed": {
+      "selector": {
+        "path": "returnObj.records",
+        "key": "name",
+        "value": "$param.instance_name"
+      },
+      "commands": [
+        "cce.extension.instance.list.{cluster_id}"
+      ],
+      "failure_values": [
+        "failed"
+      ],
+      "path": "status",
+      "success": "deployed",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "cce.extension.uninstalled": {
+      "selector": {
+        "path": "returnObj.records",
+        "key": "name",
+        "value": "$param.instance_name"
+      },
+      "commands": [
+        "cce.extension.instance.list.{cluster_id}"
+      ],
+      "failure_values": [
+        "failed"
+      ],
+      "path": "status",
+      "success": "uninstalled",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "cce.node.ready": {
+      "commands": [
+        "cce.node.show.{cluster_id}.{node_name}"
+      ],
+      "failure_values": [
+        "abnormal"
+      ],
+      "path": "returnObj.nodeStatus",
+      "success": "normal",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "cce.v1-ccse.cluster.ready": {
+      "selector": {
+        "path": "returnObj.records",
+        "key": "clusterName",
+        "value": "$param.cluster_name"
+      },
+      "commands": [
+        "cce.v1-ccse.cluster.list"
+      ],
+      "failure_values": [
+        "abnormal",
+        "create_fail",
+        "suspend",
+        "deleted",
+        "delete_fail",
+        "reset_fail",
+        "upgrade_fail"
+      ],
+      "path": "clusterStatus",
+      "success": "normal",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    }
+  }
+}

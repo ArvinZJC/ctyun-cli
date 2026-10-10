@@ -29,7 +29,7 @@ func TestRDSPostgreSQLBundle(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(bundle.Commands.Commands) != 153 || len(bundle.APIs.Operations) != 153 {
+	if len(bundle.Commands.Commands) != 156 || len(bundle.APIs.Operations) != 156 {
 		t.Fatal("captured PostgreSQL inventory changed")
 	}
 	if bundle.Manifest.API.CtyunProductID != 65 || bundle.Manifest.API.SourceRevision != "67" || bundle.Manifest.API.EndpointURL != "https://pgsql-global.ctapi.ctyun.cn" {
@@ -37,6 +37,12 @@ func TestRDSPostgreSQLBundle(t *testing.T) {
 	}
 	for _, command := range bundle.Commands.Commands {
 		op := bundle.APIs.Operations[command.Operation]
+		if command.ID == "rds-postgresql.order.convert-to-demand" || command.ID == "rds-postgresql.order.convert-to-package" || command.ID == "rds-postgresql.order.recover" {
+			if command.FixtureResponse != "" || op.Retryable || command.Dangerous.Confirm != "yes" {
+				t.Fatal("new order mutations must require confirmation without retry or fabricated fixtures")
+			}
+			continue
+		}
 		data, err := os.ReadFile(filepath.Join(dir, command.FixtureResponse))
 		if err != nil {
 			t.Fatal(err)

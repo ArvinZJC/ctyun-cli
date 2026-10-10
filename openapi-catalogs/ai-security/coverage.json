@@ -1,0 +1,31 @@
+{
+  "captured_at": "2026-09-25",
+  "service_id": 267,
+  "version_id": 352,
+  "published_api_count": 5,
+  "implemented_api_count": 5,
+  "blocked": [],
+  "fixtures_unavailable": [
+    {
+      "api_id": "23421",
+      "reason": "The official page documents a binary download but supplies no file bytes; JSON examples are error responses, not successful fixtures."
+    }
+  ],
+  "example_normalisations": [],
+  "waiter_gaps": [],
+  "request_notes": [
+    "Application-specific account, application code, request timestamp and precomputed HMAC signature headers are separate from EOP signing. No application signing algorithm is invented.",
+    "The guard table swaps the imageBase64 and imageUrl examples; those contradictory examples are omitted, while the published field names and types remain unchanged.",
+    "Multipart file inputs use the existing file upload encoder rather than serializing local paths into JSON."
+  ],
+  "response_notes": [
+    "Content detection results are results, not transport failures. A successful response reporting blocked content is preserved. Watermark insertion also checks the nested processing success Boolean.",
+    "Binary downloads accept the explicitly documented application/octet-stream response. The page also mentions unspecified file MIME types; those cannot be safely enumerated and are not claimed as supported. JSON error responses are rejected."
+  ],
+  "waiter_review": {
+    "waiter_count": 0,
+    "notes": [
+      "The published operations return synchronous checks, watermark results or file bytes; no asynchronous retrieval state contract is exposed."
+    ]
+  }
+}

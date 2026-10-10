@@ -11,7 +11,6 @@ import (
 	"strings"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
-	"github.com/ArvinZJC/ctyun-cli/internal/version"
 	"github.com/ArvinZJC/ctyun-cli/internal/waiter"
 )
 
@@ -58,15 +57,4 @@ func (catalog Catalog) validateWaiters() error {
 		}
 	}
 	return plugin.ValidateWaiterBindings(plugin.Bundle{Commands: buildCommands(catalog), APIs: buildAPIs(catalog), Waiters: buildWaiters(catalog)})
-}
-
-// waiterCoreRequirement preserves existing constraints while requiring the
-// first core release that interprets explicit bindings and multiple outcomes.
-func waiterCoreRequirement(constraint string) string {
-	for part := range strings.FieldsSeq(constraint) {
-		if strings.HasPrefix(part, ">=") && version.CompareSemanticVersions(strings.TrimPrefix(part, ">="), "0.5.0") >= 0 {
-			return constraint
-		}
-	}
-	return strings.TrimSpace(constraint + " >=0.5.0")
 }

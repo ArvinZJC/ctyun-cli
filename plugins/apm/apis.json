@@ -1,0 +1,1975 @@
+{
+  "operations": {
+    "apm.agent.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/agent/page",
+      "content_type": "text/plain",
+      "query": {
+        "accessType": "$param.access_type",
+        "agentIp": "$param.agent_ip",
+        "agentStatus": "$param.agent_status",
+        "deployment": "$param.deployment",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "serviceName": "$param.service_name",
+        "version": "$param.server_version"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.alert.history.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/alert/send/list",
+      "content_type": "application/json",
+      "query": {
+        "alertName": "$param.alert_name",
+        "alertStatus": "$param.alert_status",
+        "endTime": "$param.end_time",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "startTime": "$param.start_time",
+        "strategyId": "$param.strategy_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.alert.rule.batch.delete": {
+      "request": {
+        "encoding": "file",
+        "document": "$param.ids_file"
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/alert/rule/batchDelete",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "apm.alert.rule.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/alert/rule/create",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "alertLevel": "$param.alert_level",
+        "alertMessageTemplate": "$param.alert_message_template",
+        "appendNewObj": "$param.append_new_obj",
+        "attachLabels": "$param.attach_labels",
+        "filterLabels": "$param.filter_labels",
+        "forTime": "$param.for_time",
+        "frequency": "$param.frequency",
+        "fromRuleId": "$param.from_rule_id",
+        "notifyStrategyId": "$param.notify_strategy_id",
+        "objType": "$param.obj_type",
+        "objs": "$param.objs",
+        "params": "$param.params",
+        "ruleName": "$param.rule_name"
+      },
+      "retryable": false
+    },
+    "apm.alert.rule.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/alert/rule/list",
+      "content_type": "application/json",
+      "query": {
+        "groupId": "$param.group_id",
+        "objId": "$param.obj_id",
+        "objType": "$param.obj_type",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "ruleName": "$param.rule_name",
+        "ruleStatus": "$param.rule_status"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.alert.rule.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/alert/rule/update",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "alertLevel": "$param.alert_level",
+        "alertMessageTemplate": "$param.alert_message_template",
+        "alertRuleId": "$param.alert_rule_id",
+        "appendNewObj": "$param.append_new_obj",
+        "attachLabels": "$param.attach_labels",
+        "filterLabels": "$param.filter_labels",
+        "forTime": "$param.for_time",
+        "frequency": "$param.frequency",
+        "fromRuleId": "$param.from_rule_id",
+        "notifyStrategyId": "$param.notify_strategy_id",
+        "objType": "$param.obj_type",
+        "objs": "$param.objs",
+        "params": "$param.params",
+        "ruleName": "$param.rule_name"
+      },
+      "retryable": false
+    },
+    "apm.alert.template.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/alert/ruleTemplate/list",
+      "content_type": "application/json",
+      "query": {
+        "objType": "$param.obj_type"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.application.config.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/app/conf/list",
+      "content_type": "text/plain",
+      "query": {
+        "deployment": "$param.deployment",
+        "projectCode": "$param.project_code",
+        "serviceName": "$param.service_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.application.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/app/delete",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "deployment": "$param.deployment",
+        "id": "$param.id",
+        "projectCode": "$param.project_code",
+        "serviceName": "$param.service_name"
+      },
+      "retryable": false
+    },
+    "apm.application.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/app/list",
+      "content_type": "text/plain",
+      "query": {
+        "envUuid": "$param.env_uuid"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.application.task.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/app/page",
+      "content_type": "text/plain",
+      "query": {
+        "deployment": "$param.deployment",
+        "endTime": "$param.end_time",
+        "envUuid": "$param.env_uuid",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "projectCode": "$param.project_code",
+        "projectUuid": "$param.project_uuid",
+        "serviceName": "$param.service_name",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.collector.status.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/monitortarget/queryMonitorOpenStatus",
+      "content_type": "text/plain",
+      "query": {
+        "environmentCode": "$param.environment_code"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.collector.status.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/monitortarget/updateMetricCollectOpenStatus",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "environmentCode": "$param.environment_code",
+        "operation": "$param.operation",
+        "target": "$param.target"
+      },
+      "retryable": false
+    },
+    "apm.contact.batch.delete": {
+      "request": {
+        "encoding": "file",
+        "document": "$param.ids_file"
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/alert/contact/batchDelete",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "apm.contact.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/alert/contact/create",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "email": "$param.email",
+        "groupIdList": "$param.group_id_list",
+        "mobile": "$param.mobile",
+        "name": "$param.name"
+      },
+      "retryable": false
+    },
+    "apm.contact.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/alert/contact/list",
+      "content_type": "application/json",
+      "query": {
+        "groupId": "$param.group_id",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.contact.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/alert/contact/update",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "email": "$param.email",
+        "groupIdList": "$param.group_id_list",
+        "id": "$param.id",
+        "mobile": "$param.mobile",
+        "name": "$param.name"
+      },
+      "retryable": false
+    },
+    "apm.environment.instance.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/env/queryEnvInstanceList",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "addonTemplateId": "$param.addon_template_id",
+        "envType": "$param.env_type",
+        "resourceId": "$param.resource_id",
+        "resourceName": "$param.resource_name"
+      },
+      "retryable": true
+    },
+    "apm.environment.job.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "0",
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/env/queryDefaultJobList",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "environmentCode": "$param.environment_code"
+      },
+      "retryable": true
+    },
+    "apm.environment.job.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/env/updateDefaultJob",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "environmentCode": "$param.environment_code",
+        "jobResVOS": "$param.job_res_vos"
+      },
+      "retryable": false
+    },
+    "apm.environment.label.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/env/queryCommonLabel",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "environmentCode": "$param.environment_code"
+      },
+      "retryable": true
+    },
+    "apm.environment.label.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/env/updateCommonLabel",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "commonLabels": "$param.common_labels",
+        "environmentCode": "$param.environment_code"
+      },
+      "retryable": false
+    },
+    "apm.environment.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/namespace/env/list",
+      "content_type": "text/plain",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.environment.type.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/namespace/envType/list",
+      "content_type": "text/plain",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.exception.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/exception/getExceptionList",
+      "content_type": "text/plain",
+      "query": {
+        "deployment": "$param.deployment",
+        "endTime": "$param.end_time",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "projectCode": "$param.project_code",
+        "serviceName": "$param.service_name",
+        "startTime": "$param.start_time",
+        "transactionName": "$param.transaction_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.instance.statistics.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/instances/stat/list",
+      "content_type": "text/plain",
+      "query": {
+        "deployment": "$param.deployment",
+        "endTime": "$param.end_time",
+        "projectCode": "$param.project_code",
+        "serviceName": "$param.service_name",
+        "sort": "$param.server_sort",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.jvm.gc-count.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/jvm/gcCount",
+      "content_type": "text/plain",
+      "query": {
+        "deployment": "$param.deployment",
+        "endTime": "$param.end_time",
+        "instanceId": "$param.instance_id",
+        "projectCode": "$param.project_code",
+        "serviceName": "$param.service_name",
+        "startTime": "$param.start_time",
+        "type": "$param.type"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.jvm.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/jvm/jvmInfo",
+      "content_type": "text/plain",
+      "query": {
+        "deployment": "$param.deployment",
+        "endTime": "$param.end_time",
+        "instanceId": "$param.instance_id",
+        "projectCode": "$param.project_code",
+        "serviceName": "$param.service_name",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.jvm.thread-count.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/jvm/threadCount",
+      "content_type": "text/plain",
+      "query": {
+        "deployment": "$param.deployment",
+        "endTime": "$param.end_time",
+        "instanceId": "$param.instance_id",
+        "projectCode": "$param.project_code",
+        "serviceName": "$param.service_name",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.license-key.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/clicense/query",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.message-queue.statistics.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/mq/stat/pageList",
+      "content_type": "text/plain",
+      "query": {
+        "deployment": "$param.deployment",
+        "endTime": "$param.end_time",
+        "instanceId": "$param.instance_id",
+        "messageSystem": "$param.message_system",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "projectCode": "$param.project_code",
+        "serviceName": "$param.service_name",
+        "startTime": "$param.start_time",
+        "type": "$param.type"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.nosql.statistics.histogram.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/spans/nosql-stat/histogram",
+      "content_type": "text/plain",
+      "query": {
+        "dbTypes": "$param.db_types",
+        "deployment": "$param.deployment",
+        "endTime": "$param.end_time",
+        "projectCode": "$param.project_code",
+        "serviceName": "$param.service_name",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.nosql.statistics.page.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/spans/nosql-stat/page",
+      "content_type": "text/plain",
+      "query": {
+        "dbTypes": "$param.db_types",
+        "deployment": "$param.deployment",
+        "endTime": "$param.end_time",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "projectCode": "$param.project_code",
+        "serviceName": "$param.service_name",
+        "startTime": "$param.start_time",
+        "targetInstanceId": "$param.target_instance_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.notification-group.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/alert/contactGroup/create",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "contactIdList": "$param.contact_id_list",
+        "name": "$param.name"
+      },
+      "retryable": false
+    },
+    "apm.notification-group.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/alert/contactGroup/delete",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "contactGroupId": "$param.contact_group_id"
+      },
+      "retryable": false
+    },
+    "apm.notification-group.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/alert/contactGroup/list",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size"
+      },
+      "retryable": true
+    },
+    "apm.notification-group.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/alert/contactGroup/update",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "contactIdList": "$param.contact_id_list",
+        "groupId": "$param.group_id",
+        "name": "$param.name"
+      },
+      "retryable": false
+    },
+    "apm.notification-policy.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/alert/notifyStrategy/create",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "channels": "$param.channels",
+        "limitTimeFlag": "$param.limit_time_flag",
+        "notifyEndTime": "$param.notify_end_time",
+        "notifyObjectList": "$param.notify_object_list",
+        "notifyStartTime": "$param.notify_start_time",
+        "strategyName": "$param.strategy_name"
+      },
+      "retryable": false
+    },
+    "apm.notification-policy.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/alert/notifyStrategy/delete",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "strategyId": "$param.strategy_id"
+      },
+      "retryable": false
+    },
+    "apm.notification-policy.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/alert/notifyStrategy/list",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "strategyName": "$param.strategy_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.notification-policy.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/alert/notifyStrategy/update",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "channels": "$param.channels",
+        "limitTimeFlag": "$param.limit_time_flag",
+        "notifyEndTime": "$param.notify_end_time",
+        "notifyObjectList": "$param.notify_object_list",
+        "notifyStartTime": "$param.notify_start_time",
+        "strategyId": "$param.strategy_id",
+        "strategyName": "$param.strategy_name"
+      },
+      "retryable": false
+    },
+    "apm.project.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/namespace/project/list",
+      "content_type": "text/plain",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.sql.statistics.histogram.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/spans/sql-stat/histogram",
+      "content_type": "text/plain",
+      "query": {
+        "dbTypes": "$param.db_types",
+        "deployment": "$param.deployment",
+        "endTime": "$param.end_time",
+        "projectCode": "$param.project_code",
+        "serviceName": "$param.service_name",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.sql.statistics.page.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/spans/sql-stat/page",
+      "content_type": "text/plain",
+      "query": {
+        "dbTypes": "$param.db_types",
+        "deployment": "$param.deployment",
+        "endTime": "$param.end_time",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "projectCode": "$param.project_code",
+        "serviceName": "$param.service_name",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.statistics.instance-count.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/request/getAppInstanceCurveChart",
+      "content_type": "text/plain",
+      "query": {
+        "deployment": "$param.deployment",
+        "endTime": "$param.end_time",
+        "projectCode": "$param.project_code",
+        "serviceName": "$param.service_name",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.statistics.overview.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/overview/statistics",
+      "content_type": "text/plain",
+      "query": {
+        "deployment": "$param.deployment",
+        "endTime": "$param.end_time",
+        "projectCode": "$param.project_code",
+        "serviceName": "$param.service_name",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.statistics.request.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/request/getRequestCurveChart",
+      "content_type": "text/plain",
+      "query": {
+        "deployment": "$param.deployment",
+        "endTime": "$param.end_time",
+        "projectCode": "$param.project_code",
+        "query": "$param.query",
+        "serviceName": "$param.service_name",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.statistics.status-code.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/request/getHttpCodeCurveChart",
+      "content_type": "text/plain",
+      "query": {
+        "deployment": "$param.deployment",
+        "endTime": "$param.end_time",
+        "projectCode": "$param.project_code",
+        "serviceName": "$param.service_name",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.topology.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/topology/graph/app",
+      "content_type": "text/plain",
+      "query": {
+        "deployment": "$param.deployment",
+        "endTime": "$param.end_time",
+        "projectCode": "$param.project_code",
+        "serviceName": "$param.service_name",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.trace.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/transactions/page",
+      "content_type": "text/plain",
+      "query": {
+        "deployment": "$param.deployment",
+        "duration": "$param.duration",
+        "endTime": "$param.end_time",
+        "outcome": "$param.outcome",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "projectCode": "$param.project_code",
+        "queryFilter": "$param.query_filter",
+        "serviceName": "$param.service_name",
+        "sort": "$param.server_sort",
+        "spanKind": "$param.span_kind",
+        "startTime": "$param.start_time",
+        "traceId": "$param.trace_id",
+        "transactionName": "$param.transaction_name",
+        "type": "$param.type"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.trace.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/transactions/trace",
+      "content_type": "text/plain",
+      "query": {
+        "projectCode": "$param.project_code",
+        "timestamp": "$param.timestamp",
+        "traceId": "$param.trace_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.trace.slow.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/transactions/page/slow",
+      "content_type": "text/plain",
+      "query": {
+        "deployment": "$param.deployment",
+        "endTime": "$param.end_time",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "projectCode": "$param.project_code",
+        "serviceName": "$param.service_name",
+        "spanKind": "$param.span_kind",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.trace.span.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/transactions/traceSpanDetail",
+      "content_type": "text/plain",
+      "query": {
+        "spanId": "$param.span_id",
+        "timestamp": "$param.timestamp",
+        "traceId": "$param.trace_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.trace.statistics.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/transactions/stat/list",
+      "content_type": "text/plain",
+      "query": {
+        "deployment": "$param.deployment",
+        "endTime": "$param.end_time",
+        "projectCode": "$param.project_code",
+        "serviceName": "$param.service_name",
+        "sort": "$param.server_sort",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.trace.type.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/transactions/types/list",
+      "content_type": "text/plain",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.usage.agent-hour.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/usage/agentHour",
+      "content_type": "text/plain",
+      "query": {
+        "endTime": "$param.end_time",
+        "startTime": "$param.start_time",
+        "step": "$param.step"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.usage.overview.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/usage/totalView",
+      "content_type": "text/plain",
+      "query": {
+        "endTime": "$param.end_time",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.usage.span-report.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/usage/spanReport",
+      "content_type": "text/plain",
+      "query": {
+        "endTime": "$param.end_time",
+        "startTime": "$param.start_time",
+        "step": "$param.step"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.usage.span-storage.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/usage/spanStore",
+      "content_type": "text/plain",
+      "query": {
+        "endTime": "$param.end_time",
+        "startTime": "$param.start_time",
+        "step": "$param.step"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.webhook.batch.delete": {
+      "request": {
+        "encoding": "file",
+        "document": "$param.ids_file"
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/alert/webhook/batchDelete",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "apm.webhook.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/alert/webhook/create",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "alertTemplate": "$param.alert_template",
+        "name": "$param.name",
+        "renderType": "$param.render_type",
+        "resolvedTemplate": "$param.resolved_template",
+        "webhookUrl": "$param.webhook_url"
+      },
+      "retryable": false
+    },
+    "apm.webhook.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/alert/webhook/list",
+      "content_type": "application/json",
+      "query": {
+        "name": "$param.name",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "apm.webhook.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/alert/webhook/update",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "alertTemplate": "$param.alert_template",
+        "name": "$param.name",
+        "renderType": "$param.render_type",
+        "resolvedTemplate": "$param.resolved_template",
+        "webhookId": "$param.webhook_id",
+        "webhookUrl": "$param.webhook_url"
+      },
+      "retryable": false
+    }
+  }
+}

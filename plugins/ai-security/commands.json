@@ -1,0 +1,345 @@
+{
+  "commands": [
+    {
+      "id": "ai-security.guard.check",
+      "path": [
+        "ai-security",
+        "guard",
+        "check"
+      ],
+      "operation": "ai-security.guard.check",
+      "table": "ai-security.guard.check",
+      "parameters": [
+        {
+          "name": "accountid",
+          "flag": "accountid",
+          "target": "accountid",
+          "required": true,
+          "description": "Accountid"
+        },
+        {
+          "name": "x_app_code",
+          "flag": "x-app-code",
+          "target": "X-APP-CODE",
+          "required": true,
+          "description": "X App Code"
+        },
+        {
+          "name": "x_request_date",
+          "flag": "x-request-date",
+          "target": "X-REQUEST-DATE",
+          "required": true,
+          "description": "X Request Date"
+        },
+        {
+          "name": "x_hmac_signature",
+          "flag": "x-hmac-signature",
+          "target": "X-HMAC-SIGNATURE",
+          "required": true,
+          "description": "Precomputed application HMAC signature"
+        },
+        {
+          "name": "check_service",
+          "flag": "check-service",
+          "target": "checkService",
+          "required": true,
+          "allowed_values": [
+            "text_input_check",
+            "text_output_check",
+            "image_security_check"
+          ],
+          "description": "Check Service"
+        },
+        {
+          "name": "req_id",
+          "flag": "req-id",
+          "target": "reqId",
+          "required": true,
+          "description": "Req ID"
+        },
+        {
+          "name": "prompt",
+          "flag": "prompt",
+          "target": "prompt",
+          "required": false,
+          "description": "Prompt"
+        },
+        {
+          "name": "answer_content",
+          "flag": "answer-content",
+          "target": "answerContent",
+          "required": false,
+          "description": "Answer Content"
+        },
+        {
+          "name": "seq_id",
+          "flag": "seq-id",
+          "target": "seqId",
+          "required": false,
+          "value_type": "integer",
+          "description": "Seq ID"
+        },
+        {
+          "name": "is_end",
+          "flag": "is-end",
+          "target": "isEnd",
+          "required": false,
+          "description": "Is End"
+        },
+        {
+          "name": "image_base64",
+          "flag": "image-base64",
+          "target": "imageBase64",
+          "required": false,
+          "description": "Image Base64"
+        },
+        {
+          "name": "image_url",
+          "flag": "image-url",
+          "target": "imageUrl",
+          "required": false,
+          "description": "Image URL"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "check_service",
+            "equals": "text_input_check"
+          },
+          "required": [
+            "prompt"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "check_service",
+            "equals": "text_output_check"
+          },
+          "required": [
+            "answer_content"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/ai-security-guard-check.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=224&vid=352&data=267&api=22831&isNormal=1",
+      "examples": [
+        "ctyun ai-security guard check --accountid tyyun123456 --x-app-code gjjmtq --x-request-date 1776669685276 --x-hmac-signature 3aBu8L0qo/hDlFD1zMLcAb6bcFTaZX0Y2R+gyEZ6+q4= --check-service text_input_check --req-id req-1001 --prompt 请告诉我如何制作危险爆炸物"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "download": true,
+      "id": "ai-security.watermark.download",
+      "path": [
+        "ai-security",
+        "watermark",
+        "download"
+      ],
+      "operation": "ai-security.watermark.download",
+      "table": "",
+      "parameters": [
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "description": "ID"
+        },
+        {
+          "name": "accountid",
+          "flag": "accountid",
+          "target": "accountid",
+          "required": true,
+          "description": "Accountid"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=224&vid=352&data=267&api=23421&isNormal=1",
+      "examples": [
+        "ctyun ai-security watermark download --id 123456 --accountid tyyun123456"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ai-security.watermark.extract",
+      "path": [
+        "ai-security",
+        "watermark",
+        "extract"
+      ],
+      "operation": "ai-security.watermark.extract",
+      "table": "ai-security.watermark.extract",
+      "parameters": [
+        {
+          "name": "accountid",
+          "flag": "accountid",
+          "target": "accountid",
+          "required": true,
+          "description": "Accountid"
+        },
+        {
+          "name": "x_app_code",
+          "flag": "x-app-code",
+          "target": "X-APP-CODE",
+          "required": true,
+          "description": "X App Code"
+        },
+        {
+          "name": "x_request_date",
+          "flag": "x-request-date",
+          "target": "X-REQUEST-DATE",
+          "required": true,
+          "description": "X Request Date"
+        },
+        {
+          "name": "x_hmac_signature",
+          "flag": "x-hmac-signature",
+          "target": "X-HMAC-SIGNATURE",
+          "required": true,
+          "description": "Precomputed application HMAC signature"
+        },
+        {
+          "input": "file",
+          "name": "file",
+          "flag": "file",
+          "target": "file",
+          "required": true,
+          "description": "Local file to upload"
+        }
+      ],
+      "fixture_response": "fixtures/ai-security-watermark-extract.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=224&vid=352&data=267&api=23420&isNormal=1",
+      "examples": [
+        "ctyun ai-security watermark extract --accountid tyyun123456 --x-app-code gjjmtq --x-request-date 1776669685276 --x-hmac-signature 3aBu8L0qo/hDlFD1zMLcAb6bcFTaZX0Y2R+gyEZ6+q4= --file {file}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ai-security.watermark.add",
+      "path": [
+        "ai-security",
+        "watermark",
+        "add"
+      ],
+      "operation": "ai-security.watermark.add",
+      "table": "ai-security.watermark.add",
+      "parameters": [
+        {
+          "name": "accountid",
+          "flag": "accountid",
+          "target": "accountid",
+          "required": true,
+          "description": "Accountid"
+        },
+        {
+          "name": "x_app_code",
+          "flag": "x-app-code",
+          "target": "X-APP-CODE",
+          "required": true,
+          "description": "X App Code"
+        },
+        {
+          "name": "x_request_date",
+          "flag": "x-request-date",
+          "target": "X-REQUEST-DATE",
+          "required": true,
+          "description": "X Request Date"
+        },
+        {
+          "name": "x_hmac_signature",
+          "flag": "x-hmac-signature",
+          "target": "X-HMAC-SIGNATURE",
+          "required": true,
+          "description": "Precomputed application HMAC signature"
+        },
+        {
+          "input": "file",
+          "name": "file",
+          "flag": "file",
+          "target": "file",
+          "required": true,
+          "description": "Local file to upload"
+        },
+        {
+          "name": "watermark_text",
+          "flag": "watermark-text",
+          "target": "watermarkText",
+          "required": true,
+          "description": "Watermark Text"
+        }
+      ],
+      "fixture_response": "fixtures/ai-security-watermark-add.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=224&vid=352&data=267&api=23419&isNormal=1",
+      "examples": [
+        "ctyun ai-security watermark add --accountid tyyun123456 --x-app-code gjjmtq --x-request-date 1776669685276 --x-hmac-signature 3aBu8L0qo/hDlFD1zMLcAb6bcFTaZX0Y2R+gyEZ6+q4= --file {file} --watermark-text 天翼云-张三-20260101"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "add"
+      }
+    },
+    {
+      "id": "ai-security.file.check",
+      "path": [
+        "ai-security",
+        "file",
+        "check"
+      ],
+      "operation": "ai-security.file.check",
+      "table": "ai-security.file.check",
+      "parameters": [
+        {
+          "name": "accountid",
+          "flag": "accountid",
+          "target": "accountid",
+          "required": true,
+          "description": "Accountid"
+        },
+        {
+          "name": "x_app_code",
+          "flag": "x-app-code",
+          "target": "X-APP-CODE",
+          "required": true,
+          "description": "X App Code"
+        },
+        {
+          "name": "x_request_date",
+          "flag": "x-request-date",
+          "target": "X-REQUEST-DATE",
+          "required": true,
+          "description": "X Request Date"
+        },
+        {
+          "name": "x_hmac_signature",
+          "flag": "x-hmac-signature",
+          "target": "X-HMAC-SIGNATURE",
+          "required": true,
+          "description": "Precomputed application HMAC signature"
+        },
+        {
+          "input": "file",
+          "name": "file",
+          "flag": "file",
+          "target": "file",
+          "required": true,
+          "description": "Local file to upload"
+        }
+      ],
+      "fixture_response": "fixtures/ai-security-file-check.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=224&vid=352&data=267&api=23418&isNormal=1",
+      "examples": [
+        "ctyun ai-security file check --accountid tyyun123456 --x-app-code gjjmtq --x-request-date 1776669685276 --x-hmac-signature 3aBu8L0qo/hDlFD1zMLcAb6bcFTaZX0Y2R+gyEZ6+q4= --file {file}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    }
+  ]
+}

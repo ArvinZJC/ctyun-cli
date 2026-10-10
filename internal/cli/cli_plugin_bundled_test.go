@@ -17,11 +17,12 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
+// TestPluginBundledInstallAndUpdateAreDevOnly installs and updates synthetic development bundles while rejecting release access.
 func TestPluginBundledInstallAndUpdateAreDevOnly(t *testing.T) {
 	bundledRoot, pluginRoot := prepareBundledPluginRoots(t)
 	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.2.0")
 
-	restoreVersion := patchVersion("0.5.0-dev")
+	restoreVersion := patchVersion("0.5.1-dev")
 	defer func() {
 		restoreVersion()
 	}()
@@ -49,10 +50,11 @@ func TestPluginBundledInstallAndUpdateAreDevOnly(t *testing.T) {
 	}
 }
 
+// TestPluginBundledStatusMessagesUseLanguage localizes bundled install and update summaries.
 func TestPluginBundledStatusMessagesUseLanguage(t *testing.T) {
 	bundledRoot, pluginRoot := prepareBundledPluginRoots(t)
 	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.2.0")
-	t.Cleanup(patchVersion("0.5.0-dev"))
+	t.Cleanup(patchVersion("0.5.1-dev"))
 
 	var stdout bytes.Buffer
 	if err := Run(Config{Args: []string{"--lang", "zh-CN", "plugin", "install", "ecs", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
@@ -72,13 +74,14 @@ func TestPluginBundledStatusMessagesUseLanguage(t *testing.T) {
 	}
 }
 
+// TestPluginBundledUpdateAll updates only synthetic installed bundles with newer available versions.
 func TestPluginBundledUpdateAll(t *testing.T) {
 	bundledRoot, pluginRoot := prepareBundledPluginRoots(t)
 	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.3.0")
 	writeVersionedBundle(t, filepath.Join(bundledRoot, "vpc"), "vpc", "0.2.0")
 	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.1.0")
 	writeVersionedBundle(t, filepath.Join(pluginRoot, "vpc"), "vpc", "0.2.0")
-	t.Cleanup(patchVersion("0.5.0-dev"))
+	t.Cleanup(patchVersion("0.5.1-dev"))
 
 	var stdout bytes.Buffer
 	if err := Run(Config{Args: []string{"plugin", "update", "--all", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
@@ -89,6 +92,7 @@ func TestPluginBundledUpdateAll(t *testing.T) {
 	}
 }
 
+// TestPluginBundledReinstallRefreshesSameVersion replaces stale metadata even when the selected bundle version is unchanged.
 func TestPluginBundledReinstallRefreshesSameVersion(t *testing.T) {
 	bundledRoot, pluginRoot := prepareBundledPluginRoots(t)
 	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.2.0")
@@ -97,7 +101,7 @@ func TestPluginBundledReinstallRefreshesSameVersion(t *testing.T) {
 		t.Fatalf("create stale i18n dir: %v", err)
 	}
 	mustWrite(t, filepath.Join(pluginRoot, "ecs", "i18n", "en-US.json"), `{"name": "Stale ECS"}`)
-	t.Cleanup(patchVersion("0.5.0-dev"))
+	t.Cleanup(patchVersion("0.5.1-dev"))
 
 	var stdout bytes.Buffer
 	if err := Run(Config{Args: []string{"plugin", "reinstall", "ecs", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
@@ -116,7 +120,7 @@ func TestPluginBundledReinstallRefreshesSameVersion(t *testing.T) {
 }
 
 // prepareBundledPluginRoots creates a fake repository root for bundled plugin
-// tests and points runtimeCaller at it.
+// tests, enters it, and points runtimeCaller at its source layout.
 func prepareBundledPluginRoots(t *testing.T) (string, string) {
 	t.Helper()
 
@@ -125,6 +129,7 @@ func prepareBundledPluginRoots(t *testing.T) (string, string) {
 	if err := os.Mkdir(bundledRoot, 0o755); err != nil {
 		t.Fatalf("create bundled root: %v", err)
 	}
+	t.Chdir(repoRoot)
 	pluginRoot := t.TempDir()
 	originalCaller := runtimeCaller
 	t.Cleanup(func() { runtimeCaller = originalCaller })

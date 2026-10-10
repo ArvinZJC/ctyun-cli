@@ -1,0 +1,96 @@
+{
+  "waiters": {
+    "native-firewall.access-list.disabled": {
+      "commands": [
+        "native-firewall.access-list.show"
+      ],
+      "path": "returnObj.status",
+      "success": "disable",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "native-firewall.access-list.enabled": {
+      "commands": [
+        "native-firewall.access-list.show"
+      ],
+      "path": "returnObj.status",
+      "success": "enable",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "native-firewall.asset.protected": {
+      "commands": [
+        "native-firewall.asset.show"
+      ],
+      "path": "returnObj.protectStatus",
+      "success": "true",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "native-firewall.asset.synchronized": {
+      "commands": [
+        "native-firewall.asset.synchronization.status.show"
+      ],
+      "failure_values": [
+        "ERROR"
+      ],
+      "path": "returnObj.syncStatus",
+      "success": "SUCCESS",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "native-firewall.asset.unprotected": {
+      "commands": [
+        "native-firewall.asset.show"
+      ],
+      "path": "returnObj.protectStatus",
+      "success": "false",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "native-firewall.instance.ready": {
+      "selector": {
+        "path": "returnObj.list",
+        "key": "firewallId",
+        "value": "$param.firewall_id"
+      },
+      "commands": [
+        "native-firewall.instance.list"
+      ],
+      "failure_values": [
+        "overdue",
+        "unsubscribe"
+      ],
+      "path": "firewallState",
+      "success": "normal",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "native-firewall.policy.disabled": {
+      "commands": [
+        "native-firewall.policy.show"
+      ],
+      "path": "returnObj.status",
+      "success": "disable",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "native-firewall.policy.enabled": {
+      "commands": [
+        "native-firewall.policy.show"
+      ],
+      "path": "returnObj.status",
+      "success": "enable",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    }
+  }
+}

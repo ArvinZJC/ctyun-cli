@@ -1,0 +1,114 @@
+{
+  "captured_at": "2026-09-25",
+  "service_id": 174,
+  "version_id": 167,
+  "published_api_count": 86,
+  "implemented_api_count": 79,
+  "blocked": [
+    {
+      "api_id": "14111",
+      "title": "Ping性能探测调用",
+      "path": "/ctapi/v1/api/capability/detect",
+      "reason": "Published page has no request parameter schema, response parameter schema or response example; endpoint and URI alone cannot establish an executable contract."
+    },
+    {
+      "api_id": "14097",
+      "title": "查询安全与加速资源包列表",
+      "path": "/ctapi/v1/accessone/purchase/queryResourcePackages",
+      "reason": "Published page has no request parameter schema, response parameter schema or response example; endpoint and URI alone cannot establish an executable contract."
+    },
+    {
+      "api_id": "14098",
+      "title": "退订安全与加速资源包",
+      "path": "/ctapi/v1/accessone/purchase/refundResourcePackage",
+      "reason": "Published page has no request parameter schema, response parameter schema or response example; endpoint and URI alone cannot establish an executable contract."
+    },
+    {
+      "api_id": "14099",
+      "title": "查询安全与加速资源包列表",
+      "path": "/ctapi/v1/accessone/purchase/queryResourcePackagesDBT",
+      "reason": "Published page has no request parameter schema, response parameter schema or response example; endpoint and URI alone cannot establish an executable contract."
+    },
+    {
+      "api_id": "14100",
+      "title": "退订安全与加速资源包",
+      "path": "/ctapi/v1/accessone/purchase/refundResourcePackageDBT",
+      "reason": "Published page has no request parameter schema, response parameter schema or response example; endpoint and URI alone cannot establish an executable contract."
+    },
+    {
+      "api_id": "14091",
+      "title": "图片审核能力调用",
+      "path": "/ctapi/v1/external/api/picScan",
+      "reason": "Published page has no request parameter schema, response parameter schema or response example; endpoint and URI alone cannot establish an executable contract."
+    },
+    {
+      "api_id": "14090",
+      "title": "文本审核能力调用",
+      "path": "/ctapi/v1/external/api/textScan",
+      "reason": "Published page has no request parameter schema, response parameter schema or response example; endpoint and URI alone cannot establish an executable contract."
+    }
+  ],
+  "fixtures_unavailable": [],
+  "example_normalisations": [
+    {
+      "api_id": "13984",
+      "section": "请求体body示例",
+      "normalisation": "Replaced nonbreaking whitespace outside quoted JSON strings with JSON whitespace; values unchanged."
+    },
+    {
+      "api_id": "13981",
+      "section": "请求体body示例",
+      "normalisation": "Replaced nonbreaking whitespace outside quoted JSON strings with JSON whitespace; values unchanged."
+    },
+    {
+      "api_id": "13982",
+      "section": "响应示例",
+      "normalisation": "Restored the missing closing response brace; preserved mixed per-domain outcomes."
+    },
+    {
+      "api_id": "14101",
+      "section": "请求体body示例",
+      "normalisation": "Replaced nonbreaking whitespace outside quoted JSON strings with JSON whitespace; values unchanged."
+    },
+    {
+      "api_id": "12934",
+      "section": "request example",
+      "normalisation": "Converted pageIndex to the documented string type."
+    },
+    {
+      "api_id": "12934",
+      "section": "request example",
+      "normalisation": "Converted pageSize to the documented string type."
+    },
+    {
+      "api_id": "12873",
+      "section": "request example",
+      "normalisation": "Converted backPort to the documented string type."
+    },
+    {
+      "api_id": "12875",
+      "section": "request example",
+      "normalisation": "Converted backPort to the documented string type."
+    }
+  ],
+  "waiter_gaps": [],
+  "waiter_review": {
+    "waiter_count": 7,
+    "notes": [
+      "Domain access mode enforces a scalar domain or instance; rule collections select an exact scalar rule ID. Rule engine modes remain distinct.",
+      "Refresh/preload rows omit task IDs, and bulk legacy status accepts domain arrays. No arbitrary row or repeated URL is used as a unique task identity.",
+      "Protection and access-control switch queries do not publish a complete enum for their returned fields; no undocumented opposite state is invented."
+    ]
+  },
+  "response_notes": [
+    "WAF attack logs have a nested returnObj.statusCode envelope, which is required to equal 100000. Individual HTTP 403 log records are data rather than API failures.",
+    "Service subscription also requires submitted=true. Batch unsubscription returns per-order submitted values, including false in the captured example; its successful outer envelope does not guarantee order placement. Tables preserve these per-order outcomes.",
+    "Access-control creation and batch domain updates can include mixed per-domain outcomes inside a successful envelope. Tables show each outcome rather than hiding partial failures.",
+    "Log download API returns JSON links, sizes and checksums, not binary log data.",
+    "API 19231 captures bandwidth rows at the response root; the table uses req_bandwidth_data_interval without inventing a returnObj wrapper."
+  ],
+  "request_notes": [
+    "Domain ownership verification uses GET but requires confirmation and no automatic retries.",
+    "Older overlapping query paths are grouped under legacy; this command grouping does not mark them deprecated. Condition maps preserve nested condition arrays as Object inputs."
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "captured_at": "2026-09-25",
+  "service_id": 104,
+  "version_id": 98,
+  "published_api_count": 166,
+  "implemented_api_count": 154,
+  "blocked": [
+    {
+      "api_id": "5145",
+      "title": "分页查询策略列表",
+      "path": "/v1/sca/rule/query/scaruleListOfPage/*/*",
+      "reason": "Multiple anonymous path wildcards have no URL example or named positional contract. Parameter table order is insufficient: older named-path documentation differs from current table ordering. Await explicit pagination path evidence."
+    },
+    {
+      "api_id": "5171",
+      "title": "查询网页防篡改配额列表",
+      "path": "/v1/tamperProof/quota/query/*/*",
+      "reason": "Multiple anonymous path wildcards have no URL example or named positional contract. Parameter table order is insufficient: older named-path documentation differs from current table ordering. Await explicit pagination path evidence."
+    },
+    {
+      "api_id": "5139",
+      "title": "查询配额列表",
+      "path": "/v1/quota/quotaList/*/*",
+      "reason": "Multiple anonymous path wildcards have no URL example or named positional contract. Parameter table order is insufficient: older named-path documentation differs from current table ordering. Await explicit pagination path evidence."
+    },
+    {
+      "api_id": "5181",
+      "title": "查询网页防篡改配置列表",
+      "path": "/v1/tamperProof/config/*/*",
+      "reason": "Multiple anonymous path wildcards have no URL example or named positional contract. Parameter table order is insufficient: older named-path documentation differs from current table ordering. Await explicit pagination path evidence."
+    },
+    {
+      "api_id": "6867",
+      "title": "执行病毒查杀立即检测任务",
+      "path": "/v1/virus/now",
+      "reason": "Only an empty object response example and no response schema are published; no success/error contract is inferred."
+    },
+    {
+      "api_id": "5157",
+      "title": "查询基线一级列表",
+      "path": "/v1/sca/event/baseLevel/*/*",
+      "reason": "Multiple anonymous path wildcards have no URL example or named positional contract. Parameter table order is insufficient: older named-path documentation differs from current table ordering. Await explicit pagination path evidence."
+    },
+    {
+      "api_id": "5151",
+      "title": "查询基线二级列表",
+      "path": "/v1/sca/event/secondLevel/*/*",
+      "reason": "Multiple anonymous path wildcards have no URL example or named positional contract. Parameter table order is insufficient: older named-path documentation differs from current table ordering. Await explicit pagination path evidence."
+    },
+    {
+      "api_id": "5156",
+      "title": "查询基线三级列表",
+      "path": "/v1/sca/event/thirdLevel/*/*",
+      "reason": "Multiple anonymous path wildcards have no URL example or named positional contract. Parameter table order is insufficient: older named-path documentation differs from current table ordering. Await explicit pagination path evidence."
+    },
+    {
+      "api_id": "5152",
+      "title": "查询服务器详情页基线检测列表",
+      "path": "/v1/sca/event/host/*/*",
+      "reason": "Multiple anonymous path wildcards have no URL example or named positional contract. Parameter table order is insufficient: older named-path documentation differs from current table ordering. Await explicit pagination path evidence."
+    },
+    {
+      "api_id": "5148",
+      "title": "查询白名单列表",
+      "path": "/v1/sca/check/whiteList/*/*",
+      "reason": "Multiple anonymous path wildcards have no URL example or named positional contract. Parameter table order is insufficient: older named-path documentation differs from current table ordering. Await explicit pagination path evidence."
+    },
+    {
+      "api_id": "5175",
+      "title": "查询网页防篡改服务器列表",
+      "path": "/v1/host/queryFilterHostList/*/*",
+      "reason": "Multiple anonymous path wildcards have no URL example or named positional contract. Parameter table order is insufficient: older named-path documentation differs from current table ordering. Await explicit pagination path evidence."
+    },
+    {
+      "api_id": "19191",
+      "title": "查询网页防篡改远端服务器列表",
+      "path": "/v1/tamperProof/query/remoteServerList/*/*",
+      "reason": "Multiple anonymous path wildcards have no URL example or named positional contract. Parameter table order is insufficient: older named-path documentation differs from current table ordering. Await explicit pagination path evidence."
+    }
+  ],
+  "fixtures_unavailable": [],
+  "example_normalisations": [
+    {
+      "api_id": "5140",
+      "section": "响应示例",
+      "normalisation": "Restored the missing closing root-object brace; captured values unchanged."
+    }
+  ],
+  "waiter_gaps": [],
+  "request_notes": [
+    "Single anonymous URI wildcards map to their sole declared path parameter. No ordering is guessed for multiple wildcards.",
+    "GET agreement signing, asset collection, baseline-policy deletion and web-protection alarm deletion are confirmed non-retryable mutations.",
+    "Two captured top-level array request bodies use UTF-8 JSON file inputs; their arrays must not be wrapped in named objects.",
+    "Encoded directory and antivirus path inputs retain the upstream reverse-string then Base64 wire requirement; no unrequested shell script is executed."
+  ],
+  "supplemental_evidence": [
+    {
+      "url": "https://www.ctyun.cn/document/10026775/10040352",
+      "observation": "The older lowercase tamperproof/config URI names currentNum then pageSize; the current API 5181 table lists pageSize then currentNum and publishes only anonymous wildcards. The older response/signing contract also differs, so it cannot establish the current contract."
+    },
+    {
+      "url": "https://www.ctyun.cn/document/10026775/10298375",
+      "api_id": "5139",
+      "observation": "The current public guide also omits named path positions and URL examples."
+    },
+    {
+      "url": "https://www.ctyun.cn/document/10026775/10300459",
+      "api_id": "6867",
+      "observation": "The current public guide likewise has no response schema and only an empty object example."
+    }
+  ],
+  "waiter_review": {
+    "waiter_count": 9,
+    "notes": [
+      "The required baseline policy input identifies its current scan status; configuration queries expose documented Boolean or binary switch states.",
+      "Weak-password, antivirus and vulnerability scan summaries do not select a particular task; no task-completion waiter is inferred.",
+      "The export query accepts either exportTaskId or exportType. Current waiter metadata cannot require a scalar identity on this object response only while polling; no type-only latest-task waiter is added."
+    ]
+  },
+  "response_notes": [
+    "Successful envelopes require statusCode 200 and the documented CTCSSCN_000000 code. Sixteen operations also publish 0 in both the error-field schema example and captured successful response; accept 0 only on those operations, not as a product-wide alias.",
+    "Boolean and integer request examples written as strings are normalized to their explicit parameter types.",
+    "The quota statistics response is missing one final closing brace; repair punctuation only, preserving all values."
+  ]
+}

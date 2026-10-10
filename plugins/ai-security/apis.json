@@ -1,0 +1,199 @@
+{
+  "operations": {
+    "ai-security.file.check": {
+      "request": {
+        "encoding": "multipart",
+        "parts": [
+          {
+            "name": "file",
+            "source": "$param.file",
+            "file": true
+          }
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "200"
+            ]
+          },
+          {
+            "path": "success",
+            "values": [
+              "true"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/open-api/file/check",
+      "content_type": "multipart/form-data",
+      "headers": {
+        "X-APP-CODE": "$param.x_app_code",
+        "X-HMAC-SIGNATURE": "$param.x_hmac_signature",
+        "X-REQUEST-DATE": "$param.x_request_date",
+        "accountid": "$param.accountid"
+      },
+      "retryable": false
+    },
+    "ai-security.guard.check": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "200"
+            ]
+          },
+          {
+            "path": "success",
+            "values": [
+              "true"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/ai-guard/open/chat/check",
+      "content_type": "application/json",
+      "headers": {
+        "X-APP-CODE": "$param.x_app_code",
+        "X-HMAC-SIGNATURE": "$param.x_hmac_signature",
+        "X-REQUEST-DATE": "$param.x_request_date",
+        "accountid": "$param.accountid"
+      },
+      "body": {
+        "answerContent": "$param.answer_content",
+        "checkService": "$param.check_service",
+        "imageBase64": "$param.image_base64",
+        "imageUrl": "$param.image_url",
+        "isEnd": "$param.is_end",
+        "prompt": "$param.prompt",
+        "reqId": "$param.req_id",
+        "seqId": "$param.seq_id"
+      },
+      "retryable": false
+    },
+    "ai-security.watermark.add": {
+      "request": {
+        "encoding": "multipart",
+        "parts": [
+          {
+            "name": "file",
+            "source": "$param.file",
+            "file": true
+          },
+          {
+            "name": "watermarkText",
+            "source": "$param.watermark_text"
+          }
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "200"
+            ]
+          },
+          {
+            "path": "data.Data.success",
+            "values": [
+              "true"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/open-api/watermark",
+      "content_type": "multipart/form-data",
+      "headers": {
+        "X-APP-CODE": "$param.x_app_code",
+        "X-HMAC-SIGNATURE": "$param.x_hmac_signature",
+        "X-REQUEST-DATE": "$param.x_request_date",
+        "accountid": "$param.accountid"
+      },
+      "retryable": false
+    },
+    "ai-security.watermark.download": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "binary",
+            "media_type": "application/octet-stream"
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/ai-datasecurity/file/down",
+      "content_type": "application/json",
+      "query": {
+        "id": "$param.id"
+      },
+      "headers": {
+        "accountid": "$param.accountid"
+      },
+      "retryable": true
+    },
+    "ai-security.watermark.extract": {
+      "request": {
+        "encoding": "multipart",
+        "parts": [
+          {
+            "name": "file",
+            "source": "$param.file",
+            "file": true
+          }
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/open-api/watermark/extract",
+      "content_type": "multipart/form-data",
+      "headers": {
+        "X-APP-CODE": "$param.x_app_code",
+        "X-HMAC-SIGNATURE": "$param.x_hmac_signature",
+        "X-REQUEST-DATE": "$param.x_request_date",
+        "accountid": "$param.accountid"
+      },
+      "retryable": false
+    }
+  }
+}

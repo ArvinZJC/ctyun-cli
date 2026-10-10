@@ -1,0 +1,404 @@
+{
+  "captured_at": "2026-09-24",
+  "service_id": 78,
+  "version_id": 72,
+  "published_api_count": 183,
+  "implemented_api_count": 180,
+  "blocked": [
+    {
+      "api_id": "12041",
+      "title": "导出实例列表",
+      "path": "/DDS2/v1/openApi/exportProdInst",
+      "reason": "Export response has no published binary HTTP contract or response example; blocked pending wire evidence."
+    },
+    {
+      "api_id": "15447",
+      "title": "导出实例列表v2",
+      "path": "/DDS2/v2/openApi/exportProdInst",
+      "reason": "Export response has no published binary HTTP contract or response example; blocked pending wire evidence."
+    },
+    {
+      "api_id": "19511",
+      "title": "导出参数模板v2",
+      "path": "/DDS2/v2/openApi/exportParameterTemplates",
+      "reason": "Export response has no published binary HTTP contract or response example; blocked pending wire evidence."
+    }
+  ],
+  "fixtures_unavailable": [],
+  "example_normalisations": [
+    {
+      "api_id": "8818",
+      "section": "响应示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "19293",
+      "section": "请求体body示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "21005",
+      "section": "响应示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "22033",
+      "section": "响应示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "12732",
+      "parameter": "period",
+      "normalisation": "Omitted a request example value that contradicts the documented parameter type."
+    },
+    {
+      "api_id": "8818",
+      "parameter": "nodeInfoList",
+      "normalisation": "Omitted a request example value that contradicts the documented parameter type."
+    },
+    {
+      "api_id": "12736",
+      "parameter": "period",
+      "normalisation": "Omitted a request example value that contradicts the documented parameter type."
+    },
+    {
+      "api_id": "8801",
+      "parameter": "nodeInfoList",
+      "normalisation": "Omitted a request example value that contradicts the documented parameter type."
+    },
+    {
+      "api_id": "12042",
+      "parameter": "id",
+      "normalisation": "Omitted a request example value that contradicts the documented parameter type."
+    },
+    {
+      "api_id": "15491",
+      "parameter": "id",
+      "normalisation": "Omitted a request example value that contradicts the documented parameter type."
+    },
+    {
+      "api_id": "8775",
+      "source_url": "https://www.ctyun.cn/document/10034467/10039942",
+      "normalisation": "Complete response copied from the official v1 reference for describeHostAlarmConfig. The OpenAPI gateway uses the same v1 operation with a /DDS2 prefix; its inner fields and 800 envelope agree with this reference."
+    },
+    {
+      "api_id": "15490",
+      "source_url": "https://www.ctyun.cn/document/10034467/11011578",
+      "normalisation": "Complete response extracted after the response-example heading embedded in the request code block of the official restoreDefaultParameters v2 reference; values unchanged."
+    }
+  ],
+  "waiter_gaps": [
+    {
+      "api_id": "8708",
+      "command": "mongodb v1 instance list",
+      "states": [
+        {
+          "field": "prodOrderStatus",
+          "description": "0->订单正常, 1->订单冻结, 2->订单注销, 3->施工中, 4->施工失败"
+        },
+        {
+          "field": "logStatus",
+          "description": "实例日志审计状态，0为未开启"
+        },
+        {
+          "field": "prodRunningStatus",
+          "description": "实例运行状态: 0->运行正常, 1->重启中, 2-备份操作中,3->恢复操作中,4->转换ssl,5->异常,6->修改参数组中,7->已冻结,8->已注销,9->施工中,10->施工失败,11->扩容中,12->主备切换中"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "8734",
+      "command": "mongodb v1 instance overview show",
+      "states": [
+        {
+          "field": "prodRunningStatus",
+          "description": "实例运行状态 实例运行状态: 0->运行正常, 1->重启中, 2-备份操作中,3->恢复操作中,4->转换ssl,5->异常,6->修改参数组中,7->已冻结,8->已注销,9->施工中,10->施工失败,11->扩容中,12->主备切换中"
+        }
+      ],
+      "reason": "The command accepts multiple instance IDs in prodInstIds; CSV input cannot be used as a single exact identity selector."
+    },
+    {
+      "api_id": "8721",
+      "command": "mongodb v1 ssl show",
+      "states": [
+        {
+          "field": "SSLStatus",
+          "description": "open表示开启，close表示未开启"
+        }
+      ],
+      "reason": "Published fields describe configuration or status without documented completion and failure semantics."
+    },
+    {
+      "api_id": "12743",
+      "command": "mongodb eip list",
+      "states": [
+        {
+          "field": "bindStatus",
+          "description": "0-未绑定，1-已绑定"
+        },
+        {
+          "field": "status",
+          "description": "状态标识：ACTIVE=已使用，DOWN=未使用，ERROR=中间状态-异常，UPDATING=中间状态-更新中，BANDING_OR_UNBANGDING=中间状态-绑定或解绑中，DELETING=中间状态-删除中，DELETED=中间状态-已删除"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "12737",
+      "command": "mongodb price resize",
+      "states": [
+        {
+          "field": "verifyStatusCode",
+          "description": "状态码"
+        }
+      ],
+      "reason": "Published fields describe configuration or status without documented completion and failure semantics."
+    },
+    {
+      "api_id": "12736",
+      "command": "mongodb price create",
+      "states": [
+        {
+          "field": "verifyStatusCode",
+          "description": "状态码"
+        }
+      ],
+      "reason": "Published fields describe configuration or status without documented completion and failure semantics."
+    },
+    {
+      "api_id": "12738",
+      "command": "mongodb price renew",
+      "states": [
+        {
+          "field": "verifyStatusCode",
+          "description": "状态码"
+        }
+      ],
+      "reason": "Published fields describe configuration or status without documented completion and failure semantics."
+    },
+    {
+      "api_id": "8814",
+      "command": "mongodb v1 eip list",
+      "states": [
+        {
+          "field": "bindStatus",
+          "description": "0-未绑定，1-已绑定"
+        },
+        {
+          "field": "status",
+          "description": "状态标识：ACTIVE=已使用，DOWN=未使用，ERROR=中间状态-异常，UPDATING=中间状态-更新中，BANDING_OR_UNBANGDING=中间状态-绑定或解绑中，DELETING=中间状态-删除中，DELETED=中间状态-已删除"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "12033",
+      "command": "mongodb v1 recycle-bin list",
+      "states": [
+        {
+          "field": "prodOrderStatus",
+          "description": "0->订单正常, 1->订单冻结, 2->订单注销, 3->施工中, 4->施工失败"
+        },
+        {
+          "field": "logStatus",
+          "description": "实例日志审计状态，0为未开启"
+        },
+        {
+          "field": "prodRunningStatus",
+          "description": "实例运行状态: 0->运行正常, 1->重启中, 2-备份操作中,3->恢复操作中,4->转换ssl,5->异常,6->修改参数组中,7->已冻结,8->已注销,9->施工中,10->施工失败,11->扩容中,12->主备切换中"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "8778",
+      "command": "mongodb v1 alarm history list",
+      "states": [
+        {
+          "field": "sendMailStatus",
+          "description": "邮件推送状态"
+        },
+        {
+          "field": "sendSmsStatus",
+          "description": "短信推送状态"
+        },
+        {
+          "field": "sendOtherStatus",
+          "description": "其他形式的告警信息推送状态"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "8776",
+      "command": "mongodb v1 alarm database show",
+      "states": [
+        {
+          "field": "alarmMongoStatus",
+          "description": "数据库状态告警"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "8765",
+      "command": "mongodb v1 account root show",
+      "states": [
+        {
+          "field": "AccountStatus",
+          "description": "账户状态"
+        }
+      ],
+      "reason": "Published fields describe configuration or status without documented completion and failure semantics."
+    },
+    {
+      "api_id": "8722",
+      "command": "mongodb v1 log slow list",
+      "states": [
+        {
+          "field": "exeStatement",
+          "description": "语句"
+        },
+        {
+          "field": "statementType",
+          "description": "慢语句类型"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "15436",
+      "command": "mongodb instance overview show",
+      "states": [
+        {
+          "field": "prodRunningStatus",
+          "description": "实例的运行状态:<br/>0:运行正常<br />1:重启中<br />2:备份操作中<br />3:恢复操作中<br />4:转换 SSL<br />6:修改参数组中<br />7:已冻结<br />8:已注销<br />9:施工中<br />11:扩容中<br />12:主备切换中"
+        }
+      ],
+      "reason": "The command accepts multiple instance IDs in prodInstIds; CSV input cannot be used as a single exact identity selector."
+    },
+    {
+      "api_id": "15439",
+      "command": "mongodb ssl show",
+      "states": [
+        {
+          "field": "SSLStatus",
+          "description": "open表示开启，close表示未开启"
+        }
+      ],
+      "reason": "Published fields describe configuration or status without documented completion and failure semantics."
+    },
+    {
+      "api_id": "15452",
+      "command": "mongodb account root show",
+      "states": [
+        {
+          "field": "AccountStatus",
+          "description": "账户状态"
+        }
+      ],
+      "reason": "Published fields describe configuration or status without documented completion and failure semantics."
+    },
+    {
+      "api_id": "15467",
+      "command": "mongodb recovery instance list",
+      "states": [
+        {
+          "field": "prodOrderStatus",
+          "description": "实例订单状态"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "15469",
+      "command": "mongodb backup cross-region policy show",
+      "states": [
+        {
+          "field": "status",
+          "description": "状态，1为已生效，0为未生效"
+        }
+      ],
+      "reason": "Published fields describe configuration or status without documented completion and failure semantics."
+    },
+    {
+      "api_id": "15476",
+      "command": "mongodb log slow list",
+      "states": [
+        {
+          "field": "exeStatement",
+          "description": "语句"
+        },
+        {
+          "field": "statementType",
+          "description": "慢语句类型"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "15478",
+      "command": "mongodb log operation list",
+      "states": [
+        {
+          "field": "prodRunningStatus",
+          "description": "实例状态"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "15492",
+      "command": "mongodb recycle-bin list",
+      "states": [
+        {
+          "field": "prodRunningStatus",
+          "description": "实例运行状态: 0->运行正常, 1->重启中, 2-备份操作中,3->恢复操作中,4->转换ssl,5->异常,6->修改参数组中,7->已冻结,8->已注销,9->施工中,10->施工失败,11->扩容中,12->主备切换中"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "15502",
+      "command": "mongodb task list",
+      "states": [
+        {
+          "field": "taskStatus",
+          "description": "任务状态：<br/>0:提交成功 <br/>1:运行中<br/>2:执行成功<br/>3:执行失败"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "17768",
+      "command": "mongodb price convert-to-demand",
+      "states": [
+        {
+          "field": "verifyStatusCode",
+          "description": "状态码"
+        }
+      ],
+      "reason": "Published fields describe configuration or status without documented completion and failure semantics."
+    },
+    {
+      "api_id": "17770",
+      "command": "mongodb price convert-to-package",
+      "states": [
+        {
+          "field": "verifyStatusCode",
+          "description": "状态码"
+        }
+      ],
+      "reason": "Published fields describe configuration or status without documented completion and failure semantics."
+    }
+  ],
+  "supplemental_evidence": "supplemental-evidence.json",
+  "blocked_recheck": {
+    "checked_at": "2026-09-24",
+    "source_urls": [
+      "https://www.ctyun.cn/document/10034467/11085402"
+    ],
+    "finding": "The alternate official parameter-template export reference also leaves the response example empty. Exporting Excel or CSV in a console guide does not establish the API success media type, disposition, or error contract. Successful response headers and a redacted body are still needed."
+  }
+}

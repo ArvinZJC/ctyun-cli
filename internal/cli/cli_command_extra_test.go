@@ -20,6 +20,7 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
+// TestPluginCommandParsingAndPayloadErrors checks metadata validation, conditional inputs, and malformed response shapes.
 func TestPluginCommandParsingAndPayloadErrors(t *testing.T) {
 	command := plugin.Command{
 		ID:   "ecs.instance.list",
@@ -112,6 +113,7 @@ func TestPluginCommandParsingAndPayloadErrors(t *testing.T) {
 	}
 }
 
+// TestCommandDisplayPath uses visible command syntax and a generic fallback for diagnostics.
 func TestCommandDisplayPath(t *testing.T) {
 	command := plugin.Command{Path: []string{"ecs", "instance", "delete", "{instance_id}"}}
 	if got := commandDisplayPath(command); got != "ecs instance delete {instance_id}" {
@@ -122,6 +124,7 @@ func TestCommandDisplayPath(t *testing.T) {
 	}
 }
 
+// TestParameterConditionalHintUsesInValues renders alternative condition values in option help.
 func TestParameterConditionalHintUsesInValues(t *testing.T) {
 	command := plugin.Command{
 		Parameters: []plugin.Parameter{
@@ -140,6 +143,7 @@ func TestParameterConditionalHintUsesInValues(t *testing.T) {
 	}
 }
 
+// TestParameterConditionalHintSkipsIncompleteMetadata omits hints that lack a resolvable selector or required input.
 func TestParameterConditionalHintSkipsIncompleteMetadata(t *testing.T) {
 	parameter := plugin.Parameter{Name: "name", Flag: "name"}
 	tests := []plugin.Command{
@@ -178,6 +182,7 @@ func TestParameterConditionalHintSkipsIncompleteMetadata(t *testing.T) {
 	}
 }
 
+// TestRowsFromPayloadFormatsArrayCells preserves readable scalar and structured array cells.
 func TestRowsFromPayloadFormatsArrayCells(t *testing.T) {
 	table := plugin.Table{
 		RowPath: "items",
@@ -227,6 +232,7 @@ func TestRowsFromPayloadFormatsArrayCells(t *testing.T) {
 
 // TestRowsFromPayloadRendersNullCellAsEmpty verifies that an explicit JSON
 // null is presented like an absent optional value in table output.
+// TestRowsFromPayloadRendersNullCellAsEmpty keeps explicit JSON null out of rendered table text.
 func TestRowsFromPayloadRendersNullCellAsEmpty(t *testing.T) {
 	table := plugin.Table{
 		RowPath: "items",
@@ -245,6 +251,7 @@ func TestRowsFromPayloadRendersNullCellAsEmpty(t *testing.T) {
 	}
 }
 
+// TestRowsFromPayloadProjectsArrayObjectCells projects declared fields from collection-valued response paths.
 func TestRowsFromPayloadProjectsArrayObjectCells(t *testing.T) {
 	table := plugin.Table{
 		RowPath: "items",
@@ -283,6 +290,7 @@ func TestRowsFromPayloadProjectsArrayObjectCells(t *testing.T) {
 	}
 }
 
+// TestRunPluginCommandWriterWaiterAndOutputErrors propagates output failures and rejects incompatible waiter usage.
 func TestRunPluginCommandWriterWaiterAndOutputErrors(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeWaitBundle(t, filepath.Join(pluginRoot, "ecs"))
@@ -345,6 +353,7 @@ func TestRunPluginCommandWriterWaiterAndOutputErrors(t *testing.T) {
 	}
 }
 
+// TestPluginCommandAcceptsGuardedOperationStatus accepts an alternate API status only with the declared result guard.
 func TestPluginCommandAcceptsGuardedOperationStatus(t *testing.T) {
 	pluginRoot := t.TempDir()
 	bundleDir := filepath.Join(pluginRoot, "ims")
@@ -403,6 +412,7 @@ func TestPluginCommandAcceptsGuardedOperationStatus(t *testing.T) {
 	}
 }
 
+// TestWarnConfigCredentialsReturnsWriterError propagates failures while warning about configured credentials.
 func TestWarnConfigCredentialsReturnsWriterError(t *testing.T) {
 	profile := coreconfig.Profile{AccessKey: "ak-test", SecretKey: "sk-test"}
 	creds, err := coreconfig.ResolveCredentials(func(string) string { return "" }, profile)
@@ -415,6 +425,7 @@ func TestWarnConfigCredentialsReturnsWriterError(t *testing.T) {
 	}
 }
 
+// TestConfirmDangerousOperationCoversInputBranches checks affirmative input, rejection, writer errors, and explicit confirmation bypass.
 func TestConfirmDangerousOperationCoversInputBranches(t *testing.T) {
 	var stderr bytes.Buffer
 	if err := confirmDangerousOperation(&stderr, strings.NewReader("YES"), globalOptions{Language: "en-US"}, "delete instance"); err != nil {
@@ -442,6 +453,7 @@ func TestConfirmDangerousOperationCoversInputBranches(t *testing.T) {
 	}
 }
 
+// TestRunPluginCommandDataErrors rejects missing arguments, invalid table controls, and malformed response rows.
 func TestRunPluginCommandDataErrors(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeWaitBundle(t, filepath.Join(pluginRoot, "ecs"))
@@ -478,6 +490,7 @@ func TestRunPluginCommandDataErrors(t *testing.T) {
 	}
 }
 
+// TestLoadCommandResponseAndExecuteAPICommandErrors checks fixture failures, live prerequisites, and default request content type.
 func TestLoadCommandResponseAndExecuteAPICommandErrors(t *testing.T) {
 	bundle := plugin.Bundle{Dir: t.TempDir(), Manifest: plugin.Manifest{API: plugin.APIInfo{EndpointURL: "https://ctapi.example.test"}}}
 	command := plugin.Command{ID: "ecs.instance.list"}
@@ -532,6 +545,7 @@ func TestLoadCommandResponseAndExecuteAPICommandErrors(t *testing.T) {
 	}
 }
 
+// TestPluginRootsAndVersionComparison covers configured and discovered roots plus semantic version ordering.
 func TestPluginRootsAndVersionComparison(t *testing.T) {
 	configured := t.TempDir()
 	if got := pluginRoot(configured); got != configured {
@@ -541,7 +555,7 @@ func TestPluginRootsAndVersionComparison(t *testing.T) {
 	if got := pluginRoot(""); got != ".ctyun/plugins" {
 		t.Fatalf("pluginRoot no-home = %q", got)
 	}
-	chdirRepoRootForTest(t)
+	chdirSyntheticPluginRootForTest(t)
 	if got := defaultPluginRoot(); got != "plugins" {
 		t.Fatalf("defaultPluginRoot from repo root = %q, want plugins", got)
 	}
@@ -554,6 +568,16 @@ func TestPluginRootsAndVersionComparison(t *testing.T) {
 	}
 	originalRuntimeCaller := runtimeCaller
 	t.Cleanup(func() { runtimeCaller = originalRuntimeCaller })
+	sourceRoot := t.TempDir()
+	if err := os.Mkdir(filepath.Join(sourceRoot, "plugins"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	runtimeCaller = func(int) (uintptr, string, int, bool) {
+		return 0, filepath.Join(sourceRoot, "internal", "cli", "cli.go"), 0, true
+	}
+	if got := defaultPluginRoot(); got != filepath.Join(sourceRoot, "plugins") {
+		t.Fatalf("defaultPluginRoot from source = %q, want synthetic source plugins", got)
+	}
 	runtimeCaller = func(int) (uintptr, string, int, bool) {
 		return 0, "", 0, false
 	}
@@ -574,8 +598,9 @@ func TestPluginRootsAndVersionComparison(t *testing.T) {
 	}
 }
 
+// TestLoadBundlesUsesBundledPluginsOnlyForDevelopmentBuilds checks synthetic development bundle precedence and release isolation.
 func TestLoadBundlesUsesBundledPluginsOnlyForDevelopmentBuilds(t *testing.T) {
-	chdirRepoRootForTest(t)
+	chdirSyntheticPluginRootForTest(t)
 
 	originalChannel := version.Channel
 	t.Cleanup(func() { version.Channel = originalChannel })
@@ -618,24 +643,20 @@ func TestLoadBundlesUsesBundledPluginsOnlyForDevelopmentBuilds(t *testing.T) {
 	}
 }
 
-func chdirRepoRootForTest(t *testing.T) {
+// chdirSyntheticPluginRootForTest creates a miniature checkout for development discovery tests.
+func chdirSyntheticPluginRootForTest(t *testing.T) {
 	t.Helper()
-
-	repoRoot, err := filepath.Abs("../..")
-	if err != nil {
-		t.Fatalf("resolve repo root: %v", err)
-	}
-	originalDir, err := os.Getwd()
-	if err != nil {
-		t.Fatalf("get working directory: %v", err)
-	}
-	t.Cleanup(func() { _ = os.Chdir(originalDir) })
-	if err := os.Chdir(repoRoot); err != nil {
-		t.Fatalf("chdir repo root: %v", err)
-	}
+	root := t.TempDir()
+	dir := filepath.Join(root, "plugins", "ecs")
+	writeVersionedBundle(t, dir, "ecs", "0.1.0")
+	mustWrite(t, filepath.Join(dir, "commands.json"), `{"commands":[{"id":"ecs.list","path":["ecs","list"],"table":"items"}]}`)
+	mustWrite(t, filepath.Join(dir, "tables.json"), `{"tables":{"items":{"row_path":"$","columns":[{"key":"id","path":"id","labels":{"en-US":"ID","en-GB":"ID","zh-CN":"标识"}}]}}}`)
+	t.Chdir(root)
 }
 
+// TestPluginDirsIgnoresMissingAndUnreadableRoots handles absent roots and reports invalid bundle metadata.
 func TestPluginDirsIgnoresMissingAndUnreadableRoots(t *testing.T) {
+	disableDevelopmentBundledPluginsForTest(t)
 	if dirs := pluginDirs(filepath.Join(t.TempDir(), "missing")); dirs != nil {
 		t.Fatalf("pluginDirs missing = %#v, want nil", dirs)
 	}
@@ -653,6 +674,7 @@ func TestPluginDirsIgnoresMissingAndUnreadableRoots(t *testing.T) {
 	}
 }
 
+// TestLocalizedEnglishValidationErrors keeps parser diagnostics specific to the failed validation rule.
 func TestLocalizedEnglishValidationErrors(t *testing.T) {
 	if got := localizedUnexpectedArgument("extra", "cmd", "en-US").Error(); !strings.Contains(got, "unexpected argument") {
 		t.Fatalf("localizedUnexpectedArgument English = %q", got)
@@ -668,6 +690,7 @@ func TestLocalizedEnglishValidationErrors(t *testing.T) {
 	}
 }
 
+// TestFilteringHelpersCoverEmptyAndNoTargetCases filters mapped table values while ignoring unset or unmapped parameters.
 func TestFilteringHelpersCoverEmptyAndNoTargetCases(t *testing.T) {
 	rows := []map[string]string{{"id": "one"}}
 	if got := filterRowsByParameters(nil, plugin.Table{}, nil, nil); got != nil {
@@ -691,6 +714,7 @@ func TestFilteringHelpersCoverEmptyAndNoTargetCases(t *testing.T) {
 	}
 }
 
+// TestVisibleExamplesHidesFixtureOnlyExamples excludes development-only command examples from public help.
 func TestVisibleExamplesHidesFixtureOnlyExamples(t *testing.T) {
 	got := visibleExamples([]string{
 		"ctyun ecs instance list",
@@ -702,7 +726,9 @@ func TestVisibleExamplesHidesFixtureOnlyExamples(t *testing.T) {
 	}
 }
 
+// TestPluginCommandUsesTableDefaultColumns applies metadata defaults unless users explicitly select columns.
 func TestPluginCommandUsesTableDefaultColumns(t *testing.T) {
+	disableDevelopmentBundledPluginsForTest(t)
 	pluginRoot := t.TempDir()
 	bundleDir := filepath.Join(pluginRoot, "demo")
 	if err := os.MkdirAll(filepath.Join(bundleDir, "fixtures"), 0o755); err != nil {
@@ -737,6 +763,7 @@ func TestPluginCommandUsesTableDefaultColumns(t *testing.T) {
 	}
 }
 
+// writeMalformedRowsBundle creates a synthetic bundle with a caller-selected response shape for row-validation tests.
 func writeMalformedRowsBundle(t *testing.T, dir, fixture string) {
 	t.Helper()
 	disableDevelopmentBundledPluginsForTest(t)
@@ -756,8 +783,10 @@ func writeMalformedRowsBundle(t *testing.T, dir, fixture string) {
 	mustWrite(t, filepath.Join(dir, "fixtures", "items.json"), fixture)
 }
 
+// failingWriter simulates an output stream that rejects every write.
 type failingWriter struct{}
 
+// Write returns a deterministic output failure for propagation tests.
 func (failingWriter) Write([]byte) (int, error) {
 	return 0, errors.New("write failed")
 }

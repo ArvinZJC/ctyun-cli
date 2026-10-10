@@ -1,0 +1,3607 @@
+{
+  "schema_version": 1,
+  "product": {
+    "plugin_name": "tokenhub",
+    "api_product": "tokenhub",
+    "ctyun_product_id": 220,
+    "source_revision": "348",
+    "display_name": {
+      "en-GB": "Xingchen TokenHub Operations Platform",
+      "en-US": "Xingchen TokenHub Operations Platform",
+      "zh-CN": "星辰TokenHub运营服务平台"
+    },
+    "display_name_policy": {
+      "kind": "descriptive"
+    },
+    "endpoint_url": "https://ctinfer-global.ctapi.ctyun.cn",
+    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263",
+    "api_scope": {
+      "include_uri_prefixes": [
+        "/maas/modelService/"
+      ],
+      "notes": "Published service 263, version 348; preserves historical/versioned operations in separate command groups. See coverage.json for response-evidence gaps."
+    }
+  },
+  "operations": [
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJtZXNzYWdlIjogInN1Y2Nlc3MiLCAic3RhdHVzQ29kZSI6IDIwMCwgImVycm9yIjogIkFJUF80MDAwMDAwMCIsICJyZXR1cm5PYmoiOiBbeyJ1c2VySWQiOiAiOWE0OWRmYWIzNTcxNGVlNDhjMGNkYTExMTZlNzMwN2YiLCAidXNlck5hbWUiOiAieHh4eHh4IiwgImlzTWFpbkFjY291bnQiOiB0cnVlfSwgeyJ1c2VySWQiOiAiMzJhYzcwZjk5MzU4NDQ1YWFlNGM1NTNmY2Q4MDYxMTEiLCAidXNlck5hbWUiOiAibXpoZW50ZXN0IiwgImlzTWFpbkFjY291bnQiOiBmYWxzZX1dLCAicmVxdWVzdElkIjogIjNmY2UzNTVhNTQxYWY1OTUyMzQ2ZTU2NDFkMmQ1MTExIn0="
+      },
+      "id": "tokenhub.account.child.list",
+      "api_id": "21027",
+      "title": "根据主账号id获取系统可使用的子账号信息",
+      "description": {
+        "en-GB": "List available child accounts",
+        "en-US": "List available child accounts",
+        "zh-CN": "根据主账号id获取系统可使用的子账号信息"
+      },
+      "category": "account",
+      "command_path": [
+        "account",
+        "child",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/maas/modelService/account/listChildren",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21027&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "user_id",
+          "user_name",
+          "is_main_account"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "user_id",
+            "path": "userId",
+            "label_en": "User ID",
+            "label_zh": "用户 ID",
+            "description": "用户ID"
+          },
+          {
+            "key": "user_name",
+            "path": "userName",
+            "label_en": "User Name",
+            "label_zh": "用户名称",
+            "description": "用户名称"
+          },
+          {
+            "key": "is_main_account",
+            "path": "isMainAccount",
+            "label_en": "Is Main Account",
+            "label_zh": "主子账号标识",
+            "description": "主子账号标识"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMjAwLCAiZXJyb3IiOiAiQUlQXzQwMDAwMDAwIiwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXR1cm5PYmoiOiB7InRva2VuQnlVc2UiOiBudWxsLCAidG9rZW5RdWFudGl0aWVzIjogeyJzdWNjZXNzIjogdHJ1ZSwgImVycm9yTWVzc2FnZSI6IG51bGwsICJtdWx0aU9yZGVyU3RhdHVzTGlzdCI6IFt7Im9yZGVySWQiOiAiZTIxNTlmZGQwYTU1NDNlYjlkOWQwNWFkMTBiYTM0N2QiLCAiaXRDb2RlIjogbnVsbCwgIml0RXJyb3JNZXNzYWdlIjogbnVsbH1dfSwgInRwbSI6IHsic3VjY2VzcyI6IHRydWUsICJlcnJvck1lc3NhZ2UiOiBudWxsLCAibXVsdGlPcmRlclN0YXR1c0xpc3QiOiBbeyJvcmRlcklkIjogbnVsbCwgIml0Q29kZSI6ICJOT1RfRU5PVUdIX0NBU0giLCAiaXRFcnJvck1lc3NhZ2UiOiAi5L2Z6aKd5pSv5LuY6YeR6aKd44CQMjAwMDAuMDDjgJHlpKfkuo7lvZPliY3liankvZnkvZnpop3jgJAxMDEyMC42MuOAkSJ9XX19fQ=="
+      },
+      "id": "tokenhub.order.create",
+      "api_id": "22070",
+      "title": "创建订单",
+      "description": {
+        "en-GB": "Create model service orders",
+        "en-US": "Create model service orders",
+        "zh-CN": "创建订单"
+      },
+      "category": "order",
+      "command_path": [
+        "order",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/maas/modelService/billing/createOrder",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=22070&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "modelId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模型id",
+          "descriptions": {
+            "en-GB": "Model ID",
+            "en-US": "Model ID",
+            "zh-CN": "模型id"
+          },
+          "help_descriptions": {
+            "en-GB": "Model ID",
+            "en-US": "Model ID",
+            "zh-CN": "模型id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "model_id",
+          "cli_flag": "model-id",
+          "table_target": "",
+          "example": "43ac83747cb34730a00b7cfe590c89ac"
+        },
+        {
+          "name": "tokenByUse",
+          "location": "body",
+          "required": true,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "按量下单参数",
+          "descriptions": {
+            "en-GB": "Token By Use as a JSON object",
+            "en-US": "Token By Use as a JSON object",
+            "zh-CN": "按量下单参数"
+          },
+          "help_descriptions": {
+            "en-GB": "Token By Use as a JSON object",
+            "en-US": "Token By Use as a JSON object",
+            "zh-CN": "按量下单参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "token_by_use",
+          "cli_flag": "token-by-use",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "tokenQuantities",
+          "location": "body",
+          "required": true,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "量包下单参数",
+          "descriptions": {
+            "en-GB": "Token Quantities as a JSON object",
+            "en-US": "Token Quantities as a JSON object",
+            "zh-CN": "量包下单参数"
+          },
+          "help_descriptions": {
+            "en-GB": "Token Quantities as a JSON object",
+            "en-US": "Token Quantities as a JSON object",
+            "zh-CN": "量包下单参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "token_quantities",
+          "cli_flag": "token-quantities",
+          "table_target": ""
+        },
+        {
+          "name": "tpm",
+          "location": "body",
+          "required": true,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "tpm下单参数",
+          "descriptions": {
+            "en-GB": "Tpm as a JSON object",
+            "en-US": "Tpm as a JSON object",
+            "zh-CN": "tpm下单参数"
+          },
+          "help_descriptions": {
+            "en-GB": "Tpm as a JSON object",
+            "en-US": "Tpm as a JSON object",
+            "zh-CN": "tpm下单参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "tpm",
+          "cli_flag": "tpm",
+          "table_target": ""
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "token_by_use",
+          "token_quantities",
+          "tpm"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "token_by_use",
+            "path": "tokenByUse",
+            "label_en": "Usage Based Orders",
+            "label_zh": "按量订单",
+            "description": "按量使用订单下单结果"
+          },
+          {
+            "key": "token_quantities",
+            "path": "tokenQuantities",
+            "label_en": "Token Packages",
+            "label_zh": "词元量包",
+            "description": "包量订单下单结果"
+          },
+          {
+            "key": "tpm",
+            "path": "tpm",
+            "label_en": "Tokens Per Minute Packages",
+            "label_zh": "每分钟词元量包",
+            "description": "tpm包订单下单结果"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "modelId": "db1c153b047a4663a54345274071e539",
+        "tokenQuantities": {
+          "productName": "tokens_dsr1_1kw",
+          "quantity": 1
+        },
+        "tpm": {
+          "quantity": 1,
+          "month": 1,
+          "productName": "tokens_dsr1_tpm"
+        }
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMjAwLCAiZXJyb3IiOiAiQUlQXzQwMDAwMDAwIiwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXR1cm5PYmoiOiBbeyJtb2RlbElkIjogIjQzYWM4Mzc0N2NiMzQ3MzBhMDBiN2NmZTU5MGM4OWFjIiwgIm1vZGVsTmFtZSI6ICJEZWVwU2Vlay1WMyIsICJ0eXBlTGFiZWxOYW1lIjogIuaWh+acrOeUn+aIkCIsICJzZXJpZXNMYWJlbE5hbWUiOiAi6Zi/6YeMIn0sIHsibW9kZWxJZCI6ICI1NmRmMTIzNGVmYWI1Njc4YjExYzJkM2U0ZjVhNmI3YzgiLCAibW9kZWxOYW1lIjogIkdlbWluaS1Qcm8iLCAidHlwZUxhYmVsTmFtZSI6ICLlpJrmqKHmgIEiLCAic2VyaWVzTGFiZWxOYW1lIjogIuiwt+atjCJ9XX0="
+      },
+      "id": "tokenhub.model.preset.list",
+      "api_id": "22069",
+      "title": "计费查询预置模型",
+      "description": {
+        "en-GB": "List preset models for billing",
+        "en-US": "List preset models for billing",
+        "zh-CN": "计费查询预置模型"
+      },
+      "category": "model",
+      "command_path": [
+        "model",
+        "preset",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/maas/modelService/billing/presetModelList",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=22069&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "productType",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "枚举值：TOKENS_BY_USE（支持按量）;TOKENS_QUANTITY（支持token量包）,TPM（支持tpm包）；不传则展示所有预置模型",
+          "descriptions": {
+            "en-GB": "Product Type",
+            "en-US": "Product Type",
+            "zh-CN": "枚举值：TOKENS_BY_USE（支持按量）;TOKENS_QUANTITY（支持token量包）,TPM（支持tpm包）；不传则展示所有预置模型"
+          },
+          "help_descriptions": {
+            "en-GB": "Product Type",
+            "en-US": "Product Type",
+            "zh-CN": "枚举值：TOKENS_BY_USE（支持按量）;TOKENS_QUANTITY（支持token量包）,TPM（支持tpm包）；不传则展示所有预置模型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "product_type",
+          "cli_flag": "product-type",
+          "table_target": "",
+          "example": "TOKENS_BY_USE"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "model_id",
+          "model_name",
+          "type_label_name",
+          "series_label_name"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "model_id",
+            "path": "modelId",
+            "label_en": "Model ID",
+            "label_zh": "模型 ID"
+          },
+          {
+            "key": "model_name",
+            "path": "modelName",
+            "label_en": "Model Name",
+            "label_zh": "模型名称"
+          },
+          {
+            "key": "type_label_name",
+            "path": "typeLabelName",
+            "label_en": "Type Label",
+            "label_zh": "类型标签"
+          },
+          {
+            "key": "series_label_name",
+            "path": "seriesLabelName",
+            "label_en": "Series Label",
+            "label_zh": "系列标签"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMjAwLCAiZXJyb3IiOiAiQUlQXzQwMDAwMDAwIiwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXR1cm5PYmoiOiB0cnVlfQ=="
+      },
+      "id": "tokenhub.order.unsubscribe",
+      "api_id": "22119",
+      "title": "订单退订（单个）",
+      "description": {
+        "en-GB": "Unsubscribe from an order",
+        "en-US": "Unsubscribe from an order",
+        "zh-CN": "订单退订（单个）"
+      },
+      "category": "order",
+      "command_path": [
+        "order",
+        "unsubscribe"
+      ],
+      "method": "POST",
+      "path": "/maas/modelService/billing/unsubscribe",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=22119&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "resourceId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源Id",
+          "descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源Id"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源Id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_id",
+          "cli_flag": "resource-id",
+          "table_target": "",
+          "example": "96750bf488a54c0db21ad29d8d5299c4"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "error",
+          "message",
+          "return_obj"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "请求响应状态码"
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误",
+            "description": "错误码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "API调用结果"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果",
+            "description": "退订情况"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "resourceId": "96750bf488a54c0db21ad29d8d5299c4"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMjAwLCAiZXJyb3IiOiAiQUlQXzQwMDAwMDAwIiwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXR1cm5PYmoiOiB7Im1vZGVsSWQiOiAiZGIxYzE1M2IwNDdhNDY2M2E1NDM0NTI3NDA3MWU1MzkiLCAidGl0bGUiOiAidG9rZW5z5oyJ6YeP44CB6YeP5YyF44CBVFBN5YyFIiwgInRva2VuQnlVc2UiOiB7Iml0VHlwZSI6ICJ0b2tlbl9nbG1fMiIsICJoYXNCdXkiOiBmYWxzZSwgImlucHV0UHJpY2UiOiA0LjAsICJvdXRwdXRQcmljZSI6IDE4LjAsICJvZmZQZWFrSW5wdXRQcmljZSI6IDIuMCwgIm9mZlBlYWtPdXRwdXRQcmljZSI6IDkuMCwgImNhY2hlSW5mZXJQcmljZSI6IG51bGwsICJvcmlnaW5JbnB1dFByaWNlIjogNC4wLCAib3JpZ2luT3V0cHV0UHJpY2UiOiAxOC4wLCAib2ZmUGVha09yaWdpbklucHV0UHJpY2UiOiAyLjAsICJvZmZQZWFrT3JpZ2luT3V0cHV0UHJpY2UiOiA5LjAsICJjYWNoZUluZmVyT3JpZ2luUHJpY2UiOiBudWxsLCAiZGVzY3JpcHRpb25zIjogIlRva2Vuc+aMiemHj+WwhuagueaNruaCqOeahOWunumZheS9v+eUqOaDheWGteS7jui0puaIt+S9memineS4reaJo+mZpOi0ueeUqOOAglRva2Vuc+iuoei0ueWNleS9jTrlhYMv55m+5LiHVG9rZW5zIiwgInN1cHBvcnRTdGVwQ2hhcmdlIjogdHJ1ZSwgInN0ZXBQcmljZVNjb3BlIjogeyJpbnB1dFByaWNlIjogeyJtaW4iOiA0LjAsICJtYXgiOiA2LjB9LCAib3V0cHV0UHJpY2UiOiB7Im1pbiI6IDE4LjAsICJtYXgiOiAyMi4wfSwgIm9mZlBlYWtJbnB1dFByaWNlIjogeyJtaW4iOiAyLjAsICJtYXgiOiAzLjB9LCAib2ZmUGVha091dHB1dFByaWNlIjogeyJtaW4iOiA5LjAsICJtYXgiOiAxMS4wfSwgImNhY2hlSW5mZXJQcmljZSI6IG51bGwsICJvcmlnaW5JbnB1dFByaWNlIjogeyJtaW4iOiA0LjAsICJtYXgiOiA2LjB9LCAib3JpZ2luT3V0cHV0UHJpY2UiOiB7Im1pbiI6IDE4LjAsICJtYXgiOiAyMi4wfSwgIm9yaWdpbk9mZlBlYWtJbnB1dFByaWNlIjogeyJtaW4iOiAyLjAsICJtYXgiOiAzLjB9LCAib3JpZ2luT2ZmUGVha091dHB1dFByaWNlIjogeyJtaW4iOiA5LjAsICJtYXgiOiAxMS4wfSwgIm9yaWdpbkNhY2hlSW5mZXJQcmljZSI6IG51bGx9LCAic3RlcFByaWNlIjogW3siaW5wdXRQcmljZSI6IDQuMCwgIm91dHB1dFByaWNlIjogMTguMCwgIm9mZlBlYWtJbnB1dFByaWNlIjogMi4wLCAib2ZmUGVha091dHB1dFByaWNlIjogOS4wLCAiY2FjaGVJbmZlclByaWNlIjogbnVsbCwgIm9yaWdpbklucHV0UHJpY2UiOiA0LjAsICJvcmlnaW5PdXRwdXRQcmljZSI6IDE4LjAsICJvcmlnaW5PZmZQZWFrSW5wdXRQcmljZSI6IDIuMCwgIm9yaWdpbk9mZlBlYWtPdXRwdXRQcmljZSI6IDkuMCwgIm9yaWdpbkNhY2hlSW5mZXJQcmljZSI6IG51bGwsICJzdGFydCI6IDAsICJlbmQiOiAzMjAwMH0sIHsiaW5wdXRQcmljZSI6IDYuMCwgIm91dHB1dFByaWNlIjogMjIuMCwgIm9mZlBlYWtJbnB1dFByaWNlIjogMy4wLCAib2ZmUGVha091dHB1dFByaWNlIjogMTEuMCwgImNhY2hlSW5mZXJQcmljZSI6IG51bGwsICJvcmlnaW5JbnB1dFByaWNlIjogNi4wLCAib3JpZ2luT3V0cHV0UHJpY2UiOiAyMi4wLCAib3JpZ2luT2ZmUGVha0lucHV0UHJpY2UiOiAzLjAsICJvcmlnaW5PZmZQZWFrT3V0cHV0UHJpY2UiOiAxMS4wLCAib3JpZ2luQ2FjaGVJbmZlclByaWNlIjogbnVsbCwgInN0YXJ0IjogMzIwMDAsICJlbmQiOiAyMDAwMDB9XX0sICJ0b2tlblF1YW50aXRpZXMiOiBbeyJpdFR5cGUiOiAidG9rZW5zX2RzcjFfMWt3IiwgImV4cGlyZU1vbnRoIjogMSwgInF1YW50aXR5IjogMTAwMCwgInByaWNlIjogNzB9LCB7Iml0VHlwZSI6ICJ0b2tlbnNfZHNyMV81a3ciLCAiZXhwaXJlTW9udGgiOiAzLCAicXVhbnRpdHkiOiA1MDAwLCAicHJpY2UiOiAzNTB9LCB7Iml0VHlwZSI6ICJ0b2tlbnNfZHNyMV8xZSIsICJleHBpcmVNb250aCI6IDYsICJxdWFudGl0eSI6IDEwMDAwLCAicHJpY2UiOiA3MDB9XSwgInRwbSI6IHsiaXRUeXBlIjogInRva2Vuc19kc3IxX3RwbSIsICJ0cG1RdWFudGl0eSI6IDAsICJleHBpcmVNb250aCI6IDEsICJ0cG0iOiAxMDAwMCwgImlwbSI6IDAsICJycG0iOiA2MDAsICJjb25jdXJyZW5jeSI6IDgsICJwcmljZSI6IDIwMDAwfX19"
+      },
+      "id": "tokenhub.model.product.show",
+      "api_id": "22120",
+      "title": "获取指定模型的售卖销售品信息",
+      "description": {
+        "en-GB": "Show a model sales product",
+        "en-US": "Show a model sales product",
+        "zh-CN": "获取指定模型的售卖销售品信息"
+      },
+      "category": "model",
+      "command_path": [
+        "model",
+        "product",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/maas/modelService/billing/productDetails",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=22120&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "modelId",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模型Id",
+          "descriptions": {
+            "en-GB": "Model ID",
+            "en-US": "Model ID",
+            "zh-CN": "模型Id"
+          },
+          "help_descriptions": {
+            "en-GB": "Model ID",
+            "en-US": "Model ID",
+            "zh-CN": "模型Id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "model_id",
+          "cli_flag": "model-id",
+          "table_target": "",
+          "example": "e377ccdc8cd54fd3937b107aea320471"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "model_id",
+          "title",
+          "token_by_use",
+          "token_quantities",
+          "tpm"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "model_id",
+            "path": "modelId",
+            "label_en": "Model ID",
+            "label_zh": "模型 ID"
+          },
+          {
+            "key": "title",
+            "path": "title",
+            "label_en": "Title",
+            "label_zh": "标题"
+          },
+          {
+            "key": "token_by_use",
+            "path": "tokenByUse",
+            "label_en": "Usage Based Orders",
+            "label_zh": "按量订单"
+          },
+          {
+            "key": "token_quantities",
+            "path": "tokenQuantities",
+            "label_en": "Token Packages",
+            "label_zh": "词元量包"
+          },
+          {
+            "key": "tpm",
+            "path": "tpm",
+            "label_en": "Tokens Per Minute Packages",
+            "label_zh": "每分钟词元量包"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "fixture_unavailable": "No parseable successful JSON response example is published; no success fixture is fabricated.",
+      "id": "tokenhub.order.list",
+      "api_id": "22121",
+      "title": "分页查询订单",
+      "description": {
+        "en-GB": "List orders",
+        "en-US": "List orders",
+        "zh-CN": "分页查询订单"
+      },
+      "category": "order",
+      "command_path": [
+        "order",
+        "list"
+      ],
+      "method": "POST",
+      "path": "/maas/modelService/billing/userOrders",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=22121&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "modelId",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模型ID",
+          "descriptions": {
+            "en-GB": "Model ID",
+            "en-US": "Model ID",
+            "zh-CN": "模型ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Model ID",
+            "en-US": "Model ID",
+            "zh-CN": "模型ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "model_id",
+          "cli_flag": "model-id",
+          "table_target": "",
+          "example": "e377ccdc8cd54fd3937b107aea320471"
+        },
+        {
+          "name": "orderId",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "订单ID",
+          "descriptions": {
+            "en-GB": "Order ID",
+            "en-US": "Order ID",
+            "zh-CN": "订单ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Order ID",
+            "en-US": "Order ID",
+            "zh-CN": "订单ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "order_id",
+          "cli_flag": "order-id",
+          "table_target": "",
+          "example": "a9b7d0b5dd78486d8c16ffa4d4bfbfa2"
+        },
+        {
+          "name": "pageNum",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "页码，默认第1页",
+          "descriptions": {
+            "en-GB": "Page Number",
+            "en-US": "Page Number",
+            "zh-CN": "页码，默认第1页"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Number",
+            "en-US": "Page Number",
+            "zh-CN": "页码，默认第1页"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_num",
+          "cli_flag": "page-num",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "每页大小,最大支持10条，默认10条",
+          "descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "每页大小,最大支持10条，默认10条"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "每页大小,最大支持10条，默认10条"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj.list",
+        "row_path": "returnObj.list",
+        "default_columns": [
+          "order_id",
+          "resource_id",
+          "title",
+          "it_type",
+          "status",
+          "type"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "order_id",
+            "path": "orderId",
+            "label_en": "Order ID",
+            "label_zh": "订单 ID",
+            "description": "订单id"
+          },
+          {
+            "key": "resource_id",
+            "path": "resourceId",
+            "label_en": "Resource ID",
+            "label_zh": "资源 ID",
+            "description": "资源id"
+          },
+          {
+            "key": "title",
+            "path": "title",
+            "label_en": "Title",
+            "label_zh": "标题",
+            "description": "模型名称"
+          },
+          {
+            "key": "it_type",
+            "path": "itType",
+            "label_en": "Sales Product Type",
+            "label_zh": "销售品类型",
+            "description": "销售品类型"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态",
+            "description": "订单状态"
+          },
+          {
+            "key": "type",
+            "path": "type",
+            "label_en": "Type",
+            "label_zh": "类型",
+            "description": "订单类型"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Create Time",
+            "label_zh": "创建时间",
+            "description": "创建时间"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "modelId": "e377ccdc8cd54fd3937b107aea320471",
+        "orderId": "a9b7d0b5dd78486d8c16ffa4d4bfbfa2",
+        "pageNum": 1,
+        "pageSize": 10
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJtZXNzYWdlIjogInN1Y2Nlc3MiLCAic3RhdHVzQ29kZSI6IDIwMCwgImVycm9yIjogIkFJUF80MDAwMDAwMCIsICJyZXR1cm5PYmoiOiB7ImF2Z1Blck91dHB1dFRva2VuVGltZSI6IHsieCI6IFsiMjAyNS0wOC0yNiAwMDowMDowMCIsICIyMDI1LTA4LTI3IDAwOjAwOjAwIl0sICJ5IjogWzAsIDBdfSwgIm1heFBlck91dHB1dFRva2VuVGltZSI6IHsieCI6IFsiMjAyNS0wOC0yNiAwMDowMDowMCIsICIyMDI1LTA4LTI3IDAwOjAwOjAwIl0sICJ5IjogWzAsIDBdfSwgInA5OVBlck91dHB1dFRva2VuVGltZSI6IHsieCI6IFsiMjAyNS0wOC0yNiAwMDowMDowMCIsICIyMDI1LTA4LTI3IDAwOjAwOjAwIl0sICJ5IjogWzAsIDBdfSwgInA5MFBlck91dHB1dFRva2VuVGltZSI6IHsieCI6IFsiMjAyNS0wOC0yNiAwMDowMDowMCIsICIyMDI1LTA4LTI3IDAwOjAwOjAwIl0sICJ5IjogWzAsIDBdfSwgInA4MFBlck91dHB1dFRva2VuVGltZSI6IHsieCI6IFsiMjAyNS0wOC0yNiAwMDowMDowMCIsICIyMDI1LTA4LTI3IDAwOjAwOjAwIl0sICJ5IjogWzAsIDBdfSwgInA1MFBlck91dHB1dFRva2VuVGltZSI6IHsieCI6IFsiMjAyNS0wOC0yNiAwMDowMDowMCIsICIyMDI1LTA4LTI3IDAwOjAwOjAwIl0sICJ5IjogWzAsIDBdfX0sICJyZXF1ZXN0SWQiOiAiOTNiZDhmZGMxNGRjOWZhMWIyZjY4YTQ1M2M3NDRlZDQifQ=="
+      },
+      "id": "tokenhub.monitor.token-latency.non-first.show",
+      "api_id": "21060",
+      "title": "模型调用非首token时延",
+      "description": {
+        "en-GB": "Show latency after the first token",
+        "en-US": "Show latency after the first token",
+        "zh-CN": "模型调用非首token时延"
+      },
+      "category": "monitor",
+      "command_path": [
+        "monitor",
+        "token-latency",
+        "non-first",
+        "show"
+      ],
+      "method": "POST",
+      "path": "/maas/modelService/monitor/report/nonFirstTokenLatency",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21060&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "userIds",
+          "location": "body",
+          "required": true,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "子账户userId列表",
+          "descriptions": {
+            "en-GB": "User IDs as a JSON array",
+            "en-US": "User IDs as a JSON array",
+            "zh-CN": "子账户userId列表"
+          },
+          "help_descriptions": {
+            "en-GB": "User IDs as a JSON array",
+            "en-US": "User IDs as a JSON array",
+            "zh-CN": "子账户userId列表"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "user_ids",
+          "cli_flag": "user-ids",
+          "table_target": ""
+        },
+        {
+          "name": "modelId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模型 id",
+          "descriptions": {
+            "en-GB": "Model ID",
+            "en-US": "Model ID",
+            "zh-CN": "模型 id"
+          },
+          "help_descriptions": {
+            "en-GB": "Model ID",
+            "en-US": "Model ID",
+            "zh-CN": "模型 id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "model_id",
+          "cli_flag": "model-id",
+          "table_target": "",
+          "example": "72aa0079b67e4939870b4dbbeb33109b"
+        },
+        {
+          "name": "applicationId",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "应用分组 id",
+          "descriptions": {
+            "en-GB": "Application ID",
+            "en-US": "Application ID",
+            "zh-CN": "应用分组 id"
+          },
+          "help_descriptions": {
+            "en-GB": "Application ID",
+            "en-US": "Application ID",
+            "zh-CN": "应用分组 id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "application_id",
+          "cli_flag": "application-id",
+          "table_target": "",
+          "example": "1342050328713687654"
+        },
+        {
+          "name": "startTime",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "格式必须满足 yyyy-MM-dd hh:mm:ss",
+          "descriptions": {
+            "en-GB": "Start Time",
+            "en-US": "Start Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "help_descriptions": {
+            "en-GB": "Start Time",
+            "en-US": "Start Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "start_time",
+          "cli_flag": "start-time",
+          "table_target": "",
+          "example": "2025-08-01 12:00:00"
+        },
+        {
+          "name": "endTime",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "格式必须满足 yyyy-MM-dd hh:mm:ss",
+          "descriptions": {
+            "en-GB": "End Time",
+            "en-US": "End Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "help_descriptions": {
+            "en-GB": "End Time",
+            "en-US": "End Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "end_time",
+          "cli_flag": "end-time",
+          "table_target": "",
+          "example": "2025-08-02 12:00:00"
+        },
+        {
+          "name": "type",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "时间精度：hour day minute 精度为 hour 时支持跨度为 7天，精度为day支持跨度 31天，精度为 minute支持跨度为 1天",
+          "descriptions": {
+            "en-GB": "Type",
+            "en-US": "Type",
+            "zh-CN": "时间精度：hour day minute 精度为 hour 时支持跨度为 7天，精度为day支持跨度 31天，精度为 minute支持跨度为 1天"
+          },
+          "help_descriptions": {
+            "en-GB": "Type",
+            "en-US": "Type",
+            "zh-CN": "时间精度：hour day minute 精度为 hour 时支持跨度为 7天，精度为day支持跨度 31天，精度为 minute支持跨度为 1天"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "type",
+          "cli_flag": "type",
+          "table_target": "",
+          "example": "day"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "avg_per_output_token_time",
+          "max_per_output_token_time",
+          "p99_per_output_token_time",
+          "p90_per_output_token_time",
+          "p80_per_output_token_time",
+          "p50_per_output_token_time"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "avg_per_output_token_time",
+            "path": "avgPerOutputTokenTime",
+            "label_en": "Average Output Token Latency",
+            "label_zh": "平均非首词元时延",
+            "description": "非首 Token 时延（该对话请求榆出后续所有token的平均值）的平均值(基于时间周期统计)"
+          },
+          {
+            "key": "max_per_output_token_time",
+            "path": "maxPerOutputTokenTime",
+            "label_en": "Maximum Output Token Latency",
+            "label_zh": "最大非首词元时延",
+            "description": "非首 Token 时延的最大值(基于时间周期统计)"
+          },
+          {
+            "key": "p99_per_output_token_time",
+            "path": "p99PerOutputTokenTime",
+            "label_en": "99th Percentile Output Token Latency",
+            "label_zh": "第 99 百分位非首词元时延",
+            "description": "99%的非首 Token 时延低于该值(基于时间周期统计)"
+          },
+          {
+            "key": "p90_per_output_token_time",
+            "path": "p90PerOutputTokenTime",
+            "label_en": "90th Percentile Output Token Latency",
+            "label_zh": "第 90 百分位非首词元时延",
+            "description": "90%的非首Token 时延低于该值(基于时间周期统计)"
+          },
+          {
+            "key": "p80_per_output_token_time",
+            "path": "p80PerOutputTokenTime",
+            "label_en": "80th Percentile Output Token Latency",
+            "label_zh": "第 80 百分位非首词元时延",
+            "description": "80%的非首 Token 时延低于该值(基于时间周期统计)"
+          },
+          {
+            "key": "p50_per_output_token_time",
+            "path": "p50PerOutputTokenTime",
+            "label_en": "Median Output Token Latency",
+            "label_zh": "中位非首词元时延",
+            "description": "50%的非首 Token 时延低于该值(基于时间周期统计)"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "applicationId": "1223344",
+        "endTime": "2025-08-27 23:59:00",
+        "model": [
+          "preset",
+          "59d27de81a21482c8d3f36089342bbf4"
+        ],
+        "modelId": "59d27de81a21482c8d3f36089342bbf4",
+        "startTime": "2025-08-26 00:00:00",
+        "type": "day",
+        "userIds": [
+          "09e05c968e124475853a157612c17761"
+        ]
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJtZXNzYWdlIjogInN1Y2Nlc3MiLCAic3RhdHVzQ29kZSI6IDIwMCwgImVycm9yIjogIkFJUF80MDAwMDAwMCIsICJyZXR1cm5PYmoiOiBbeyJtb2RlbElkIjogIjFkZTg0MjVmMzI5YTRhZGRhZDQ2MWQ5NGE2Yzk1NTAwIiwgIm5hbWUiOiAi56eB5pyJ5qih5Z6LMDEiLCAibW9kZWxUeXBlIjogIlBVQkxJQ1NWQyJ9LCB7Im1vZGVsSWQiOiAiNDY2NzM4ZTJjMjhmNDUyOGFmZGVlNzdjYjdkNzAyMzIiLCAibmFtZSI6ICJ0ZXN0MTEiLCAibW9kZWxUeXBlIjogIk1ZU1ZDIn0sIHsibW9kZWxJZCI6ICI3MWZmOGRkYmQ5YzU0MzZlYTczYTMyYzBkY2EzNzAwNiIsICJuYW1lIjogInRlc3QxIiwgIm1vZGVsVHlwZSI6ICJNWVNWQyJ9XSwgInJlcXVlc3RJZCI6ICI3YjZjMzQwOWU2YjA1MWVmZGE1N2NiMTQ5OWM0ODhmMyJ9"
+      },
+      "id": "tokenhub.model.list",
+      "api_id": "21029",
+      "title": "查询预置模型和我的模型",
+      "description": {
+        "en-GB": "List preset and owned models",
+        "en-US": "List preset and owned models",
+        "zh-CN": "查询预置模型和我的模型"
+      },
+      "category": "model",
+      "command_path": [
+        "model",
+        "list"
+      ],
+      "method": "POST",
+      "path": "/maas/modelService/monitor/publicAndMyModelList",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21029&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "userIds",
+          "location": "body",
+          "required": true,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "子账户userId列表",
+          "descriptions": {
+            "en-GB": "User IDs as a JSON array",
+            "en-US": "User IDs as a JSON array",
+            "zh-CN": "子账户userId列表"
+          },
+          "help_descriptions": {
+            "en-GB": "User IDs as a JSON array",
+            "en-US": "User IDs as a JSON array",
+            "zh-CN": "子账户userId列表"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "user_ids",
+          "cli_flag": "user-ids",
+          "table_target": "",
+          "example": [
+            "3449dfab35714ee48c0cdafcf6e739ab"
+          ]
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "model_id",
+          "name",
+          "model_type"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "model_id",
+            "path": "modelId",
+            "label_en": "Model ID",
+            "label_zh": "模型 ID",
+            "description": "模型ID"
+          },
+          {
+            "key": "name",
+            "path": "name",
+            "label_en": "Name",
+            "label_zh": "名称",
+            "description": "模型名称"
+          },
+          {
+            "key": "model_type",
+            "path": "modelType",
+            "label_en": "Model Type",
+            "label_zh": "模型类型",
+            "description": "模型类型 PUBLICSVC公共,MYSVC私有"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "userIds": [
+          "9a49dfab35714ee48c0cdafcf6e7307f"
+        ]
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJtZXNzYWdlIjogInN1Y2Nlc3MiLCAic3RhdHVzQ29kZSI6IDIwMCwgImVycm9yIjogIkFJUF80MDAwMDAwMCIsICJyZXR1cm5PYmoiOiB7InN1Y2Nlc3MiOiB7IngiOiBbIjIwMjUtMDktMTAgMDA6MDA6MDAiLCAiMjAyNS0wOS0xMSAwMDowMDowMCIsICIyMDI1LTA5LTEyIDAwOjAwOjAwIiwgIjIwMjUtMDktMTMgMDA6MDA6MDAiLCAiMjAyNS0wOS0xNCAwMDowMDowMCIsICIyMDI1LTA5LTE1IDAwOjAwOjAwIiwgIjIwMjUtMDktMTYgMDA6MDA6MDAiLCAiMjAyNS0wOS0xNyAwMDowMDowMCJdLCAieSI6IFs1LjAsIDQuMCwgMC4wLCAwLjAsIDAuMCwgMC4wLCAwLjAsIDAuMF19LCAiZmFpbCI6IHsieCI6IFsiMjAyNS0wOS0xMCAwMDowMDowMCIsICIyMDI1LTA5LTExIDAwOjAwOjAwIiwgIjIwMjUtMDktMTIgMDA6MDA6MDAiLCAiMjAyNS0wOS0xMyAwMDowMDowMCIsICIyMDI1LTA5LTE0IDAwOjAwOjAwIiwgIjIwMjUtMDktMTUgMDA6MDA6MDAiLCAiMjAyNS0wOS0xNiAwMDowMDowMCIsICIyMDI1LTA5LTE3IDAwOjAwOjAwIl0sICJ5IjogWzkuMCwgMi4wLCAwLjAsIDAuMCwgMC4wLCAwLjAsIDAuMCwgMC4wXX0sICJ0b3RhbCI6IHsieCI6IFsiMjAyNS0wOS0xMCAwMDowMDowMCIsICIyMDI1LTA5LTExIDAwOjAwOjAwIiwgIjIwMjUtMDktMTIgMDA6MDA6MDAiLCAiMjAyNS0wOS0xMyAwMDowMDowMCIsICIyMDI1LTA5LTE0IDAwOjAwOjAwIiwgIjIwMjUtMDktMTUgMDA6MDA6MDAiLCAiMjAyNS0wOS0xNiAwMDowMDowMCIsICIyMDI1LTA5LTE3IDAwOjAwOjAwIl0sICJ5IjogWzE0LjAsIDYuMCwgMC4wLCAwLjAsIDAuMCwgMC4wLCAwLjAsIDAuMF19fSwgInJlcXVlc3RJZCI6ICIzNmI4ZmNhNzIxNTc5NGU1ZTYzNThkNzY4MmFhMWRmNiJ9"
+      },
+      "id": "tokenhub.monitor.call-count.show",
+      "api_id": "21030",
+      "title": "模型调用次数",
+      "description": {
+        "en-GB": "Show model call counts",
+        "en-US": "Show model call counts",
+        "zh-CN": "模型调用次数"
+      },
+      "category": "monitor",
+      "command_path": [
+        "monitor",
+        "call-count",
+        "show"
+      ],
+      "method": "POST",
+      "path": "/maas/modelService/monitor/report/call",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21030&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "userIds",
+          "location": "body",
+          "required": true,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "子账户userId列表",
+          "descriptions": {
+            "en-GB": "User IDs as a JSON array",
+            "en-US": "User IDs as a JSON array",
+            "zh-CN": "子账户userId列表"
+          },
+          "help_descriptions": {
+            "en-GB": "User IDs as a JSON array",
+            "en-US": "User IDs as a JSON array",
+            "zh-CN": "子账户userId列表"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "user_ids",
+          "cli_flag": "user-ids",
+          "table_target": ""
+        },
+        {
+          "name": "modelId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模型 id",
+          "descriptions": {
+            "en-GB": "Model ID",
+            "en-US": "Model ID",
+            "zh-CN": "模型 id"
+          },
+          "help_descriptions": {
+            "en-GB": "Model ID",
+            "en-US": "Model ID",
+            "zh-CN": "模型 id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "model_id",
+          "cli_flag": "model-id",
+          "table_target": "",
+          "example": "72aa0079b67e4939870b4dbbeb33109b"
+        },
+        {
+          "name": "applicationId",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "应用分组 id",
+          "descriptions": {
+            "en-GB": "Application ID",
+            "en-US": "Application ID",
+            "zh-CN": "应用分组 id"
+          },
+          "help_descriptions": {
+            "en-GB": "Application ID",
+            "en-US": "Application ID",
+            "zh-CN": "应用分组 id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "application_id",
+          "cli_flag": "application-id",
+          "table_target": "",
+          "example": "1342050328713687654"
+        },
+        {
+          "name": "startTime",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "格式必须满足 yyyy-MM-dd hh:mm:ss",
+          "descriptions": {
+            "en-GB": "Start Time",
+            "en-US": "Start Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "help_descriptions": {
+            "en-GB": "Start Time",
+            "en-US": "Start Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "start_time",
+          "cli_flag": "start-time",
+          "table_target": "",
+          "example": "2025-08-01 12:00:00"
+        },
+        {
+          "name": "endTime",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "格式必须满足 yyyy-MM-dd hh:mm:ss",
+          "descriptions": {
+            "en-GB": "End Time",
+            "en-US": "End Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "help_descriptions": {
+            "en-GB": "End Time",
+            "en-US": "End Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "end_time",
+          "cli_flag": "end-time",
+          "table_target": "",
+          "example": "2025-08-02 12:00:00"
+        },
+        {
+          "name": "type",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "时间精度：hour day minute 精度为 hour 时支持跨度为 7天，精度为day支持跨度 31天，精度为 minute支持跨度为 1天",
+          "descriptions": {
+            "en-GB": "Type",
+            "en-US": "Type",
+            "zh-CN": "时间精度：hour day minute 精度为 hour 时支持跨度为 7天，精度为day支持跨度 31天，精度为 minute支持跨度为 1天"
+          },
+          "help_descriptions": {
+            "en-GB": "Type",
+            "en-US": "Type",
+            "zh-CN": "时间精度：hour day minute 精度为 hour 时支持跨度为 7天，精度为day支持跨度 31天，精度为 minute支持跨度为 1天"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "type",
+          "cli_flag": "type",
+          "table_target": "",
+          "example": "day"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "success",
+          "fail",
+          "total"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "success",
+            "path": "success",
+            "label_en": "Success",
+            "label_zh": "是否成功",
+            "description": "成功数据量随时间变化信息"
+          },
+          {
+            "key": "fail",
+            "path": "fail",
+            "label_en": "Fail",
+            "label_zh": "失败数据量随时间变化信息",
+            "description": "失败数据量随时间变化信息"
+          },
+          {
+            "key": "total",
+            "path": "total",
+            "label_en": "Total",
+            "label_zh": "总数",
+            "description": "总共数据量随时间变化信息"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "endTime": "2025-09-17 15:22:00",
+        "modelId": "1de8425f329a4addad461d94a6c95500",
+        "startTime": "2025-09-10 00:00:00",
+        "type": "day",
+        "userIds": [
+          "9a49dfab35714ee48c0cdafcf6e7307f"
+        ]
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJtZXNzYWdlIjogInN1Y2Nlc3MiLCAic3RhdHVzQ29kZSI6IDIwMCwgImVycm9yIjogIkFJUF80MDAwMDAwMCIsICJyZXR1cm5PYmoiOiB7ImZhaWxSYXRpbyI6IHsieCI6IFsiMjAyNS0wOS0xMCAwMDowMDowMCIsICIyMDI1LTA5LTExIDAwOjAwOjAwIiwgIjIwMjUtMDktMTIgMDA6MDA6MDAiLCAiMjAyNS0wOS0xMyAwMDowMDowMCIsICIyMDI1LTA5LTE0IDAwOjAwOjAwIiwgIjIwMjUtMDktMTUgMDA6MDA6MDAiLCAiMjAyNS0wOS0xNiAwMDowMDowMCIsICIyMDI1LTA5LTE3IDAwOjAwOjAwIl0sICJ5IjogWzY0LjI5LCAzMy4zMywgMC4wLCAwLjAsIDAuMCwgMC4wLCAwLjAsIDAuMF19fSwgInJlcXVlc3RJZCI6ICJkNzc1Yjk0YTA2ZTBjMWNmYzdjNmNkOTRiMzA0YTFkNSJ9"
+      },
+      "id": "tokenhub.monitor.failure-rate.show",
+      "api_id": "21031",
+      "title": "模型调用失败率",
+      "description": {
+        "en-GB": "Show model call failure rates",
+        "en-US": "Show model call failure rates",
+        "zh-CN": "模型调用失败率"
+      },
+      "category": "monitor",
+      "command_path": [
+        "monitor",
+        "failure-rate",
+        "show"
+      ],
+      "method": "POST",
+      "path": "/maas/modelService/monitor/report/fail",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21031&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "userIds",
+          "location": "body",
+          "required": true,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "子账户userId列表",
+          "descriptions": {
+            "en-GB": "User IDs as a JSON array",
+            "en-US": "User IDs as a JSON array",
+            "zh-CN": "子账户userId列表"
+          },
+          "help_descriptions": {
+            "en-GB": "User IDs as a JSON array",
+            "en-US": "User IDs as a JSON array",
+            "zh-CN": "子账户userId列表"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "user_ids",
+          "cli_flag": "user-ids",
+          "table_target": ""
+        },
+        {
+          "name": "modelId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模型 id",
+          "descriptions": {
+            "en-GB": "Model ID",
+            "en-US": "Model ID",
+            "zh-CN": "模型 id"
+          },
+          "help_descriptions": {
+            "en-GB": "Model ID",
+            "en-US": "Model ID",
+            "zh-CN": "模型 id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "model_id",
+          "cli_flag": "model-id",
+          "table_target": "",
+          "example": "72aa0079b67e4939870b4dbbeb33109b"
+        },
+        {
+          "name": "applicationId",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "应用分组 id",
+          "descriptions": {
+            "en-GB": "Application ID",
+            "en-US": "Application ID",
+            "zh-CN": "应用分组 id"
+          },
+          "help_descriptions": {
+            "en-GB": "Application ID",
+            "en-US": "Application ID",
+            "zh-CN": "应用分组 id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "application_id",
+          "cli_flag": "application-id",
+          "table_target": "",
+          "example": "1342050328713687654"
+        },
+        {
+          "name": "startTime",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "格式必须满足 yyyy-MM-dd hh:mm:ss",
+          "descriptions": {
+            "en-GB": "Start Time",
+            "en-US": "Start Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "help_descriptions": {
+            "en-GB": "Start Time",
+            "en-US": "Start Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "start_time",
+          "cli_flag": "start-time",
+          "table_target": "",
+          "example": "2025-08-01 12:00:00"
+        },
+        {
+          "name": "endTime",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "格式必须满足 yyyy-MM-dd hh:mm:ss",
+          "descriptions": {
+            "en-GB": "End Time",
+            "en-US": "End Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "help_descriptions": {
+            "en-GB": "End Time",
+            "en-US": "End Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "end_time",
+          "cli_flag": "end-time",
+          "table_target": "",
+          "example": "2025-08-02 12:00:00"
+        },
+        {
+          "name": "type",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "时间精度：hour day minute 精度为 hour 时支持跨度为 7天，精度为day支持跨度 31天，精度为 minute支持跨度为 1天",
+          "descriptions": {
+            "en-GB": "Type",
+            "en-US": "Type",
+            "zh-CN": "时间精度：hour day minute 精度为 hour 时支持跨度为 7天，精度为day支持跨度 31天，精度为 minute支持跨度为 1天"
+          },
+          "help_descriptions": {
+            "en-GB": "Type",
+            "en-US": "Type",
+            "zh-CN": "时间精度：hour day minute 精度为 hour 时支持跨度为 7天，精度为day支持跨度 31天，精度为 minute支持跨度为 1天"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "type",
+          "cli_flag": "type",
+          "table_target": "",
+          "example": "day"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "fail_ratio"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "fail_ratio",
+            "path": "failRatio",
+            "label_en": "Fail Ratio",
+            "label_zh": "失败率随时间变化信息",
+            "description": "失败率随时间变化信息"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "endTime": "2025-09-17 15:22:00",
+        "modelId": "1de8425f329a4addad461d94a6c95500",
+        "startTime": "2025-09-10 00:00:00",
+        "type": "day",
+        "userIds": [
+          "9a49dfab35714ee48c0cdafcf6e7307f"
+        ]
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMjAwLCAiZXJyb3IiOiAiQUlQXzQwMDAwMDAwIiwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXR1cm5PYmoiOiB0cnVlfQ=="
+      },
+      "id": "tokenhub.service-group.delete",
+      "api_id": "21066",
+      "title": "删除服务组",
+      "description": {
+        "en-GB": "Delete a service group",
+        "en-US": "Delete a service group",
+        "zh-CN": "删除服务组"
+      },
+      "category": "service-group",
+      "command_path": [
+        "service-group",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/maas/modelService/serviceGroup/deleteServiceGroup",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21066&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "appId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务组Id",
+          "descriptions": {
+            "en-GB": "App ID",
+            "en-US": "App ID",
+            "zh-CN": "服务组Id"
+          },
+          "help_descriptions": {
+            "en-GB": "App ID",
+            "en-US": "App ID",
+            "zh-CN": "服务组Id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "app_id",
+          "cli_flag": "app-id",
+          "table_target": "",
+          "example": "1942259836003368947"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "error",
+          "message",
+          "return_obj"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "请求响应状态码"
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误",
+            "description": "错误码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "API调用结果"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果",
+            "description": "true 则删除成功；false 删除失败"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "appId": 1942259836003368947
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJtZXNzYWdlIjogInN1Y2Nlc3MiLCAic3RhdHVzQ29kZSI6IDIwMCwgImVycm9yIjogIkFJUF80MDAwMDAwMCIsICJyZXR1cm5PYmoiOiBbeyJpZCI6ICIxOTY0OTYzNDkwMzMyMjAwNTciLCAidXNlcklkIjogIjlhNDlkZmFiMzU3MTRlZTQ4YzBjZGFmY2Y2ZTczMDdmIiwgIm5hbWUiOiAi55uR5o6n5oyJ6ZKu54K55Ye7In0sIHsiaWQiOiAiMTk2Mzg0OTI4MDM0MDYwNzA2IiwgInVzZXJJZCI6ICI5YTQ5ZGZhYjM1NzE0ZWU0OGMwY2RhZmNmNmU3MzA3ZiIsICJuYW1lIjogIuS4k+WxnuaooeWei+mZkOa1gSJ9XSwgInJlcXVlc3RJZCI6ICIwNWIwYzk2MDljZDgyYzA0OTgyYmJlYjRmNmVhZGZiMyJ9"
+      },
+      "id": "tokenhub.service-group.list",
+      "api_id": "21028",
+      "title": "查询服务组",
+      "description": {
+        "en-GB": "List service groups",
+        "en-US": "List service groups",
+        "zh-CN": "查询服务组"
+      },
+      "category": "service-group",
+      "command_path": [
+        "service-group",
+        "list"
+      ],
+      "method": "POST",
+      "path": "/maas/modelService/monitor/appGroup",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21028&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "userIds",
+          "location": "body",
+          "required": true,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "子账户userId列表",
+          "descriptions": {
+            "en-GB": "User IDs as a JSON array",
+            "en-US": "User IDs as a JSON array",
+            "zh-CN": "子账户userId列表"
+          },
+          "help_descriptions": {
+            "en-GB": "User IDs as a JSON array",
+            "en-US": "User IDs as a JSON array",
+            "zh-CN": "子账户userId列表"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "user_ids",
+          "cli_flag": "user-ids",
+          "table_target": "",
+          "example": [
+            "3449dfab35714ee48c0cdafcf6e739ab"
+          ]
+        },
+        {
+          "name": "modelId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模型 id",
+          "descriptions": {
+            "en-GB": "Model ID",
+            "en-US": "Model ID",
+            "zh-CN": "模型 id"
+          },
+          "help_descriptions": {
+            "en-GB": "Model ID",
+            "en-US": "Model ID",
+            "zh-CN": "模型 id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "model_id",
+          "cli_flag": "model-id",
+          "table_target": "",
+          "example": "72aa0079b67e4939870b4dbbeb33109b"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "id",
+          "user_id",
+          "name"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "id",
+            "path": "id",
+            "label_en": "ID",
+            "label_zh": "ID",
+            "description": "1323322332"
+          },
+          {
+            "key": "user_id",
+            "path": "userId",
+            "label_en": "User ID",
+            "label_zh": "用户 ID",
+            "description": "用户 id"
+          },
+          {
+            "key": "name",
+            "path": "name",
+            "label_en": "Name",
+            "label_zh": "名称",
+            "description": "服务组名称"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "modelId": "a9a0698b038d492d8844c28f41a14b1b",
+        "userIds": [
+          "9a49dfab35714ee48c0cdafcf6e7307f",
+          "9a49dfab35714ee48c0cdafcf6e73022"
+        ]
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJtZXNzYWdlIjogInN1Y2Nlc3MiLCAic3RhdHVzQ29kZSI6IDIwMCwgImVycm9yIjogIkFJUF80MDAwMDAwMCIsICJyZXR1cm5PYmoiOiB7InFwcyI6IHsieCI6IFsiMjAyNS0wOC0yNiAwMDowMDowMCIsICIyMDI1LTA4LTI3IDAwOjAwOjAwIl0sICJ5IjogWzIsIDFdfX0sICJyZXF1ZXN0SWQiOiAiNjQ3YzNiYjU2YTIwMzVmOGIwNTQyODUzNzY3YWNhNGMifQ=="
+      },
+      "id": "tokenhub.monitor.qps.show",
+      "api_id": "21057",
+      "title": "模型调用QPS",
+      "description": {
+        "en-GB": "Show model query rates",
+        "en-US": "Show model query rates",
+        "zh-CN": "模型调用QPS"
+      },
+      "category": "monitor",
+      "command_path": [
+        "monitor",
+        "qps",
+        "show"
+      ],
+      "method": "POST",
+      "path": "/maas/modelService/monitor/report/qps",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21057&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "userIds",
+          "location": "body",
+          "required": true,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "子账户userId列表",
+          "descriptions": {
+            "en-GB": "User IDs as a JSON array",
+            "en-US": "User IDs as a JSON array",
+            "zh-CN": "子账户userId列表"
+          },
+          "help_descriptions": {
+            "en-GB": "User IDs as a JSON array",
+            "en-US": "User IDs as a JSON array",
+            "zh-CN": "子账户userId列表"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "user_ids",
+          "cli_flag": "user-ids",
+          "table_target": ""
+        },
+        {
+          "name": "modelId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模型 id",
+          "descriptions": {
+            "en-GB": "Model ID",
+            "en-US": "Model ID",
+            "zh-CN": "模型 id"
+          },
+          "help_descriptions": {
+            "en-GB": "Model ID",
+            "en-US": "Model ID",
+            "zh-CN": "模型 id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "model_id",
+          "cli_flag": "model-id",
+          "table_target": "",
+          "example": "72aa0079b67e4939870b4dbbeb33109b"
+        },
+        {
+          "name": "applicationId",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "应用分组 id",
+          "descriptions": {
+            "en-GB": "Application ID",
+            "en-US": "Application ID",
+            "zh-CN": "应用分组 id"
+          },
+          "help_descriptions": {
+            "en-GB": "Application ID",
+            "en-US": "Application ID",
+            "zh-CN": "应用分组 id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "application_id",
+          "cli_flag": "application-id",
+          "table_target": "",
+          "example": "1342050328713687654"
+        },
+        {
+          "name": "startTime",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "格式必须满足 yyyy-MM-dd hh:mm:ss",
+          "descriptions": {
+            "en-GB": "Start Time",
+            "en-US": "Start Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "help_descriptions": {
+            "en-GB": "Start Time",
+            "en-US": "Start Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "start_time",
+          "cli_flag": "start-time",
+          "table_target": "",
+          "example": "2025-08-01 12:00:00"
+        },
+        {
+          "name": "endTime",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "格式必须满足 yyyy-MM-dd hh:mm:ss",
+          "descriptions": {
+            "en-GB": "End Time",
+            "en-US": "End Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "help_descriptions": {
+            "en-GB": "End Time",
+            "en-US": "End Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "end_time",
+          "cli_flag": "end-time",
+          "table_target": "",
+          "example": "2025-08-02 12:00:00"
+        },
+        {
+          "name": "type",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "时间精度：hour day minute 精度为 hour 时支持跨度为 7天，精度为day支持跨度 31天，精度为 minute支持跨度为 1天",
+          "descriptions": {
+            "en-GB": "Type",
+            "en-US": "Type",
+            "zh-CN": "时间精度：hour day minute 精度为 hour 时支持跨度为 7天，精度为day支持跨度 31天，精度为 minute支持跨度为 1天"
+          },
+          "help_descriptions": {
+            "en-GB": "Type",
+            "en-US": "Type",
+            "zh-CN": "时间精度：hour day minute 精度为 hour 时支持跨度为 7天，精度为day支持跨度 31天，精度为 minute支持跨度为 1天"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "type",
+          "cli_flag": "type",
+          "table_target": "",
+          "example": "day"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "qps"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "qps",
+            "path": "qps",
+            "label_en": "Queries Per Second",
+            "label_zh": "每秒请求数",
+            "description": "按照时间周期维度统计输出： 模型服务调用qps"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "applicationId": "1223344",
+        "endTime": "2025-08-27 23:59:00",
+        "model": [
+          "preset",
+          "59d27de81a21482c8d3f36089342bbf4"
+        ],
+        "modelId": "59d27de81a21482c8d3f36089342bbf4",
+        "startTime": "2025-08-26 00:00:00",
+        "type": "day",
+        "userIds": [
+          "09e05c968e124475853a157612c17761"
+        ]
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJtZXNzYWdlIjogInN1Y2Nlc3MiLCAic3RhdHVzQ29kZSI6IDIwMCwgImVycm9yIjogIkFJUF80MDAwMDAwMCIsICJyZXR1cm5PYmoiOiB7InJlc3BvbnNlVGltZSI6IHsieCI6IFsiMjAyNS0wOC0yNiAwMDowMDowMCIsICIyMDI1LTA4LTI3IDAwOjAwOjAwIl0sICJ5IjogWzIxMC41LCAzMTRdfX0sICJyZXF1ZXN0SWQiOiAiZGNkYzQ4ZjI1ZDVlNjQ4NDlhMGRmNTE0MTRhODdmMjYifQ=="
+      },
+      "id": "tokenhub.monitor.response-time.show",
+      "api_id": "21058",
+      "title": "模型调用平均响应时延",
+      "description": {
+        "en-GB": "Show average response latency",
+        "en-US": "Show average response latency",
+        "zh-CN": "模型调用平均响应时延"
+      },
+      "category": "monitor",
+      "command_path": [
+        "monitor",
+        "response-time",
+        "show"
+      ],
+      "method": "POST",
+      "path": "/maas/modelService/monitor/report/averageResponseTime",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21058&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "userIds",
+          "location": "body",
+          "required": true,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "子账户userId列表",
+          "descriptions": {
+            "en-GB": "User IDs as a JSON array",
+            "en-US": "User IDs as a JSON array",
+            "zh-CN": "子账户userId列表"
+          },
+          "help_descriptions": {
+            "en-GB": "User IDs as a JSON array",
+            "en-US": "User IDs as a JSON array",
+            "zh-CN": "子账户userId列表"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "user_ids",
+          "cli_flag": "user-ids",
+          "table_target": ""
+        },
+        {
+          "name": "modelId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模型 id",
+          "descriptions": {
+            "en-GB": "Model ID",
+            "en-US": "Model ID",
+            "zh-CN": "模型 id"
+          },
+          "help_descriptions": {
+            "en-GB": "Model ID",
+            "en-US": "Model ID",
+            "zh-CN": "模型 id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "model_id",
+          "cli_flag": "model-id",
+          "table_target": "",
+          "example": "72aa0079b67e4939870b4dbbeb33109b"
+        },
+        {
+          "name": "applicationId",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "应用分组 id",
+          "descriptions": {
+            "en-GB": "Application ID",
+            "en-US": "Application ID",
+            "zh-CN": "应用分组 id"
+          },
+          "help_descriptions": {
+            "en-GB": "Application ID",
+            "en-US": "Application ID",
+            "zh-CN": "应用分组 id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "application_id",
+          "cli_flag": "application-id",
+          "table_target": "",
+          "example": "1342050328713687654"
+        },
+        {
+          "name": "startTime",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "格式必须满足 yyyy-MM-dd hh:mm:ss",
+          "descriptions": {
+            "en-GB": "Start Time",
+            "en-US": "Start Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "help_descriptions": {
+            "en-GB": "Start Time",
+            "en-US": "Start Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "start_time",
+          "cli_flag": "start-time",
+          "table_target": "",
+          "example": "2025-08-01 12:00:00"
+        },
+        {
+          "name": "endTime",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "格式必须满足 yyyy-MM-dd hh:mm:ss",
+          "descriptions": {
+            "en-GB": "End Time",
+            "en-US": "End Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "help_descriptions": {
+            "en-GB": "End Time",
+            "en-US": "End Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "end_time",
+          "cli_flag": "end-time",
+          "table_target": "",
+          "example": "2025-08-02 12:00:00"
+        },
+        {
+          "name": "type",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "时间精度：hour day minute 精度为 hour 时支持跨度为 7天，精度为day支持跨度 31天，精度为 minute支持跨度为 1天",
+          "descriptions": {
+            "en-GB": "Type",
+            "en-US": "Type",
+            "zh-CN": "时间精度：hour day minute 精度为 hour 时支持跨度为 7天，精度为day支持跨度 31天，精度为 minute支持跨度为 1天"
+          },
+          "help_descriptions": {
+            "en-GB": "Type",
+            "en-US": "Type",
+            "zh-CN": "时间精度：hour day minute 精度为 hour 时支持跨度为 7天，精度为day支持跨度 31天，精度为 minute支持跨度为 1天"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "type",
+          "cli_flag": "type",
+          "table_target": "",
+          "example": "day"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "response_time"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "response_time",
+            "path": "responseTime",
+            "label_en": "Response Time",
+            "label_zh": "成功数据量随时间变化信息",
+            "description": "成功数据量随时间变化信息"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "applicationId": "1223344",
+        "endTime": "2025-08-27 23:59:00",
+        "model": [
+          "preset",
+          "59d27de81a21482c8d3f36089342bbf4"
+        ],
+        "modelId": "59d27de81a21482c8d3f36089342bbf4",
+        "startTime": "2025-08-26 00:00:00",
+        "type": "day",
+        "userIds": [
+          "09e05c968e124475853a157612c17761"
+        ]
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJtZXNzYWdlIjogInN1Y2Nlc3MiLCAic3RhdHVzQ29kZSI6IDIwMCwgImVycm9yIjogIkFJUF80MDAwMDAwMCIsICJyZXR1cm5PYmoiOiB7ImF2Z1RhbGtUb3RhbFRpbWUiOiB7IngiOiBbIjIwMjUtMDgtMjYgMDA6MDA6MDAiLCAiMjAyNS0wOC0yNyAwMDowMDowMCJdLCAieSI6IFsyMzQsIDQwOV19LCAibWF4VGFsa1RvdGFsVGltZSI6IHsieCI6IFsiMjAyNS0wOC0yNiAwMDowMDowMCIsICIyMDI1LTA4LTI3IDAwOjAwOjAwIl0sICJ5IjogWzMyOCwgNDA5XX0sICJwOTlUYWxrVG90YWxUaW1lIjogeyJ4IjogWyIyMDI1LTA4LTI2IDAwOjAwOjAwIiwgIjIwMjUtMDgtMjcgMDA6MDA6MDAiXSwgInkiOiBbMzI2LCA0MDldfSwgInA5MFRhbGtUb3RhbFRpbWUiOiB7IngiOiBbIjIwMjUtMDgtMjYgMDA6MDA6MDAiLCAiMjAyNS0wOC0yNyAwMDowMDowMCJdLCAieSI6IFszMDksIDQwOV19LCAicDgwVGFsa1RvdGFsVGltZSI6IHsieCI6IFsiMjAyNS0wOC0yNiAwMDowMDowMCIsICIyMDI1LTA4LTI3IDAwOjAwOjAwIl0sICJ5IjogWzI5MCwgNDA5XX0sICJwNTBUYWxrVG90YWxUaW1lIjogeyJ4IjogWyIyMDI1LTA4LTI2IDAwOjAwOjAwIiwgIjIwMjUtMDgtMjcgMDA6MDA6MDAiXSwgInkiOiBbMjM0LCA0MDldfX0sICJyZXF1ZXN0SWQiOiAiODQ1ZDUwYTEwOWM4Yzg1NTBlYTE0MjhjMGUyYjQ2OTkifQ=="
+      },
+      "id": "tokenhub.monitor.sentence-latency.show",
+      "api_id": "21059",
+      "title": "模型调用整句Token时延",
+      "description": {
+        "en-GB": "Show whole-sentence token latency",
+        "en-US": "Show whole-sentence token latency",
+        "zh-CN": "模型调用整句Token时延"
+      },
+      "category": "monitor",
+      "command_path": [
+        "monitor",
+        "sentence-latency",
+        "show"
+      ],
+      "method": "POST",
+      "path": "/maas/modelService/monitor/report/talkTime",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21059&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "userIds",
+          "location": "body",
+          "required": true,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "子账户userId列表",
+          "descriptions": {
+            "en-GB": "User IDs as a JSON array",
+            "en-US": "User IDs as a JSON array",
+            "zh-CN": "子账户userId列表"
+          },
+          "help_descriptions": {
+            "en-GB": "User IDs as a JSON array",
+            "en-US": "User IDs as a JSON array",
+            "zh-CN": "子账户userId列表"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "user_ids",
+          "cli_flag": "user-ids",
+          "table_target": ""
+        },
+        {
+          "name": "modelId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模型 id",
+          "descriptions": {
+            "en-GB": "Model ID",
+            "en-US": "Model ID",
+            "zh-CN": "模型 id"
+          },
+          "help_descriptions": {
+            "en-GB": "Model ID",
+            "en-US": "Model ID",
+            "zh-CN": "模型 id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "model_id",
+          "cli_flag": "model-id",
+          "table_target": "",
+          "example": "72aa0079b67e4939870b4dbbeb33109b"
+        },
+        {
+          "name": "applicationId",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "应用分组 id",
+          "descriptions": {
+            "en-GB": "Application ID",
+            "en-US": "Application ID",
+            "zh-CN": "应用分组 id"
+          },
+          "help_descriptions": {
+            "en-GB": "Application ID",
+            "en-US": "Application ID",
+            "zh-CN": "应用分组 id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "application_id",
+          "cli_flag": "application-id",
+          "table_target": "",
+          "example": "1342050328713687654"
+        },
+        {
+          "name": "startTime",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "格式必须满足 yyyy-MM-dd hh:mm:ss",
+          "descriptions": {
+            "en-GB": "Start Time",
+            "en-US": "Start Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "help_descriptions": {
+            "en-GB": "Start Time",
+            "en-US": "Start Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "start_time",
+          "cli_flag": "start-time",
+          "table_target": "",
+          "example": "2025-08-01 12:00:00"
+        },
+        {
+          "name": "endTime",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "格式必须满足 yyyy-MM-dd hh:mm:ss",
+          "descriptions": {
+            "en-GB": "End Time",
+            "en-US": "End Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "help_descriptions": {
+            "en-GB": "End Time",
+            "en-US": "End Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "end_time",
+          "cli_flag": "end-time",
+          "table_target": "",
+          "example": "2025-08-02 12:00:00"
+        },
+        {
+          "name": "type",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "时间精度：hour day minute 精度为 hour 时支持跨度为 7天，精度为day支持跨度 31天，精度为 minute支持跨度为 1天",
+          "descriptions": {
+            "en-GB": "Type",
+            "en-US": "Type",
+            "zh-CN": "时间精度：hour day minute 精度为 hour 时支持跨度为 7天，精度为day支持跨度 31天，精度为 minute支持跨度为 1天"
+          },
+          "help_descriptions": {
+            "en-GB": "Type",
+            "en-US": "Type",
+            "zh-CN": "时间精度：hour day minute 精度为 hour 时支持跨度为 7天，精度为day支持跨度 31天，精度为 minute支持跨度为 1天"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "type",
+          "cli_flag": "type",
+          "table_target": "",
+          "example": "day"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "avg_talk_total_time",
+          "max_talk_total_time",
+          "p99_talk_total_time",
+          "p90_talk_total_time",
+          "p80_talk_total_time",
+          "p50_talk_total_time"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "avg_talk_total_time",
+            "path": "avgTalkTotalTime",
+            "label_en": "Average Sentence Latency",
+            "label_zh": "平均整句时延",
+            "description": "整句Token 时延的平均值(基于时间周期统计)"
+          },
+          {
+            "key": "max_talk_total_time",
+            "path": "maxTalkTotalTime",
+            "label_en": "Maximum Sentence Latency",
+            "label_zh": "最大整句时延",
+            "description": "整句Token 时延的最大值(基于时间周期统计)"
+          },
+          {
+            "key": "p99_talk_total_time",
+            "path": "p99TalkTotalTime",
+            "label_en": "99th Percentile Sentence Latency",
+            "label_zh": "第 99 百分位整句时延",
+            "description": "99%的整句Token 时延低于该值(基于时间周期统计)"
+          },
+          {
+            "key": "p90_talk_total_time",
+            "path": "p90TalkTotalTime",
+            "label_en": "90th Percentile Sentence Latency",
+            "label_zh": "第 90 百分位整句时延",
+            "description": "90%的整句Token 时延低于该值(基于时间周期统计)"
+          },
+          {
+            "key": "p80_talk_total_time",
+            "path": "p80TalkTotalTime",
+            "label_en": "80th Percentile Sentence Latency",
+            "label_zh": "第 80 百分位整句时延",
+            "description": "80%的整句Token 时延低于该值(基于时间周期统计)"
+          },
+          {
+            "key": "p50_talk_total_time",
+            "path": "p50TalkTotalTime",
+            "label_en": "Median Sentence Latency",
+            "label_zh": "中位整句时延",
+            "description": "50%的整句Token 时延低于该值(基于时间周期统计)"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "applicationId": "1223344",
+        "endTime": "2025-08-27 23:59:00",
+        "model": [
+          "preset",
+          "59d27de81a21482c8d3f36089342bbf4"
+        ],
+        "modelId": "59d27de81a21482c8d3f36089342bbf4",
+        "startTime": "2025-08-26 00:00:00",
+        "type": "day",
+        "userIds": [
+          "09e05c968e124475853a157612c17761"
+        ]
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJtZXNzYWdlIjogInN1Y2Nlc3MiLCAic3RhdHVzQ29kZSI6IDIwMCwgImVycm9yIjogIkFJUF80MDAwMDAwMCIsICJyZXR1cm5PYmoiOiB7ImF2Z0ZpcnN0VG9rZW5UaW1lIjogeyJ4IjogWyIyMDI1LTA4LTI2IDAwOjAwOjAwIiwgIjIwMjUtMDgtMjcgMDA6MDA6MDAiXSwgInkiOiBbMCwgMF19LCAibWF4Rmlyc3RUb2tlblRpbWUiOiB7IngiOiBbIjIwMjUtMDgtMjYgMDA6MDA6MDAiLCAiMjAyNS0wOC0yNyAwMDowMDowMCJdLCAieSI6IFswLCAwXX0sICJwOTlGaXJzdFRva2VuVGltZSI6IHsieCI6IFsiMjAyNS0wOC0yNiAwMDowMDowMCIsICIyMDI1LTA4LTI3IDAwOjAwOjAwIl0sICJ5IjogWzAsIDBdfSwgInA5MEZpcnN0VG9rZW5UaW1lIjogeyJ4IjogWyIyMDI1LTA4LTI2IDAwOjAwOjAwIiwgIjIwMjUtMDgtMjcgMDA6MDA6MDAiXSwgInkiOiBbMCwgMF19LCAicDgwRmlyc3RUb2tlblRpbWUiOiB7IngiOiBbIjIwMjUtMDgtMjYgMDA6MDA6MDAiLCAiMjAyNS0wOC0yNyAwMDowMDowMCJdLCAieSI6IFswLCAwXX0sICJwNTBGaXJzdFRva2VuVGltZSI6IHsieCI6IFsiMjAyNS0wOC0yNiAwMDowMDowMCIsICIyMDI1LTA4LTI3IDAwOjAwOjAwIl0sICJ5IjogWzAsIDBdfX0sICJyZXF1ZXN0SWQiOiAiMWNlNTUzZDRiNjcxYjY1ZWU2MGQxY2RiYzUyYjIxZDIifQ=="
+      },
+      "id": "tokenhub.monitor.token-latency.first.show",
+      "api_id": "21061",
+      "title": "模型调用首token延迟",
+      "description": {
+        "en-GB": "Show first-token latency",
+        "en-US": "Show first-token latency",
+        "zh-CN": "模型调用首token延迟"
+      },
+      "category": "monitor",
+      "command_path": [
+        "monitor",
+        "token-latency",
+        "first",
+        "show"
+      ],
+      "method": "POST",
+      "path": "/maas/modelService/monitor/report/firstTokenLatency",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21061&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "userIds",
+          "location": "body",
+          "required": true,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "子账户userId列表",
+          "descriptions": {
+            "en-GB": "User IDs as a JSON array",
+            "en-US": "User IDs as a JSON array",
+            "zh-CN": "子账户userId列表"
+          },
+          "help_descriptions": {
+            "en-GB": "User IDs as a JSON array",
+            "en-US": "User IDs as a JSON array",
+            "zh-CN": "子账户userId列表"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "user_ids",
+          "cli_flag": "user-ids",
+          "table_target": ""
+        },
+        {
+          "name": "modelId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模型 id",
+          "descriptions": {
+            "en-GB": "Model ID",
+            "en-US": "Model ID",
+            "zh-CN": "模型 id"
+          },
+          "help_descriptions": {
+            "en-GB": "Model ID",
+            "en-US": "Model ID",
+            "zh-CN": "模型 id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "model_id",
+          "cli_flag": "model-id",
+          "table_target": "",
+          "example": "72aa0079b67e4939870b4dbbeb33109b"
+        },
+        {
+          "name": "applicationId",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "应用分组 id",
+          "descriptions": {
+            "en-GB": "Application ID",
+            "en-US": "Application ID",
+            "zh-CN": "应用分组 id"
+          },
+          "help_descriptions": {
+            "en-GB": "Application ID",
+            "en-US": "Application ID",
+            "zh-CN": "应用分组 id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "application_id",
+          "cli_flag": "application-id",
+          "table_target": "",
+          "example": "1342050328713687654"
+        },
+        {
+          "name": "startTime",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "格式必须满足 yyyy-MM-dd hh:mm:ss",
+          "descriptions": {
+            "en-GB": "Start Time",
+            "en-US": "Start Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "help_descriptions": {
+            "en-GB": "Start Time",
+            "en-US": "Start Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "start_time",
+          "cli_flag": "start-time",
+          "table_target": "",
+          "example": "2025-08-01 12:00:00"
+        },
+        {
+          "name": "endTime",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "格式必须满足 yyyy-MM-dd hh:mm:ss",
+          "descriptions": {
+            "en-GB": "End Time",
+            "en-US": "End Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "help_descriptions": {
+            "en-GB": "End Time",
+            "en-US": "End Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "end_time",
+          "cli_flag": "end-time",
+          "table_target": "",
+          "example": "2025-08-02 12:00:00"
+        },
+        {
+          "name": "type",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "时间精度：hour day minute 精度为 hour 时支持跨度为 7天，精度为day支持跨度 31天，精度为 minute支持跨度为 1天",
+          "descriptions": {
+            "en-GB": "Type",
+            "en-US": "Type",
+            "zh-CN": "时间精度：hour day minute 精度为 hour 时支持跨度为 7天，精度为day支持跨度 31天，精度为 minute支持跨度为 1天"
+          },
+          "help_descriptions": {
+            "en-GB": "Type",
+            "en-US": "Type",
+            "zh-CN": "时间精度：hour day minute 精度为 hour 时支持跨度为 7天，精度为day支持跨度 31天，精度为 minute支持跨度为 1天"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "type",
+          "cli_flag": "type",
+          "table_target": "",
+          "example": "day"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "avg_first_token_time",
+          "max_first_token_time",
+          "p99_first_token_time",
+          "p90_first_token_time",
+          "p80_first_token_time",
+          "p50_first_token_time"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "avg_first_token_time",
+            "path": "avgFirstTokenTime",
+            "label_en": "Average First Token Latency",
+            "label_zh": "平均首词元时延",
+            "description": "首Token 时延的平均值(基于时间周期统计)"
+          },
+          {
+            "key": "max_first_token_time",
+            "path": "maxFirstTokenTime",
+            "label_en": "Maximum First Token Latency",
+            "label_zh": "最大首词元时延",
+            "description": "首 Token 时延的最大值(基于时间周期统计)"
+          },
+          {
+            "key": "p99_first_token_time",
+            "path": "p99FirstTokenTime",
+            "label_en": "99th Percentile First Token Latency",
+            "label_zh": "第 99 百分位首词元时延",
+            "description": "99%的首 Token 时延低于该值(基于时间周期统计)"
+          },
+          {
+            "key": "p90_first_token_time",
+            "path": "p90FirstTokenTime",
+            "label_en": "90th Percentile First Token Latency",
+            "label_zh": "第 90 百分位首词元时延",
+            "description": "90%的首Token 时延低于该值(基于时间周期统计)"
+          },
+          {
+            "key": "p80_first_token_time",
+            "path": "p80FirstTokenTime",
+            "label_en": "80th Percentile First Token Latency",
+            "label_zh": "第 80 百分位首词元时延",
+            "description": "80%的首Token 时延低于该值(基于时间周期统计)"
+          },
+          {
+            "key": "p50_first_token_time",
+            "path": "p50FirstTokenTime",
+            "label_en": "Median First Token Latency",
+            "label_zh": "中位首词元时延",
+            "description": "50%的首Token 时延低于该值(基于时间周期统计)"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "applicationId": "1223344",
+        "endTime": "2025-08-27 23:59:00",
+        "model": [
+          "preset",
+          "59d27de81a21482c8d3f36089342bbf4"
+        ],
+        "modelId": "59d27de81a21482c8d3f36089342bbf4",
+        "startTime": "2025-08-26 00:00:00",
+        "type": "day",
+        "userIds": [
+          "09e05c968e124475853a157612c17761"
+        ]
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJtZXNzYWdlIjogInN1Y2Nlc3MiLCAic3RhdHVzQ29kZSI6IDIwMCwgImVycm9yIjogIkFJUF80MDAwMDAwMCIsICJyZXR1cm5PYmoiOiB7InFwcyI6IHsieCI6IFsiMjAyNS0wOC0yNiAwMDowMDowMCIsICIyMDI1LTA4LTI3IDAwOjAwOjAwIl0sICJ5IjogWzIsIDFdfX0sICJyZXF1ZXN0SWQiOiAiNjQ3YzNiYjU2YTIwMzVmOGIwNTQyODUzNzY3YWNhNGMifQ=="
+      },
+      "id": "tokenhub.monitor.token-usage.show",
+      "api_id": "21062",
+      "title": "查询模型服务Token调用量",
+      "description": {
+        "en-GB": "Show model token usage",
+        "en-US": "Show model token usage",
+        "zh-CN": "查询模型服务Token调用量"
+      },
+      "category": "monitor",
+      "command_path": [
+        "monitor",
+        "token-usage",
+        "show"
+      ],
+      "method": "POST",
+      "path": "/maas/modelService/monitor/report/tokensUsage",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21062&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "userIds",
+          "location": "body",
+          "required": true,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "子账户userId列表",
+          "descriptions": {
+            "en-GB": "User IDs as a JSON array",
+            "en-US": "User IDs as a JSON array",
+            "zh-CN": "子账户userId列表"
+          },
+          "help_descriptions": {
+            "en-GB": "User IDs as a JSON array",
+            "en-US": "User IDs as a JSON array",
+            "zh-CN": "子账户userId列表"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "user_ids",
+          "cli_flag": "user-ids",
+          "table_target": ""
+        },
+        {
+          "name": "modelId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模型 id",
+          "descriptions": {
+            "en-GB": "Model ID",
+            "en-US": "Model ID",
+            "zh-CN": "模型 id"
+          },
+          "help_descriptions": {
+            "en-GB": "Model ID",
+            "en-US": "Model ID",
+            "zh-CN": "模型 id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "model_id",
+          "cli_flag": "model-id",
+          "table_target": "",
+          "example": "72aa0079b67e4939870b4dbbeb33109b"
+        },
+        {
+          "name": "applicationId",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "应用分组 id",
+          "descriptions": {
+            "en-GB": "Application ID",
+            "en-US": "Application ID",
+            "zh-CN": "应用分组 id"
+          },
+          "help_descriptions": {
+            "en-GB": "Application ID",
+            "en-US": "Application ID",
+            "zh-CN": "应用分组 id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "application_id",
+          "cli_flag": "application-id",
+          "table_target": "",
+          "example": "1342050328713687654"
+        },
+        {
+          "name": "startTime",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "格式必须满足 yyyy-MM-dd hh:mm:ss",
+          "descriptions": {
+            "en-GB": "Start Time",
+            "en-US": "Start Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "help_descriptions": {
+            "en-GB": "Start Time",
+            "en-US": "Start Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "start_time",
+          "cli_flag": "start-time",
+          "table_target": "",
+          "example": "2025-08-01 12:00:00"
+        },
+        {
+          "name": "endTime",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "格式必须满足 yyyy-MM-dd hh:mm:ss",
+          "descriptions": {
+            "en-GB": "End Time",
+            "en-US": "End Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "help_descriptions": {
+            "en-GB": "End Time",
+            "en-US": "End Time",
+            "zh-CN": "格式必须满足 yyyy-MM-dd hh:mm:ss"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "end_time",
+          "cli_flag": "end-time",
+          "table_target": "",
+          "example": "2025-08-02 12:00:00"
+        },
+        {
+          "name": "type",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "时间精度：hour day minute 精度为 hour 时支持跨度为 7天，精度为day支持跨度 31天，精度为 minute支持跨度为 1天",
+          "descriptions": {
+            "en-GB": "Type",
+            "en-US": "Type",
+            "zh-CN": "时间精度：hour day minute 精度为 hour 时支持跨度为 7天，精度为day支持跨度 31天，精度为 minute支持跨度为 1天"
+          },
+          "help_descriptions": {
+            "en-GB": "Type",
+            "en-US": "Type",
+            "zh-CN": "时间精度：hour day minute 精度为 hour 时支持跨度为 7天，精度为day支持跨度 31天，精度为 minute支持跨度为 1天"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "type",
+          "cli_flag": "type",
+          "table_target": "",
+          "example": "day"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "qps",
+          "total_tokens",
+          "input_tokens",
+          "output_tokens"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "qps",
+            "path": "qps",
+            "label_en": "Queries Per Second",
+            "label_zh": "每秒请求数"
+          },
+          {
+            "key": "total_tokens",
+            "path": "totalTokens",
+            "label_en": "Total Tokens",
+            "label_zh": "按照时间周期维度统计输出",
+            "description": "按照时间周期维度统计输出：模型服务调用Token总量"
+          },
+          {
+            "key": "input_tokens",
+            "path": "inputTokens",
+            "label_en": "Input Tokens",
+            "label_zh": "按照时间周期维度统计输出",
+            "description": "按照时间周期维度统计输出： 模型服务调用输入Token量"
+          },
+          {
+            "key": "output_tokens",
+            "path": "outputTokens",
+            "label_en": "Output Tokens",
+            "label_zh": "按照时间周期维度统计输出",
+            "description": "按照时间周期维度统计输出：模型服务调用输出Token量"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "applicationId": "1223344",
+        "endTime": "2025-08-27 23:59:00",
+        "model": [
+          "preset",
+          "59d27de81a21482c8d3f36089342bbf4"
+        ],
+        "modelId": "59d27de81a21482c8d3f36089342bbf4",
+        "startTime": "2025-08-26 00:00:00",
+        "type": "day",
+        "userIds": [
+          "09e05c968e124475853a157612c17761"
+        ]
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMjAwLCAiZXJyb3IiOiAiQUlQXzQwMDAwMDAwIiwgIm1lc3NhZ2UiOiAi6K+35rGC5oiQ5YqfIiwgInJldHVybk9iaiI6IHsibmFtZSI6ICJIelNlcnZpY2VHcm91cCIsICJkZXNjcmlwdGlvbiI6IG51bGwsICJtb2RlbFN5bkRUT0xpc3QiOiBbeyJtb2RlbElkIjogImYxZjJiZjY3YmViZTQwYjI4NjljMTNhN2ZmNGNjYWIzMzMzIiwgIm1vZGVsTmFtZSI6ICJEZWVwU2Vlay1SMS1EaXN0aWxsLUxsYW1hLTcwQiIsICJtb2RlbERlc2MiOiAiRGVlcFNlZWstUjEtRGlzdGlsbC1MbGFtYS03MELmqKHlnovmj4/ov7AiLCAibW9kZWxUeXBlIjogMX0sIHsibW9kZWxJZCI6ICI4OWUxM2E3NzJjYTA0YzVlODc1MTRmNWMzNDdjNmQxOTIyMiIsICJtb2RlbE5hbWUiOiAiRGVlcFNlZWstUjEtRGlzdGlsbC1Rd2VuLTMyQiIsICJtb2RlbERlc2MiOiAiRGVlcFNlZWstUjEtRGlzdGlsbC1Rd2VuLTMyQuaooeWei+aPj+i/sCIsICJtb2RlbFR5cGUiOiAxfV0sICJhcHBLZXkiOiAiZTIyZmE0ZGEyYTI3NDkwMzlkNWNiYzlkYWExODA4YzIifX0="
+      },
+      "id": "tokenhub.service-group.model.list",
+      "api_id": "21065",
+      "title": "查询服务组的模型列表",
+      "description": {
+        "en-GB": "List models in a service group",
+        "en-US": "List models in a service group",
+        "zh-CN": "查询服务组的模型列表"
+      },
+      "category": "service-group",
+      "command_path": [
+        "service-group",
+        "model",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/maas/modelService/serviceGroup/queryModel",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21065&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "appId",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务组Id",
+          "descriptions": {
+            "en-GB": "App ID",
+            "en-US": "App ID",
+            "zh-CN": "服务组Id"
+          },
+          "help_descriptions": {
+            "en-GB": "App ID",
+            "en-US": "App ID",
+            "zh-CN": "服务组Id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "app_id",
+          "cli_flag": "app-id",
+          "table_target": "",
+          "example": "13sacf3232f323232"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "name",
+          "description",
+          "model_syn_dto_list",
+          "app_key"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "name",
+            "path": "name",
+            "label_en": "Name",
+            "label_zh": "名称",
+            "description": "服务组名称"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "服务组描述",
+            "description": "服务组描述"
+          },
+          {
+            "key": "model_syn_dto_list",
+            "path": "modelSynDTOList",
+            "label_en": "Model Syn Dto List",
+            "label_zh": "模型列表",
+            "description": "模型列表"
+          },
+          {
+            "key": "app_key",
+            "path": "appKey",
+            "label_en": "Service Group Key",
+            "label_zh": "服务组密钥",
+            "description": "服务组appKey"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMjAwLCAiZXJyb3IiOiAiQUlQXzQwMDAwMDAwIiwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXR1cm5PYmoiOiB7ImFwcElkIjogIjE5NDAyOTA2MTI3NjY2MTM1MDUiLCAiYXBwS2V5IjogIjIzMjNkNjdlNDZiYTRmNDBiNDA0MDlmMzcxMjMyMzIxIn19"
+      },
+      "id": "tokenhub.service-group.upsert",
+      "api_id": "21064",
+      "title": "添加或更新服务组",
+      "description": {
+        "en-GB": "Add or update a service group",
+        "en-US": "Add or update a service group",
+        "zh-CN": "添加或更新服务组"
+      },
+      "category": "service-group",
+      "command_path": [
+        "service-group",
+        "upsert"
+      ],
+      "method": "POST",
+      "path": "/maas/modelService/serviceGroup/addOrUpdateServiceGroup",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21064&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "appId",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务组Id。 创建服务组时，不需要填写；更新服务组时，需要填写",
+          "descriptions": {
+            "en-GB": "App ID",
+            "en-US": "App ID",
+            "zh-CN": "服务组Id。 创建服务组时，不需要填写；更新服务组时，需要填写"
+          },
+          "help_descriptions": {
+            "en-GB": "App ID",
+            "en-US": "App ID",
+            "zh-CN": "服务组Id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "app_id",
+          "cli_flag": "app-id",
+          "table_target": "",
+          "example": "1939876459164934145"
+        },
+        {
+          "name": "name",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务组名称",
+          "descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "服务组名称"
+          },
+          "help_descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "服务组名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "name",
+          "cli_flag": "name",
+          "table_target": "",
+          "example": "服务组名称"
+        },
+        {
+          "name": "description",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "描述不超过200字符",
+          "descriptions": {
+            "en-GB": "Description",
+            "en-US": "Description",
+            "zh-CN": "描述不超过200字符"
+          },
+          "help_descriptions": {
+            "en-GB": "Description",
+            "en-US": "Description",
+            "zh-CN": "描述不超过200字符"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "description",
+          "cli_flag": "description",
+          "table_target": "",
+          "example": "这是一个新建的服务组描述"
+        },
+        {
+          "name": "expireAtStr",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "服务组过期时间：如果为空，代表永不过期 ，格式为yyyyMMdd",
+          "descriptions": {
+            "en-GB": "Expire At Str",
+            "en-US": "Expire At Str",
+            "zh-CN": "服务组过期时间：如果为空，代表永不过期 ，格式为yyyyMMdd"
+          },
+          "help_descriptions": {
+            "en-GB": "Expire At Str",
+            "en-US": "Expire At Str",
+            "zh-CN": "服务组过期时间：如果为空，代表永不过期 ，格式为yyyyMMdd"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "expire_at_str",
+          "cli_flag": "expire-at-str",
+          "table_target": "",
+          "example": "20250801"
+        },
+        {
+          "name": "publicModelIdList",
+          "location": "body",
+          "required": true,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "预置模型Id列表",
+          "descriptions": {
+            "en-GB": "Public Model ID List as a JSON array",
+            "en-US": "Public Model ID List as a JSON array",
+            "zh-CN": "预置模型Id列表"
+          },
+          "help_descriptions": {
+            "en-GB": "Public Model ID List as a JSON array",
+            "en-US": "Public Model ID List as a JSON array",
+            "zh-CN": "预置模型Id列表"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "public_model_id_list",
+          "cli_flag": "public-model-id-list",
+          "table_target": "",
+          "example_unavailable": true
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "app_id",
+          "app_key"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "app_id",
+            "path": "appId",
+            "label_en": "App ID",
+            "label_zh": "创建或者更新返回的服务组 ID",
+            "description": "创建或者更新返回的服务组Id"
+          },
+          {
+            "key": "app_key",
+            "path": "appKey",
+            "label_en": "Service Group Key",
+            "label_zh": "服务组密钥",
+            "description": "服务组 appKey，用于openai 请求鉴权"
+          }
+        ]
+      },
+      "dangerous": true,
+      "example_response": null
+    }
+  ]
+}

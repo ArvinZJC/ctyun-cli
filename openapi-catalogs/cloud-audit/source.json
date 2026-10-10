@@ -1,0 +1,2867 @@
+{
+  "schema_version": 1,
+  "product": {
+    "plugin_name": "cloud-audit",
+    "api_product": "cloud-audit",
+    "ctyun_product_id": 126,
+    "source_revision": "159",
+    "display_name": {
+      "en-US": "Cloud Audit",
+      "en-GB": "Cloud Audit",
+      "zh-CN": "云审计"
+    },
+    "display_name_policy": {
+      "kind": "descriptive"
+    },
+    "endpoint_url": "https://cloudaudit-global.ctapi.ctyun.cn",
+    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=126&vid=159&data=166",
+    "api_scope": {
+      "include_uri_prefixes": [
+        "/v2/manager/",
+        "/v2/region/"
+      ],
+      "notes": "Published customer-side APIs for the self-operated service; product resource-pool labels are not node classifications. See coverage.json for reviewed evidence gaps."
+    }
+  },
+  "operations": [
+    {
+      "id": "cloud-audit.service.enable",
+      "api_id": "11788",
+      "title": "开通云审计",
+      "description": {
+        "en-US": "Enable Cloud Audit",
+        "en-GB": "Enable Cloud Audit",
+        "zh-CN": "开通云审计"
+      },
+      "category": "service",
+      "command_path": [
+        "service",
+        "enable"
+      ],
+      "method": "POST",
+      "path": "/v2/manager/user",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=126&vid=159&data=166&api=11788&isNormal=1",
+      "retryable": false,
+      "dangerous": true,
+      "parameters": [
+        {
+          "name": "regionid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "资源池 id",
+          "descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "cli_name": "",
+          "cli_flag": "",
+          "profile": "region",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "accountid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "租户的账户 id",
+          "descriptions": {
+            "en-US": "Accountid",
+            "en-GB": "Accountid",
+            "zh-CN": "租户的账户 id"
+          },
+          "help_descriptions": {
+            "en-US": "Accountid",
+            "en-GB": "Accountid",
+            "zh-CN": "租户的账户 ID"
+          },
+          "cli_name": "accountid",
+          "cli_flag": "accountid",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "userid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "用户 id",
+          "descriptions": {
+            "en-US": "Userid",
+            "en-GB": "Userid",
+            "zh-CN": "用户 id"
+          },
+          "help_descriptions": {
+            "en-US": "Userid",
+            "en-GB": "Userid",
+            "zh-CN": "用户 ID"
+          },
+          "cli_name": "userid",
+          "cli_flag": "userid",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        }
+      ],
+      "examples": [],
+      "request_example": {},
+      "response": {
+        "success_code": "0",
+        "result_path": "$",
+        "row_path": "$",
+        "columns": [
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果",
+            "description": "返回数据结构体"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "状态码 取值范围：0 成功"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "提示信息"
+          }
+        ],
+        "default_columns": [
+          "return_obj",
+          "status_code",
+          "message"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "layout": "vertical"
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJyZXR1cm5PYmoiOiAiIiwgInN0YXR1c0NvZGUiOiAiMCIsICJtZXNzYWdlIjogIlNVQ0NFU1MifQ=="
+      }
+    },
+    {
+      "id": "cloud-audit.service.status",
+      "api_id": "11789",
+      "title": "获取服务开通状态",
+      "description": {
+        "en-US": "Show Cloud Audit activation status",
+        "en-GB": "Show Cloud Audit activation status",
+        "zh-CN": "获取服务开通状态"
+      },
+      "category": "service",
+      "command_path": [
+        "service",
+        "status"
+      ],
+      "method": "GET",
+      "path": "/v2/manager/user/enable",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=126&vid=159&data=166&api=11789&isNormal=1",
+      "retryable": true,
+      "dangerous": false,
+      "parameters": [
+        {
+          "name": "regionid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "资源池 id",
+          "descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "cli_name": "",
+          "cli_flag": "",
+          "profile": "region",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "accountid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "租户的账户 id",
+          "descriptions": {
+            "en-US": "Accountid",
+            "en-GB": "Accountid",
+            "zh-CN": "租户的账户 id"
+          },
+          "help_descriptions": {
+            "en-US": "Accountid",
+            "en-GB": "Accountid",
+            "zh-CN": "租户的账户 ID"
+          },
+          "cli_name": "accountid",
+          "cli_flag": "accountid",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "userid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "用户 id",
+          "descriptions": {
+            "en-US": "Userid",
+            "en-GB": "Userid",
+            "zh-CN": "用户 id"
+          },
+          "help_descriptions": {
+            "en-US": "Userid",
+            "en-GB": "Userid",
+            "zh-CN": "用户 ID"
+          },
+          "cli_name": "userid",
+          "cli_flag": "userid",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        }
+      ],
+      "examples": [],
+      "request_example": {},
+      "response": {
+        "success_code": "0",
+        "result_path": "$",
+        "row_path": "$",
+        "columns": [
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果",
+            "description": "返回数据结构体"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "状态码 取值范围：0 成功"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "提示信息"
+          }
+        ],
+        "default_columns": [
+          "return_obj",
+          "status_code",
+          "message"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "layout": "vertical"
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJyZXR1cm5PYmoiOiB0cnVlLCAic3RhdHVzQ29kZSI6ICIwIiwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyJ9"
+      }
+    },
+    {
+      "id": "cloud-audit.event.condition.list",
+      "api_id": "11790",
+      "title": "查询筛选事件的条件列表",
+      "description": {
+        "en-US": "List event filter conditions",
+        "en-GB": "List event filter conditions",
+        "zh-CN": "查询筛选事件的条件列表"
+      },
+      "category": "event",
+      "command_path": [
+        "event",
+        "condition",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v2/manager/event/selection",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=126&vid=159&data=166&api=11790&isNormal=1",
+      "retryable": true,
+      "dangerous": false,
+      "parameters": [
+        {
+          "name": "fieldName",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "description": "字段名称，支持一下字段：eventActType、eventLevel、userId、srcServiceType、srcProdTypeName、eventName",
+          "descriptions": {
+            "en-US": "Field Name",
+            "en-GB": "Field Name",
+            "zh-CN": "字段名称，支持一下字段：eventActType、eventLevel、userId、srcServiceType、srcProdTypeName、eventName"
+          },
+          "help_descriptions": {
+            "en-US": "Field Name",
+            "en-GB": "Field Name",
+            "zh-CN": "字段名称，支持一下字段：eventActType、eventLevel、userId、srcServiceType、srcProdTypeName、eventName"
+          },
+          "cli_name": "field_name",
+          "cli_flag": "field-name",
+          "example_unavailable": true
+        },
+        {
+          "name": "regionid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "资源池id",
+          "descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "cli_name": "",
+          "cli_flag": "",
+          "profile": "region",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "accountId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "账户id",
+          "descriptions": {
+            "en-US": "Account ID",
+            "en-GB": "Account ID",
+            "zh-CN": "账户id"
+          },
+          "help_descriptions": {
+            "en-US": "Account ID",
+            "en-GB": "Account ID",
+            "zh-CN": "账户ID"
+          },
+          "cli_name": "account_id",
+          "cli_flag": "account-id",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "userid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "用户id",
+          "descriptions": {
+            "en-US": "Userid",
+            "en-GB": "Userid",
+            "zh-CN": "用户id"
+          },
+          "help_descriptions": {
+            "en-US": "Userid",
+            "en-GB": "Userid",
+            "zh-CN": "用户ID"
+          },
+          "cli_name": "userid",
+          "cli_flag": "userid",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        }
+      ],
+      "examples": [],
+      "request_example": {},
+      "response": {
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Dictionary Code",
+            "label_zh": "字典编码",
+            "description": "字典编码"
+          },
+          {
+            "key": "value",
+            "path": "value",
+            "label_en": "Value",
+            "label_zh": "字典值",
+            "description": "字典值"
+          }
+        ],
+        "default_columns": [
+          "code",
+          "value"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        }
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJyZXR1cm5PYmoiOiBbeyJjb2RlIjogMCwgInZhbHVlIjogIuivu+exu+WeiyJ9XSwgInN0YXR1c0NvZGUiOiAiMCIsICJtZXNzYWdlIjogIlNVQ0NFU1MifQ=="
+      }
+    },
+    {
+      "id": "cloud-audit.event.list",
+      "api_id": "11791",
+      "title": "查询事件列表",
+      "description": {
+        "en-US": "List audit events",
+        "en-GB": "List audit events",
+        "zh-CN": "查询事件列表"
+      },
+      "category": "event",
+      "command_path": [
+        "event",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v2/manager/event/list",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=126&vid=159&data=166&api=11791&isNormal=1",
+      "retryable": true,
+      "dangerous": false,
+      "parameters": [
+        {
+          "name": "eventActType",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "description": "事件的读写类型：0为读类型，1为写类型，-1为全部",
+          "descriptions": {
+            "en-US": "Event Act Type",
+            "en-GB": "Event Act Type",
+            "zh-CN": "事件的读写类型：0为读类型，1为写类型，-1为全部"
+          },
+          "help_descriptions": {
+            "en-US": "Event Act Type",
+            "en-GB": "Event Act Type",
+            "zh-CN": "事件的读写类型：0为读类型，1为写类型，-1为全部"
+          },
+          "cli_name": "event_act_type",
+          "cli_flag": "event-act-type",
+          "example": 0
+        },
+        {
+          "name": "timeLabel",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "description": "查询的快捷时间标签，支持以下四种:30M为近30分钟、1H为近1小时、1D为近1天、7D为近7天",
+          "descriptions": {
+            "en-US": "Time Label",
+            "en-GB": "Time Label",
+            "zh-CN": "查询的快捷时间标签，支持以下四种:30M为近30分钟、1H为近1小时、1D为近1天、7D为近7天"
+          },
+          "help_descriptions": {
+            "en-US": "Time Label",
+            "en-GB": "Time Label",
+            "zh-CN": "查询的快捷时间标签，支持以下四种:30M为近30分钟、1H为近1小时、1D为近1天、7D为近7天"
+          },
+          "cli_name": "time_label",
+          "cli_flag": "time-label",
+          "example": "1D"
+        },
+        {
+          "name": "fromTime",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "description": "查询时间段起点，格式为：yyyy-MM-dd HH:mm:ss",
+          "descriptions": {
+            "en-US": "From Time",
+            "en-GB": "From Time",
+            "zh-CN": "查询时间段起点，格式为：yyyy-MM-dd HH:mm:ss"
+          },
+          "help_descriptions": {
+            "en-US": "From Time",
+            "en-GB": "From Time",
+            "zh-CN": "查询时间段起点，格式为：yyyy-MM-dd HH:mm:ss"
+          },
+          "cli_name": "from_time",
+          "cli_flag": "from-time",
+          "example": "2023-09-19 12:20:20"
+        },
+        {
+          "name": "toTime",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "description": "查询时间段终点，格式为：yyyy-MM-dd HH:mm:ss",
+          "descriptions": {
+            "en-US": "To Time",
+            "en-GB": "To Time",
+            "zh-CN": "查询时间段终点，格式为：yyyy-MM-dd HH:mm:ss"
+          },
+          "help_descriptions": {
+            "en-US": "To Time",
+            "en-GB": "To Time",
+            "zh-CN": "查询时间段终点，格式为：yyyy-MM-dd HH:mm:ss"
+          },
+          "cli_name": "to_time",
+          "cli_flag": "to-time",
+          "example": "2023-09-19 12:20:20"
+        },
+        {
+          "name": "eventLevel",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "description": "事件级别，操作事件等级，分为三级：0：normal 1：warning， 2：incident",
+          "descriptions": {
+            "en-US": "Event Level",
+            "en-GB": "Event Level",
+            "zh-CN": "事件级别，操作事件等级，分为三级：0：normal 1：warning， 2：incident"
+          },
+          "help_descriptions": {
+            "en-US": "Event Level",
+            "en-GB": "Event Level",
+            "zh-CN": "事件级别，操作事件等级，分为三级：0：normal 1：warning， 2：incident"
+          },
+          "cli_name": "event_level",
+          "cli_flag": "event-level",
+          "example": 0
+        },
+        {
+          "name": "userId",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "description": "用户唯一标识",
+          "descriptions": {
+            "en-US": "User ID",
+            "en-GB": "User ID",
+            "zh-CN": "用户唯一标识"
+          },
+          "help_descriptions": {
+            "en-US": "User ID",
+            "en-GB": "User ID",
+            "zh-CN": "用户唯一标识"
+          },
+          "cli_name": "user_id",
+          "cli_flag": "user-id",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "srcServiceType",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "description": "事件来源服务名称（计算、存储、网络、安全）",
+          "descriptions": {
+            "en-US": "Src Service Type",
+            "en-GB": "Src Service Type",
+            "zh-CN": "事件来源服务名称（计算、存储、网络、安全）"
+          },
+          "help_descriptions": {
+            "en-US": "Src Service Type",
+            "en-GB": "Src Service Type",
+            "zh-CN": "事件来源服务名称（计算、存储、网络、安全）"
+          },
+          "cli_name": "src_service_type",
+          "cli_flag": "src-service-type",
+          "example": "计算"
+        },
+        {
+          "name": "srcProdTypeName",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "description": "事件来源的资源类型",
+          "descriptions": {
+            "en-US": "Src Product Type Name",
+            "en-GB": "Src Product Type Name",
+            "zh-CN": "事件来源的资源类型"
+          },
+          "help_descriptions": {
+            "en-US": "Src Product Type Name",
+            "en-GB": "Src Product Type Name",
+            "zh-CN": "事件来源的资源类型"
+          },
+          "cli_name": "src_prod_type_name",
+          "cli_flag": "src-prod-type-name",
+          "example": "弹性计算服务器"
+        },
+        {
+          "name": "filterKey",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "description": "筛选类型,-1为所有类型，resName为资源名称，resId为资源id，eventName为事件名称，filterKey与filterValue必须同时传递",
+          "descriptions": {
+            "en-US": "Filter Key",
+            "en-GB": "Filter Key",
+            "zh-CN": "筛选类型,-1为所有类型，resName为资源名称，resId为资源id，eventName为事件名称，filterKey与filterValue必须同时传递"
+          },
+          "help_descriptions": {
+            "en-US": "Filter Key",
+            "en-GB": "Filter Key",
+            "zh-CN": "筛选类型,-1为所有类型，resName为资源名称，resId为资源ID，eventName为事件名称，filterKey与filterValue必须同时传递"
+          },
+          "cli_name": "filter_key",
+          "cli_flag": "filter-key",
+          "example": "RES_ID"
+        },
+        {
+          "name": "filterValue",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "description": "筛选值，filterKey与filterValue必须同时传递",
+          "descriptions": {
+            "en-US": "Filter Value",
+            "en-GB": "Filter Value",
+            "zh-CN": "筛选值，filterKey与filterValue必须同时传递"
+          },
+          "help_descriptions": {
+            "en-US": "Filter Value",
+            "en-GB": "Filter Value",
+            "zh-CN": "筛选值，filterKey与filterValue必须同时传递"
+          },
+          "cli_name": "filter_value",
+          "cli_flag": "filter-value",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "pageNumber",
+          "location": "query",
+          "required": true,
+          "type": "Integer",
+          "description": "页码",
+          "descriptions": {
+            "en-US": "Page Number",
+            "en-GB": "Page Number",
+            "zh-CN": "页码"
+          },
+          "help_descriptions": {
+            "en-US": "Page Number",
+            "en-GB": "Page Number",
+            "zh-CN": "页码"
+          },
+          "cli_name": "page_number",
+          "cli_flag": "page-number",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "query",
+          "required": true,
+          "type": "Integer",
+          "description": "每页数量",
+          "descriptions": {
+            "en-US": "Page Size",
+            "en-GB": "Page Size",
+            "zh-CN": "每页数量"
+          },
+          "help_descriptions": {
+            "en-US": "Page Size",
+            "en-GB": "Page Size",
+            "zh-CN": "每页数量"
+          },
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "example": 20
+        },
+        {
+          "name": "regionid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "资源池 id",
+          "descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "cli_name": "",
+          "cli_flag": "",
+          "profile": "region",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        }
+      ],
+      "examples": [],
+      "request_example": {},
+      "response": {
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "columns": [
+          {
+            "key": "account_id",
+            "path": "accountId",
+            "label_en": "Account ID",
+            "label_zh": "账户 ID",
+            "description": "主账号 id"
+          },
+          {
+            "key": "api_version",
+            "path": "apiVersion",
+            "label_en": "API Version",
+            "label_zh": "接口版本",
+            "description": "api 版本"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间",
+            "description": "数据创建时间"
+          },
+          {
+            "key": "event_act_type",
+            "path": "eventActType",
+            "label_en": "Event Access Type",
+            "label_zh": "事件读写类型",
+            "description": "事件的读写类型编码：0为读类型，1为写类型"
+          },
+          {
+            "key": "event_level",
+            "path": "eventLevel",
+            "label_en": "Event Level",
+            "label_zh": "事件等级编码",
+            "description": "事件等级编码，分为三级：0：normal 1：warning， 2：incident"
+          },
+          {
+            "key": "event_name",
+            "path": "eventName",
+            "label_en": "Event Name",
+            "label_zh": "事件名称",
+            "description": "事件名称"
+          },
+          {
+            "key": "event_time",
+            "path": "eventTime",
+            "label_en": "Event Time",
+            "label_zh": "事件发生时间",
+            "description": "事件发生时间"
+          },
+          {
+            "key": "event_type",
+            "path": "eventType",
+            "label_en": "Event Type",
+            "label_zh": "发生的事件类型",
+            "description": "发生的事件类型。取值： 0：API调用事件（ApiCall） 1：部分控制台或售卖页的管控事件（ConsoleOperation） 2：用户登录登出 3：其他(待定)"
+          },
+          {
+            "key": "id",
+            "path": "id",
+            "label_en": "ID",
+            "label_zh": "数据主键",
+            "description": "数据主键"
+          },
+          {
+            "key": "req_data",
+            "path": "reqData",
+            "label_en": "Request Data",
+            "label_zh": "请求报文",
+            "description": "事件操作请求报文"
+          },
+          {
+            "key": "req_id",
+            "path": "reqId",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "操作请求 id"
+          },
+          {
+            "key": "resp_data",
+            "path": "respData",
+            "label_en": "Response Data",
+            "label_zh": "响应报文",
+            "description": "事件操作响应数据报文"
+          },
+          {
+            "key": "src_ip",
+            "path": "srcIp",
+            "label_en": "Source IP",
+            "label_zh": "来源 IP",
+            "description": "事件来源 ip,发起请求的地址"
+          },
+          {
+            "key": "src_prod_name",
+            "path": "srcProdName",
+            "label_en": "Source Resource Name",
+            "label_zh": "来源资源名称",
+            "description": "事件来源资源的名称"
+          },
+          {
+            "key": "src_prod_type_name",
+            "path": "srcProdTypeName",
+            "label_en": "Source Resource Type",
+            "label_zh": "来源资源类型",
+            "description": "事件来源的资源类型名称"
+          },
+          {
+            "key": "src_region",
+            "path": "srcRegion",
+            "label_en": "Source Region",
+            "label_zh": "来源资源池",
+            "description": "资源池名称,不区分传入 all"
+          },
+          {
+            "key": "src_res_id",
+            "path": "srcResId",
+            "label_en": "Resource ID",
+            "label_zh": "资源 ID",
+            "description": "事件操作资源的 id（页面展示的 id）"
+          },
+          {
+            "key": "src_service_type",
+            "path": "srcServiceType",
+            "label_en": "Source Service",
+            "label_zh": "来源服务",
+            "description": "事件来源服务名称（计算、存储、网络、安全）"
+          },
+          {
+            "key": "update_time",
+            "path": "updateTime",
+            "label_en": "Update Time",
+            "label_zh": "更新时间",
+            "description": "数据更新时间"
+          },
+          {
+            "key": "user_id",
+            "path": "userId",
+            "label_en": "User ID",
+            "label_zh": "用户 ID",
+            "description": "用户唯一标识"
+          }
+        ],
+        "default_columns": [
+          "account_id",
+          "api_version",
+          "create_time",
+          "event_act_type",
+          "event_level",
+          "event_name"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        }
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJyZXR1cm5PYmoiOiB7ImRhdGEiOiBbeyJhY2NvdW50SWQiOiAiZTI0MzE4ZWQyY2U3NDhjN2Q5MDczZDVmOTcyMjFkMzYiLCAiYXBpVmVyc2lvbiI6ICIyMS4xLjAiLCAiY3JlYXRlVGltZSI6ICIyMDIyLTA1LTMxVDE1OjMwOjQ4LjA0MzE1MjMwMCIsICJldmVudEFjdFR5cGUiOiAxLCAiZXZlbnRMZXZlbCI6IDEsICJldmVudE5hbWUiOiAi5byA6YCa5LqR5Li75py6IiwgImV2ZW50VGltZSI6ICIyMDIyLTA1LTMxVDE1OjMwOjQ4LjA0MzE1MjMwMCIsICJldmVudFR5cGUiOiAxLCAiaWQiOiAiZTI0MzE4ZWQyY2U3NDhjN2Q5MDczZDVmOTcyMjFkMzYiLCAicmVxRGF0YSI6ICJcbiAgICAgICAgICAgICAgICB7XG4gICAgICAgICAgICAgICAgfVxuICAgICAgICAgICAgICAgICIsICJyZXFJZCI6ICJlMjQzMThlZDJjZTc0OGM3ZDkwNzNkNWY5NzIyMWQzNiIsICJyZXNwRGF0YSI6ICJcbiAgICAgICAgICAgICAgICB7XG4gICAgICAgICAgICAgICAgfVxuICAgICAgICAgICAgICAgICIsICJzcmNJcCI6ICIxOTIuMTY4LjEuMTAwIiwgInNyY1Byb2ROYW1lIjogIm15LW5hbWUiLCAic3JjUHJvZFR5cGVOYW1lIjogIuW8ueaAp+iuoeeul+acjeWKoeWZqCIsICJzcmNSZWdpb24iOiAiYWxsIiwgInNyY1Jlc0lkIjogImUyNDMxOGVkMmNlNzQ4YzdkOTA3M2Q1Zjk3MjIxZDM2IiwgInNyY1NlcnZpY2VUeXBlIjogIuiuoeeulyIsICJ1cGRhdGVUaW1lIjogIjIwMjItMDUtMzFUMTU6MzA6NDguMDQzMTUyMzAwIiwgInVzZXJJZCI6ICJlMjQzMThlZDJjZTc0OGM3ZDkwNzNkNWY5NzIyMWQzNiJ9XSwgInRvdGFsIjogMTAwLCAicGFnZSI6IDEwMH0sICJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICJTVUNDRVNTIn0="
+      }
+    },
+    {
+      "id": "cloud-audit.bucket.authorize",
+      "api_id": "11792",
+      "title": "授权云审计服务读写对象存储桶",
+      "description": {
+        "en-US": "Authorize Cloud Audit to access an object storage bucket",
+        "en-GB": "Authorize Cloud Audit to access an object storage bucket",
+        "zh-CN": "授权云审计服务读写对象存储桶"
+      },
+      "category": "bucket",
+      "command_path": [
+        "bucket",
+        "authorize"
+      ],
+      "method": "POST",
+      "path": "/v2/manager/user/arn",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=126&vid=159&data=166&api=11792&isNormal=1",
+      "retryable": false,
+      "dangerous": true,
+      "parameters": [
+        {
+          "name": "regionid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "资源池 id",
+          "descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "cli_name": "",
+          "cli_flag": "",
+          "profile": "region",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "accountid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "租户的账户 id",
+          "descriptions": {
+            "en-US": "Accountid",
+            "en-GB": "Accountid",
+            "zh-CN": "租户的账户 id"
+          },
+          "help_descriptions": {
+            "en-US": "Accountid",
+            "en-GB": "Accountid",
+            "zh-CN": "租户的账户 ID"
+          },
+          "cli_name": "accountid",
+          "cli_flag": "accountid",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "userid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "用户 id",
+          "descriptions": {
+            "en-US": "Userid",
+            "en-GB": "Userid",
+            "zh-CN": "用户 id"
+          },
+          "help_descriptions": {
+            "en-US": "Userid",
+            "en-GB": "Userid",
+            "zh-CN": "用户 ID"
+          },
+          "cli_name": "userid",
+          "cli_flag": "userid",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "targetType",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "description": "转储目标服务类型，目前只支持对象存储，0：对象存储",
+          "descriptions": {
+            "en-US": "Target Type",
+            "en-GB": "Target Type",
+            "zh-CN": "转储目标服务类型，目前只支持对象存储，0：对象存储"
+          },
+          "help_descriptions": {
+            "en-US": "Target Type",
+            "en-GB": "Target Type",
+            "zh-CN": "转储目标服务类型，目前只支持对象存储，0：对象存储"
+          },
+          "cli_name": "target_type",
+          "cli_flag": "target-type",
+          "example": 0
+        },
+        {
+          "name": "arn",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "description": "服务授权用户 arn 信息",
+          "descriptions": {
+            "en-US": "Arn",
+            "en-GB": "Arn",
+            "zh-CN": "服务授权用户 arn 信息"
+          },
+          "help_descriptions": {
+            "en-US": "Arn",
+            "en-GB": "Arn",
+            "zh-CN": "服务授权用户 arn 信息"
+          },
+          "cli_name": "arn",
+          "cli_flag": "arn",
+          "example": "E24318ED2CE748C7D9073D5F97221D36"
+        },
+        {
+          "name": "authorizedId",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "description": "服务被授权用户 id",
+          "descriptions": {
+            "en-US": "Authorized ID",
+            "en-GB": "Authorized ID",
+            "zh-CN": "服务被授权用户 id"
+          },
+          "help_descriptions": {
+            "en-US": "Authorized ID",
+            "en-GB": "Authorized ID",
+            "zh-CN": "服务被授权用户 ID"
+          },
+          "cli_name": "authorized_id",
+          "cli_flag": "authorized-id",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "bucketName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "授权桶的名称",
+          "descriptions": {
+            "en-US": "Bucket Name",
+            "en-GB": "Bucket Name",
+            "zh-CN": "授权桶的名称"
+          },
+          "help_descriptions": {
+            "en-US": "Bucket Name",
+            "en-GB": "Bucket Name",
+            "zh-CN": "授权桶的名称"
+          },
+          "cli_name": "bucket_name",
+          "cli_flag": "bucket-name",
+          "example": "audit"
+        },
+        {
+          "name": "roleName",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "description": "授权的角色名称",
+          "descriptions": {
+            "en-US": "Role Name",
+            "en-GB": "Role Name",
+            "zh-CN": "授权的角色名称"
+          },
+          "help_descriptions": {
+            "en-US": "Role Name",
+            "en-GB": "Role Name",
+            "zh-CN": "授权的角色名称"
+          },
+          "cli_name": "role_name",
+          "cli_flag": "role-name",
+          "example": "云审计授权角色"
+        }
+      ],
+      "examples": [],
+      "request_example": {
+        "targetType": 0,
+        "bucketName": "audit"
+      },
+      "response": {
+        "success_code": "0",
+        "result_path": "$",
+        "row_path": "$",
+        "columns": [
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果",
+            "description": "返回数据结构体"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "状态码 取值范围：0 成功"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "提示信息"
+          }
+        ],
+        "default_columns": [
+          "return_obj",
+          "status_code",
+          "message"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "layout": "vertical"
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJyZXR1cm5PYmoiOiAiZTI0MzE4ZWQyY2U3NDhjN2Q5MDczZDVmOTcyMjFkMzYiLCAic3RhdHVzQ29kZSI6ICIwIiwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyJ9"
+      }
+    },
+    {
+      "id": "cloud-audit.bucket.show",
+      "api_id": "11793",
+      "title": "获取用户授权的桶信息",
+      "description": {
+        "en-US": "Show the authorized object storage bucket",
+        "en-GB": "Show the authorized object storage bucket",
+        "zh-CN": "获取用户授权的桶信息"
+      },
+      "category": "bucket",
+      "command_path": [
+        "bucket",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v2/manager/user/authority",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=126&vid=159&data=166&api=11793&isNormal=1",
+      "retryable": true,
+      "dangerous": false,
+      "parameters": [
+        {
+          "name": "regionid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "资源池 id",
+          "descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "cli_name": "",
+          "cli_flag": "",
+          "profile": "region",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "accountid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "租户的账户 id",
+          "descriptions": {
+            "en-US": "Accountid",
+            "en-GB": "Accountid",
+            "zh-CN": "租户的账户 id"
+          },
+          "help_descriptions": {
+            "en-US": "Accountid",
+            "en-GB": "Accountid",
+            "zh-CN": "租户的账户 ID"
+          },
+          "cli_name": "accountid",
+          "cli_flag": "accountid",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "userid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "用户 id",
+          "descriptions": {
+            "en-US": "Userid",
+            "en-GB": "Userid",
+            "zh-CN": "用户 id"
+          },
+          "help_descriptions": {
+            "en-US": "Userid",
+            "en-GB": "Userid",
+            "zh-CN": "用户 ID"
+          },
+          "cli_name": "userid",
+          "cli_flag": "userid",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        }
+      ],
+      "examples": [],
+      "request_example": {},
+      "response": {
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "columns": [
+          {
+            "key": "user_id",
+            "path": "userId",
+            "label_en": "User ID",
+            "label_zh": "用户 ID",
+            "description": "用户 id"
+          },
+          {
+            "key": "account_id",
+            "path": "accountId",
+            "label_en": "Account ID",
+            "label_zh": "账户 ID",
+            "description": "用户账户 id"
+          },
+          {
+            "key": "oos_arn",
+            "path": "oosArn",
+            "label_en": "Storage Authorization ARN",
+            "label_zh": "对象存储授权资源名称",
+            "description": "对象存储服务授权用户 arn 信息"
+          },
+          {
+            "key": "oos_authorized_id",
+            "path": "oosAuthorizedId",
+            "label_en": "Authorized Storage User ID",
+            "label_zh": "对象存储被授权用户 ID",
+            "description": "对象存储服务被授权用户 id"
+          },
+          {
+            "key": "oos_role_name",
+            "path": "oosRoleName",
+            "label_en": "Authorized Storage Role",
+            "label_zh": "对象存储被授权角色",
+            "description": "对象存储服务被授权用户角色名称"
+          },
+          {
+            "key": "bucket_names",
+            "path": "bucketNames",
+            "label_en": "Bucket Names",
+            "label_zh": "已授权的桶列表",
+            "description": "已授权的桶列表"
+          }
+        ],
+        "default_columns": [
+          "user_id",
+          "account_id",
+          "oos_arn",
+          "oos_authorized_id",
+          "oos_role_name",
+          "bucket_names"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "layout": "vertical"
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMCwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7InVzZXJJZCI6ICJlYjNhMjRkODI0YTI0YTdiOTMwOTJlZWFmYmM5MDJjZCIsICJhY2NvdW50SWQiOiAiMGY4ZWQxNmI2ZDUwNDFkYjhjY2ZlMzhkMDI2ZDM3NTkiLCAib29zQXJuIjogImFybjphd3M6aWFtOjo6cm9sZS9yb2xlLWNsb3VkLWF1ZGl0LThmOGJmOGI1YmJlMjBjMGYxNjdhMTVjN2ExOTk0ZmEwLTIxMDYiLCAib29zQXV0aG9yaXplZElkIjogIjIyNGJjODdjLTc0NDQtMTFlZC1iNWVlLTAwNTA1Njg5MTdmYiIsICJvb3NSb2xlTmFtZSI6ICJyb2xlLWNsb3VkLWF1ZGl0LThmOGJmOGI1YmJlMjBjMGYxNjdhMTVjN2ExOTk0ZmEwLTIxMDYiLCAiYnVja2V0TmFtZXMiOiBbImJ1Y2tldC1mMjJkIiwgImJ1Y2tldC1hMmZiIiwgImJ1Y2tldC1jNzg3Il19fQ=="
+      }
+    },
+    {
+      "id": "cloud-audit.tracker.create",
+      "api_id": "11794",
+      "title": "新建跟踪任务",
+      "description": {
+        "en-US": "Create an audit tracking task",
+        "en-GB": "Create an audit tracking task",
+        "zh-CN": "新建跟踪任务"
+      },
+      "category": "tracker",
+      "command_path": [
+        "tracker",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v2/manager/auditTrack/create",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=126&vid=159&data=166&api=11794&isNormal=1",
+      "retryable": false,
+      "dangerous": true,
+      "parameters": [
+        {
+          "name": "regionid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "资源池 id",
+          "descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "cli_name": "",
+          "cli_flag": "",
+          "profile": "region",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "accountid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "租户的账户 id",
+          "descriptions": {
+            "en-US": "Accountid",
+            "en-GB": "Accountid",
+            "zh-CN": "租户的账户 id"
+          },
+          "help_descriptions": {
+            "en-US": "Accountid",
+            "en-GB": "Accountid",
+            "zh-CN": "租户的账户 ID"
+          },
+          "cli_name": "accountid",
+          "cli_flag": "accountid",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "userid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "用户 id",
+          "descriptions": {
+            "en-US": "Userid",
+            "en-GB": "Userid",
+            "zh-CN": "用户 id"
+          },
+          "help_descriptions": {
+            "en-US": "Userid",
+            "en-GB": "Userid",
+            "zh-CN": "用户 ID"
+          },
+          "cli_name": "userid",
+          "cli_flag": "userid",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "taskName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "跟踪任务名称，以大小写字母或中文开头，可包含数字、'.'、'_'、'-'，长度在2-64之间",
+          "descriptions": {
+            "en-US": "Task Name",
+            "en-GB": "Task Name",
+            "zh-CN": "跟踪任务名称，以大小写字母或中文开头，可包含数字、'.'、'_'、'-'，长度在2-64之间"
+          },
+          "help_descriptions": {
+            "en-US": "Task Name",
+            "en-GB": "Task Name",
+            "zh-CN": "跟踪任务名称，以大小写字母或中文开头，可包含数字、'.'、'_'、'-'，长度在2-64之间"
+          },
+          "cli_name": "task_name",
+          "cli_flag": "task-name",
+          "example": "任务跟踪1"
+        },
+        {
+          "name": "state",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "description": "启用状态：1启用，0停用",
+          "descriptions": {
+            "en-US": "State",
+            "en-GB": "State",
+            "zh-CN": "启用状态：1启用，0停用"
+          },
+          "help_descriptions": {
+            "en-US": "State",
+            "en-GB": "State",
+            "zh-CN": "启用状态：1启用，0停用"
+          },
+          "cli_name": "state",
+          "cli_flag": "state",
+          "example": 1
+        },
+        {
+          "name": "rwType",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "description": "事件范围：0为读类型，1为写类型,2为全部类型",
+          "descriptions": {
+            "en-US": "Rw Type",
+            "en-GB": "Rw Type",
+            "zh-CN": "事件范围：0为读类型，1为写类型,2为全部类型"
+          },
+          "help_descriptions": {
+            "en-US": "Rw Type",
+            "en-GB": "Rw Type",
+            "zh-CN": "事件范围：0为读类型，1为写类型,2为全部类型"
+          },
+          "cli_name": "rw_type",
+          "cli_flag": "rw-type",
+          "example": 1
+        },
+        {
+          "name": "targetType",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "description": "投递目标，0为对象存储",
+          "descriptions": {
+            "en-US": "Target Type",
+            "en-GB": "Target Type",
+            "zh-CN": "投递目标，0为对象存储"
+          },
+          "help_descriptions": {
+            "en-US": "Target Type",
+            "en-GB": "Target Type",
+            "zh-CN": "投递目标，0为对象存储"
+          },
+          "cli_name": "target_type",
+          "cli_flag": "target-type",
+          "example": 0
+        },
+        {
+          "name": "targetDomain",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "转储目标的桶 id",
+          "descriptions": {
+            "en-US": "Target Domain",
+            "en-GB": "Target Domain",
+            "zh-CN": "转储目标的桶 id"
+          },
+          "help_descriptions": {
+            "en-US": "Target Domain",
+            "en-GB": "Target Domain",
+            "zh-CN": "转储目标的桶 ID"
+          },
+          "cli_name": "target_domain",
+          "cli_flag": "target-domain",
+          "example": "bucket-c787"
+        },
+        {
+          "name": "targetSpace",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "转储目录前缀，不要以/或\\\\开头，不允许出现名为..的子目录，长度需要在1-254",
+          "descriptions": {
+            "en-US": "Target Space",
+            "en-GB": "Target Space",
+            "zh-CN": "转储目录前缀，不要以/或\\\\开头，不允许出现名为..的子目录，长度需要在1-254"
+          },
+          "help_descriptions": {
+            "en-US": "Target Space",
+            "en-GB": "Target Space",
+            "zh-CN": "转储目录前缀，不要以/或\\\\开头，不允许出现名为..的子目录，长度需要在1-254"
+          },
+          "cli_name": "target_space",
+          "cli_flag": "target-space",
+          "example": "log"
+        }
+      ],
+      "examples": [],
+      "request_example": {
+        "taskName": "test",
+        "state": 1,
+        "rwType": 1,
+        "targetType": 0,
+        "targetRegion": "e9842b5a-0e30-47e1-8e24-a77fe138786d",
+        "targetDomain": "bucket-c787",
+        "targetSpace": "log"
+      },
+      "response": {
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "columns": [
+          {
+            "key": "task_name",
+            "path": "taskName",
+            "label_en": "Task Name",
+            "label_zh": "跟踪任务名称",
+            "description": "跟踪任务名称"
+          },
+          {
+            "key": "task_id",
+            "path": "taskId",
+            "label_en": "Task ID",
+            "label_zh": "跟踪任务 ID",
+            "description": "跟踪任务 ID"
+          },
+          {
+            "key": "rw_type",
+            "path": "rwType",
+            "label_en": "Event Scope",
+            "label_zh": "事件范围",
+            "description": "事件范围"
+          },
+          {
+            "key": "target_domain",
+            "path": "targetDomain",
+            "label_en": "Target Domain",
+            "label_zh": "转储目标的桶 ID",
+            "description": "转储目标的桶 id"
+          },
+          {
+            "key": "target_space",
+            "path": "targetSpace",
+            "label_en": "Target Space",
+            "label_zh": "转储目录前缀",
+            "description": "转储目录前缀"
+          },
+          {
+            "key": "target_region",
+            "path": "targetRegion",
+            "label_en": "Target Region",
+            "label_zh": "转储目标的资源池 ID",
+            "description": "转储目标的资源池 id"
+          },
+          {
+            "key": "state",
+            "path": "state",
+            "label_en": "State",
+            "label_zh": "状态",
+            "description": "启用状态"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间",
+            "description": "创建时间"
+          }
+        ],
+        "default_columns": [
+          "task_name",
+          "task_id",
+          "rw_type",
+          "target_domain",
+          "target_space",
+          "target_region"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "layout": "vertical"
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMCwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7InRhc2tOYW1lIjogInRlc3QyNSIsICJ0YXNrSWQiOiAiODBjMzBlY2ItZjdmYi00MDhiLWFhOGUtYzU4ZDRiN2VhNDc0IiwgInJ3VHlwZSI6IHsiY29kZSI6IDEsICJ2YWx1ZSI6ICLor7vnsbvlnosifSwgInRhcmdldERvbWFpbiI6ICJidWNrZXQtYzc4NyIsICJ0YXJnZXRTcGFjZSI6ICJ0ZXN0IiwgInRhcmdldFJlZ2lvbiI6ICJlOTg0MmI1YS0wZTMwLTQ3ZTEtOGUyNC1hNzdmZTEzODc4NmQiLCAic3RhdGUiOiAxLCAiY3JlYXRlVGltZSI6ICIyMDIzLTA5LTE4IDE3OjI1OjM0In19"
+      }
+    },
+    {
+      "id": "cloud-audit.tracker.update",
+      "api_id": "11795",
+      "title": "修改跟踪任务",
+      "description": {
+        "en-US": "Update an audit tracking task",
+        "en-GB": "Update an audit tracking task",
+        "zh-CN": "修改跟踪任务"
+      },
+      "category": "tracker",
+      "command_path": [
+        "tracker",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v2/manager/auditTrack/update",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=126&vid=159&data=166&api=11795&isNormal=1",
+      "retryable": false,
+      "dangerous": true,
+      "parameters": [
+        {
+          "name": "regionid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "资源池 id",
+          "descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "cli_name": "",
+          "cli_flag": "",
+          "profile": "region",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "accountid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "租户的账户 id",
+          "descriptions": {
+            "en-US": "Accountid",
+            "en-GB": "Accountid",
+            "zh-CN": "租户的账户 id"
+          },
+          "help_descriptions": {
+            "en-US": "Accountid",
+            "en-GB": "Accountid",
+            "zh-CN": "租户的账户 ID"
+          },
+          "cli_name": "accountid",
+          "cli_flag": "accountid",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "userid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "用户 id",
+          "descriptions": {
+            "en-US": "Userid",
+            "en-GB": "Userid",
+            "zh-CN": "用户 id"
+          },
+          "help_descriptions": {
+            "en-US": "Userid",
+            "en-GB": "Userid",
+            "zh-CN": "用户 ID"
+          },
+          "cli_name": "userid",
+          "cli_flag": "userid",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "taskId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "跟踪任务id",
+          "descriptions": {
+            "en-US": "Task ID",
+            "en-GB": "Task ID",
+            "zh-CN": "跟踪任务id"
+          },
+          "help_descriptions": {
+            "en-US": "Task ID",
+            "en-GB": "Task ID",
+            "zh-CN": "跟踪任务ID"
+          },
+          "cli_name": "task_id",
+          "cli_flag": "task-id",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "taskName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "跟踪任务名称，以大小写字母或中文开头，可包含数字、'.'、'_'、'-'，长度在2-64之间",
+          "descriptions": {
+            "en-US": "Task Name",
+            "en-GB": "Task Name",
+            "zh-CN": "跟踪任务名称，以大小写字母或中文开头，可包含数字、'.'、'_'、'-'，长度在2-64之间"
+          },
+          "help_descriptions": {
+            "en-US": "Task Name",
+            "en-GB": "Task Name",
+            "zh-CN": "跟踪任务名称，以大小写字母或中文开头，可包含数字、'.'、'_'、'-'，长度在2-64之间"
+          },
+          "cli_name": "task_name",
+          "cli_flag": "task-name",
+          "example": "test"
+        },
+        {
+          "name": "state",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "description": "启用状态：1启用，0停用",
+          "descriptions": {
+            "en-US": "State",
+            "en-GB": "State",
+            "zh-CN": "启用状态：1启用，0停用"
+          },
+          "help_descriptions": {
+            "en-US": "State",
+            "en-GB": "State",
+            "zh-CN": "启用状态：1启用，0停用"
+          },
+          "cli_name": "state",
+          "cli_flag": "state",
+          "example": 1
+        },
+        {
+          "name": "rwType",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "description": "事件范围：0为读类型，1为写类型,2为全部类型",
+          "descriptions": {
+            "en-US": "Rw Type",
+            "en-GB": "Rw Type",
+            "zh-CN": "事件范围：0为读类型，1为写类型,2为全部类型"
+          },
+          "help_descriptions": {
+            "en-US": "Rw Type",
+            "en-GB": "Rw Type",
+            "zh-CN": "事件范围：0为读类型，1为写类型,2为全部类型"
+          },
+          "cli_name": "rw_type",
+          "cli_flag": "rw-type",
+          "example": 1
+        },
+        {
+          "name": "targetDomain",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "转储目标的桶 id",
+          "descriptions": {
+            "en-US": "Target Domain",
+            "en-GB": "Target Domain",
+            "zh-CN": "转储目标的桶 id"
+          },
+          "help_descriptions": {
+            "en-US": "Target Domain",
+            "en-GB": "Target Domain",
+            "zh-CN": "转储目标的桶 ID"
+          },
+          "cli_name": "target_domain",
+          "cli_flag": "target-domain",
+          "example": "bucket-c787"
+        },
+        {
+          "name": "targetSpace",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "转储目录前缀，不要以/或\\\\开头，不允许出现名为..的子目录，长度需要在1-254",
+          "descriptions": {
+            "en-US": "Target Space",
+            "en-GB": "Target Space",
+            "zh-CN": "转储目录前缀，不要以/或\\\\开头，不允许出现名为..的子目录，长度需要在1-254"
+          },
+          "help_descriptions": {
+            "en-US": "Target Space",
+            "en-GB": "Target Space",
+            "zh-CN": "转储目录前缀，不要以/或\\\\开头，不允许出现名为..的子目录，长度需要在1-254"
+          },
+          "cli_name": "target_space",
+          "cli_flag": "target-space",
+          "example": "log"
+        },
+        {
+          "name": "updateTaskName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "跟踪任务名称，以大小写字母或中文开头，可包含数字、'.'、'_'、'-'，长度在2-64之间",
+          "descriptions": {
+            "en-US": "Update Task Name",
+            "en-GB": "Update Task Name",
+            "zh-CN": "跟踪任务名称，以大小写字母或中文开头，可包含数字、'.'、'_'、'-'，长度在2-64之间"
+          },
+          "help_descriptions": {
+            "en-US": "Update Task Name",
+            "en-GB": "Update Task Name",
+            "zh-CN": "跟踪任务名称，以大小写字母或中文开头，可包含数字、'.'、'_'、'-'，长度在2-64之间"
+          },
+          "cli_name": "update_task_name",
+          "cli_flag": "update-task-name",
+          "example": "test2"
+        }
+      ],
+      "examples": [],
+      "request_example": {
+        "rwType": 2,
+        "state": 1,
+        "targetDomain": "bucket-c787",
+        "targetSpace": "test-new",
+        "targetType": "0",
+        "taskName": "test25",
+        "taskId": "80c30ecb-f7fb-408b-aa8e-c58d4b7ea474",
+        "updateTaskName": "test25new"
+      },
+      "response": {
+        "success_code": "0",
+        "result_path": "$",
+        "row_path": "$",
+        "columns": [
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果",
+            "description": "返回数据结构体"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "状态码 取值范围：0 成功"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "提示信息"
+          }
+        ],
+        "default_columns": [
+          "return_obj",
+          "status_code",
+          "message"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "layout": "vertical"
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJyZXR1cm5PYmoiOiB7fSwgInN0YXR1c0NvZGUiOiAiMCIsICJtZXNzYWdlIjogIlNVQ0NFU1MifQ=="
+      }
+    },
+    {
+      "id": "cloud-audit.tracker.delete",
+      "api_id": "11796",
+      "title": "删除跟踪任务",
+      "description": {
+        "en-US": "Delete an audit tracking task",
+        "en-GB": "Delete an audit tracking task",
+        "zh-CN": "删除跟踪任务"
+      },
+      "category": "tracker",
+      "command_path": [
+        "tracker",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/v2/manager/auditTrack/delete",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=126&vid=159&data=166&api=11796&isNormal=1",
+      "retryable": false,
+      "dangerous": true,
+      "parameters": [
+        {
+          "name": "regionid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "资源池 id",
+          "descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "cli_name": "",
+          "cli_flag": "",
+          "profile": "region",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "accountid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "租户的账户 id",
+          "descriptions": {
+            "en-US": "Accountid",
+            "en-GB": "Accountid",
+            "zh-CN": "租户的账户 id"
+          },
+          "help_descriptions": {
+            "en-US": "Accountid",
+            "en-GB": "Accountid",
+            "zh-CN": "租户的账户 ID"
+          },
+          "cli_name": "accountid",
+          "cli_flag": "accountid",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "userid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "用户 id",
+          "descriptions": {
+            "en-US": "Userid",
+            "en-GB": "Userid",
+            "zh-CN": "用户 id"
+          },
+          "help_descriptions": {
+            "en-US": "Userid",
+            "en-GB": "Userid",
+            "zh-CN": "用户 ID"
+          },
+          "cli_name": "userid",
+          "cli_flag": "userid",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "taskName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "跟踪任务名称",
+          "descriptions": {
+            "en-US": "Task Name",
+            "en-GB": "Task Name",
+            "zh-CN": "跟踪任务名称"
+          },
+          "help_descriptions": {
+            "en-US": "Task Name",
+            "en-GB": "Task Name",
+            "zh-CN": "跟踪任务名称"
+          },
+          "cli_name": "task_name",
+          "cli_flag": "task-name",
+          "example": "test"
+        },
+        {
+          "name": "taskId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "跟踪任务 id",
+          "descriptions": {
+            "en-US": "Task ID",
+            "en-GB": "Task ID",
+            "zh-CN": "跟踪任务 id"
+          },
+          "help_descriptions": {
+            "en-US": "Task ID",
+            "en-GB": "Task ID",
+            "zh-CN": "跟踪任务 ID"
+          },
+          "cli_name": "task_id",
+          "cli_flag": "task-id",
+          "example": "385248c8-799f-4129-8928-4f94c61a2c50"
+        }
+      ],
+      "examples": [],
+      "request_example": {
+        "taskName": "test",
+        "taskId": "385248c8-799f-4129-8928-4f94c61a2c50"
+      },
+      "response": {
+        "success_code": "0",
+        "result_path": "$",
+        "row_path": "$",
+        "columns": [
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果",
+            "description": "返回数据结构体"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "状态码 取值范围：0 成功"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "提示信息"
+          }
+        ],
+        "default_columns": [
+          "return_obj",
+          "status_code",
+          "message"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "layout": "vertical"
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJyZXR1cm5PYmoiOiB7fSwgInN0YXR1c0NvZGUiOiAiMCIsICJtZXNzYWdlIjogIlNVQ0NFU1MifQ=="
+      }
+    },
+    {
+      "id": "cloud-audit.tracker.list",
+      "api_id": "11797",
+      "title": "查询跟踪任务列表",
+      "description": {
+        "en-US": "List audit tracking tasks",
+        "en-GB": "List audit tracking tasks",
+        "zh-CN": "查询跟踪任务列表"
+      },
+      "category": "tracker",
+      "command_path": [
+        "tracker",
+        "list"
+      ],
+      "method": "POST",
+      "path": "/v2/manager/auditTrack/list",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=126&vid=159&data=166&api=11797&isNormal=1",
+      "retryable": true,
+      "dangerous": false,
+      "parameters": [
+        {
+          "name": "regionid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "资源池 id",
+          "descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "cli_name": "",
+          "cli_flag": "",
+          "profile": "region",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "accountid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "租户的账户 id",
+          "descriptions": {
+            "en-US": "Accountid",
+            "en-GB": "Accountid",
+            "zh-CN": "租户的账户 id"
+          },
+          "help_descriptions": {
+            "en-US": "Accountid",
+            "en-GB": "Accountid",
+            "zh-CN": "租户的账户 ID"
+          },
+          "cli_name": "accountid",
+          "cli_flag": "accountid",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "userid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "用户 id",
+          "descriptions": {
+            "en-US": "Userid",
+            "en-GB": "Userid",
+            "zh-CN": "用户 id"
+          },
+          "help_descriptions": {
+            "en-US": "Userid",
+            "en-GB": "Userid",
+            "zh-CN": "用户 ID"
+          },
+          "cli_name": "userid",
+          "cli_flag": "userid",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "pageNumber",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "description": "页码",
+          "descriptions": {
+            "en-US": "Page Number",
+            "en-GB": "Page Number",
+            "zh-CN": "页码"
+          },
+          "help_descriptions": {
+            "en-US": "Page Number",
+            "en-GB": "Page Number",
+            "zh-CN": "页码"
+          },
+          "cli_name": "page_number",
+          "cli_flag": "page-number",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "description": "每页数量",
+          "descriptions": {
+            "en-US": "Page Size",
+            "en-GB": "Page Size",
+            "zh-CN": "每页数量"
+          },
+          "help_descriptions": {
+            "en-US": "Page Size",
+            "en-GB": "Page Size",
+            "zh-CN": "每页数量"
+          },
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "example": 10
+        }
+      ],
+      "examples": [],
+      "request_example": {
+        "pageNumber": 1,
+        "pageSize": 10
+      },
+      "response": {
+        "success_code": "0",
+        "result_path": "returnObj.records",
+        "row_path": "returnObj.records",
+        "columns": [
+          {
+            "key": "task_name",
+            "path": "taskName",
+            "label_en": "Task Name",
+            "label_zh": "跟踪任务名称",
+            "description": "跟踪任务名称"
+          },
+          {
+            "key": "task_id",
+            "path": "taskId",
+            "label_en": "Task ID",
+            "label_zh": "跟踪任务 ID",
+            "description": "跟踪任务 ID"
+          },
+          {
+            "key": "rw_type",
+            "path": "rwType",
+            "label_en": "Event Scope",
+            "label_zh": "事件范围",
+            "description": "事件范围"
+          },
+          {
+            "key": "target_domain",
+            "path": "targetDomain",
+            "label_en": "Target Domain",
+            "label_zh": "转储目标的桶 ID",
+            "description": "转储目标的桶 id"
+          },
+          {
+            "key": "target_space",
+            "path": "targetSpace",
+            "label_en": "Target Space",
+            "label_zh": "转储目录前缀",
+            "description": "bucket-c787"
+          },
+          {
+            "key": "state",
+            "path": "state",
+            "label_en": "State",
+            "label_zh": "状态",
+            "description": "启用状态"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间",
+            "description": "创建时间"
+          },
+          {
+            "key": "target_region",
+            "path": "targetRegion",
+            "label_en": "Target Region",
+            "label_zh": "转储目标的资源池 ID",
+            "description": "转储目标的资源池 id"
+          },
+          {
+            "key": "storage_state",
+            "path": "storageState",
+            "label_en": "Storage State",
+            "label_zh": "数据转储状态",
+            "description": "数据转储状态，0-失败，1-成功"
+          },
+          {
+            "key": "error_reason",
+            "path": "errorReason",
+            "label_en": "Error Reason",
+            "label_zh": "转储出错原因",
+            "description": "转储出错原因"
+          }
+        ],
+        "default_columns": [
+          "task_name",
+          "task_id",
+          "rw_type",
+          "target_domain",
+          "target_space",
+          "state"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        }
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMCwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7InJlY29yZHMiOiBbeyJ0YXNrTmFtZSI6ICJ0ZXN0MTIwNSIsICJ0YXNrSWQiOiAiMTQ3ZGU0YzgtMzc4OS00ZDNiLTkwMjUtZTZjMjI0NmNlZWQ0IiwgInJ3VHlwZSI6IDEsICJ0YXJnZXREb21haW4iOiAiYnVja2V0LWM3ODciLCAidGFyZ2V0U3BhY2UiOiAidGVzdDEyMDUiLCAic3RhdGUiOiAxLCAiY3JlYXRlVGltZSI6ICIyMDIyLTEyLTA1IDAyOjI1OjU1IiwgInRhcmdldFJlZ2lvbiI6ICI4MWY3NzI4NjYyZGQxMWVjODEwODAwMTU1ZDMwN2Q1YiIsICJzdG9yYWdlU3RhdGUiOiAxLCAiZXJyb3JSZWFzb24iOiAi6L2s5YKo5oiQ5YqfIn0sIHsidGFza05hbWUiOiAidGVzdDEyMDUyIiwgInRhc2tJZCI6ICJmZDMwYTE4Yi05MGNmLTQyNDgtYWJkOS1mM2Y4YjUwZjM5NzIiLCAicndUeXBlIjogMCwgInRhcmdldERvbWFpbiI6ICJidWNrZXQtYTJmYiIsICJ0YXJnZXRTcGFjZSI6ICIxMjA1MiIsICJzdGF0ZSI6IDEsICJjcmVhdGVUaW1lIjogIjIwMjItMTItMDUgMDY6NTQ6MTYiLCAidGFyZ2V0UmVnaW9uIjogIjgxZjc3Mjg2NjJkZDExZWM4MTA4MDAxNTVkMzA3ZDViIiwgInN0b3JhZ2VTdGF0ZSI6IDEsICJlcnJvclJlYXNvbiI6ICLovazlgqjmiJDlip8ifV0sICJ0b3RhbCI6IDIsICJzaXplIjogMjAsICJjdXJyZW50IjogMX19"
+      }
+    },
+    {
+      "id": "cloud-audit.tracker.show",
+      "api_id": "11798",
+      "title": "查询跟踪任务详情",
+      "description": {
+        "en-US": "Show an audit tracking task",
+        "en-GB": "Show an audit tracking task",
+        "zh-CN": "查询跟踪任务详情"
+      },
+      "category": "tracker",
+      "command_path": [
+        "tracker",
+        "show"
+      ],
+      "method": "POST",
+      "path": "/v2/manager/auditTrack/get",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=126&vid=159&data=166&api=11798&isNormal=1",
+      "retryable": true,
+      "dangerous": false,
+      "parameters": [
+        {
+          "name": "regionid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "资源池 id",
+          "descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "cli_name": "",
+          "cli_flag": "",
+          "profile": "region",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "accountid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "租户的账户 id",
+          "descriptions": {
+            "en-US": "Accountid",
+            "en-GB": "Accountid",
+            "zh-CN": "租户的账户 id"
+          },
+          "help_descriptions": {
+            "en-US": "Accountid",
+            "en-GB": "Accountid",
+            "zh-CN": "租户的账户 ID"
+          },
+          "cli_name": "accountid",
+          "cli_flag": "accountid",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "userid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "用户 id",
+          "descriptions": {
+            "en-US": "Userid",
+            "en-GB": "Userid",
+            "zh-CN": "用户 id"
+          },
+          "help_descriptions": {
+            "en-US": "Userid",
+            "en-GB": "Userid",
+            "zh-CN": "用户 ID"
+          },
+          "cli_name": "userid",
+          "cli_flag": "userid",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "taskName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "跟踪任务名称",
+          "descriptions": {
+            "en-US": "Task Name",
+            "en-GB": "Task Name",
+            "zh-CN": "跟踪任务名称"
+          },
+          "help_descriptions": {
+            "en-US": "Task Name",
+            "en-GB": "Task Name",
+            "zh-CN": "跟踪任务名称"
+          },
+          "cli_name": "task_name",
+          "cli_flag": "task-name",
+          "example": "test"
+        },
+        {
+          "name": "taskId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "跟踪任务 id",
+          "descriptions": {
+            "en-US": "Task ID",
+            "en-GB": "Task ID",
+            "zh-CN": "跟踪任务 id"
+          },
+          "help_descriptions": {
+            "en-US": "Task ID",
+            "en-GB": "Task ID",
+            "zh-CN": "跟踪任务 ID"
+          },
+          "cli_name": "task_id",
+          "cli_flag": "task-id",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        }
+      ],
+      "examples": [],
+      "request_example": {
+        "taskName": "test",
+        "taskId": "385248c8-799f-4129-8928-4f94c61a2c50"
+      },
+      "response": {
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "columns": [
+          {
+            "key": "task_name",
+            "path": "taskName",
+            "label_en": "Task Name",
+            "label_zh": "跟踪任务名称",
+            "description": "跟踪任务名称"
+          },
+          {
+            "key": "task_id",
+            "path": "taskId",
+            "label_en": "Task ID",
+            "label_zh": "跟踪任务 ID",
+            "description": "跟踪任务 ID"
+          },
+          {
+            "key": "rw_type",
+            "path": "rwType",
+            "label_en": "Event Scope",
+            "label_zh": "事件范围",
+            "description": "事件范围"
+          },
+          {
+            "key": "target_domain",
+            "path": "targetDomain",
+            "label_en": "Target Domain",
+            "label_zh": "转储目标的桶 ID",
+            "description": "转储目标的桶 id"
+          },
+          {
+            "key": "target_space",
+            "path": "targetSpace",
+            "label_en": "Target Space",
+            "label_zh": "转储目录前缀",
+            "description": "转储目录前缀"
+          },
+          {
+            "key": "target_region",
+            "path": "targetRegion",
+            "label_en": "Target Region",
+            "label_zh": "转储目标的资源池 ID",
+            "description": "转储目标的资源池 id"
+          },
+          {
+            "key": "state",
+            "path": "state",
+            "label_en": "State",
+            "label_zh": "状态",
+            "description": "启用状态"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间",
+            "description": "创建时间"
+          }
+        ],
+        "default_columns": [
+          "task_name",
+          "task_id",
+          "rw_type",
+          "target_domain",
+          "target_space",
+          "target_region"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "layout": "vertical"
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMCwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7InRhc2tOYW1lIjogInRlc3QyNSIsICJ0YXNrSWQiOiAiODBjMzBlY2ItZjdmYi00MDhiLWFhOGUtYzU4ZDRiN2VhNDc0IiwgInJ3VHlwZSI6IHsiY29kZSI6IDEsICJ2YWx1ZSI6ICLor7vnsbvlnosifSwgInRhcmdldERvbWFpbiI6ICJidWNrZXQtYzc4NyIsICJ0YXJnZXRTcGFjZSI6ICJ0ZXN0IiwgInRhcmdldFJlZ2lvbiI6ICJlOTg0MmI1YS0wZTMwLTQ3ZTEtOGUyNC1hNzdmZTEzODc4NmQiLCAic3RhdGUiOiAxLCAiY3JlYXRlVGltZSI6ICIyMDIzLTA5LTE4IDE3OjI1OjM0In19"
+      }
+    },
+    {
+      "id": "cloud-audit.region.list",
+      "api_id": "11799",
+      "title": "获取云审计支持的资源池列表",
+      "description": {
+        "en-US": "List regions supported by Cloud Audit",
+        "en-GB": "List regions supported by Cloud Audit",
+        "zh-CN": "获取云审计支持的资源池列表"
+      },
+      "category": "region",
+      "command_path": [
+        "region",
+        "list"
+      ],
+      "method": "POST",
+      "path": "/v2/region/available/getList",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=126&vid=159&data=166&api=11799&isNormal=1",
+      "retryable": true,
+      "dangerous": false,
+      "parameters": [
+        {
+          "name": "regionid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "资源池 id",
+          "descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "cli_name": "",
+          "cli_flag": "",
+          "profile": "region",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "accountid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "租户的账户 id",
+          "descriptions": {
+            "en-US": "Accountid",
+            "en-GB": "Accountid",
+            "zh-CN": "租户的账户 id"
+          },
+          "help_descriptions": {
+            "en-US": "Accountid",
+            "en-GB": "Accountid",
+            "zh-CN": "租户的账户 ID"
+          },
+          "cli_name": "accountid",
+          "cli_flag": "accountid",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "userid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "用户 id",
+          "descriptions": {
+            "en-US": "Userid",
+            "en-GB": "Userid",
+            "zh-CN": "用户 id"
+          },
+          "help_descriptions": {
+            "en-US": "Userid",
+            "en-GB": "Userid",
+            "zh-CN": "用户 ID"
+          },
+          "cli_name": "userid",
+          "cli_flag": "userid",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        }
+      ],
+      "examples": [],
+      "request_example": {},
+      "response": {
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "columns": [
+          {
+            "key": "region_id",
+            "path": "regionId",
+            "label_en": "Region ID",
+            "label_zh": "资源池 ID",
+            "description": "资源池id"
+          },
+          {
+            "key": "region_name",
+            "path": "regionName",
+            "label_en": "Region Name",
+            "label_zh": "资源池名称",
+            "description": "资源池名称"
+          },
+          {
+            "key": "region_url",
+            "path": "regionUrl",
+            "label_en": "Region URL",
+            "label_zh": "资源池地址",
+            "description": "资源池地址"
+          }
+        ],
+        "default_columns": [
+          "region_id",
+          "region_name",
+          "region_url"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        }
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMCwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiBbeyJyZWdpb25JZCI6ICJjbi1haHdoMSIsICJyZWdpb25OYW1lIjogIuiKnOa5liIsICJyZWdpb25VcmwiOiAiaHR0cHM6Ly9jb25zb2xlMi5jdHl1bi5jbi9jb25zb2xlLz9yZWdpb249Y24tYWh3aDEjL2hvbWUifSwgeyJyZWdpb25JZCI6ICI4MWY3NzI4NjYyZGQxMWVjODEwODAwMTU1ZDMwN2Q1YiIsICJyZWdpb25OYW1lIjogIuWGheiSmTgiLCAicmVnaW9uVXJsIjogImh0dHBzOi8vY29uc29sZS5jdHl1bi5jbi9jb25zb2xlL2luZGV4LyMvY29uc29sZT9yZWdpb25pZD02OTliZGY2OWQyN2U0ZTJhYjVkZmZiMzhhYmVmYjExYyJ9LCB7InJlZ2lvbklkIjogImNuLXFoeG4xIiwgInJlZ2lvbk5hbWUiOiAi6KW/5a6BIiwgInJlZ2lvblVybCI6ICJodHRwczovL2NvbnNvbGUyLmN0eXVuLmNuL2NvbnNvbGUvP3JlZ2lvbj1jbi1xaHhuMSMvaG9tZSJ9XX0="
+      }
+    },
+    {
+      "id": "cloud-audit.event.storage-region.show",
+      "api_id": "11800",
+      "title": "获取操作事件存储的资源池信息",
+      "description": {
+        "en-US": "Show the storage region for audit events",
+        "en-GB": "Show the storage region for audit events",
+        "zh-CN": "获取操作事件存储的资源池信息"
+      },
+      "category": "event",
+      "command_path": [
+        "event",
+        "storage-region",
+        "show"
+      ],
+      "method": "POST",
+      "path": "/v2/region/storage/getInfo",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=126&vid=159&data=166&api=11800&isNormal=1",
+      "retryable": true,
+      "dangerous": false,
+      "parameters": [
+        {
+          "name": "regionid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "资源池id",
+          "descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-US": "Region ID",
+            "en-GB": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "cli_name": "",
+          "cli_flag": "",
+          "profile": "region",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "userid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "用户id",
+          "descriptions": {
+            "en-US": "Userid",
+            "en-GB": "Userid",
+            "zh-CN": "用户id"
+          },
+          "help_descriptions": {
+            "en-US": "Userid",
+            "en-GB": "Userid",
+            "zh-CN": "用户ID"
+          },
+          "cli_name": "userid",
+          "cli_flag": "userid",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        },
+        {
+          "name": "accountId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "description": "账户id",
+          "descriptions": {
+            "en-US": "Account ID",
+            "en-GB": "Account ID",
+            "zh-CN": "账户id"
+          },
+          "help_descriptions": {
+            "en-US": "Account ID",
+            "en-GB": "Account ID",
+            "zh-CN": "账户ID"
+          },
+          "cli_name": "account_id",
+          "cli_flag": "account-id",
+          "example": "e24318ed2ce748c7d9073d5f97221d36"
+        }
+      ],
+      "examples": [],
+      "request_example": {},
+      "response": {
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "columns": [
+          {
+            "key": "region_id",
+            "path": "regionId",
+            "label_en": "Region ID",
+            "label_zh": "资源池 ID",
+            "description": "资源池id"
+          },
+          {
+            "key": "region_name",
+            "path": "regionName",
+            "label_en": "Region Name",
+            "label_zh": "资源池名称",
+            "description": "资源池名称"
+          },
+          {
+            "key": "region_url",
+            "path": "regionUrl",
+            "label_en": "Region URL",
+            "label_zh": "资源池地址",
+            "description": "资源池地址"
+          }
+        ],
+        "default_columns": [
+          "region_id",
+          "region_name",
+          "region_url"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "layout": "vertical"
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMCwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7InJlZ2lvbklkIjogIjgxZjc3Mjg2NjJkZDExZWM4MTA4MDAxNTVkMzA3ZDViIiwgInJlZ2lvbk5hbWUiOiAi5YaF6JKZOCIsICJyZWdpb25VcmwiOiAiaHR0cHM6Ly9jb25zb2xlLmN0eXVuLmNuL2NvbnNvbGUvaW5kZXgvIy9jb25zb2xlP3JlZ2lvbmlkPTY5OWJkZjY5ZDI3ZTRlMmFiNWRmZmIzOGFiZWZiMTFjIn19"
+      }
+    }
+  ]
+}

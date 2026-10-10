@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.1.0-beta.4 - 2026-10-10
+
+### Added
+
+- Added 16 publicly documented service delegation, HPC cluster lifecycle and pricing, queue, node, task-result, and specification commands while preserving the original command paths.
+- Added bounded task completion waits covering documented success, forced completion, failure, cancellation, and console failure states.
+
+### Changed
+
+- Refreshed supported-region responses with availability-zone ECS, SFS, and OceanFS support information.
+
+### Fixed
+
+- Remove incorrect column deprecation warnings from the scheduler node offline state.
+
 ## 0.1.0-beta.3 - 2026-09-23
 
 ### Added

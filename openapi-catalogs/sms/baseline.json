@@ -1,0 +1,5542 @@
+{
+  "waiters": {
+    "sms.signature.approved": {
+      "commands": [
+        "sms.signature.show"
+      ],
+      "path": "returnObj.signStatus",
+      "success": "1",
+      "failure": "2",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "API 11647 documents 0 under review, 1 approved, 2 rejected; the command queries one template code or signature name. The response path matches its captured example."
+    },
+    "sms.template.approved": {
+      "commands": [
+        "sms.template.show"
+      ],
+      "path": "returnObj.templateStatus",
+      "success": "1",
+      "failure": "2",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "API 11673 documents 0 under review, 1 approved, 2 rejected; the command queries one template code or signature name. The response path matches its captured example."
+    },
+    "sms.v1.signature.approved": {
+      "commands": [
+        "sms.v1.signature.show"
+      ],
+      "path": "signStatus",
+      "success": "1",
+      "failure": "2",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "API 954 documents 0 under review, 1 approved, 2 rejected; the command queries one template code or signature name. The response path matches its captured example."
+    },
+    "sms.v1.template.approved": {
+      "commands": [
+        "sms.v1.template.show"
+      ],
+      "path": "templateStatus",
+      "success": "1",
+      "failure": "2",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "API 954 documents 0 under review, 1 approved, 2 rejected; the command queries one template code or signature name. The response path matches its captured example."
+    }
+  },
+  "schema_version": 1,
+  "product": {
+    "plugin_name": "sms",
+    "api_product": "sms",
+    "ctyun_product_id": 74,
+    "source_revision": "2",
+    "display_name": {
+      "en-GB": "Cloud Messaging - SMS",
+      "en-US": "Cloud Messaging - SMS",
+      "zh-CN": "云通信-短信"
+    },
+    "display_name_policy": {
+      "kind": "descriptive"
+    },
+    "endpoint_url": "https://sms-global.ctapi.ctyun.cn",
+    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2",
+    "api_scope": {
+      "include_uri_prefixes": [
+        "/sms/api/"
+      ],
+      "notes": "Published self-operated customer-side APIs; legacy API families retain separate command groups. See coverage.json for reviewed evidence and remaining gaps."
+    }
+  },
+  "operations": [
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMTAwMDAsICJtZXNzYWdlIjogIuaIkOWKnyIsICJyZXF1ZXN0SWQiOiAiY2tyb2xxYmJ0ZmUwa2ZjaDdoN2ciLCAicmV0dXJuT2JqIjogeyJ0ZW1wbGF0ZVR5cGUiOiAxLCAidGVtcGxhdGVOYW1lIjogIumqjOivgeeggea1i+ivlSIsICJyZWFzb24iOiAi6YCa6L+HIiwgInRlbXBsYXRlQ29kZSI6ICJTTVM2NDEyNDg3MDUxMCIsICJ0ZW1wbGF0ZVN0YXR1cyI6IDEsICJjcmVhdGVUaW1lIjogIjIwMjItMDctMTlUMDc6NDA6MDMuMzM3WiIsICJ0ZW1wbGF0ZUNvbnRlbnQiOiAi5oKo55qE6aqM6K+B56CB5piv77yaJHtjb2Rlfe+8jOacieaViOacnzLliIbpkp/vvIzor7fli7/ms4TpnLLnu5nku5bkurrvvIzlpoLpnZ7mnKzkurrmk43kvZzvvIzor7flv73nlaXmraTkv6Hmga/jgIIifX0="
+      },
+      "id": "sms.template.show",
+      "api_id": "11673",
+      "title": "查询模板",
+      "description": {
+        "en-GB": "Show an SMS template",
+        "en-US": "Show an SMS template",
+        "zh-CN": "查询模板"
+      },
+      "category": "template",
+      "command_path": [
+        "template",
+        "show"
+      ],
+      "method": "POST",
+      "path": "/sms/api/v2/querySmsTemplate",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2&api=11673&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "templateCode",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信模板CODE。 您可以在控制台模板管理页面或API接口AddSmsTemplate的返回参数中获取短信模板CODE",
+          "descriptions": {
+            "en-GB": "Template Code",
+            "en-US": "Template Code",
+            "zh-CN": "短信模板CODE。 您可以在控制台模板管理页面或API接口AddSmsTemplate的返回参数中获取短信模板CODE"
+          },
+          "help_descriptions": {
+            "en-GB": "Template Code",
+            "en-US": "Template Code",
+            "zh-CN": "短信模板CODE"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_code",
+          "cli_flag": "template-code",
+          "table_target": "",
+          "example": "SMS64124870510"
+        },
+        {
+          "name": "action",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统规定参数。取值：QuerySmsTemplate",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数。取值：QuerySmsTemplate"
+          },
+          "help_descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "action",
+          "cli_flag": "action",
+          "table_target": "",
+          "example": "QuerySmsTemplate"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "10000"
+              ]
+            }
+          ]
+        },
+        "success_code": "10000",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "template_type",
+          "template_name",
+          "reason",
+          "template_code",
+          "template_status",
+          "create_time"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "template_type",
+            "path": "templateType",
+            "label_en": "Template Type",
+            "label_zh": "短信类型",
+            "description": "短信类型。其中： 1：验证码。 2：短信通知"
+          },
+          {
+            "key": "template_name",
+            "path": "templateName",
+            "label_en": "Template Name",
+            "label_zh": "模板名称",
+            "description": "模板名称"
+          },
+          {
+            "key": "reason",
+            "path": "reason",
+            "label_en": "Reason",
+            "label_zh": "审核备注",
+            "description": "审核备注。 如果审核状态为审核中，参数Reason显示为“”。 如果审核状态为审核通过，参数Reason显示审核通过的详细信息。 如果审核状态为审核未通过，参数Reason显示审核未通过的原因"
+          },
+          {
+            "key": "template_code",
+            "path": "templateCode",
+            "label_en": "Template Code",
+            "label_zh": "模板编码",
+            "description": "短信模板CODE"
+          },
+          {
+            "key": "template_status",
+            "path": "templateStatus",
+            "label_en": "Template Status",
+            "label_zh": "模板审核状态",
+            "description": "模板审核状态。其中： 0：审核中。 1：审核通过。 2：审核失败，请在返回参数Reason中查看审核失败原因"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间",
+            "description": "短信模板的创建日期和时间"
+          },
+          {
+            "key": "template_content",
+            "path": "templateContent",
+            "label_en": "Template Content",
+            "label_zh": "模板内容",
+            "description": "模板内容"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "action": "QuerySmsTemplate",
+        "templateCode": "SMS13889962005"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMTAwMDAsICJtZXNzYWdlIjogIuaIkOWKnyIsICJyZXF1ZXN0SWQiOiAiY2tybWxqajAwZmUwa2ZjaDZqMDAiLCAicmV0dXJuT2JqIjogeyJ0b3RhbCI6IDE0LCAiZGF0YSI6IFt7InRlbXBsYXRlVHlwZSI6IDEsICJ0ZW1wbGF0ZU5hbWUiOiAi6aqM6K+B56CB5rWL6K+VIiwgInRlbXBsYXRlQ29udGVudCI6ICLmgqjnmoTpqozor4HnoIHmmK/vvJoke2NvZGV977yM5pyJ5pWI5pyfMuWIhumSn++8jOivt+WLv+azhOmcsue7meS7luS6uu+8jOWmgumdnuacrOS6uuaTjeS9nO+8jOivt+W/veeVpeatpOS/oeaBr+OAgiIsICJzdGF0dXMiOiAxLCAicmVtYXJrIjogIjEiLCAicmVhc29uIjogIumAmui/hyIsICJjcmVhdGVUaW1lIjogIjIwMjItMDctMTlUMDc6NDA6MDMuMzM3WiIsICJ1cGRhdGVUaW1lIjogIjIwMjItMDctMTlUMDc6NDA6MDMuMzM3WiIsICJ0ZW1wbGF0ZUNvZGUiOiAiU01TNjQxMjQ4NzA1MTAiLCAiZXhhbXBsZSI6ICLmgqjnmoTpqozor4HnoIHmmK/vvJoxMjM0NTbvvIzmnInmlYjmnJ8y5YiG6ZKf77yM6K+35Yu/5rOE6Zyy57uZ5LuW5Lq677yM5aaC6Z2e5pys5Lq65pON5L2c77yM6K+35b+955Wl5q2k5L+h5oGv44CCIn0sIHsic3RhdHVzIjogMSwgInRlbXBsYXRlVHlwZSI6IDIsICJyZW1hcmsiOiAi5YaF6YOo5rWL6K+VIiwgInRlbXBsYXRlQ29udGVudCI6ICLmgqjmraPlnKjov5vooYzlpKnnv7zkupHpl6jmiLfms6jlhozvvIzpqozor4HnoIHkuLrvvJoke2NvZGV977yMNeWIhumSn+WGheacieaViCEiLCAidGVtcGxhdGVDb2RlIjogIlNNUzIyMTExMzc4MDAwIiwgInRlbXBsYXRlTmFtZSI6ICLlpKnnv7zkupHmtYvor5UyIiwgInJlYXNvbiI6ICLpgJrov4ciLCAiY3JlYXRlVGltZSI6ICIyMDIzLTA4LTI0VDA3OjE0OjA1LjgyMloiLCAidXBkYXRlVGltZSI6ICIyMDIyLTA3LTE5VDA3OjQwOjAzLjMzN1oiLCAiZXhhbXBsZSI6ICIifV19fQ=="
+      },
+      "id": "sms.template.list",
+      "api_id": "11668",
+      "title": "查询模板列表",
+      "description": {
+        "en-GB": "List SMS templates",
+        "en-US": "List SMS templates",
+        "zh-CN": "查询模板列表"
+      },
+      "category": "template",
+      "command_path": [
+        "template",
+        "list"
+      ],
+      "method": "POST",
+      "path": "/sms/api/v2/querySmsTemplateList",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2&api=11668&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "action",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统规定参数。取值：QuerySmsTemplateList",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数。取值：QuerySmsTemplateList"
+          },
+          "help_descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "action",
+          "cli_flag": "action",
+          "table_target": "",
+          "example": "QuerySmsTemplateList"
+        },
+        {
+          "name": "pageIndex",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "页码，即获取第几页的模板",
+          "descriptions": {
+            "en-GB": "Page Index",
+            "en-US": "Page Index",
+            "zh-CN": "页码，即获取第几页的模板"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Index",
+            "en-US": "Page Index",
+            "zh-CN": "页码，即获取第几页的模板"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_index",
+          "cli_flag": "page-index",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "个数，即每页包含多少条模板",
+          "descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "个数，即每页包含多少条模板"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "个数，即每页包含多少条模板"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "10000"
+              ]
+            }
+          ]
+        },
+        "success_code": "10000",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "default_columns": [
+          "template_type",
+          "template_name",
+          "template_content",
+          "status",
+          "remark",
+          "reason"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "template_type",
+            "path": "templateType",
+            "label_en": "Template Type",
+            "label_zh": "短信类型",
+            "description": "短信类型。 1：验证码； 2：短信通知"
+          },
+          {
+            "key": "template_name",
+            "path": "templateName",
+            "label_en": "Template Name",
+            "label_zh": "模板名称",
+            "description": "模板名称"
+          },
+          {
+            "key": "template_content",
+            "path": "templateContent",
+            "label_en": "Template Content",
+            "label_zh": "模板内容",
+            "description": "模板内容"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态",
+            "description": "模板审核状态： 0：未审核； 1：审核通过； 2：审核未通过"
+          },
+          {
+            "key": "remark",
+            "path": "remark",
+            "label_en": "Remark",
+            "label_zh": "短信模板申请说明",
+            "description": "短信模板申请说明。 用来描述业务使用场景"
+          },
+          {
+            "key": "reason",
+            "path": "reason",
+            "label_en": "Reason",
+            "label_zh": "审核备注",
+            "description": "审核备注。 如果审核状态为审核中，参数Reason显示为“”。 如果审核状态为审核通过，参数Reason显示为审核通过的详细信息。 如果审核状态为审核未通过，参数Reason显示审核未通过的原因"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间",
+            "description": "创建时间"
+          },
+          {
+            "key": "update_time",
+            "path": "updateTime",
+            "label_en": "Update Time",
+            "label_zh": "更新时间",
+            "description": "更新时间"
+          },
+          {
+            "key": "template_code",
+            "path": "templateCode",
+            "label_en": "Template Code",
+            "label_zh": "模板编码",
+            "description": "短信模板编码"
+          },
+          {
+            "key": "example",
+            "path": "example",
+            "label_en": "Example",
+            "label_zh": "短信示例",
+            "description": "短信示例。 申请模板时由用户填写"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "action": "QuerySmsTemplateList",
+        "pageIndex": 1,
+        "pageSize": 1
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMTAwMDAsICJtZXNzYWdlIjogIuaIkOWKnyIsICJyZXF1ZXN0SWQiOiAiY2tua2JtcWZsc29qYmY0OGg4bmciLCAicmV0dXJuT2JqIjogeyJ0ZW1wbGF0ZUNvZGUiOiAiU01TNjc3NTM1MzAzMjcifX0="
+      },
+      "id": "sms.template.delete",
+      "api_id": "11677",
+      "title": "删除模板",
+      "description": {
+        "en-GB": "Delete an SMS template",
+        "en-US": "Delete an SMS template",
+        "zh-CN": "删除模板"
+      },
+      "category": "template",
+      "command_path": [
+        "template",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/sms/api/v2/deleteSmsTemplate",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2&api=11677&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "action",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统规定参数。取值：DeleteSmsTemplate ",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数。取值：DeleteSmsTemplate "
+          },
+          "help_descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "action",
+          "cli_flag": "action",
+          "table_target": "",
+          "example": "DeleteSmsTemplate"
+        },
+        {
+          "name": "templateCode",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信模板CODE。您可以在控制台模板管理页面或API接口AddSmsTemplate的返回参数中获取短信模板CODE",
+          "descriptions": {
+            "en-GB": "Template Code",
+            "en-US": "Template Code",
+            "zh-CN": "短信模板CODE。您可以在控制台模板管理页面或API接口AddSmsTemplate的返回参数中获取短信模板CODE"
+          },
+          "help_descriptions": {
+            "en-GB": "Template Code",
+            "en-US": "Template Code",
+            "zh-CN": "短信模板CODE"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_code",
+          "cli_flag": "template-code",
+          "table_target": "",
+          "example": "SMS73419576145"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "10000"
+              ]
+            }
+          ]
+        },
+        "success_code": "10000",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "template_code"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "template_code",
+            "path": "templateCode",
+            "label_en": "Template Code",
+            "label_zh": "模板编码",
+            "description": "短信模板CODE。您可以使用模板CODE通过API接口QuerySmsTemplate或在控制台查看模板申请状态和结果"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "action": "DeleteSmsTemplate",
+        "templateCode": "SMS13889962005"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMTAwMDAsICJtZXNzYWdlIjogIuaIkOWKnyIsICJyZXF1ZXN0SWQiOiAiY2tua2JtcWZsc29qYmY0OGg4bmciLCAicmV0dXJuT2JqIjogeyJ0ZW1wbGF0ZUNvZGUiOiAiU01TNjc3NTM1MzAzMjcifX0="
+      },
+      "id": "sms.template.create",
+      "api_id": "11675",
+      "title": "添加模板",
+      "description": {
+        "en-GB": "Create an SMS template",
+        "en-US": "Create an SMS template",
+        "zh-CN": "添加模板"
+      },
+      "category": "template",
+      "command_path": [
+        "template",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/sms/api/v2/addSmsTemplate",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2&api=11675&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "action",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统规定参数。取值：AddSmsTemplate ",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数。取值：AddSmsTemplate "
+          },
+          "help_descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "action",
+          "cli_flag": "action",
+          "table_target": "",
+          "example": "AddSmsTemplate"
+        },
+        {
+          "name": "templateType",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信类型。其中：1：验证码。 2：短信通知",
+          "descriptions": {
+            "en-GB": "Template Type",
+            "en-US": "Template Type",
+            "zh-CN": "短信类型。其中：1：验证码。 2：短信通知"
+          },
+          "help_descriptions": {
+            "en-GB": "Template Type",
+            "en-US": "Template Type",
+            "zh-CN": "短信类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_type",
+          "cli_flag": "template-type",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "templateName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模板名称，长度为1~30个字",
+          "descriptions": {
+            "en-GB": "Template Name",
+            "en-US": "Template Name",
+            "zh-CN": "模板名称，长度为1~30个字"
+          },
+          "help_descriptions": {
+            "en-GB": "Template Name",
+            "en-US": "Template Name",
+            "zh-CN": "模板名称，长度为1~30个字"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_name",
+          "cli_flag": "template-name",
+          "table_target": "",
+          "example": "天翼云注册"
+        },
+        {
+          "name": "templateContent",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模板内容，长度为1~500个字。模板内容需要符合 模板规范 ",
+          "descriptions": {
+            "en-GB": "Template Content",
+            "en-US": "Template Content",
+            "zh-CN": "模板内容，长度为1~500个字。模板内容需要符合 模板规范 "
+          },
+          "help_descriptions": {
+            "en-GB": "Template Content",
+            "en-US": "Template Content",
+            "zh-CN": "模板内容，长度为1~500个字"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_content",
+          "cli_flag": "template-content",
+          "table_target": "",
+          "example": "您正在进行天翼云门户注册，验证码为：${code}，5分钟内有效！"
+        },
+        {
+          "name": "remark",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信模板申请说明。请在申请说明中描述您的业务使用场景，长度不超过200个字",
+          "descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "短信模板申请说明。请在申请说明中描述您的业务使用场景，长度不超过200个字"
+          },
+          "help_descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "短信模板申请说明"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "remark",
+          "cli_flag": "remark",
+          "table_target": "",
+          "example": "天翼云注册"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "10000"
+              ]
+            }
+          ]
+        },
+        "success_code": "10000",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "template_code"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "template_code",
+            "path": "templateCode",
+            "label_en": "Template Code",
+            "label_zh": "模板编码",
+            "description": "短信模板CODE。您可以使用模板CODE通过API接口QuerySmsTemplate或在控制台查看模板申请状态和结果"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "action": "AddSmsTemplate",
+        "remark": "天翼云注册",
+        "templateContent": "您正在进行天翼云门户注册，验证码为：${code},5分钟内有效！",
+        "templateName": "天翼云注册",
+        "templateType": 1
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMTAwMDAsICJtZXNzYWdlIjogIuaIkOWKnyIsICJyZXF1ZXN0SWQiOiAiY2tua2JtcWZsc29qYmY0OGg4bmcifQ=="
+      },
+      "id": "sms.signature.delete",
+      "api_id": "11651",
+      "title": "删除签名",
+      "description": {
+        "en-GB": "Delete an SMS signature",
+        "en-US": "Delete an SMS signature",
+        "zh-CN": "删除签名"
+      },
+      "category": "signature",
+      "command_path": [
+        "signature",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/sms/api/v2/deleteSmsSign",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2&api=11651&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "action",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统规定参数。取值：DeleteSmsSign",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数。取值：DeleteSmsSign"
+          },
+          "help_descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "action",
+          "cli_flag": "action",
+          "table_target": "",
+          "example": "DeleteSmsSign"
+        },
+        {
+          "name": "signName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信签名。 说明:必须是本账号已申请的短信签名",
+          "descriptions": {
+            "en-GB": "Sign Name",
+            "en-US": "Sign Name",
+            "zh-CN": "短信签名。 说明:必须是本账号已申请的短信签名"
+          },
+          "help_descriptions": {
+            "en-GB": "Sign Name",
+            "en-US": "Sign Name",
+            "zh-CN": "短信签名"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sign_name",
+          "cli_flag": "sign-name",
+          "table_target": "",
+          "example": "天翼云"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "10000"
+              ]
+            }
+          ]
+        },
+        "success_code": "10000",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message",
+          "request_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "请求状态码。 返回10000代表请求成功。 其他错误码详见 错误码列表 "
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "状态码或错误码的描述"
+          },
+          {
+            "key": "request_id",
+            "path": "requestId",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "请求ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "action": "DeleteSmsSign",
+        "signName": "天翼云"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMTAwMDAsICJtZXNzYWdlIjogIuaIkOWKnyIsICJyZXF1ZXN0SWQiOiAiY2tybXY3cmJ0ZmUwazAwMDByNzAiLCAicmV0dXJuT2JqIjogeyJ0b3RhbCI6IDE0LCAiZGF0YSI6IFt7ImV4dENvZGUiOiBbIiJdLCAic2lnblB1cnBvc2UiOiAwLCAiYnVzaW5lc3NUeXBlIjogNSwgInJlbWFyayI6ICLmtYvor5UiLCAic3RhdHVzIjogMSwgImNyZWF0ZVRpbWUiOiAiMjAyMy0xMC0xNlQwOToxMjo1OC4wNDdaIiwgInVwZGF0ZVRpbWUiOiAiMjAyMy0xMC0xNlQwOToxMjo1OC4wNDdaIiwgInNpZ25OYW1lIjogIuWkqee/vOS6kea1i+ivlSIsICJzaWduVHlwZSI6IDEsICJyZWFzb24iOiAi6YCa6L+HIn0sIHsiZXh0Q29kZSI6IFsiOTI0MTc4MjMiLCAiOTI0MTc4MjQiXSwgInNpZ25QdXJwb3NlIjogMCwgInJlYXNvbiI6ICLpgJrov4ciLCAic2lnbk5hbWUiOiAi5aSp57+85LqRIiwgImNyZWF0ZVRpbWUiOiAiMjAyMy0wNC0xMlQwOTo1MzoyNS40ODdaIiwgInVwZGF0ZVRpbWUiOiAiMjAyMy0wNC0xMlQwOTo1MzoyNS40ODdaIiwgImJ1c2luZXNzVHlwZSI6IDUsICJzdGF0dXMiOiAxLCAic2lnblR5cGUiOiAxLCAicmVtYXJrIjogIua1i+ivlSJ9XX19"
+      },
+      "id": "sms.signature.list",
+      "api_id": "11650",
+      "title": "查询签名列表",
+      "description": {
+        "en-GB": "List SMS signatures",
+        "en-US": "List SMS signatures",
+        "zh-CN": "查询签名列表"
+      },
+      "category": "signature",
+      "command_path": [
+        "signature",
+        "list"
+      ],
+      "method": "POST",
+      "path": "/sms/api/v2/querySmsSignList",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2&api=11650&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "action",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统规定参数。取值：QuerySmsSignList",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数。取值：QuerySmsSignList"
+          },
+          "help_descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "action",
+          "cli_flag": "action",
+          "table_target": "",
+          "example": "QuerySmsSignList"
+        },
+        {
+          "name": "pageIndex",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "页码，即获取第几页的模板",
+          "descriptions": {
+            "en-GB": "Page Index",
+            "en-US": "Page Index",
+            "zh-CN": "页码，即获取第几页的模板"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Index",
+            "en-US": "Page Index",
+            "zh-CN": "页码，即获取第几页的模板"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_index",
+          "cli_flag": "page-index",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "个数，即每页包含多少条模板",
+          "descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "个数，即每页包含多少条模板"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "个数，即每页包含多少条模板"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "10000"
+              ]
+            }
+          ]
+        },
+        "success_code": "10000",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "default_columns": [
+          "ext_code",
+          "sign_purpose",
+          "business_type",
+          "remark",
+          "status",
+          "create_time"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "ext_code",
+            "path": "extCode",
+            "label_en": "Extension Code",
+            "label_zh": "扩展码",
+            "description": "当签名设置了扩展码时，返回签名的扩展码"
+          },
+          {
+            "key": "sign_purpose",
+            "path": "signPurpose",
+            "label_en": "Signature Purpose",
+            "label_zh": "签名用途",
+            "description": "签名用途0：自用；1：他用"
+          },
+          {
+            "key": "business_type",
+            "path": "businessType",
+            "label_en": "Business Type",
+            "label_zh": "业务类型",
+            "description": "业务类型。取值： 1、账号注册； 2、账号登录； 3、广告促销； 4、通知提醒； 5、公共服务； 6、其他"
+          },
+          {
+            "key": "remark",
+            "path": "remark",
+            "label_en": "Remark",
+            "label_zh": "申请说明",
+            "description": "申请说明"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态",
+            "description": "签名审核状态。 0：审核中 1：审核通过 2：审核失败，请在返回参数Reason中查看审核失败原因"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间",
+            "description": "短信签名的创建日期和时间"
+          },
+          {
+            "key": "update_time",
+            "path": "updateTime",
+            "label_en": "Update Time",
+            "label_zh": "更新时间",
+            "description": "短信签名的更新日期和时间"
+          },
+          {
+            "key": "sign_name",
+            "path": "signName",
+            "label_en": "Sign Name",
+            "label_zh": "短信签名",
+            "description": "短信签名"
+          },
+          {
+            "key": "sign_type",
+            "path": "signType",
+            "label_en": "Signature Type",
+            "label_zh": "签名类型",
+            "description": "签名类型 0：企事业单位的全称或简称； 1：工信部备案网站的全称或简称； 2：App应用的全称或简称； 3：公众号或小程序的全称或简称； 4：电商平台店铺名的全称或简称； 5：商标名的全称或简称 6、其他"
+          },
+          {
+            "key": "reason",
+            "path": "reason",
+            "label_en": "Reason",
+            "label_zh": "审核备注",
+            "description": "审核备注。 如果审核状态为审核中，参数Reason显示为“”。 如果审核状态为审核通过，参数Reason显示审核通过的详细信息。 如果审核状态为审核未通过，参数Reason显示审核未通过的原因"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "action": "QuerySmsSignList",
+        "pageIndex": 1,
+        "pageSize": 1
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMTAwMDAsICJtZXNzYWdlIjogIuaIkOWKnyIsICJyZXF1ZXN0SWQiOiAiY2tua2JtcWZsc29qYmY0OGg4bmcifQ=="
+      },
+      "id": "sms.signature.update",
+      "api_id": "11652",
+      "title": "修改签名",
+      "description": {
+        "en-GB": "Update an SMS signature",
+        "en-US": "Update an SMS signature",
+        "zh-CN": "修改签名"
+      },
+      "category": "signature",
+      "command_path": [
+        "signature",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/sms/api/v2/modifySmsSign",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2&api=11652&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "action",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统规定参数。取值：ModifySmsSign ",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数。取值：ModifySmsSign "
+          },
+          "help_descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "action",
+          "cli_flag": "action",
+          "table_target": "",
+          "example": "ModifySmsSign"
+        },
+        {
+          "name": "signName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "签名内容。说明：签名内容必须符合签名规范",
+          "descriptions": {
+            "en-GB": "Sign Name",
+            "en-US": "Sign Name",
+            "zh-CN": "签名内容。说明：签名内容必须符合签名规范"
+          },
+          "help_descriptions": {
+            "en-GB": "Sign Name",
+            "en-US": "Sign Name",
+            "zh-CN": "签名内容"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sign_name",
+          "cli_flag": "sign-name",
+          "table_target": "",
+          "example": "天翼云"
+        },
+        {
+          "name": "signPurpose",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "是否自用。0、自用；1、他用",
+          "descriptions": {
+            "en-GB": "Sign Purpose",
+            "en-US": "Sign Purpose",
+            "zh-CN": "是否自用。0、自用；1、他用"
+          },
+          "help_descriptions": {
+            "en-GB": "Sign Purpose",
+            "en-US": "Sign Purpose",
+            "zh-CN": "是否自用"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sign_purpose",
+          "cli_flag": "sign-purpose",
+          "table_target": "",
+          "example": 0
+        },
+        {
+          "name": "signType",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "签名来源。取值： 0、企事业单位的全称或简称； 1、工信部备案网站的全称或简称； 2、App应用的全称或简称； 3、公众号或小程序的全称或简称； 4、电商平台店铺名的全称或简称； 5、商标名的全称或简称； 6、其他 说明:签名来源为工信部备案网站的全称或简称时，请在申请说明中添加网站域名，加快审核速度",
+          "descriptions": {
+            "en-GB": "Sign Type",
+            "en-US": "Sign Type",
+            "zh-CN": "签名来源。取值： 0、企事业单位的全称或简称； 1、工信部备案网站的全称或简称； 2、App应用的全称或简称； 3、公众号或小程序的全称或简称； 4、电商平台店铺名的全称或简称； 5、商标名的全称或简称； 6、其他 说明:签名来源为工信部备案网站的全称或简称时，请在申请说明中添加网站域名，加快审核速度"
+          },
+          "help_descriptions": {
+            "en-GB": "Sign Type",
+            "en-US": "Sign Type",
+            "zh-CN": "签名来源"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sign_type",
+          "cli_flag": "sign-type",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "businessType",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "业务类型。取值： 1、账号注册； 2、账号登录； 3、广告促销； 4、通知提醒； 5、公共服务； 6、其他",
+          "descriptions": {
+            "en-GB": "Business Type",
+            "en-US": "Business Type",
+            "zh-CN": "业务类型。取值： 1、账号注册； 2、账号登录； 3、广告促销； 4、通知提醒； 5、公共服务； 6、其他"
+          },
+          "help_descriptions": {
+            "en-GB": "Business Type",
+            "en-US": "Business Type",
+            "zh-CN": "业务类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "business_type",
+          "cli_flag": "business-type",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "businessName",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "自定义业务类型。businessType=6时，为必填项",
+          "descriptions": {
+            "en-GB": "Business Name",
+            "en-US": "Business Name",
+            "zh-CN": "自定义业务类型。businessType=6时，为必填项"
+          },
+          "help_descriptions": {
+            "en-GB": "Business Name",
+            "en-US": "Business Name",
+            "zh-CN": "自定义业务类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "business_name",
+          "cli_flag": "business-name",
+          "table_target": "",
+          "example": "告警提醒"
+        },
+        {
+          "name": "qualificationUuid",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "已经审核通过的资质ID",
+          "descriptions": {
+            "en-GB": "Qualification UUID",
+            "en-US": "Qualification UUID",
+            "zh-CN": "已经审核通过的资质ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Qualification UUID",
+            "en-US": "Qualification UUID",
+            "zh-CN": "已经审核通过的资质ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "qualification_uuid",
+          "cli_flag": "qualification-uuid",
+          "table_target": "",
+          "example": "4573aea4-854e-498d-829f-88ea4522df17"
+        },
+        {
+          "name": "remark",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信签名申请说明。请在申请说明中详细描述您的业务使用场景，申请工信部备案网站的全称或简称请在此处填写域名，长度不超过200个字符",
+          "descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "短信签名申请说明。请在申请说明中详细描述您的业务使用场景，申请工信部备案网站的全称或简称请在此处填写域名，长度不超过200个字符"
+          },
+          "help_descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "短信签名申请说明"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "remark",
+          "cli_flag": "remark",
+          "table_target": "",
+          "example": "测试签名"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "10000"
+              ]
+            }
+          ]
+        },
+        "success_code": "10000",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message",
+          "request_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "请求状态码。 返回10000代表请求成功。 其他错误码详见 错误码列表 "
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "状态码或错误码的描述"
+          },
+          {
+            "key": "request_id",
+            "path": "requestId",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "请求ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "action": "ModifySmsSign",
+        "businessName": "告警提醒",
+        "businessType": 6,
+        "qualificationUuid": "4573aea4-854e-498d-829f-88ea4522df17",
+        "remark": "测试签名",
+        "signName": "天翼云",
+        "signPurpose": 1,
+        "signType": 2
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMTAwMDAsICJtZXNzYWdlIjogIuaIkOWKnyIsICJyZXF1ZXN0SWQiOiAiY2tua2JtcWZsc29qYmY0OGg4bmciLCAicmV0dXJuT2JqIjogeyJ0ZW1wbGF0ZUNvZGUiOiAiU01TNjc3NTM1MzAzMjcifX0="
+      },
+      "id": "sms.template.update",
+      "api_id": "11681",
+      "title": "修改模板",
+      "description": {
+        "en-GB": "Update an SMS template",
+        "en-US": "Update an SMS template",
+        "zh-CN": "修改模板"
+      },
+      "category": "template",
+      "command_path": [
+        "template",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/sms/api/v2/modifySmsTemplate",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2&api=11681&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "templateType",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信类型。其中： 1： 验证码。 2：短信通知",
+          "descriptions": {
+            "en-GB": "Template Type",
+            "en-US": "Template Type",
+            "zh-CN": "短信类型。其中： 1： 验证码。 2：短信通知"
+          },
+          "help_descriptions": {
+            "en-GB": "Template Type",
+            "en-US": "Template Type",
+            "zh-CN": "短信类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_type",
+          "cli_flag": "template-type",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "templateName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模板名称，长度为1~30个字符",
+          "descriptions": {
+            "en-GB": "Template Name",
+            "en-US": "Template Name",
+            "zh-CN": "模板名称，长度为1~30个字符"
+          },
+          "help_descriptions": {
+            "en-GB": "Template Name",
+            "en-US": "Template Name",
+            "zh-CN": "模板名称，长度为1~30个字符"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_name",
+          "cli_flag": "template-name",
+          "table_target": "",
+          "example": "天翼云短信测试模板"
+        },
+        {
+          "name": "templateContent",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模板内容，长度为1~500个字。模板内容需要符合 模板规范 。 说明:修改模板时，请针对审核意见合理设计模板内容",
+          "descriptions": {
+            "en-GB": "Template Content",
+            "en-US": "Template Content",
+            "zh-CN": "模板内容，长度为1~500个字。模板内容需要符合 模板规范 。 说明:修改模板时，请针对审核意见合理设计模板内容"
+          },
+          "help_descriptions": {
+            "en-GB": "Template Content",
+            "en-US": "Template Content",
+            "zh-CN": "模板内容，长度为1~500个字"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_content",
+          "cli_flag": "template-content",
+          "table_target": "",
+          "example": "您正在申请手机注册，验证码为：${code}，5分钟内有效！"
+        },
+        {
+          "name": "remark",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信模板申请说明。请在申请说明中描述您的业务使用场景，长度不超过200个字",
+          "descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "短信模板申请说明。请在申请说明中描述您的业务使用场景，长度不超过200个字"
+          },
+          "help_descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "短信模板申请说明"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "remark",
+          "cli_flag": "remark",
+          "table_target": "",
+          "example": "当前的短信模板应用于双11大促推广营销"
+        },
+        {
+          "name": "templateCode",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信模板CODE。您可以在控制台模板管理页面或API接口AddSmsTemplate的返回参数中获取短信模板CODE",
+          "descriptions": {
+            "en-GB": "Template Code",
+            "en-US": "Template Code",
+            "zh-CN": "短信模板CODE。您可以在控制台模板管理页面或API接口AddSmsTemplate的返回参数中获取短信模板CODE"
+          },
+          "help_descriptions": {
+            "en-GB": "Template Code",
+            "en-US": "Template Code",
+            "zh-CN": "短信模板CODE"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_code",
+          "cli_flag": "template-code",
+          "table_target": "",
+          "example": "SMS73419576145"
+        },
+        {
+          "name": "action",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统规定参数。取值：ModifySmsTemplate",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数。取值：ModifySmsTemplate"
+          },
+          "help_descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "action",
+          "cli_flag": "action",
+          "table_target": "",
+          "example": "ModifySmsTemplate"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "10000"
+              ]
+            }
+          ]
+        },
+        "success_code": "10000",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "template_code"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "template_code",
+            "path": "templateCode",
+            "label_en": "Template Code",
+            "label_zh": "模板编码",
+            "description": "短信模板CODE。您可以使用模板CODE通过API接口QuerySmsTemplate或在控制台查看模板申请状态和结果"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "action": "ModifySmsTemplate",
+        "remark": "测试",
+        "templateCode": "SMS13889962005",
+        "templateContent": "您的验证码为${code},有效期为${time}分钟!",
+        "templateName": "登陆验证码",
+        "templateType": 1
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMTAwMDAsICJtZXNzYWdlIjogIuaIkOWKnyIsICJyZXF1ZXN0SWQiOiAiY2tyb2t0cmJ0ZmUwa2ZjaDdmcGciLCAicmV0dXJuT2JqIjogeyJzaWduTmFtZSI6ICLlpKnnv7zkupHmtYvor5UiLCAic2lnblN0YXR1cyI6IDEsICJjcmVhdGVUaW1lIjogIjIwMjMtMDQtMTJUMDk6NTM6MjUuNDg3WiIsICJyZWFzb24iOiAi6YCa6L+H44CCIn19"
+      },
+      "id": "sms.signature.show",
+      "api_id": "11647",
+      "title": "查询签名",
+      "description": {
+        "en-GB": "Show an SMS signature",
+        "en-US": "Show an SMS signature",
+        "zh-CN": "查询签名"
+      },
+      "category": "signature",
+      "command_path": [
+        "signature",
+        "show"
+      ],
+      "method": "POST",
+      "path": "/sms/api/v2/querySmsSign",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2&api=11647&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "signName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "签名名称",
+          "descriptions": {
+            "en-GB": "Sign Name",
+            "en-US": "Sign Name",
+            "zh-CN": "签名名称"
+          },
+          "help_descriptions": {
+            "en-GB": "Sign Name",
+            "en-US": "Sign Name",
+            "zh-CN": "签名名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sign_name",
+          "cli_flag": "sign-name",
+          "table_target": "",
+          "example": "天翼云"
+        },
+        {
+          "name": "action",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统规定参数。取值：QuerySmsSign",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数。取值：QuerySmsSign"
+          },
+          "help_descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "action",
+          "cli_flag": "action",
+          "table_target": "",
+          "example": "QuerySmsSign"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "10000"
+              ]
+            }
+          ]
+        },
+        "success_code": "10000",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "sign_name",
+          "sign_status",
+          "create_time",
+          "reason"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "sign_name",
+            "path": "signName",
+            "label_en": "Sign Name",
+            "label_zh": "短信签名",
+            "description": "短信签名"
+          },
+          {
+            "key": "sign_status",
+            "path": "signStatus",
+            "label_en": "Sign Status",
+            "label_zh": "签名审核状态",
+            "description": "签名审核状态。其中： 0：审核中。 1：审核通过。 2：审核失败，请在返回参数Reason中查看审核失败原因"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间",
+            "description": "短信签名的创建日期和时间"
+          },
+          {
+            "key": "reason",
+            "path": "reason",
+            "label_en": "Reason",
+            "label_zh": "审核备注",
+            "description": "审核备注。 如果审核状态为审核中，参数Reason显示为“”。 如果审核状态为审核通过，参数Reason显示审核通过的详细信息。 如果审核状态为审核未通过，参数Reason显示审核未通过的原因"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "action": "QuerySmsSign",
+        "signName": "天翼云"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMTAwMDAsICJtZXNzYWdlIjogIuaIkOWKnyIsICJyZXF1ZXN0SWQiOiAiY2tua2JtcWZsc29qYmY0OGg4bmcifQ=="
+      },
+      "id": "sms.signature.create",
+      "api_id": "11649",
+      "title": "添加签名",
+      "description": {
+        "en-GB": "Create an SMS signature",
+        "en-US": "Create an SMS signature",
+        "zh-CN": "添加签名"
+      },
+      "category": "signature",
+      "command_path": [
+        "signature",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/sms/api/v2/addSmsSign",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2&api=11649&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "action",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统规定参数。取值：AddSmsSign",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数。取值：AddSmsSign"
+          },
+          "help_descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "action",
+          "cli_flag": "action",
+          "table_target": "",
+          "example": "AddSmsSign"
+        },
+        {
+          "name": "signName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "签名名称。必须符合 签名规范 ",
+          "descriptions": {
+            "en-GB": "Sign Name",
+            "en-US": "Sign Name",
+            "zh-CN": "签名名称。必须符合 签名规范 "
+          },
+          "help_descriptions": {
+            "en-GB": "Sign Name",
+            "en-US": "Sign Name",
+            "zh-CN": "签名名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sign_name",
+          "cli_flag": "sign-name",
+          "table_target": "",
+          "example": "天翼云"
+        },
+        {
+          "name": "signPurpose",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "是否自用。0、自用；1、他用",
+          "descriptions": {
+            "en-GB": "Sign Purpose",
+            "en-US": "Sign Purpose",
+            "zh-CN": "是否自用。0、自用；1、他用"
+          },
+          "help_descriptions": {
+            "en-GB": "Sign Purpose",
+            "en-US": "Sign Purpose",
+            "zh-CN": "是否自用"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sign_purpose",
+          "cli_flag": "sign-purpose",
+          "table_target": "",
+          "example": 0
+        },
+        {
+          "name": "signType",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "签名来源。取值： 0、企事业单位的全称或简称； 1、工信部备案网站的全称或简称； 2、App应用的全称或简称； 3、公众号或小程序的全称或简称； 4、电商平台店铺名的全称或简称； 5、商标名的全称或简称； 6、其他 说明:签名来源为工信部备案网站的全称或简称时，请在申请说明中添加网站域名，加快审核速度",
+          "descriptions": {
+            "en-GB": "Sign Type",
+            "en-US": "Sign Type",
+            "zh-CN": "签名来源。取值： 0、企事业单位的全称或简称； 1、工信部备案网站的全称或简称； 2、App应用的全称或简称； 3、公众号或小程序的全称或简称； 4、电商平台店铺名的全称或简称； 5、商标名的全称或简称； 6、其他 说明:签名来源为工信部备案网站的全称或简称时，请在申请说明中添加网站域名，加快审核速度"
+          },
+          "help_descriptions": {
+            "en-GB": "Sign Type",
+            "en-US": "Sign Type",
+            "zh-CN": "签名来源"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sign_type",
+          "cli_flag": "sign-type",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "businessType",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "业务类型。 取值： 1、账号注册； 2、账号登录； 3、广告促销； 4、通知提醒； 5、公共服务； 6、其他",
+          "descriptions": {
+            "en-GB": "Business Type",
+            "en-US": "Business Type",
+            "zh-CN": "业务类型。 取值： 1、账号注册； 2、账号登录； 3、广告促销； 4、通知提醒； 5、公共服务； 6、其他"
+          },
+          "help_descriptions": {
+            "en-GB": "Business Type",
+            "en-US": "Business Type",
+            "zh-CN": "业务类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "business_type",
+          "cli_flag": "business-type",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "businessName",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "自定义业务类型。businessType=6时，为必填项",
+          "descriptions": {
+            "en-GB": "Business Name",
+            "en-US": "Business Name",
+            "zh-CN": "自定义业务类型。businessType=6时，为必填项"
+          },
+          "help_descriptions": {
+            "en-GB": "Business Name",
+            "en-US": "Business Name",
+            "zh-CN": "自定义业务类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "business_name",
+          "cli_flag": "business-name",
+          "table_target": "",
+          "example": "告警提醒"
+        },
+        {
+          "name": "qualificationUuid",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "已经审核通过的资质ID",
+          "descriptions": {
+            "en-GB": "Qualification UUID",
+            "en-US": "Qualification UUID",
+            "zh-CN": "已经审核通过的资质ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Qualification UUID",
+            "en-US": "Qualification UUID",
+            "zh-CN": "已经审核通过的资质ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "qualification_uuid",
+          "cli_flag": "qualification-uuid",
+          "table_target": "",
+          "example": "4573aea4-854e-498d-829f-88ea4522df17"
+        },
+        {
+          "name": "remark",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信签名申请说明。 请在申请说明中详细描述您的业务使用场景，申请工信部备案网站的全称或简称，请在此处填写域名，长度不超过200个字符",
+          "descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "短信签名申请说明。 请在申请说明中详细描述您的业务使用场景，申请工信部备案网站的全称或简称，请在此处填写域名，长度不超过200个字符"
+          },
+          "help_descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "短信签名申请说明"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "remark",
+          "cli_flag": "remark",
+          "table_target": "",
+          "example": "测试签名"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "10000"
+              ]
+            }
+          ]
+        },
+        "success_code": "10000",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message",
+          "request_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "请求状态码。 返回10000代表请求成功。 其他错误码详见 错误码列表 "
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "状态码或错误码的描述"
+          },
+          {
+            "key": "request_id",
+            "path": "requestId",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "请求ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "action": "AddSmsSign",
+        "businessName": "告警提醒",
+        "businessType": 6,
+        "qualificationUuid": "4573aea4-854e-498d-829f-88ea4522df17",
+        "remark": "测试签名",
+        "signName": "天翼云",
+        "signPurpose": 0,
+        "signType": 1
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMTAwMDAsICJtZXNzYWdlIjogIuaIkOWKnyIsICJyZXF1ZXN0SWQiOiAiY2tua2JtcWZsc29qYmY0OGg4bmcifQ=="
+      },
+      "id": "sms.message.send",
+      "api_id": "11695",
+      "title": "发送短信",
+      "description": {
+        "en-GB": "Send an SMS message",
+        "en-US": "Send an SMS message",
+        "zh-CN": "发送短信"
+      },
+      "category": "message",
+      "command_path": [
+        "message",
+        "send"
+      ],
+      "method": "POST",
+      "path": "/sms/api/v2",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2&api=11695&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "action",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统规定参数。取值：SendSms",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数。取值：SendSms"
+          },
+          "help_descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "action",
+          "cli_flag": "action",
+          "table_target": "",
+          "example": "SendSms"
+        },
+        {
+          "name": "phoneNumber",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "接收短信的手机号码。格式：国内短信：无任何前缀的11位手机号码，例如1381111****。多个手机号码使用英文','隔开，最多支持一次提交200个手机号码",
+          "descriptions": {
+            "en-GB": "Phone Number",
+            "en-US": "Phone Number",
+            "zh-CN": "接收短信的手机号码。格式：国内短信：无任何前缀的11位手机号码，例如1381111****。多个手机号码使用英文','隔开，最多支持一次提交200个手机号码"
+          },
+          "help_descriptions": {
+            "en-GB": "Phone Number",
+            "en-US": "Phone Number",
+            "zh-CN": "接收短信的手机号码"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "phone_number",
+          "cli_flag": "phone-number",
+          "table_target": "",
+          "example": "1381111*****"
+        },
+        {
+          "name": "signName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信签名名称。请在控制台的签名管理页签下签名名称一列查看。说明：必须是已添加、并通过审核的短信签名",
+          "descriptions": {
+            "en-GB": "Sign Name",
+            "en-US": "Sign Name",
+            "zh-CN": "短信签名名称。请在控制台的签名管理页签下签名名称一列查看。说明：必须是已添加、并通过审核的短信签名"
+          },
+          "help_descriptions": {
+            "en-GB": "Sign Name",
+            "en-US": "Sign Name",
+            "zh-CN": "短信签名名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sign_name",
+          "cli_flag": "sign-name",
+          "table_target": "",
+          "example": "天翼云测试"
+        },
+        {
+          "name": "templateCode",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信模板ID。请在控制台的模板管理页签下模板CODE一列查看。说明：必须是已添加、并通过审核的短信模板",
+          "descriptions": {
+            "en-GB": "Template Code",
+            "en-US": "Template Code",
+            "zh-CN": "短信模板ID。请在控制台的模板管理页签下模板CODE一列查看。说明：必须是已添加、并通过审核的短信模板"
+          },
+          "help_descriptions": {
+            "en-GB": "Template Code",
+            "en-US": "Template Code",
+            "zh-CN": "短信模板ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_code",
+          "cli_flag": "template-code",
+          "table_target": "",
+          "example": "SMS64124870510"
+        },
+        {
+          "name": "templateParam",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信模板变量对应的实际值，JSON字符串格式。说明：如果JSON中需要带换行符，请参照标准的JSON协议处理。 调试时会自动转换jsonString 示例：{code:123456} 通过代码调用接口时，格式请参考请求示例",
+          "descriptions": {
+            "en-GB": "Template Parameter",
+            "en-US": "Template Parameter",
+            "zh-CN": "短信模板变量对应的实际值，JSON字符串格式。说明：如果JSON中需要带换行符，请参照标准的JSON协议处理。 调试时会自动转换jsonString 示例：{code:123456} 通过代码调用接口时，格式请参考请求示例"
+          },
+          "help_descriptions": {
+            "en-GB": "Template Parameter",
+            "en-US": "Template Parameter",
+            "zh-CN": "短信模板变量对应的实际值，JSON字符串格式"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_param",
+          "cli_flag": "template-param",
+          "table_target": "",
+          "example": "{code:123456}"
+        },
+        {
+          "name": "extendCode",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "上行短信扩展码，上行短信，指发送给通信服务提供商的短信，用于定制某种服务、完成查询，或是办理某种业务等，需要收费的，按运营商普通短信资费进行扣费。说明：无特殊需要此字段的用户请忽略此字段",
+          "descriptions": {
+            "en-GB": "Extend Code",
+            "en-US": "Extend Code",
+            "zh-CN": "上行短信扩展码，上行短信，指发送给通信服务提供商的短信，用于定制某种服务、完成查询，或是办理某种业务等，需要收费的，按运营商普通短信资费进行扣费。说明：无特殊需要此字段的用户请忽略此字段"
+          },
+          "help_descriptions": {
+            "en-GB": "Extend Code",
+            "en-US": "Extend Code",
+            "zh-CN": "上行短信扩展码，上行短信，指发送给通信服务提供商的短信，用于定制某种服务、完成查询，或是办理某种业务等，需要收费的，按运营商普通短信资费进行扣费"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "extend_code",
+          "cli_flag": "extend-code",
+          "table_target": "",
+          "example": "90999"
+        },
+        {
+          "name": "sessionId",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "客户自带短信标识，在状态报告中会原样返回。说明：无特殊需要此字段的用户请忽略此字段",
+          "descriptions": {
+            "en-GB": "Session ID",
+            "en-US": "Session ID",
+            "zh-CN": "客户自带短信标识，在状态报告中会原样返回。说明：无特殊需要此字段的用户请忽略此字段"
+          },
+          "help_descriptions": {
+            "en-GB": "Session ID",
+            "en-US": "Session ID",
+            "zh-CN": "客户自带短信标识，在状态报告中会原样返回"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "session_id",
+          "cli_flag": "session-id",
+          "table_target": "",
+          "example": "123456"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "10000"
+              ]
+            }
+          ]
+        },
+        "success_code": "10000",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message",
+          "request_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "请求状态码。 返回10000代表请求成功。 其他错误码详见 错误码列表 "
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "状态码描述"
+          },
+          {
+            "key": "request_id",
+            "path": "requestId",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "请求ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "action": "SendSms",
+        "extendCode": "123",
+        "phoneNumber": "13301110000",
+        "signName": "天翼云测试",
+        "templateCode": "SMS64124870510",
+        "templateParam": "{\"code\": \"123456\"}"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMTAwMDAsICJtZXNzYWdlIjogIuaIkOWKnyIsICJyZXF1ZXN0SWQiOiAiZE5GZ1BXVjVEYjE0dmczOCIsICJyZXR1cm5PYmoiOiB7InRvdGFsIjogMTQsICJkYXRhIjogW3siX2lkIjogIjY1MjEyZGNiNzllOTE0NjA1ZGE2NDFlZiIsICJwaG9uZSI6ICIxMzMwMTE2MTMxMiIsICJyZXF1ZXN0SWQiOiAiY2tua2JtcWZsc29qYmY0OGg4bmciLCAidGVtcGxhdGVDb2RlIjogIlNNUzgxMTM2ODI1MTY4IiwgInNpZ25OYW1lIjogIuWkqee/vOS6kSIsICJ0b3RhbCI6IDIsICJpbmRleCI6IDEsICJ0eXBlIjogMSwgImNvbnRlbnQiOiAi5oKo55qE6aqM6K+B56CB5Li6MTIzLOacieaViOacn+S4ujXliIbpkp8hIiwgInN0YXR1cyI6IDMsICJzdGF0dXNDb2RlIjogIkRFTElWUkQiLCAicmVjZWl2ZVRpbWUiOiAiMjAyMi0wMy0yOFQwNjoyOTozNC44MTlaIiwgImRlbGl2ZXJUaW1lIjogIjIwMjItMDMtMjhUMDY6Mjk6MzQuODI0WiIsICJyZXBvcnRUaW1lIjogIjIwMjItMDMtMjhUMDY6Mjk6MzUuMTcxWiIsICJub3RpZnlUaW1lIjogIjIwMjItMDMtMjhUMDY6Mjk6MzUuMTcxWiJ9XX19"
+      },
+      "id": "sms.message.history",
+      "api_id": "11653",
+      "title": "查询发送记录",
+      "description": {
+        "en-GB": "Query SMS delivery records",
+        "en-US": "Query SMS delivery records",
+        "zh-CN": "查询发送记录"
+      },
+      "category": "message",
+      "command_path": [
+        "message",
+        "history"
+      ],
+      "method": "POST",
+      "path": "/sms/api/v2/querySendDetails",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2&api=11653&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "action",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统规定参数。取值：QuerySendDetails ",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数。取值：QuerySendDetails "
+          },
+          "help_descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "action",
+          "cli_flag": "action",
+          "table_target": "",
+          "example": "QuerySendDetails"
+        },
+        {
+          "name": "currentPage",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "分页查看发送记录，指定发送记录的当前页码",
+          "descriptions": {
+            "en-GB": "Current Page",
+            "en-US": "Current Page",
+            "zh-CN": "分页查看发送记录，指定发送记录的当前页码"
+          },
+          "help_descriptions": {
+            "en-GB": "Current Page",
+            "en-US": "Current Page",
+            "zh-CN": "分页查看发送记录，指定发送记录的当前页码"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "current_page",
+          "cli_flag": "current-page",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "分页查看发送记录，指定每页显示的短信记录数量",
+          "descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "分页查看发送记录，指定每页显示的短信记录数量"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "分页查看发送记录，指定每页显示的短信记录数量"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        },
+        {
+          "name": "phoneNumber",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "接收短信的手机号码。格式：国内短信：11位手机号码，例如1590000****",
+          "descriptions": {
+            "en-GB": "Phone Number",
+            "en-US": "Phone Number",
+            "zh-CN": "接收短信的手机号码。格式：国内短信：11位手机号码，例如1590000****"
+          },
+          "help_descriptions": {
+            "en-GB": "Phone Number",
+            "en-US": "Phone Number",
+            "zh-CN": "接收短信的手机号码"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "phone_number",
+          "cli_flag": "phone-number",
+          "table_target": "",
+          "example": "1590000****"
+        },
+        {
+          "name": "sendDate",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信发送日期，支持查询最近30天的记录。格式为yyyy-MM-dd，例如2018-12-25",
+          "descriptions": {
+            "en-GB": "Send Date",
+            "en-US": "Send Date",
+            "zh-CN": "短信发送日期，支持查询最近30天的记录。格式为yyyy-MM-dd，例如2018-12-25"
+          },
+          "help_descriptions": {
+            "en-GB": "Send Date",
+            "en-US": "Send Date",
+            "zh-CN": "短信发送日期，支持查询最近30天的记录"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "send_date",
+          "cli_flag": "send-date",
+          "table_target": "",
+          "example": "2022-03-28"
+        },
+        {
+          "name": "signName",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "对应发送内容的签名",
+          "descriptions": {
+            "en-GB": "Sign Name",
+            "en-US": "Sign Name",
+            "zh-CN": "对应发送内容的签名"
+          },
+          "help_descriptions": {
+            "en-GB": "Sign Name",
+            "en-US": "Sign Name",
+            "zh-CN": "对应发送内容的签名"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sign_name",
+          "cli_flag": "sign-name",
+          "table_target": "",
+          "example": "签名"
+        },
+        {
+          "name": "templateCode",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "对应发送内容的模板编号",
+          "descriptions": {
+            "en-GB": "Template Code",
+            "en-US": "Template Code",
+            "zh-CN": "对应发送内容的模板编号"
+          },
+          "help_descriptions": {
+            "en-GB": "Template Code",
+            "en-US": "Template Code",
+            "zh-CN": "对应发送内容的模板编号"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_code",
+          "cli_flag": "template-code",
+          "table_target": "",
+          "example": "SMS73419576145"
+        },
+        {
+          "name": "requestId",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "对应发送时返回的流水号",
+          "descriptions": {
+            "en-GB": "Request ID",
+            "en-US": "Request ID",
+            "zh-CN": "对应发送时返回的流水号"
+          },
+          "help_descriptions": {
+            "en-GB": "Request ID",
+            "en-US": "Request ID",
+            "zh-CN": "对应发送时返回的流水号"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "request_id",
+          "cli_flag": "request-id",
+          "table_target": "",
+          "example": "cknkbmqflsojbf48h8ng"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "10000"
+              ]
+            }
+          ]
+        },
+        "success_code": "10000",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "default_columns": [
+          "_id",
+          "phone",
+          "request_id",
+          "template_code",
+          "sign_name",
+          "total"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "_id",
+            "path": "_id",
+            "label_en": "Record ID",
+            "label_zh": "记录 ID"
+          },
+          {
+            "key": "phone",
+            "path": "phone",
+            "label_en": "Phone",
+            "label_zh": "手机号码",
+            "description": "手机号码"
+          },
+          {
+            "key": "request_id",
+            "path": "requestId",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "当为群发任务时,该字段为JobId"
+          },
+          {
+            "key": "template_code",
+            "path": "templateCode",
+            "label_en": "Template Code",
+            "label_zh": "模板编码",
+            "description": "短信模板CODE"
+          },
+          {
+            "key": "sign_name",
+            "path": "signName",
+            "label_en": "Sign Name",
+            "label_zh": "签名名称",
+            "description": "签名名称"
+          },
+          {
+            "key": "total",
+            "path": "total",
+            "label_en": "Total",
+            "label_zh": "总数",
+            "description": "该记录所属短信的总发送记录条数"
+          },
+          {
+            "key": "index",
+            "path": "index",
+            "label_en": "Index",
+            "label_zh": "该记录在所属短信的全部发送记录中的编号",
+            "description": "该记录在所属短信的全部发送记录中的编号"
+          },
+          {
+            "key": "type",
+            "path": "type",
+            "label_en": "Type",
+            "label_zh": "短信类型",
+            "description": "短信类型。其中： 0：模板异常。 1：验证码。 2：短信通知"
+          },
+          {
+            "key": "content",
+            "path": "content",
+            "label_en": "Content",
+            "label_zh": "短信内容",
+            "description": "短信内容"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态",
+            "description": "短信发送状态： 1 发送中, 2 发送失败, 3 发送成功"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "短信的最终发送状态"
+          },
+          {
+            "key": "receive_time",
+            "path": "receiveTime",
+            "label_en": "Receive Time",
+            "label_zh": "接收到发送短信请求的时间",
+            "description": "接收到发送短信请求的时间"
+          },
+          {
+            "key": "deliver_time",
+            "path": "deliverTime",
+            "label_en": "Deliver Time",
+            "label_zh": "下发短信时间",
+            "description": "下发短信时间"
+          },
+          {
+            "key": "report_time",
+            "path": "reportTime",
+            "label_en": "Report Time",
+            "label_zh": "接收短信状态报告时间",
+            "description": "接收短信状态报告时间"
+          },
+          {
+            "key": "notify_time",
+            "path": "notifyTime",
+            "label_en": "Notify Time",
+            "label_zh": "回调时间",
+            "description": "回调时间"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIk9LIiwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXF1ZXN0SWQiOiAiY2tua2JtcWZsc29qYmY0OGg4bmcifQ=="
+      },
+      "id": "sms.v1.message.send",
+      "api_id": "954",
+      "title": "短信v1",
+      "description": {
+        "en-GB": "Send SMS message using the legacy API",
+        "en-US": "Send SMS message using the legacy API",
+        "zh-CN": "发送短信（旧版）"
+      },
+      "category": "v1",
+      "command_path": [
+        "v1",
+        "message",
+        "send"
+      ],
+      "method": "POST",
+      "path": "/sms/api/v1",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2&api=954&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "constant": "SendSms",
+          "name": "action",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统规定参数。取值：SendSms",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数。取值：SendSms"
+          },
+          "help_descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "SendSms"
+        },
+        {
+          "name": "phoneNumber",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "接收短信的手机号码。格式：国内短信：无任何前缀的11位手机号码，例如1381111****。多个手机号码使用英文','隔开，最多支持一次提交200个手机号码",
+          "descriptions": {
+            "en-GB": "Phone number",
+            "en-US": "Phone number",
+            "zh-CN": "接收短信的手机号码。格式：国内短信：无任何前缀的11位手机号码，例如1381111****。多个手机号码使用英文','隔开，最多支持一次提交200个手机号码"
+          },
+          "help_descriptions": {
+            "en-GB": "Phone number",
+            "en-US": "Phone number",
+            "zh-CN": "接收短信的手机号码"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "phone_number",
+          "cli_flag": "phone-number",
+          "table_target": "",
+          "example": "1381111*****"
+        },
+        {
+          "name": "signName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信签名名称。请在控制台的签名管理页签下签名名称一列查看。 说明： 必须是已添加、并通过审核的短信签名",
+          "descriptions": {
+            "en-GB": "Sign name",
+            "en-US": "Sign name",
+            "zh-CN": "短信签名名称。请在控制台的签名管理页签下签名名称一列查看。 说明： 必须是已添加、并通过审核的短信签名"
+          },
+          "help_descriptions": {
+            "en-GB": "Sign name",
+            "en-US": "Sign name",
+            "zh-CN": "短信签名名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sign_name",
+          "cli_flag": "sign-name",
+          "table_target": "",
+          "example": "天翼云测试"
+        },
+        {
+          "name": "templateCode",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信模板ID。请在控制台的模板管理页签下模板CODE一列查看。 说明： 必须是已添加、并通过审核的短信模板",
+          "descriptions": {
+            "en-GB": "Template code",
+            "en-US": "Template code",
+            "zh-CN": "短信模板ID。请在控制台的模板管理页签下模板CODE一列查看。 说明： 必须是已添加、并通过审核的短信模板"
+          },
+          "help_descriptions": {
+            "en-GB": "Template code",
+            "en-US": "Template code",
+            "zh-CN": "短信模板ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_code",
+          "cli_flag": "template-code",
+          "table_target": "",
+          "example": "SMS64124870510"
+        },
+        {
+          "name": "templateParam",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信模板变量对应的实际值，JSON字符串格式。 说明： 如果JSON中需要带换行符，请参照标准的JSON协议处理。 调试时会自动转换jsonString 示例：{code:123456} 通过代码调用接口时，格式请参考请求示例",
+          "descriptions": {
+            "en-GB": "Template param",
+            "en-US": "Template param",
+            "zh-CN": "短信模板变量对应的实际值，JSON字符串格式。 说明： 如果JSON中需要带换行符，请参照标准的JSON协议处理。 调试时会自动转换jsonString 示例：{code:123456} 通过代码调用接口时，格式请参考请求示例"
+          },
+          "help_descriptions": {
+            "en-GB": "Template param",
+            "en-US": "Template param",
+            "zh-CN": "短信模板变量对应的实际值，JSON字符串格式"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_param",
+          "cli_flag": "template-param",
+          "table_target": "",
+          "example": "{code:123456}"
+        },
+        {
+          "name": "extendCode",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "上行短信扩展码，上行短信，指发送给通信服务提供商的短信，用于定制某种服务、完成查询，或是办理某种业务等，需要收费的，按运营商普通短信资费进行扣费。 说明： 无特殊需要此字段的用户请忽略此字段",
+          "descriptions": {
+            "en-GB": "Extend code",
+            "en-US": "Extend code",
+            "zh-CN": "上行短信扩展码，上行短信，指发送给通信服务提供商的短信，用于定制某种服务、完成查询，或是办理某种业务等，需要收费的，按运营商普通短信资费进行扣费。 说明： 无特殊需要此字段的用户请忽略此字段"
+          },
+          "help_descriptions": {
+            "en-GB": "Extend code",
+            "en-US": "Extend code",
+            "zh-CN": "上行短信扩展码，上行短信，指发送给通信服务提供商的短信，用于定制某种服务、完成查询，或是办理某种业务等，需要收费的，按运营商普通短信资费进行扣费"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "extend_code",
+          "cli_flag": "extend-code",
+          "table_target": "",
+          "example": "90999"
+        },
+        {
+          "name": "sessionId",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "客户自带短信标识，在状态报告中会原样返回。说明：无特殊需要此字段的用户请忽略此字段",
+          "descriptions": {
+            "en-GB": "Session id",
+            "en-US": "Session id",
+            "zh-CN": "客户自带短信标识，在状态报告中会原样返回。说明：无特殊需要此字段的用户请忽略此字段"
+          },
+          "help_descriptions": {
+            "en-GB": "Session id",
+            "en-US": "Session id",
+            "zh-CN": "客户自带短信标识，在状态报告中会原样返回"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "session_id",
+          "cli_flag": "session-id",
+          "table_target": "",
+          "example": "123456"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "code",
+              "values": [
+                "OK"
+              ]
+            }
+          ]
+        },
+        "success_code": "OK",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message",
+          "request_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Code",
+            "label_zh": "响应码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "状态码描述"
+          },
+          {
+            "key": "request_id",
+            "path": "requestId",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "当为群发任务时,该字段为JobId"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "action": "SendSms",
+        "extendCode": "123",
+        "phoneNumber": "13301110000",
+        "signName": "天翼云测试",
+        "templateCode": "SMS64124870510",
+        "templateParam": "{\"code\":\"123456\"}"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJ0b3RhbENvdW50IjogMSwgImRhdGEiOiBbeyJfaWQiOiAiNjUyMTJkY2I3OWU5MTQ2MDVkYTY0MWVmIiwgInBob25lIjogIjEzMzAwMDAwMDAwIiwgInJlcXVlc3RJZCI6ICJjZ3VkZ29yNTExaW1yN25obGx0ZyIsICJ0ZW1wbGF0ZUNvZGUiOiAiU01TNjQxMjQ4NzA1MTAiLCAic2lnbk5hbWUiOiAi5aSp57+85LqR5rWL6K+VIiwgInRvdGFsIjogMCwgImluZGV4IjogMCwgInR5cGUiOiAxLCAiY29udGVudCI6ICLmgqjnmoTpqozor4HnoIHkuLoxMjMs5pyJ5pWI5pyf5Li6NeWIhumSnyEiLCAic3RhdHVzIjogMywgInN0YXR1c0NvZGUiOiAiREVMSVZSRCIsICJyZWNlaXZlVGltZSI6ICIyMDIyLTAzLTI4VDA2OjI5OjM0LjgxOVoiLCAiZGVsaXZlclRpbWUiOiAiMjAyMi0wMy0yOFQwNjoyOTozNC44MjRaIiwgInJlcG9ydFRpbWUiOiAiMjAyMi0wMy0yOFQwNjoyOTozNS4xNzFaIiwgIm5vdGlmeVRpbWUiOiAiMjAyMi0wMy0yOFQwNjoyOTozNS4xNzFaIn1dLCAicmVxdWVzdElkIjogImNrbmtibXFmbHNvamJmNDhoOG5nIn0="
+      },
+      "id": "sms.v1.message.history",
+      "api_id": "954",
+      "title": "短信v1",
+      "description": {
+        "en-GB": "Query SMS message using the legacy API",
+        "en-US": "Query SMS message using the legacy API",
+        "zh-CN": "查询发送记录（旧版）"
+      },
+      "category": "v1",
+      "command_path": [
+        "v1",
+        "message",
+        "history"
+      ],
+      "method": "POST",
+      "path": "/sms/api/v1",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2&api=954&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "constant": "QuerySendDetails",
+          "name": "action",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统规定参数。取值：QuerySendDetails ",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数。取值：QuerySendDetails "
+          },
+          "help_descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "QuerySendDetails"
+        },
+        {
+          "name": "currentPage",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "分页查看发送记录，指定发送记录的当前页码",
+          "descriptions": {
+            "en-GB": "Current page",
+            "en-US": "Current page",
+            "zh-CN": "分页查看发送记录，指定发送记录的当前页码"
+          },
+          "help_descriptions": {
+            "en-GB": "Current page",
+            "en-US": "Current page",
+            "zh-CN": "分页查看发送记录，指定发送记录的当前页码"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "current_page",
+          "cli_flag": "current-page",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "分页查看发送记录，指定每页显示的短信记录数量",
+          "descriptions": {
+            "en-GB": "Page size",
+            "en-US": "Page size",
+            "zh-CN": "分页查看发送记录，指定每页显示的短信记录数量"
+          },
+          "help_descriptions": {
+            "en-GB": "Page size",
+            "en-US": "Page size",
+            "zh-CN": "分页查看发送记录，指定每页显示的短信记录数量"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        },
+        {
+          "name": "phoneNumber",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "接收短信的手机号码。格式：国内短信：11位手机号码，例如1590000****",
+          "descriptions": {
+            "en-GB": "Phone number",
+            "en-US": "Phone number",
+            "zh-CN": "接收短信的手机号码。格式：国内短信：11位手机号码，例如1590000****"
+          },
+          "help_descriptions": {
+            "en-GB": "Phone number",
+            "en-US": "Phone number",
+            "zh-CN": "接收短信的手机号码"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "phone_number",
+          "cli_flag": "phone-number",
+          "table_target": "",
+          "example": "1590000****"
+        },
+        {
+          "name": "sendDate",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信发送日期，支持查询最近30天的记录。格式为yyyy-MM-dd，例如2018-12-25",
+          "descriptions": {
+            "en-GB": "Send date",
+            "en-US": "Send date",
+            "zh-CN": "短信发送日期，支持查询最近30天的记录。格式为yyyy-MM-dd，例如2018-12-25"
+          },
+          "help_descriptions": {
+            "en-GB": "Send date",
+            "en-US": "Send date",
+            "zh-CN": "短信发送日期，支持查询最近30天的记录"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "send_date",
+          "cli_flag": "send-date",
+          "table_target": "",
+          "example": "2022-03-28"
+        },
+        {
+          "name": "signName",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "对应发送内容的签名",
+          "descriptions": {
+            "en-GB": "Sign name",
+            "en-US": "Sign name",
+            "zh-CN": "对应发送内容的签名"
+          },
+          "help_descriptions": {
+            "en-GB": "Sign name",
+            "en-US": "Sign name",
+            "zh-CN": "对应发送内容的签名"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sign_name",
+          "cli_flag": "sign-name",
+          "table_target": "",
+          "example": "天翼云测试"
+        },
+        {
+          "name": "templateCode",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "对应发送内容的模板编号",
+          "descriptions": {
+            "en-GB": "Template code",
+            "en-US": "Template code",
+            "zh-CN": "对应发送内容的模板编号"
+          },
+          "help_descriptions": {
+            "en-GB": "Template code",
+            "en-US": "Template code",
+            "zh-CN": "对应发送内容的模板编号"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_code",
+          "cli_flag": "template-code",
+          "table_target": "",
+          "example": "SMS64124870510"
+        },
+        {
+          "name": "requestId",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "对用发送时返回的流水号",
+          "descriptions": {
+            "en-GB": "Request id",
+            "en-US": "Request id",
+            "zh-CN": "对用发送时返回的流水号"
+          },
+          "help_descriptions": {
+            "en-GB": "Request id",
+            "en-US": "Request id",
+            "zh-CN": "对用发送时返回的流水号"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "request_id",
+          "cli_flag": "request-id",
+          "table_target": "",
+          "example": "cknkbmqflsojbf48h8ng"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "data",
+        "row_path": "data",
+        "default_columns": [
+          "_id",
+          "phone",
+          "request_id",
+          "template_code",
+          "sign_name",
+          "total"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "_id",
+            "path": "_id",
+            "label_en": "Record ID",
+            "label_zh": "记录 ID"
+          },
+          {
+            "key": "phone",
+            "path": "phone",
+            "label_en": "Phone",
+            "label_zh": "手机号码",
+            "description": "手机号码"
+          },
+          {
+            "key": "request_id",
+            "path": "requestId",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "当为群发任务时,该字段为JobId"
+          },
+          {
+            "key": "template_code",
+            "path": "templateCode",
+            "label_en": "Template Code",
+            "label_zh": "模板编码",
+            "description": "短信模板CODE"
+          },
+          {
+            "key": "sign_name",
+            "path": "signName",
+            "label_en": "Sign Name",
+            "label_zh": "签名名称",
+            "description": "签名名称"
+          },
+          {
+            "key": "total",
+            "path": "total",
+            "label_en": "Total",
+            "label_zh": "总数",
+            "description": "该记录所属短信的总发送记录条数"
+          },
+          {
+            "key": "index",
+            "path": "index",
+            "label_en": "Index",
+            "label_zh": "该记录在所属短信的全部发送记录中的编号",
+            "description": "该记录在所属短信的全部发送记录中的编号"
+          },
+          {
+            "key": "type",
+            "path": "type",
+            "label_en": "Type",
+            "label_zh": "短信类型",
+            "description": "短信类型。其中： 0：模板异常。 1：验证码。 2：短信通知"
+          },
+          {
+            "key": "content",
+            "path": "content",
+            "label_en": "Content",
+            "label_zh": "短信内容",
+            "description": "短信内容"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态",
+            "description": "短信发送状态： 1 发送中, 2 发送失败, 3 发送成功"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "短信的最终发送状态"
+          },
+          {
+            "key": "receive_time",
+            "path": "receiveTime",
+            "label_en": "Receive Time",
+            "label_zh": "接收到发送短信请求的时间",
+            "description": "接收到发送短信请求的时间"
+          },
+          {
+            "key": "deliver_time",
+            "path": "deliverTime",
+            "label_en": "Deliver Time",
+            "label_zh": "下发短信时间",
+            "description": "下发短信时间"
+          },
+          {
+            "key": "report_time",
+            "path": "reportTime",
+            "label_en": "Report Time",
+            "label_zh": "接收短信状态报告时间",
+            "description": "接收短信状态报告时间"
+          },
+          {
+            "key": "notify_time",
+            "path": "notifyTime",
+            "label_en": "Notify Time",
+            "label_zh": "回调时间",
+            "description": "回调时间"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "action": "QuerySendDetails",
+        "currentPage": 1,
+        "pageSize": 10,
+        "phoneNumber": "18616065511",
+        "sendDate": "2022-01-18",
+        "signName": "天翼云测试",
+        "templateCode": "SMS64124870510"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIk9LIiwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXF1ZXN0SWQiOiAiY2tua2JtcWZsc29qYmY0OGg4bmciLCAidG90YWxDb3VudCI6IDE0LCAiZGF0YSI6IFt7ImV4dENvZGUiOiBbIiJdLCAic2lnblB1cnBvc2UiOiAwLCAicGFwZXJzVHlwZSI6IDUsICJyZW1hcmsiOiAi5rWL6K+VIiwgInN0YXR1cyI6IDEsICJjcmVhdGVUaW1lIjogIjIwMjMtMTAtMTZUMDk6MTI6NTguMDQ3WiIsICJ1cGRhdGVUaW1lIjogIjIwMjMtMTAtMTZUMDk6MTI6NTguMDQ3WiIsICJzaWduTmFtZSI6ICLlpKnnv7zkupHmtYvor5UiLCAic2lnblR5cGUiOiAxLCAicmVhc29uIjogIumAmui/hyJ9XX0="
+      },
+      "id": "sms.v1.signature.list",
+      "api_id": "954",
+      "title": "短信v1",
+      "description": {
+        "en-GB": "Query SMS signature using the legacy API",
+        "en-US": "Query SMS signature using the legacy API",
+        "zh-CN": "查询签名列表（旧版）"
+      },
+      "category": "v1",
+      "command_path": [
+        "v1",
+        "signature",
+        "list"
+      ],
+      "method": "POST",
+      "path": "/sms/api/v1",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2&api=954&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "constant": "QuerySmsSignList",
+          "name": "action",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统规定参数。取值：QuerySmsSignList",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数。取值：QuerySmsSignList"
+          },
+          "help_descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "QuerySmsSignList"
+        },
+        {
+          "name": "pageIndex",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "页码，即获取第几页的模板",
+          "descriptions": {
+            "en-GB": "Page index",
+            "en-US": "Page index",
+            "zh-CN": "页码，即获取第几页的模板"
+          },
+          "help_descriptions": {
+            "en-GB": "Page index",
+            "en-US": "Page index",
+            "zh-CN": "页码，即获取第几页的模板"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_index",
+          "cli_flag": "page-index",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "个数，即每页包含多少条模板",
+          "descriptions": {
+            "en-GB": "Page size",
+            "en-US": "Page size",
+            "zh-CN": "个数，即每页包含多少条模板"
+          },
+          "help_descriptions": {
+            "en-GB": "Page size",
+            "en-US": "Page size",
+            "zh-CN": "个数，即每页包含多少条模板"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "code",
+              "values": [
+                "OK"
+              ]
+            }
+          ]
+        },
+        "success_code": "OK",
+        "result_path": "data",
+        "row_path": "data",
+        "default_columns": [
+          "ext_code",
+          "sign_purpose",
+          "papers_type",
+          "remark",
+          "status",
+          "create_time"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "ext_code",
+            "path": "extCode",
+            "label_en": "Extension Code",
+            "label_zh": "扩展码",
+            "description": "当签名设置了扩展码时，返回签名的扩展码"
+          },
+          {
+            "key": "sign_purpose",
+            "path": "signPurpose",
+            "label_en": "Signature Purpose",
+            "label_zh": "签名用途",
+            "description": "签名用途0：自用；1：他用"
+          },
+          {
+            "key": "papers_type",
+            "path": "papersType",
+            "label_en": "Document Type",
+            "label_zh": "证件类型"
+          },
+          {
+            "key": "remark",
+            "path": "remark",
+            "label_en": "Remark",
+            "label_zh": "申请说明",
+            "description": "申请说明"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态",
+            "description": "短信发送状态： 1 发送中, 2 发送失败, 3 发送成功"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间",
+            "description": "短信签名的创建日期和时间"
+          },
+          {
+            "key": "update_time",
+            "path": "updateTime",
+            "label_en": "Update Time",
+            "label_zh": "更新时间",
+            "description": "短信签名的更新日期和时间"
+          },
+          {
+            "key": "sign_name",
+            "path": "signName",
+            "label_en": "Sign Name",
+            "label_zh": "签名名称",
+            "description": "签名名称"
+          },
+          {
+            "key": "sign_type",
+            "path": "signType",
+            "label_en": "Signature Type",
+            "label_zh": "签名类型",
+            "description": "签名类型 0：企事业单位的全称或简称； 1：工信部备案网站的全称或简称； 2：App应用的全称或简称； 3：公众号或小程序的全称或简称； 4：电商平台店铺名的全称或简称； 5：商标名的全称或简称 6、其他"
+          },
+          {
+            "key": "reason",
+            "path": "reason",
+            "label_en": "Reason",
+            "label_zh": "审核备注",
+            "description": "审核备注。 如果审核状态为审核中，参数Reason显示为“”。 如果审核状态为审核通过，参数Reason显示审核通过的详细信息。 如果审核状态为审核未通过，参数Reason显示审核未通过的原因"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "action": "QuerySmsSignList",
+        "pageIndex": 1,
+        "pageSize": 10
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIk9LIiwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXF1ZXN0SWQiOiAiY2tua2JtcWZsc29qYmY0OGg4bmcifQ=="
+      },
+      "id": "sms.v1.signature.create",
+      "api_id": "954",
+      "title": "短信v1",
+      "description": {
+        "en-GB": "Create SMS signature using the legacy API",
+        "en-US": "Create SMS signature using the legacy API",
+        "zh-CN": "添加签名（旧版）"
+      },
+      "category": "v1",
+      "command_path": [
+        "v1",
+        "signature",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/sms/api/v1",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2&api=954&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "constant": "AddSmsSign",
+          "name": "action",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统规定参数。取值：AddSmsSign",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数。取值：AddSmsSign"
+          },
+          "help_descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "AddSmsSign"
+        },
+        {
+          "name": "signName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "签名名称。必须符合 签名规范 ",
+          "descriptions": {
+            "en-GB": "Sign name",
+            "en-US": "Sign name",
+            "zh-CN": "签名名称。必须符合 签名规范 "
+          },
+          "help_descriptions": {
+            "en-GB": "Sign name",
+            "en-US": "Sign name",
+            "zh-CN": "签名名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sign_name",
+          "cli_flag": "sign-name",
+          "table_target": "",
+          "example": "天翼云测试"
+        },
+        {
+          "name": "signPurpos",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "是否自用。 0、自用； 1、他用",
+          "descriptions": {
+            "en-GB": "Sign purpos",
+            "en-US": "Sign purpos",
+            "zh-CN": "是否自用。 0、自用； 1、他用"
+          },
+          "help_descriptions": {
+            "en-GB": "Sign purpos",
+            "en-US": "Sign purpos",
+            "zh-CN": "是否自用"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sign_purpos",
+          "cli_flag": "sign-purpos",
+          "table_target": "",
+          "example": 0
+        },
+        {
+          "name": "signType",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "签名来源。取值： 0：企事业单位的全称或简称; 1：工信部备案网站的全称或简称; 2：App应用的全称或简称; 3：公众号或小程序的全称或简称; 4：电商平台店铺名的全称或简称; 5：商标名的全称或简称。 说明: 签名来源为工信部备案网站的全称或简称时，请在申请说明中添加网站域名，加快审核速度",
+          "descriptions": {
+            "en-GB": "Sign type",
+            "en-US": "Sign type",
+            "zh-CN": "签名来源。取值： 0：企事业单位的全称或简称; 1：工信部备案网站的全称或简称; 2：App应用的全称或简称; 3：公众号或小程序的全称或简称; 4：电商平台店铺名的全称或简称; 5：商标名的全称或简称。 说明: 签名来源为工信部备案网站的全称或简称时，请在申请说明中添加网站域名，加快审核速度"
+          },
+          "help_descriptions": {
+            "en-GB": "Sign type",
+            "en-US": "Sign type",
+            "zh-CN": "签名来源"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sign_type",
+          "cli_flag": "sign-type",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "papersType",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "证件类型： 0：三证合一; 1：企业营业执照; 2：组织机构代码证书; 3：社会信用代码证书; 4：应用后台管理截图（个人开发APP）; 5：网站备案后台截图（个人开发网站）; 6：小程序设置页面截图（个人认证小程序）; 7：商标注册书; 8：公众号设置页面截图（个人认证公众号）",
+          "descriptions": {
+            "en-GB": "Papers type",
+            "en-US": "Papers type",
+            "zh-CN": "证件类型： 0：三证合一; 1：企业营业执照; 2：组织机构代码证书; 3：社会信用代码证书; 4：应用后台管理截图（个人开发APP）; 5：网站备案后台截图（个人开发网站）; 6：小程序设置页面截图（个人认证小程序）; 7：商标注册书; 8：公众号设置页面截图（个人认证公众号）"
+          },
+          "help_descriptions": {
+            "en-GB": "Papers type",
+            "en-US": "Papers type",
+            "zh-CN": "证件类型： 0：三证合一; 1：企业营业执照; 2：组织机构代码证书; 3：社会信用代码证书; 4：应用后台管理截图（个人开发APP）; 5：网站备案后台截图（个人开发网站）; 6：小程序设置页面截图（个人认证小程序）; 7：商标注册书; 8：公众号设置页面截图（个人认证公众号）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "papers_type",
+          "cli_flag": "papers-type",
+          "table_target": "",
+          "example": 0
+        },
+        {
+          "name": "remark",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信签名申请说明。 请在申请说明中详细描述您的业务使用场景，申请工信部备案网站的全称或简称，请在此处填写域名，长度不超过200个字符",
+          "descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "短信签名申请说明。 请在申请说明中详细描述您的业务使用场景，申请工信部备案网站的全称或简称，请在此处填写域名，长度不超过200个字符"
+          },
+          "help_descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "短信签名申请说明"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "remark",
+          "cli_flag": "remark",
+          "table_target": "",
+          "example": "当前的短信签名应用于企业内部网络登录验证"
+        },
+        {
+          "name": "signFileList",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "签名的证明文件列表",
+          "descriptions": {
+            "en-GB": "Sign file list",
+            "en-US": "Sign file list",
+            "zh-CN": "签名的证明文件列表"
+          },
+          "help_descriptions": {
+            "en-GB": "Sign file list",
+            "en-US": "Sign file list",
+            "zh-CN": "签名的证明文件列表"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sign_file_list",
+          "cli_flag": "sign-file-list",
+          "table_target": "",
+          "example_unavailable": true
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "code",
+              "values": [
+                "OK"
+              ]
+            }
+          ]
+        },
+        "success_code": "OK",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message",
+          "request_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Code",
+            "label_zh": "响应码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "状态码描述"
+          },
+          {
+            "key": "request_id",
+            "path": "requestId",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "当为群发任务时,该字段为JobId"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "action": "AddSmsSign",
+        "papersType": 1,
+        "remark": "测试",
+        "signFileList": [
+          {
+            "FileSuffix": "png",
+            "FileContents": "data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAE......"
+          }
+        ],
+        "signName": "天翼云测试",
+        "signPurpose": 0,
+        "signType": 1
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIk9LIiwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXF1ZXN0SWQiOiAiY2tua2JtcWZsc29qYmY0OGg4bmcifQ=="
+      },
+      "id": "sms.v1.signature.delete",
+      "api_id": "954",
+      "title": "短信v1",
+      "description": {
+        "en-GB": "Delete SMS signature using the legacy API",
+        "en-US": "Delete SMS signature using the legacy API",
+        "zh-CN": "删除签名（旧版）"
+      },
+      "category": "v1",
+      "command_path": [
+        "v1",
+        "signature",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/sms/api/v1",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2&api=954&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "constant": "DeleteSmsSign",
+          "name": "action",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统规定参数。取值：DeleteSmsSign",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数。取值：DeleteSmsSign"
+          },
+          "help_descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "DeleteSmsSign"
+        },
+        {
+          "name": "signName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信签名。 说明:必须是本账号已申请的短信签名",
+          "descriptions": {
+            "en-GB": "Sign name",
+            "en-US": "Sign name",
+            "zh-CN": "短信签名。 说明:必须是本账号已申请的短信签名"
+          },
+          "help_descriptions": {
+            "en-GB": "Sign name",
+            "en-US": "Sign name",
+            "zh-CN": "短信签名"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sign_name",
+          "cli_flag": "sign-name",
+          "table_target": "",
+          "example": "天翼云测试"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "code",
+              "values": [
+                "OK"
+              ]
+            }
+          ]
+        },
+        "success_code": "OK",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message",
+          "request_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Code",
+            "label_zh": "响应码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "状态码描述"
+          },
+          {
+            "key": "request_id",
+            "path": "requestId",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "当为群发任务时,该字段为JobId"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "action": "DeleteSmsSign",
+        "signName": "天翼云测试"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIk9LIiwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXF1ZXN0SWQiOiAiY2tua2JtcWZsc29qYmY0OGg4bmcifQ=="
+      },
+      "id": "sms.v1.signature.update",
+      "api_id": "954",
+      "title": "短信v1",
+      "description": {
+        "en-GB": "Update SMS signature using the legacy API",
+        "en-US": "Update SMS signature using the legacy API",
+        "zh-CN": "修改签名（旧版）"
+      },
+      "category": "v1",
+      "command_path": [
+        "v1",
+        "signature",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/sms/api/v1",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2&api=954&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "constant": "ModifySmsSign",
+          "name": "action",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统规定参数。取值：ModifySmsSign ",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数。取值：ModifySmsSign "
+          },
+          "help_descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "ModifySmsSign"
+        },
+        {
+          "name": "signName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "签名内容。说明：签名内容必须符合 签名规范 ",
+          "descriptions": {
+            "en-GB": "Sign name",
+            "en-US": "Sign name",
+            "zh-CN": "签名内容。说明：签名内容必须符合 签名规范 "
+          },
+          "help_descriptions": {
+            "en-GB": "Sign name",
+            "en-US": "Sign name",
+            "zh-CN": "签名内容"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sign_name",
+          "cli_flag": "sign-name",
+          "table_target": "",
+          "example": "天翼云测试"
+        },
+        {
+          "name": "signPurpose",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "是否自用。 0、自用； 1、他用",
+          "descriptions": {
+            "en-GB": "Sign purpose",
+            "en-US": "Sign purpose",
+            "zh-CN": "是否自用。 0、自用； 1、他用"
+          },
+          "help_descriptions": {
+            "en-GB": "Sign purpose",
+            "en-US": "Sign purpose",
+            "zh-CN": "是否自用"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sign_purpose",
+          "cli_flag": "sign-purpose",
+          "table_target": "",
+          "example": 0
+        },
+        {
+          "name": "signType",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "签名来源。取值：0：企事业单位的全称或简称; 1：工信部备案网站的全称或简称; 2：App应用的全称或简称; 3：公众号或小程序的全称或简称; 4：电商平台店铺名的全称或简称; 5：商标名的全称或简称。 说明:签名来源为工信部备案网站的全称或简称时，请在申请说明中添加网站域名，加快审核速度",
+          "descriptions": {
+            "en-GB": "Sign type",
+            "en-US": "Sign type",
+            "zh-CN": "签名来源。取值：0：企事业单位的全称或简称; 1：工信部备案网站的全称或简称; 2：App应用的全称或简称; 3：公众号或小程序的全称或简称; 4：电商平台店铺名的全称或简称; 5：商标名的全称或简称。 说明:签名来源为工信部备案网站的全称或简称时，请在申请说明中添加网站域名，加快审核速度"
+          },
+          "help_descriptions": {
+            "en-GB": "Sign type",
+            "en-US": "Sign type",
+            "zh-CN": "签名来源"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sign_type",
+          "cli_flag": "sign-type",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "papersType",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "证件类型：0：三证合一; 1：企业营业执照; 2：组织机构代码证书; 3：社会信用代码证书; 4：应用后台管理截图（个人开发APP）; 5：网站备案后台截图（个人开发网站）; 6：小程序设置页面截图（个人认证小程序）; 7：商标注册书; 8：公众号设置页面截图（个人认证公众号）",
+          "descriptions": {
+            "en-GB": "Papers type",
+            "en-US": "Papers type",
+            "zh-CN": "证件类型：0：三证合一; 1：企业营业执照; 2：组织机构代码证书; 3：社会信用代码证书; 4：应用后台管理截图（个人开发APP）; 5：网站备案后台截图（个人开发网站）; 6：小程序设置页面截图（个人认证小程序）; 7：商标注册书; 8：公众号设置页面截图（个人认证公众号）"
+          },
+          "help_descriptions": {
+            "en-GB": "Papers type",
+            "en-US": "Papers type",
+            "zh-CN": "证件类型：0：三证合一; 1：企业营业执照; 2：组织机构代码证书; 3：社会信用代码证书; 4：应用后台管理截图（个人开发APP）; 5：网站备案后台截图（个人开发网站）; 6：小程序设置页面截图（个人认证小程序）; 7：商标注册书; 8：公众号设置页面截图（个人认证公众号）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "papers_type",
+          "cli_flag": "papers-type",
+          "table_target": "",
+          "example": 0
+        },
+        {
+          "name": "remark",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信签名申请说明。请在申请说明中详细描述您的业务使用场景，申请工信部备案网站的全称或简称请在此处填写域名，长度不超过200个字符",
+          "descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "短信签名申请说明。请在申请说明中详细描述您的业务使用场景，申请工信部备案网站的全称或简称请在此处填写域名，长度不超过200个字符"
+          },
+          "help_descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "短信签名申请说明"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "remark",
+          "cli_flag": "remark",
+          "table_target": "",
+          "example": "当前的短信签名应用于企业内部网络登录验证。"
+        },
+        {
+          "name": "signFileList",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "签名的证明文件列表",
+          "descriptions": {
+            "en-GB": "Sign file list",
+            "en-US": "Sign file list",
+            "zh-CN": "签名的证明文件列表"
+          },
+          "help_descriptions": {
+            "en-GB": "Sign file list",
+            "en-US": "Sign file list",
+            "zh-CN": "签名的证明文件列表"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sign_file_list",
+          "cli_flag": "sign-file-list",
+          "table_target": "",
+          "example_unavailable": true
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "code",
+              "values": [
+                "OK"
+              ]
+            }
+          ]
+        },
+        "success_code": "OK",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message",
+          "request_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Code",
+            "label_zh": "响应码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "状态码描述"
+          },
+          {
+            "key": "request_id",
+            "path": "requestId",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "当为群发任务时,该字段为JobId"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "action": "ModifySmsSign",
+        "papersType": 1,
+        "remark": "测试",
+        "signFileList": [
+          {
+            "FileSuffix": "png",
+            "FileContents": "data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAE......"
+          }
+        ],
+        "signName": "天翼云测试",
+        "signPurpose": 1,
+        "signType": 2
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIk9LIiwgImNyZWF0ZVRpbWUiOiAiMjAyMi0wMi0xMVQwMTozNToxNi40OTJaIiwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZWFzb24iOiAiIiwgInJlcXVlc3RJZCI6ICJja25rYm1xZmxzb2piZjQ4aDhuZyIsICJzaWduTmFtZSI6ICLlpKnnv7zkupHmtYvor5UiLCAic2lnblN0YXR1cyI6IDB9"
+      },
+      "id": "sms.v1.signature.show",
+      "api_id": "954",
+      "title": "短信v1",
+      "description": {
+        "en-GB": "Query SMS signature using the legacy API",
+        "en-US": "Query SMS signature using the legacy API",
+        "zh-CN": "查询签名（旧版）"
+      },
+      "category": "v1",
+      "command_path": [
+        "v1",
+        "signature",
+        "show"
+      ],
+      "method": "POST",
+      "path": "/sms/api/v1",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2&api=954&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "constant": "QuerySmsSign",
+          "name": "action",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统规定参数。取值：QuerySmsSign",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数。取值：QuerySmsSign"
+          },
+          "help_descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "QuerySmsSign"
+        },
+        {
+          "name": "signName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "签名名称",
+          "descriptions": {
+            "en-GB": "Sign name",
+            "en-US": "Sign name",
+            "zh-CN": "签名名称"
+          },
+          "help_descriptions": {
+            "en-GB": "Sign name",
+            "en-US": "Sign name",
+            "zh-CN": "签名名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sign_name",
+          "cli_flag": "sign-name",
+          "table_target": "",
+          "example": "天翼云测试"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "code",
+              "values": [
+                "OK"
+              ]
+            }
+          ]
+        },
+        "success_code": "OK",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "create_time",
+          "message",
+          "reason",
+          "request_id",
+          "sign_name"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Code",
+            "label_zh": "响应码"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间",
+            "description": "短信签名的创建日期和时间"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "状态码描述"
+          },
+          {
+            "key": "reason",
+            "path": "reason",
+            "label_en": "Reason",
+            "label_zh": "审核备注",
+            "description": "审核备注。 如果审核状态为审核中，参数Reason显示为“”。 如果审核状态为审核通过，参数Reason显示审核通过的详细信息。 如果审核状态为审核未通过，参数Reason显示审核未通过的原因"
+          },
+          {
+            "key": "request_id",
+            "path": "requestId",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "当为群发任务时,该字段为JobId"
+          },
+          {
+            "key": "sign_name",
+            "path": "signName",
+            "label_en": "Sign Name",
+            "label_zh": "签名名称",
+            "description": "签名名称"
+          },
+          {
+            "key": "sign_status",
+            "path": "signStatus",
+            "label_en": "Sign Status",
+            "label_zh": "签名审核状态",
+            "description": "签名审核状态。其中： 0：审核中。 1：审核通过。 2：审核失败，请在返回参数Reason中查看审核失败原因"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "action": "QuerySmsSign",
+        "signName": "天翼云"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIk9LIiwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXF1ZXN0SWQiOiAiY2tua2JtcWZsc29qYmY0OGg4bmciLCAidG90YWxDb3VudCI6IDEsICJkYXRhIjogW3sicmVhc29uIjogIumAmui/hyIsICJjcmVhdGVUaW1lIjogIjIwMjItMTItMDFUMTQ6MjY6MDYuNDY2WiIsICJ1cGRhdGVUaW1lIjogIjIwMjItMDctMTlUMDc6NDA6MDMuMzM3WiIsICJyZW1hcmsiOiAi5rWL6K+VIiwgInN0YXR1cyI6IDEsICJ0ZW1wbGF0ZUNvZGUiOiAiU01TNjQxMjQ4NzA1MTAiLCAidGVtcGxhdGVUeXBlIjogMiwgInRlbXBsYXRlTmFtZSI6ICLpqozor4HnoIHmtYvor5UiLCAiZXhhbXBsZSI6ICIiLCAidGVtcGxhdGVDb250ZW50IjogIuaCqOeahOmqjOivgeeggSR7Y29kZX3vvIzmnInmlYjmnJ815YiG6ZKf44CCIn1dfQ=="
+      },
+      "id": "sms.v1.template.list",
+      "api_id": "954",
+      "title": "短信v1",
+      "description": {
+        "en-GB": "Query SMS template using the legacy API",
+        "en-US": "Query SMS template using the legacy API",
+        "zh-CN": "查询模板列表（旧版）"
+      },
+      "category": "v1",
+      "command_path": [
+        "v1",
+        "template",
+        "list"
+      ],
+      "method": "POST",
+      "path": "/sms/api/v1",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2&api=954&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "constant": "QuerySmsTemplateList",
+          "name": "action",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统规定参数。取值：QuerySmsTemplateList",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数。取值：QuerySmsTemplateList"
+          },
+          "help_descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "QuerySmsTemplateList"
+        },
+        {
+          "name": "pageIndex",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "页码，即获取第几页的模板",
+          "descriptions": {
+            "en-GB": "Page index",
+            "en-US": "Page index",
+            "zh-CN": "页码，即获取第几页的模板"
+          },
+          "help_descriptions": {
+            "en-GB": "Page index",
+            "en-US": "Page index",
+            "zh-CN": "页码，即获取第几页的模板"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_index",
+          "cli_flag": "page-index",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "个数，即每页包含多少条模板",
+          "descriptions": {
+            "en-GB": "Page size",
+            "en-US": "Page size",
+            "zh-CN": "个数，即每页包含多少条模板"
+          },
+          "help_descriptions": {
+            "en-GB": "Page size",
+            "en-US": "Page size",
+            "zh-CN": "个数，即每页包含多少条模板"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "code",
+              "values": [
+                "OK"
+              ]
+            }
+          ]
+        },
+        "success_code": "OK",
+        "result_path": "data",
+        "row_path": "data",
+        "default_columns": [
+          "reason",
+          "create_time",
+          "update_time",
+          "remark",
+          "status",
+          "template_code"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "reason",
+            "path": "reason",
+            "label_en": "Reason",
+            "label_zh": "审核备注",
+            "description": "审核备注。 如果审核状态为审核中，参数Reason显示为“”。 如果审核状态为审核通过，参数Reason显示审核通过的详细信息。 如果审核状态为审核未通过，参数Reason显示审核未通过的原因"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间",
+            "description": "短信签名的创建日期和时间"
+          },
+          {
+            "key": "update_time",
+            "path": "updateTime",
+            "label_en": "Update Time",
+            "label_zh": "更新时间",
+            "description": "短信签名的更新日期和时间"
+          },
+          {
+            "key": "remark",
+            "path": "remark",
+            "label_en": "Remark",
+            "label_zh": "申请说明",
+            "description": "申请说明"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态",
+            "description": "短信发送状态： 1 发送中, 2 发送失败, 3 发送成功"
+          },
+          {
+            "key": "template_code",
+            "path": "templateCode",
+            "label_en": "Template Code",
+            "label_zh": "模板编码",
+            "description": "短信模板CODE"
+          },
+          {
+            "key": "template_type",
+            "path": "templateType",
+            "label_en": "Template Type",
+            "label_zh": "短信类型",
+            "description": "短信类型。 1：验证码； 2：短信通知"
+          },
+          {
+            "key": "template_name",
+            "path": "templateName",
+            "label_en": "Template Name",
+            "label_zh": "模板名称",
+            "description": "模板名称"
+          },
+          {
+            "key": "example",
+            "path": "example",
+            "label_en": "Example",
+            "label_zh": "短信示例",
+            "description": "短信示例。 申请模板时由用户填写"
+          },
+          {
+            "key": "template_content",
+            "path": "templateContent",
+            "label_en": "Template Content",
+            "label_zh": "模板内容",
+            "description": "模板内容"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "action": "QuerySmsTemplateList",
+        "pageIndex": 1,
+        "pageSize": 10
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIk9LIiwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXF1ZXN0SWQiOiAiY2tua2JtcWZsc29qYmY0OGg4bmciLCAidGVtcGxhdGVDb2RlIjogIlNNUzY0MTI0ODcwNTEwIn0="
+      },
+      "id": "sms.v1.template.create",
+      "api_id": "954",
+      "title": "短信v1",
+      "description": {
+        "en-GB": "Create SMS template using the legacy API",
+        "en-US": "Create SMS template using the legacy API",
+        "zh-CN": "添加模板（旧版）"
+      },
+      "category": "v1",
+      "command_path": [
+        "v1",
+        "template",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/sms/api/v1",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2&api=954&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "constant": "AddSmsTemplate",
+          "name": "action",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统规定参数。取值：AddSmsTemplate ",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数。取值：AddSmsTemplate "
+          },
+          "help_descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "AddSmsTemplate"
+        },
+        {
+          "name": "templateType",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信类型。其中： 1：验证码。 2：短信通知",
+          "descriptions": {
+            "en-GB": "Template type",
+            "en-US": "Template type",
+            "zh-CN": "短信类型。其中： 1：验证码。 2：短信通知"
+          },
+          "help_descriptions": {
+            "en-GB": "Template type",
+            "en-US": "Template type",
+            "zh-CN": "短信类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_type",
+          "cli_flag": "template-type",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "templateName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模板名称，长度为1~30个字符",
+          "descriptions": {
+            "en-GB": "Template name",
+            "en-US": "Template name",
+            "zh-CN": "模板名称，长度为1~30个字符"
+          },
+          "help_descriptions": {
+            "en-GB": "Template name",
+            "en-US": "Template name",
+            "zh-CN": "模板名称，长度为1~30个字符"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_name",
+          "cli_flag": "template-name",
+          "table_target": "",
+          "example": "天翼云测试"
+        },
+        {
+          "name": "templateContent",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模板内容，长度为1~500个字符。 模板内容需要符合 模板规范 ",
+          "descriptions": {
+            "en-GB": "Template content",
+            "en-US": "Template content",
+            "zh-CN": "模板内容，长度为1~500个字符。 模板内容需要符合 模板规范 "
+          },
+          "help_descriptions": {
+            "en-GB": "Template content",
+            "en-US": "Template content",
+            "zh-CN": "模板内容，长度为1~500个字符"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_content",
+          "cli_flag": "template-content",
+          "table_target": "",
+          "example": "您正在进行天翼云门户注册，验证码为：${code}，5分钟内有效！"
+        },
+        {
+          "name": "remark",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信模板申请说明。 请在申请说明中描述您的业务使用场景，长度不超过200个字符",
+          "descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "短信模板申请说明。 请在申请说明中描述您的业务使用场景，长度不超过200个字符"
+          },
+          "help_descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "短信模板申请说明"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "remark",
+          "cli_flag": "remark",
+          "table_target": "",
+          "example": "天翼云注册"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "code",
+              "values": [
+                "OK"
+              ]
+            }
+          ]
+        },
+        "success_code": "OK",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message",
+          "request_id",
+          "template_code"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Code",
+            "label_zh": "响应码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "状态码描述"
+          },
+          {
+            "key": "request_id",
+            "path": "requestId",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "当为群发任务时,该字段为JobId"
+          },
+          {
+            "key": "template_code",
+            "path": "templateCode",
+            "label_en": "Template Code",
+            "label_zh": "模板编码",
+            "description": "短信模板CODE"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "action": "AddSmsTemplate",
+        "remark": "天翼云注册",
+        "templateContent": "您正在进行天翼云门户注册，验证码为：${code}，5分钟内有效！",
+        "templateName": "天翼云注册",
+        "templateType": 0
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIk9LIiwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXF1ZXN0SWQiOiAiY2tua2JtcWZsc29qYmY0OGg4bmciLCAidGVtcGxhdGVDb2RlIjogIlNNUzY0MTI0ODcwNTEwIn0="
+      },
+      "id": "sms.v1.template.delete",
+      "api_id": "954",
+      "title": "短信v1",
+      "description": {
+        "en-GB": "Delete SMS template using the legacy API",
+        "en-US": "Delete SMS template using the legacy API",
+        "zh-CN": "删除模板（旧版）"
+      },
+      "category": "v1",
+      "command_path": [
+        "v1",
+        "template",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/sms/api/v1",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2&api=954&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "constant": "DeleteSmsTemplate",
+          "name": "action",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统规定参数。取值：DeleteSmsTemplate ",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数。取值：DeleteSmsTemplate "
+          },
+          "help_descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "DeleteSmsTemplate"
+        },
+        {
+          "name": "templateCode",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信模板CODE。 您可以在控制台模板管理页面或API接口AddSmsTemplate的返回参数中获取短信模板CODE",
+          "descriptions": {
+            "en-GB": "Template code",
+            "en-US": "Template code",
+            "zh-CN": "短信模板CODE。 您可以在控制台模板管理页面或API接口AddSmsTemplate的返回参数中获取短信模板CODE"
+          },
+          "help_descriptions": {
+            "en-GB": "Template code",
+            "en-US": "Template code",
+            "zh-CN": "短信模板CODE"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_code",
+          "cli_flag": "template-code",
+          "table_target": "",
+          "example": "SMS64124870510"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "code",
+              "values": [
+                "OK"
+              ]
+            }
+          ]
+        },
+        "success_code": "OK",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message",
+          "request_id",
+          "template_code"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Code",
+            "label_zh": "响应码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "状态码描述"
+          },
+          {
+            "key": "request_id",
+            "path": "requestId",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "当为群发任务时,该字段为JobId"
+          },
+          {
+            "key": "template_code",
+            "path": "templateCode",
+            "label_en": "Template Code",
+            "label_zh": "模板编码",
+            "description": "短信模板CODE"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "action": "DeleteSmsTemplate",
+        "templateCode": "SMS64124870510"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIk9LIiwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXF1ZXN0SWQiOiAiY2tua2JtcWZsc29qYmY0OGg4bmciLCAidGVtcGxhdGVDb2RlIjogIlNNUzY0MTI0ODcwNTEwIn0="
+      },
+      "id": "sms.v1.template.update",
+      "api_id": "954",
+      "title": "短信v1",
+      "description": {
+        "en-GB": "Update SMS template using the legacy API",
+        "en-US": "Update SMS template using the legacy API",
+        "zh-CN": "修改模板（旧版）"
+      },
+      "category": "v1",
+      "command_path": [
+        "v1",
+        "template",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/sms/api/v1",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2&api=954&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "constant": "ModifySmsTemplate",
+          "name": "action",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统规定参数。取值：ModifySmsTemplate",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数。取值：ModifySmsTemplate"
+          },
+          "help_descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "ModifySmsTemplate"
+        },
+        {
+          "name": "templateType",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信类型。其中： 1： 验证码。 2：短信通知",
+          "descriptions": {
+            "en-GB": "Template type",
+            "en-US": "Template type",
+            "zh-CN": "短信类型。其中： 1： 验证码。 2：短信通知"
+          },
+          "help_descriptions": {
+            "en-GB": "Template type",
+            "en-US": "Template type",
+            "zh-CN": "短信类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_type",
+          "cli_flag": "template-type",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "templateName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模板名称，长度为1~30个字符",
+          "descriptions": {
+            "en-GB": "Template name",
+            "en-US": "Template name",
+            "zh-CN": "模板名称，长度为1~30个字符"
+          },
+          "help_descriptions": {
+            "en-GB": "Template name",
+            "en-US": "Template name",
+            "zh-CN": "模板名称，长度为1~30个字符"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_name",
+          "cli_flag": "template-name",
+          "table_target": "",
+          "example": "天翼云短信测试模板"
+        },
+        {
+          "name": "templateContent",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模板内容，长度为1~500个字符。模板内容需要符合 模板规范 。 说明:修改模板时，请针对审核意见合理设计模板内容",
+          "descriptions": {
+            "en-GB": "Template content",
+            "en-US": "Template content",
+            "zh-CN": "模板内容，长度为1~500个字符。模板内容需要符合 模板规范 。 说明:修改模板时，请针对审核意见合理设计模板内容"
+          },
+          "help_descriptions": {
+            "en-GB": "Template content",
+            "en-US": "Template content",
+            "zh-CN": "模板内容，长度为1~500个字符"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_content",
+          "cli_flag": "template-content",
+          "table_target": "",
+          "example": "您正在申请手机注册，验证码为：${code}，5分钟内有效！"
+        },
+        {
+          "name": "remark",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信模板申请说明。请在申请说明中描述您的业务使用场景，长度不超过200个字符",
+          "descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "短信模板申请说明。请在申请说明中描述您的业务使用场景，长度不超过200个字符"
+          },
+          "help_descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "短信模板申请说明"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "remark",
+          "cli_flag": "remark",
+          "table_target": "",
+          "example": "当前的短信模板应用于双11大促推广营销"
+        },
+        {
+          "name": "templateCode",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信模板CODE。 您可以在控制台模板管理页面或API接口AddSmsTemplate的返回参数中获取短信模板CODE",
+          "descriptions": {
+            "en-GB": "Template code",
+            "en-US": "Template code",
+            "zh-CN": "短信模板CODE。 您可以在控制台模板管理页面或API接口AddSmsTemplate的返回参数中获取短信模板CODE"
+          },
+          "help_descriptions": {
+            "en-GB": "Template code",
+            "en-US": "Template code",
+            "zh-CN": "短信模板CODE"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_code",
+          "cli_flag": "template-code",
+          "table_target": "",
+          "example": "SMS64124870510"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "code",
+              "values": [
+                "OK"
+              ]
+            }
+          ]
+        },
+        "success_code": "OK",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message",
+          "request_id",
+          "template_code"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Code",
+            "label_zh": "响应码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "状态码描述"
+          },
+          {
+            "key": "request_id",
+            "path": "requestId",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "当为群发任务时,该字段为JobId"
+          },
+          {
+            "key": "template_code",
+            "path": "templateCode",
+            "label_en": "Template Code",
+            "label_zh": "模板编码",
+            "description": "短信模板CODE"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "action": "ModifySmsTemplate",
+        "remark": "测试",
+        "templateCode": "SMS64124870510",
+        "templateContent": "您的验证码为${code},有效期为5分钟!",
+        "templateName": "登陆验证码",
+        "templateType": 1
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIk9LIiwgImNyZWF0ZVRpbWUiOiAiMjAyMi0wMi0xMVQwMjowMzozMi43MTFaIiwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZWFzb24iOiAiIiwgInJlcXVlc3RJZCI6ICJja25rYm1xZmxzb2piZjQ4aDhuZyIsICJ0ZW1wbGF0ZUNvZGUiOiAiU01TNjQxMjQ4NzA1MTAiLCAidGVtcGxhdGVDb250ZW50IjogIuaCqOeahOmqjOivgeeggeS4uiR7Y29kZX0s5pyJ5pWI5pyf5Li6NeWIhumSnyEiLCAidGVtcGxhdGVOYW1lIjogIueZu+mZhumqjOivgeeggSIsICJ0ZW1wbGF0ZVN0YXR1cyI6IDAsICJ0ZW1wbGF0ZVR5cGUiOiAwfQ=="
+      },
+      "id": "sms.v1.template.show",
+      "api_id": "954",
+      "title": "短信v1",
+      "description": {
+        "en-GB": "Query SMS template using the legacy API",
+        "en-US": "Query SMS template using the legacy API",
+        "zh-CN": "查询模板（旧版）"
+      },
+      "category": "v1",
+      "command_path": [
+        "v1",
+        "template",
+        "show"
+      ],
+      "method": "POST",
+      "path": "/sms/api/v1",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2&api=954&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "constant": "QuerySmsTemplate",
+          "name": "action",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统规定参数。取值：QuerySmsTemplate",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数。取值：QuerySmsTemplate"
+          },
+          "help_descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "系统规定参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "QuerySmsTemplate"
+        },
+        {
+          "name": "templateCode",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "短信模板CODE。 您可以在控制台模板管理页面或API接口AddSmsTemplate的返回参数中获取短信模板CODE",
+          "descriptions": {
+            "en-GB": "Template code",
+            "en-US": "Template code",
+            "zh-CN": "短信模板CODE。 您可以在控制台模板管理页面或API接口AddSmsTemplate的返回参数中获取短信模板CODE"
+          },
+          "help_descriptions": {
+            "en-GB": "Template code",
+            "en-US": "Template code",
+            "zh-CN": "短信模板CODE"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_code",
+          "cli_flag": "template-code",
+          "table_target": "",
+          "example": "SMS64124870510"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "code",
+              "values": [
+                "OK"
+              ]
+            }
+          ]
+        },
+        "success_code": "OK",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "create_time",
+          "message",
+          "reason",
+          "request_id",
+          "template_code"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Code",
+            "label_zh": "响应码"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间",
+            "description": "短信签名的创建日期和时间"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "状态码描述"
+          },
+          {
+            "key": "reason",
+            "path": "reason",
+            "label_en": "Reason",
+            "label_zh": "审核备注",
+            "description": "审核备注。 如果审核状态为审核中，参数Reason显示为“”。 如果审核状态为审核通过，参数Reason显示审核通过的详细信息。 如果审核状态为审核未通过，参数Reason显示审核未通过的原因"
+          },
+          {
+            "key": "request_id",
+            "path": "requestId",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "当为群发任务时,该字段为JobId"
+          },
+          {
+            "key": "template_code",
+            "path": "templateCode",
+            "label_en": "Template Code",
+            "label_zh": "模板编码",
+            "description": "短信模板CODE"
+          },
+          {
+            "key": "template_content",
+            "path": "templateContent",
+            "label_en": "Template Content",
+            "label_zh": "模板内容",
+            "description": "模板内容"
+          },
+          {
+            "key": "template_name",
+            "path": "templateName",
+            "label_en": "Template Name",
+            "label_zh": "模板名称",
+            "description": "模板名称"
+          },
+          {
+            "key": "template_status",
+            "path": "templateStatus",
+            "label_en": "Template Status",
+            "label_zh": "模板审核状态",
+            "description": "模板审核状态。其中： 0：审核中。 1：审核通过。 2：审核失败，请在返回参数Reason中查看审核失败原因"
+          },
+          {
+            "key": "template_type",
+            "path": "templateType",
+            "label_en": "Template Type",
+            "label_zh": "短信类型",
+            "description": "短信类型。 1：验证码； 2：短信通知"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "action": "QuerySmsTemplate",
+        "templateCode": "SMS64124870510"
+      },
+      "example_response": null
+    }
+  ]
+}

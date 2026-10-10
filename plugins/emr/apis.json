@@ -1,0 +1,370 @@
+{
+  "operations": {
+    "emr.cluster.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/emr/openapi/order/new",
+      "content_type": "application/json",
+      "body": {
+        "available_zone_id": "$param.available_zone_id",
+        "charge_info": "$param.charge_info",
+        "cluster_name": "$param.cluster_name",
+        "cluster_type": "$param.cluster_type",
+        "components": "$param.components",
+        "cpu_type": "$param.cpu_type",
+        "datasource_configs": "$param.datasource_configs",
+        "dps_type": "$param.dps_type",
+        "enable_ipv6": "$param.enable_ipv6",
+        "host_type": "$param.host_type",
+        "node_details": "$param.node_details",
+        "node_root_password": "$param.node_root_password",
+        "os_type": "$param.os_type",
+        "project_id": "$param.project_id",
+        "region_id": "$param.region_id",
+        "security_groups_id": "$param.security_groups_id",
+        "spec_type": "$param.spec_type",
+        "subnet_id": "$param.subnet_id",
+        "vpc_Id": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "emr.cluster.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/emr/openapi/cluster/clusterDetail/selectPage",
+      "content_type": "application/json",
+      "body": {
+        "clusterName": "$param.cluster_name",
+        "clusterStateCode": "$param.cluster_state_code",
+        "clusterTypeCode": "$param.cluster_type_code",
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "emr.cluster.resize": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/emr/openapi/order/increase",
+      "content_type": "application/json",
+      "body": {
+        "auto_pay": "$param.auto_pay",
+        "cluster_id": "$param.cluster_id",
+        "component_role_list": "$param.component_role_list",
+        "count": "$param.count",
+        "node_group_name": "$param.node_group_name",
+        "scale_without_start": "$param.scale_without_start"
+      },
+      "retryable": false
+    },
+    "emr.cluster.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/emr/openapi/cluster/clusterDetail/getById",
+      "content_type": "application/json",
+      "query": {
+        "id": "$param.id"
+      },
+      "retryable": true
+    },
+    "emr.cluster.unsubscribe": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/emr/openapi/order/refund",
+      "content_type": "application/json",
+      "query": {
+        "clusterId": "$param.cluster_id"
+      },
+      "retryable": false
+    },
+    "emr.metadata.overview": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/emr/doctor/openapi/meta/hive/overview",
+      "content_type": "application/json",
+      "query": {
+        "clusterId": "$param.cluster_id",
+        "timestamp": "$param.timestamp"
+      },
+      "retryable": true
+    },
+    "emr.metadata.table.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/emr/doctor/openapi/meta/hive/tableInfo",
+      "content_type": "application/json",
+      "query": {
+        "clusterId": "$param.cluster_id",
+        "databaseName": "$param.database_name",
+        "tableName": "$param.table_name",
+        "timestamp": "$param.timestamp"
+      },
+      "retryable": true
+    },
+    "emr.node-group.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/emr/openapi/cluster/clusterNodeGroup/getByClusterId",
+      "content_type": "application/json",
+      "query": {
+        "clusterId": "$param.cluster_id"
+      },
+      "retryable": true
+    },
+    "emr.node-group.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/emr/openapi/cluster/nodeGroup/getGroupAndHostByCondition",
+      "content_type": "application/json",
+      "body": {
+        "clusterId": "$param.cluster_id",
+        "nodeState": "$param.node_state",
+        "selectKey": "$param.select_key"
+      },
+      "retryable": true
+    },
+    "emr.v1.cluster.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/emr/openapi/cluster/clusterDetail/selectPage",
+      "content_type": "application/json",
+      "body": {
+        "clusterName": "$param.cluster_name",
+        "clusterStateCode": "$param.cluster_state_code",
+        "clusterTypeCode": "$param.cluster_type_code",
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "emr.v1.cluster.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/emr/openapi/cluster/clusterDetail/getById",
+      "content_type": "application/json",
+      "query": {
+        "id": "$param.id"
+      },
+      "retryable": true
+    },
+    "emr.v1.node-group.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/emr/openapi/cluster/clusterNodeGroup/getByClusterId",
+      "content_type": "application/json",
+      "query": {
+        "clusterId": "$param.cluster_id"
+      },
+      "retryable": true
+    },
+    "emr.v1.node-group.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/emr/openapi/cluster/clusterNodeGroup/getGroupAndHostByCondition",
+      "content_type": "application/json",
+      "body": {
+        "clusterId": "$param.cluster_id",
+        "nodeState": "$param.node_state",
+        "selectKey": "$param.select_key"
+      },
+      "retryable": true
+    }
+  }
+}

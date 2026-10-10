@@ -1,0 +1,6164 @@
+{
+  "commands": [
+    {
+      "id": "sdwan.topology.node.list",
+      "path": [
+        "sdwan",
+        "topology",
+        "node",
+        "list"
+      ],
+      "operation": "sdwan.topology.node.list",
+      "table": "sdwan.topology.node.list",
+      "parameters": [
+        {
+          "name": "sdwan_id",
+          "flag": "sdwan-id",
+          "target": "sdwanID",
+          "required": true,
+          "description": "Sdwan ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-topology-node-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5898&isNormal=1",
+      "examples": [
+        "ctyun sdwan topology node list --sdwan-id be012e8f-ea32-4a2c-89da-7db35eedb334"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.topology.link.list",
+      "path": [
+        "sdwan",
+        "topology",
+        "link",
+        "list"
+      ],
+      "operation": "sdwan.topology.link.list",
+      "table": "sdwan.topology.link.list",
+      "parameters": [
+        {
+          "name": "sdwan_id",
+          "flag": "sdwan-id",
+          "target": "sdwanID",
+          "required": true,
+          "description": "Sdwan ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-topology-link-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5899&isNormal=1",
+      "examples": [
+        "ctyun sdwan topology link list --sdwan-id be012e8f-ea32-4a2c-89da-7db35eedb334"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.topology.node.detail.list",
+      "path": [
+        "sdwan",
+        "topology",
+        "node",
+        "detail",
+        "list"
+      ],
+      "operation": "sdwan.topology.node.detail.list",
+      "table": "sdwan.topology.node.detail.list",
+      "parameters": [
+        {
+          "name": "sdwan_id",
+          "flag": "sdwan-id",
+          "target": "sdwanID",
+          "required": true,
+          "description": "Sdwan ID"
+        },
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-topology-node-detail-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5900&isNormal=1",
+      "examples": [
+        "ctyun sdwan topology node detail list --sdwan-id be012e8f-ea32-4a2c-89da-7db35eedb334 --edge-id be012e8f-ea32-4a2c-89da-7dbsddssdd"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.deactivate",
+      "path": [
+        "sdwan",
+        "gateway",
+        "deactivate"
+      ],
+      "operation": "sdwan.gateway.deactivate",
+      "table": "sdwan.gateway.deactivate",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-deactivate.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5901&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway deactivate --edge-id 65768712-3890-11ed-a977-005056898fe0"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "deactivate"
+      }
+    },
+    {
+      "id": "sdwan.topology.node.update",
+      "path": [
+        "sdwan",
+        "topology",
+        "node",
+        "update"
+      ],
+      "operation": "sdwan.topology.node.update",
+      "table": "sdwan.topology.node.update",
+      "parameters": [
+        {
+          "name": "sdwan_id",
+          "flag": "sdwan-id",
+          "target": "sdwanID",
+          "required": true,
+          "description": "Sdwan ID"
+        },
+        {
+          "name": "edges",
+          "flag": "edges",
+          "target": "edges",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Edges as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-topology-node-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5902&isNormal=1",
+      "examples": [
+        "ctyun sdwan topology node update --sdwan-id be012e8f-ea32-4a2c-89da-7db35eedb334 --edges '[{\"edgeID\":\"01fdb0ca-16bd-11ec-8dbe-005056898fe0\",\"x\":\"180.00\",\"y\":\"170.00\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "sdwan.gateway.static-route.create",
+      "path": [
+        "sdwan",
+        "gateway",
+        "static-route",
+        "create"
+      ],
+      "operation": "sdwan.gateway.static-route.create",
+      "table": "sdwan.gateway.static-route.create",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "protocol",
+          "flag": "protocol",
+          "target": "protocol",
+          "required": true,
+          "description": "Protocol"
+        },
+        {
+          "name": "dst_cidr",
+          "flag": "dst-cidr",
+          "target": "dstCIDR",
+          "required": true,
+          "description": "Dst Cidr"
+        },
+        {
+          "name": "next_hop_list",
+          "flag": "next-hop-list",
+          "target": "nextHopList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Next Hop List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-static-route-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5903&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway static-route create --edge-id '3677d762-b0dd-11ec-9e10-00505689ac50 ' --protocol 'IPv4 ' --dst-cidr 12.3.4.0/24 --next-hop-list '[{\"nextHop\":\"12.3.4.6 \",\"priority\":\"60 \",\"interface\":\"wan1 \"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "sdwan.gateway.static-route.delete",
+      "path": [
+        "sdwan",
+        "gateway",
+        "static-route",
+        "delete"
+      ],
+      "operation": "sdwan.gateway.static-route.delete",
+      "table": "sdwan.gateway.static-route.delete",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "route_id_list",
+          "flag": "route-id-list",
+          "target": "routeIDList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Route ID List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-static-route-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5904&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway static-route delete --edge-id 3677d762-b0dd-11ec-9e10-00505689ac50 --route-id-list '[\"4f4d9452-388c-11ed-a977-005056898fe0\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "sdwan.gateway.static-route.list",
+      "path": [
+        "sdwan",
+        "gateway",
+        "static-route",
+        "list"
+      ],
+      "operation": "sdwan.gateway.static-route.list",
+      "table": "sdwan.gateway.static-route.list",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "search",
+          "flag": "search",
+          "target": "search",
+          "required": false,
+          "description": "Search"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-static-route-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5905&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway static-route list --edge-id 4f4d9452-388c-11ed-a977-005056898fe0"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.network.bind",
+      "path": [
+        "sdwan",
+        "gateway",
+        "network",
+        "bind"
+      ],
+      "operation": "sdwan.gateway.network.bind",
+      "table": "sdwan.gateway.network.bind",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "sdwan_id",
+          "flag": "sdwan-id",
+          "target": "sdwanID",
+          "required": true,
+          "description": "Sdwan ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-network-bind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5906&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway network bind --edge-id 9aa1a302-388d-11ed-a977-005056898fe0 --sdwan-id be012e8f-ea32-4a2c-89da-7db35eedb334"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "bind"
+      }
+    },
+    {
+      "id": "sdwan.gateway.network.unbind",
+      "path": [
+        "sdwan",
+        "gateway",
+        "network",
+        "unbind"
+      ],
+      "operation": "sdwan.gateway.network.unbind",
+      "table": "sdwan.gateway.network.unbind",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-network-unbind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5907&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway network unbind --edge-id '65768712-3890-11ed-a977-005056898fe0 '"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unbind"
+      }
+    },
+    {
+      "id": "sdwan.gateway.private-network.configure",
+      "path": [
+        "sdwan",
+        "gateway",
+        "private-network",
+        "configure"
+      ],
+      "operation": "sdwan.gateway.private-network.configure",
+      "table": "sdwan.gateway.private-network.configure",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "edge_cidr",
+          "flag": "edge-cidr",
+          "target": "edgeCIDR",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Edge Cidr as a JSON array"
+        },
+        {
+          "name": "lan_control_ip",
+          "flag": "lan-control-ip",
+          "target": "lanControlIP",
+          "required": false,
+          "description": "Lan Control IP"
+        },
+        {
+          "name": "lan_business_ip",
+          "flag": "lan-business-ip",
+          "target": "lanBusinessIP",
+          "required": false,
+          "description": "Lan Business IP"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-private-network-configure.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5908&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway private-network configure --edge-id 65768712-3890-11ed-a977-005056898fe0 --edge-cidr '[\"13.5.6.0/24,\\n        \"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "configure"
+      }
+    },
+    {
+      "id": "sdwan.gateway.activate",
+      "path": [
+        "sdwan",
+        "gateway",
+        "activate"
+      ],
+      "operation": "sdwan.gateway.activate",
+      "table": "sdwan.gateway.activate",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "edge_cidr",
+          "flag": "edge-cidr",
+          "target": "edgeCIDR",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Edge Cidr as a JSON array"
+        },
+        {
+          "name": "deploy_mode",
+          "flag": "deploy-mode",
+          "target": "deployMode",
+          "required": true,
+          "allowed_values": [
+            "inline-mode",
+            "dual-arm-mode",
+            "single-arm-mode"
+          ],
+          "description": "Deploy Mode"
+        },
+        {
+          "name": "dhcp_disable",
+          "flag": "dhcp-disable",
+          "target": "dhcpDisable",
+          "required": false,
+          "default": "false",
+          "description": "Dhcp Disable"
+        },
+        {
+          "name": "lan_control_ip",
+          "flag": "lan-control-ip",
+          "target": "lanControlIP",
+          "required": false,
+          "description": "Lan Control IP"
+        },
+        {
+          "name": "lan_business_ip",
+          "flag": "lan-business-ip",
+          "target": "lanBusinessIP",
+          "required": false,
+          "description": "Lan Business IP"
+        },
+        {
+          "name": "lan_business_i_pv6",
+          "flag": "lan-business-i-pv6",
+          "target": "lanBusinessIPv6",
+          "required": false,
+          "description": "Lan Business I Pv6"
+        },
+        {
+          "name": "lan_control_i_pv6",
+          "flag": "lan-control-i-pv6",
+          "target": "lanControlIPv6",
+          "required": false,
+          "description": "Lan Control I Pv6"
+        },
+        {
+          "name": "lan_vrrp_ip",
+          "flag": "lan-vrrp-ip",
+          "target": "lanVrrpIP",
+          "required": false,
+          "description": "Lan Vrrp IP"
+        },
+        {
+          "name": "lan_vrrp_i_pv6",
+          "flag": "lan-vrrp-i-pv6",
+          "target": "lanVrrpIPv6",
+          "required": false,
+          "description": "Lan Vrrp I Pv6"
+        },
+        {
+          "name": "slave_lan_control_ip",
+          "flag": "slave-lan-control-ip",
+          "target": "slaveLanControlIP",
+          "required": false,
+          "description": "Slave Lan Control IP"
+        },
+        {
+          "name": "slave_lan_business_ip",
+          "flag": "slave-lan-business-ip",
+          "target": "slaveLanBusinessIP",
+          "required": false,
+          "description": "Slave Lan Business IP"
+        },
+        {
+          "name": "dc_id",
+          "flag": "dc-id",
+          "target": "dcID",
+          "required": false,
+          "description": "Dc ID"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "deploy_mode",
+            "equals": "inline-mode"
+          },
+          "required": [
+            "dhcp_disable"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-activate.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5909&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway activate --edge-id 65768712-3890-11ed-a977-005056898fe0 --edge-cidr '[\"2.3.4.0/24\",\"12.3.3.0/24\"]' --deploy-mode inline-mode --dhcp-disable false"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "activate"
+      }
+    },
+    {
+      "id": "sdwan.qos.create",
+      "path": [
+        "sdwan",
+        "qos",
+        "create"
+      ],
+      "operation": "sdwan.qos.create",
+      "table": "sdwan.qos.create",
+      "parameters": [
+        {
+          "name": "qos_name",
+          "flag": "qos-name",
+          "target": "qosName",
+          "required": true,
+          "description": "Qos Name"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": true,
+          "description": "Project ID"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": true,
+          "description": "Description"
+        },
+        {
+          "name": "bandwidth",
+          "flag": "bandwidth",
+          "target": "bandwidth",
+          "required": true,
+          "description": "Bandwidth"
+        },
+        {
+          "name": "bandwidth_type",
+          "flag": "bandwidth-type",
+          "target": "bandwidthType",
+          "required": true,
+          "description": "Bandwidth Type"
+        },
+        {
+          "name": "rule_list",
+          "flag": "rule-list",
+          "target": "ruleList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Rule List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-qos-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5910&isNormal=1",
+      "examples": [
+        "ctyun sdwan qos create --qos-name qos-policy-002 --project-id 11 --description qos策略 --bandwidth 200 --bandwidth-type internet --rule-list '[{\"value\":\"{rule_list}\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "sdwan.qos.update",
+      "path": [
+        "sdwan",
+        "qos",
+        "update"
+      ],
+      "operation": "sdwan.qos.update",
+      "table": "sdwan.qos.update",
+      "parameters": [
+        {
+          "name": "qos_id",
+          "flag": "qos-id",
+          "target": "qosID",
+          "required": true,
+          "description": "Qos ID"
+        },
+        {
+          "name": "qos_name",
+          "flag": "qos-name",
+          "target": "qosName",
+          "required": true,
+          "description": "Qos Name"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": true,
+          "description": "Description"
+        },
+        {
+          "name": "bandwidth",
+          "flag": "bandwidth",
+          "target": "bandwidth",
+          "required": true,
+          "description": "Bandwidth"
+        },
+        {
+          "name": "bandwidth_type",
+          "flag": "bandwidth-type",
+          "target": "bandwidthType",
+          "required": true,
+          "description": "Bandwidth Type"
+        },
+        {
+          "name": "update_rule_list",
+          "flag": "update-rule-list",
+          "target": "updateRuleList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Update Rule List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-qos-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5911&isNormal=1",
+      "examples": [
+        "ctyun sdwan qos update --qos-id 472a8c3c-4a9b-11ed-b0e4-005056898fe0 --qos-name qos-policy-002 --description qos策略 --bandwidth 200 --bandwidth-type internet"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "sdwan.qos.delete",
+      "path": [
+        "sdwan",
+        "qos",
+        "delete"
+      ],
+      "operation": "sdwan.qos.delete",
+      "table": "sdwan.qos.delete",
+      "parameters": [
+        {
+          "name": "qos_id",
+          "flag": "qos-id",
+          "target": "qosID",
+          "required": true,
+          "description": "Qos ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-qos-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5912&isNormal=1",
+      "examples": [
+        "ctyun sdwan qos delete --qos-id 472a8c3c-4a9b-11ed-b0e4-005056898fe0"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "sdwan.qos.list",
+      "path": [
+        "sdwan",
+        "qos",
+        "list"
+      ],
+      "operation": "sdwan.qos.list",
+      "table": "sdwan.qos.list",
+      "parameters": [
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "description": "Project ID"
+        },
+        {
+          "name": "qos_id",
+          "flag": "qos-id",
+          "target": "qosID",
+          "required": false,
+          "description": "Qos ID"
+        },
+        {
+          "name": "qos_name",
+          "flag": "qos-name",
+          "target": "qosName",
+          "required": false,
+          "description": "Qos Name"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "search",
+          "flag": "search",
+          "target": "search",
+          "required": false,
+          "description": "Search"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-qos-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5913&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.qos.rule.create",
+      "path": [
+        "sdwan",
+        "qos",
+        "rule",
+        "create"
+      ],
+      "operation": "sdwan.qos.rule.create",
+      "table": "sdwan.qos.rule.create",
+      "parameters": [
+        {
+          "name": "qos_id",
+          "flag": "qos-id",
+          "target": "qosID",
+          "required": true,
+          "description": "Qos ID"
+        },
+        {
+          "name": "rule_id",
+          "flag": "rule-id",
+          "target": "ruleID",
+          "required": true,
+          "description": "Rule ID"
+        },
+        {
+          "name": "rule_type",
+          "flag": "rule-type",
+          "target": "ruleType",
+          "required": true,
+          "description": "Rule Type"
+        },
+        {
+          "name": "ace_list",
+          "flag": "ace-list",
+          "target": "aceList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Ace List as a JSON array"
+        },
+        {
+          "name": "app_list",
+          "flag": "app-list",
+          "target": "appList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "App List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-qos-rule-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5914&isNormal=1",
+      "examples": [
+        "ctyun sdwan qos rule create --qos-id 472a8c3c-4a9b-11ed-b0e4-005056898fe0 --rule-id 472a8e62-4a9b-11ed-b0e4-005056898fe0 --rule-type ace"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "sdwan.qos.rule.application-group.update",
+      "path": [
+        "sdwan",
+        "qos",
+        "rule",
+        "application-group",
+        "update"
+      ],
+      "operation": "sdwan.qos.rule.application-group.update",
+      "table": "sdwan.qos.rule.application-group.update",
+      "parameters": [
+        {
+          "name": "qos_id",
+          "flag": "qos-id",
+          "target": "qosID",
+          "required": true,
+          "description": "Qos ID"
+        },
+        {
+          "name": "rule_id",
+          "flag": "rule-id",
+          "target": "ruleID",
+          "required": true,
+          "description": "Rule ID"
+        },
+        {
+          "name": "item_id",
+          "flag": "item-id",
+          "target": "itemID",
+          "required": true,
+          "description": "Item ID"
+        },
+        {
+          "name": "app_list",
+          "flag": "app-list",
+          "target": "appList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "App List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-qos-rule-application-group-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5915&isNormal=1",
+      "examples": [
+        "ctyun sdwan qos rule application-group update --qos-id 472a8c3c-4a9b-11ed-b0e4-005056898fe0 --rule-id 472e1ff0-4a9b-11ed-b0e4-005056898fe0 --item-id 472e214e-4a9b-11ed-b0e4-005056898fe0 --app-list '[{\"appName\":\"影视TV\",\"appID\":\"56789\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "sdwan.qos.rule.list",
+      "path": [
+        "sdwan",
+        "qos",
+        "rule",
+        "list"
+      ],
+      "operation": "sdwan.qos.rule.list",
+      "table": "sdwan.qos.rule.list",
+      "parameters": [
+        {
+          "name": "qos_id",
+          "flag": "qos-id",
+          "target": "qosID",
+          "required": true,
+          "description": "Qos ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-qos-rule-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5916&isNormal=1",
+      "examples": [
+        "ctyun sdwan qos rule list --qos-id 472a8c3c-4a9b-11ed-b0e4-005056898fe0"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.qos.gateway.bind",
+      "path": [
+        "sdwan",
+        "qos",
+        "gateway",
+        "bind"
+      ],
+      "operation": "sdwan.qos.gateway.bind",
+      "table": "sdwan.qos.gateway.bind",
+      "parameters": [
+        {
+          "name": "qos_id",
+          "flag": "qos-id",
+          "target": "qosID",
+          "required": true,
+          "description": "Qos ID"
+        },
+        {
+          "name": "edge_id_list",
+          "flag": "edge-id-list",
+          "target": "edgeIDList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Edge ID List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-qos-gateway-bind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5917&isNormal=1",
+      "examples": [
+        "ctyun sdwan qos gateway bind --qos-id 472a8c3c-4a9b-11ed-b0e4-005056898fe0 --edge-id-list '[\"87a74704-3efd-11ed-910d-005056893e3e\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "bind"
+      }
+    },
+    {
+      "id": "sdwan.qos.gateway.unbind",
+      "path": [
+        "sdwan",
+        "qos",
+        "gateway",
+        "unbind"
+      ],
+      "operation": "sdwan.qos.gateway.unbind",
+      "table": "sdwan.qos.gateway.unbind",
+      "parameters": [
+        {
+          "name": "qos_id",
+          "flag": "qos-id",
+          "target": "qosID",
+          "required": true,
+          "description": "Qos ID"
+        },
+        {
+          "name": "edge_id_list",
+          "flag": "edge-id-list",
+          "target": "edgeIDList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Edge ID List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-qos-gateway-unbind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5918&isNormal=1",
+      "examples": [
+        "ctyun sdwan qos gateway unbind --qos-id 472a8c3c-4a9b-11ed-b0e4-005056898fe0 --edge-id-list '[\"87a74704-3efd-11ed-910d-005056893e3e\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unbind"
+      }
+    },
+    {
+      "id": "sdwan.qos.gateway.bound.list",
+      "path": [
+        "sdwan",
+        "qos",
+        "gateway",
+        "bound",
+        "list"
+      ],
+      "operation": "sdwan.qos.gateway.bound.list",
+      "table": "sdwan.qos.gateway.bound.list",
+      "parameters": [
+        {
+          "name": "qos_id",
+          "flag": "qos-id",
+          "target": "qosID",
+          "required": true,
+          "description": "Qos ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "search",
+          "flag": "search",
+          "target": "search",
+          "required": false,
+          "description": "Search"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-qos-gateway-bound-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5919&isNormal=1",
+      "examples": [
+        "ctyun sdwan qos gateway bound list --qos-id 472a8c3c-4a9b-11ed-b0e4-005056898fe0"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.qos.gateway.unbound.list",
+      "path": [
+        "sdwan",
+        "qos",
+        "gateway",
+        "unbound",
+        "list"
+      ],
+      "operation": "sdwan.qos.gateway.unbound.list",
+      "table": "sdwan.qos.gateway.unbound.list",
+      "parameters": [
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "search",
+          "flag": "search",
+          "target": "search",
+          "required": false,
+          "description": "Search"
+        },
+        {
+          "name": "sdwan_name",
+          "flag": "sdwan-name",
+          "target": "sdwanName",
+          "required": false,
+          "description": "Sdwan Name"
+        },
+        {
+          "name": "bandwidth_type",
+          "flag": "bandwidth-type",
+          "target": "bandwidthType",
+          "required": true,
+          "description": "Bandwidth Type"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-qos-gateway-unbound-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5920&isNormal=1",
+      "examples": [
+        "ctyun sdwan qos gateway unbound list --bandwidth-type internet"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.device.list",
+      "path": [
+        "sdwan",
+        "gateway",
+        "device",
+        "list"
+      ],
+      "operation": "sdwan.gateway.device.list",
+      "table": "sdwan.gateway.device.list",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-device-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5921&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway device list --edge-id 87a74704-3efd-11ed-910d-005056893e3e"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.lan.control.list",
+      "path": [
+        "sdwan",
+        "gateway",
+        "lan",
+        "control",
+        "list"
+      ],
+      "operation": "sdwan.gateway.lan.control.list",
+      "table": "sdwan.gateway.lan.control.list",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-lan-control-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5922&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway lan control list --edge-id 87a74704-3efd-11ed-910d-005056893e3e"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.lan.list",
+      "path": [
+        "sdwan",
+        "gateway",
+        "lan",
+        "list"
+      ],
+      "operation": "sdwan.gateway.lan.list",
+      "table": "sdwan.gateway.lan.list",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-lan-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5923&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway lan list --edge-id 87a74704-3efd-11ed-910d-005056893e3e"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.list",
+      "path": [
+        "sdwan",
+        "gateway",
+        "list"
+      ],
+      "operation": "sdwan.gateway.list",
+      "table": "sdwan.gateway.list",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": false,
+          "description": "Edge ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "search",
+          "flag": "search",
+          "target": "search",
+          "required": false,
+          "description": "Search"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5924&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.link.list",
+      "path": [
+        "sdwan",
+        "gateway",
+        "link",
+        "list"
+      ],
+      "operation": "sdwan.gateway.link.list",
+      "table": "sdwan.gateway.link.list",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-link-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5925&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway link list --edge-id 87a74704-3efd-11ed-910d-005056893e3e"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.update",
+      "path": [
+        "sdwan",
+        "gateway",
+        "update"
+      ],
+      "operation": "sdwan.gateway.update",
+      "table": "sdwan.gateway.update",
+      "parameters": [
+        {
+          "name": "edge_name",
+          "flag": "edge-name",
+          "target": "edgeName",
+          "required": true,
+          "description": "Edge Name"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        },
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5926&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway update --edge-name edge-001 --edge-id 87a74704-3efd-11ed-910d-005056893e3e"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "sdwan.gateway.available-version.list",
+      "path": [
+        "sdwan",
+        "gateway",
+        "available-version",
+        "list"
+      ],
+      "operation": "sdwan.gateway.available-version.list",
+      "table": "sdwan.gateway.available-version.list",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-available-version-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5927&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway available-version list --edge-id 87a74704-3efd-11ed-910d-005056893e3e"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.version.list",
+      "path": [
+        "sdwan",
+        "gateway",
+        "version",
+        "list"
+      ],
+      "operation": "sdwan.gateway.version.list",
+      "table": "sdwan.gateway.version.list",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-version-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5928&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway version list --edge-id 87a74704-3efd-11ed-910d-005056893e3e"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.inspection.update",
+      "path": [
+        "sdwan",
+        "gateway",
+        "inspection",
+        "update"
+      ],
+      "operation": "sdwan.gateway.inspection.update",
+      "table": "sdwan.gateway.inspection.update",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "dpi_switch",
+          "flag": "dpi-switch",
+          "target": "dpiSwitch",
+          "required": true,
+          "description": "Dpi Switch"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-inspection-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5929&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway inspection update --edge-id 87a74704-3efd-11ed-910d-005056893e3 --dpi-switch true"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "sdwan.gateway.dns.switch",
+      "path": [
+        "sdwan",
+        "gateway",
+        "dns",
+        "switch"
+      ],
+      "operation": "sdwan.gateway.dns.switch",
+      "table": "sdwan.gateway.dns.switch",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "dns_switch",
+          "flag": "dns-switch",
+          "target": "dnsSwitch",
+          "required": true,
+          "description": "Dns Switch"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-dns-switch.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5930&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway dns switch --edge-id 87a74704-3efd-11ed-910d-005056893e3 --dns-switch true"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "switch"
+      }
+    },
+    {
+      "id": "sdwan.gateway.dns.update",
+      "path": [
+        "sdwan",
+        "gateway",
+        "dns",
+        "update"
+      ],
+      "operation": "sdwan.gateway.dns.update",
+      "table": "sdwan.gateway.dns.update",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "dns",
+          "flag": "dns",
+          "target": "DNS",
+          "required": true,
+          "description": "Dns"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-dns-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5931&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway dns update --edge-id 87a74704-3efd-11ed-910d-005056893e3 --dns 10.1.1.1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "sdwan.gateway.dns.list",
+      "path": [
+        "sdwan",
+        "gateway",
+        "dns",
+        "list"
+      ],
+      "operation": "sdwan.gateway.dns.list",
+      "table": "sdwan.gateway.dns.list",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-dns-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5940&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway dns list --edge-id 87a74704-3efd-11ed-910d-005056893e3"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.serial-number.update",
+      "path": [
+        "sdwan",
+        "gateway",
+        "serial-number",
+        "update"
+      ],
+      "operation": "sdwan.gateway.serial-number.update",
+      "table": "sdwan.gateway.serial-number.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "serial_number_dict",
+          "flag": "serial-number-dict",
+          "target": "serialNumberDict",
+          "required": true,
+          "value_type": "json",
+          "description": "Serial Number Dict as a JSON object"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-serial-number-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5941&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway serial-number update --edge-id 87a74704-3efd-11ed-910d-005056893e3e --serial-number-dict '{\"masterSN\":\"CTEB000123\",\"slaveSN\":\"CTEB000125\"}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "sdwan.gateway.dual-arm.update",
+      "path": [
+        "sdwan",
+        "gateway",
+        "dual-arm",
+        "update"
+      ],
+      "operation": "sdwan.gateway.dual-arm.update",
+      "table": "sdwan.gateway.dual-arm.update",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "lan_business_ip",
+          "flag": "lan-business-ip",
+          "target": "lanBusinessIP",
+          "required": true,
+          "description": "Lan Business IP"
+        },
+        {
+          "name": "lan_control_ip",
+          "flag": "lan-control-ip",
+          "target": "lanControlIP",
+          "required": true,
+          "description": "Lan Control IP"
+        },
+        {
+          "name": "slave_lan_business_ip",
+          "flag": "slave-lan-business-ip",
+          "target": "slaveLanBusinessIP",
+          "required": false,
+          "description": "Slave Lan Business IP"
+        },
+        {
+          "name": "slave_lan_control_ip",
+          "flag": "slave-lan-control-ip",
+          "target": "slaveLanControlIP",
+          "required": false,
+          "description": "Slave Lan Control IP"
+        },
+        {
+          "name": "lan_vrrp_ip",
+          "flag": "lan-vrrp-ip",
+          "target": "lanVrrpIP",
+          "required": false,
+          "description": "Lan Vrrp IP"
+        },
+        {
+          "name": "lan_business_i_pv6",
+          "flag": "lan-business-i-pv6",
+          "target": "lanBusinessIPv6",
+          "required": false,
+          "description": "Lan Business I Pv6"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-dual-arm-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5944&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway dual-arm update --edge-id 87a74704-3efd-11ed-910d-005056893e3e --lan-business-ip 172.24.11.6 --lan-control-ip 172.24.12.7"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "sdwan.gateway.rule.list",
+      "path": [
+        "sdwan",
+        "gateway",
+        "rule",
+        "list"
+      ],
+      "operation": "sdwan.gateway.rule.list",
+      "table": "sdwan.gateway.rule.list",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-rule-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5945&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway rule list --edge-id 87a74704-3efd-11ed-910d-005056893e3e"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.qos.rule.count",
+      "path": [
+        "sdwan",
+        "qos",
+        "rule",
+        "count"
+      ],
+      "operation": "sdwan.qos.rule.count",
+      "table": "sdwan.qos.rule.count",
+      "parameters": [
+        {
+          "name": "qos_id",
+          "flag": "qos-id",
+          "target": "qosID",
+          "required": true,
+          "description": "Qos ID"
+        },
+        {
+          "name": "qos_name",
+          "flag": "qos-name",
+          "target": "qosName",
+          "required": false,
+          "description": "Qos Name"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-qos-rule-count.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5947&isNormal=1",
+      "examples": [
+        "ctyun sdwan qos rule count --qos-id 67984246-4dea-11ed-bdcc-005056893e3e"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.static-route.count",
+      "path": [
+        "sdwan",
+        "gateway",
+        "static-route",
+        "count"
+      ],
+      "operation": "sdwan.gateway.static-route.count",
+      "table": "sdwan.gateway.static-route.count",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-static-route-count.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5948&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway static-route count --edge-id 87a74704-3efd-11ed-910d-005056893e3e"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.count",
+      "path": [
+        "sdwan",
+        "gateway",
+        "count"
+      ],
+      "operation": "sdwan.gateway.count",
+      "table": "sdwan.gateway.count",
+      "fixture_response": "fixtures/sdwan-gateway-count.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5949&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.link.count",
+      "path": [
+        "sdwan",
+        "gateway",
+        "link",
+        "count"
+      ],
+      "operation": "sdwan.gateway.link.count",
+      "table": "sdwan.gateway.link.count",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-link-count.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5951&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway link count --edge-id 87a74704-3efd-11ed-910d-005056893e3e"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.ospf.backup.create",
+      "path": [
+        "sdwan",
+        "gateway",
+        "ospf",
+        "backup",
+        "create"
+      ],
+      "operation": "sdwan.gateway.ospf.backup.create",
+      "table": "sdwan.gateway.ospf.backup.create",
+      "parameters": [
+        {
+          "name": "master_edge_id",
+          "flag": "master-edge-id",
+          "target": "masterEdgeID",
+          "required": true,
+          "description": "Master Edge ID"
+        },
+        {
+          "name": "slave_edge_id",
+          "flag": "slave-edge-id",
+          "target": "slaveEdgeID",
+          "required": true,
+          "description": "Slave Edge ID"
+        },
+        {
+          "name": "master_priority",
+          "flag": "master-priority",
+          "target": "masterPriority",
+          "required": true,
+          "description": "Master Priority"
+        },
+        {
+          "name": "slave_priority",
+          "flag": "slave-priority",
+          "target": "slavePriority",
+          "required": true,
+          "description": "Slave Priority"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-ospf-backup-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5953&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway ospf backup create --master-edge-id 87a74704-3efd-11ed-910d-005056893e3e --slave-edge-id 1d725a16-3eff-11ed-910d-005056893e3e --master-priority 2 --slave-priority 3"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "sdwan.gateway.ospf.backup.delete",
+      "path": [
+        "sdwan",
+        "gateway",
+        "ospf",
+        "backup",
+        "delete"
+      ],
+      "operation": "sdwan.gateway.ospf.backup.delete",
+      "table": "sdwan.gateway.ospf.backup.delete",
+      "parameters": [
+        {
+          "name": "relation_id_list",
+          "flag": "relation-id-list",
+          "target": "RelationIDList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Relation ID List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-ospf-backup-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5954&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway ospf backup delete --relation-id-list '[\"534408ac8ae54f67b736600907092bd7\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "sdwan.gateway.ospf.backup.list",
+      "path": [
+        "sdwan",
+        "gateway",
+        "ospf",
+        "backup",
+        "list"
+      ],
+      "operation": "sdwan.gateway.ospf.backup.list",
+      "table": "sdwan.gateway.ospf.backup.list",
+      "parameters": [
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-ospf-backup-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5956&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.ospf.backup-candidate.list",
+      "path": [
+        "sdwan",
+        "gateway",
+        "ospf",
+        "backup-candidate",
+        "list"
+      ],
+      "operation": "sdwan.gateway.ospf.backup-candidate.list",
+      "table": "sdwan.gateway.ospf.backup-candidate.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": false,
+          "description": "Edge ID"
+        },
+        {
+          "name": "search",
+          "flag": "search",
+          "target": "search",
+          "required": false,
+          "description": "Search"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-ospf-backup-candidate-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5957&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.ospf.switch",
+      "path": [
+        "sdwan",
+        "gateway",
+        "ospf",
+        "switch"
+      ],
+      "operation": "sdwan.gateway.ospf.switch",
+      "table": "sdwan.gateway.ospf.switch",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "ospf_switch",
+          "flag": "ospf-switch",
+          "target": "ospfSwitch",
+          "required": true,
+          "description": "Ospf Switch"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-ospf-switch.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5959&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway ospf switch --edge-id 87a74704-3efd-11ed-910d-005056893e3e --ospf-switch true"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "switch"
+      }
+    },
+    {
+      "id": "sdwan.gateway.ospf.update",
+      "path": [
+        "sdwan",
+        "gateway",
+        "ospf",
+        "update"
+      ],
+      "operation": "sdwan.gateway.ospf.update",
+      "table": "sdwan.gateway.ospf.update",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "ospf_intf_ip",
+          "flag": "ospf-intf-ip",
+          "target": "ospfIntfIP",
+          "required": true,
+          "description": "Ospf Intf IP"
+        },
+        {
+          "name": "auth_enable",
+          "flag": "auth-enable",
+          "target": "authEnable",
+          "required": true,
+          "description": "Auth Enable"
+        },
+        {
+          "name": "key_id",
+          "flag": "key-id",
+          "target": "keyID",
+          "required": true,
+          "description": "Key ID"
+        },
+        {
+          "name": "mds_key",
+          "flag": "mds-key",
+          "target": "mdsKey",
+          "required": true,
+          "description": "Mds Key"
+        },
+        {
+          "name": "hello_time",
+          "flag": "hello-time",
+          "target": "helloTime",
+          "required": true,
+          "description": "Hello Time"
+        },
+        {
+          "name": "dead_time",
+          "flag": "dead-time",
+          "target": "deadTime",
+          "required": true,
+          "description": "Dead Time"
+        },
+        {
+          "name": "area_id",
+          "flag": "area-id",
+          "target": "areaID",
+          "required": true,
+          "description": "Area ID"
+        },
+        {
+          "name": "router_id",
+          "flag": "router-id",
+          "target": "routerID",
+          "required": true,
+          "description": "Router ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-ospf-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5962&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway ospf update --edge-id 87a74704-3efd-11ed-910d-005056893e3e --ospf-intf-ip 10.1.1.1 --auth-enable true --key-id 1 --mds-key 123456 --hello-time 60 --dead-time 20 --area-id 1 --router-id 100.0.0.1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "sdwan.gateway.ospf.delete",
+      "path": [
+        "sdwan",
+        "gateway",
+        "ospf",
+        "delete"
+      ],
+      "operation": "sdwan.gateway.ospf.delete",
+      "table": "sdwan.gateway.ospf.delete",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-ospf-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5964&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway ospf delete --edge-id 87a74704-3efd-11ed-910d-005056893e3e"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "sdwan.gateway.ospf.list",
+      "path": [
+        "sdwan",
+        "gateway",
+        "ospf",
+        "list"
+      ],
+      "operation": "sdwan.gateway.ospf.list",
+      "table": "sdwan.gateway.ospf.list",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-ospf-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5966&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway ospf list --edge-id 87a74704-3efd-11ed-910d-005056893e3e"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.network.create",
+      "path": [
+        "sdwan",
+        "network",
+        "create"
+      ],
+      "operation": "sdwan.network.create",
+      "table": "sdwan.network.create",
+      "parameters": [
+        {
+          "name": "sdwan_name",
+          "flag": "sdwan-name",
+          "target": "sdwanName",
+          "required": true,
+          "description": "Sdwan Name"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": true,
+          "description": "Project ID"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-network-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5968&isNormal=1",
+      "examples": [
+        "ctyun sdwan network create --sdwan-name sdwan-001 --project-id 0"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "sdwan.network.delete",
+      "path": [
+        "sdwan",
+        "network",
+        "delete"
+      ],
+      "operation": "sdwan.network.delete",
+      "table": "sdwan.network.delete",
+      "parameters": [
+        {
+          "name": "sdwan_id",
+          "flag": "sdwan-id",
+          "target": "sdwanID",
+          "required": true,
+          "description": "Sdwan ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-network-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5970&isNormal=1",
+      "examples": [
+        "ctyun sdwan network delete --sdwan-id bb5b64b8-8870-494e-8c89-b75331dbe6a4"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "sdwan.network.list",
+      "path": [
+        "sdwan",
+        "network",
+        "list"
+      ],
+      "operation": "sdwan.network.list",
+      "table": "sdwan.network.list",
+      "parameters": [
+        {
+          "name": "sdwan_id",
+          "flag": "sdwan-id",
+          "target": "sdwanID",
+          "required": false,
+          "description": "Sdwan ID"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "description": "Project ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-network-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5971&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.interconnection.create",
+      "path": [
+        "sdwan",
+        "gateway",
+        "interconnection",
+        "create"
+      ],
+      "operation": "sdwan.gateway.interconnection.create",
+      "table": "sdwan.gateway.interconnection.create",
+      "parameters": [
+        {
+          "name": "src_edge_id",
+          "flag": "src-edge-id",
+          "target": "srcEdgeID",
+          "required": true,
+          "description": "Src Edge ID"
+        },
+        {
+          "name": "dst_edge_id",
+          "flag": "dst-edge-id",
+          "target": "dstEdgeID",
+          "required": true,
+          "description": "Dst Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-interconnection-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5974&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway interconnection create --src-edge-id ea631478-3efc-11ed-bca7-005056893e3e --dst-edge-id aa5b64b8-8870-494e-8c89-b75331dbe6a4"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "sdwan.gateway.interconnection.delete",
+      "path": [
+        "sdwan",
+        "gateway",
+        "interconnection",
+        "delete"
+      ],
+      "operation": "sdwan.gateway.interconnection.delete",
+      "table": "sdwan.gateway.interconnection.delete",
+      "parameters": [
+        {
+          "name": "edge_branch_id_list",
+          "flag": "edge-branch-id-list",
+          "target": "edgeBranchIDList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Edge Branch ID List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-interconnection-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5975&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway interconnection delete --edge-branch-id-list '[\"{edge_branch_id_list}\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "sdwan.gateway.interconnection.list",
+      "path": [
+        "sdwan",
+        "gateway",
+        "interconnection",
+        "list"
+      ],
+      "operation": "sdwan.gateway.interconnection.list",
+      "table": "sdwan.gateway.interconnection.list",
+      "parameters": [
+        {
+          "name": "sdwan_id",
+          "flag": "sdwan-id",
+          "target": "sdwanID",
+          "required": true,
+          "description": "Sdwan ID"
+        },
+        {
+          "name": "edge_branch_id",
+          "flag": "edge-branch-id",
+          "target": "edgeBranchID",
+          "required": false,
+          "description": "Edge Branch ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "search",
+          "flag": "search",
+          "target": "search",
+          "required": false,
+          "description": "Search"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-interconnection-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5976&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway interconnection list --sdwan-id 3a5644b2-e9c4-11eb-b46f-005056898fe0"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.link.configure",
+      "path": [
+        "sdwan",
+        "gateway",
+        "link",
+        "configure"
+      ],
+      "operation": "sdwan.gateway.link.configure",
+      "table": "sdwan.gateway.link.configure",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "links",
+          "flag": "links",
+          "target": "links",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Links as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-link-configure.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5977&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway link configure --edge-id 9aa1a302-388d-11ed-a977-005056898fe0 --links '[{\"port\":\"WAN1\",\"transportNet\":\"internet\",\"level\":\"master\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "configure"
+      }
+    },
+    {
+      "id": "sdwan.gateway.interconnection.gateway.list",
+      "path": [
+        "sdwan",
+        "gateway",
+        "interconnection",
+        "gateway",
+        "list"
+      ],
+      "operation": "sdwan.gateway.interconnection.gateway.list",
+      "table": "sdwan.gateway.interconnection.gateway.list",
+      "parameters": [
+        {
+          "name": "sdwan_id",
+          "flag": "sdwan-id",
+          "target": "sdwanID",
+          "required": true,
+          "description": "Sdwan ID"
+        },
+        {
+          "name": "zone",
+          "flag": "zone",
+          "target": "zone",
+          "required": false,
+          "description": "Zone"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "search",
+          "flag": "search",
+          "target": "search",
+          "required": false,
+          "description": "Search"
+        },
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": false,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-interconnection-gateway-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5978&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway interconnection gateway list --sdwan-id 3a5644b2-e9c4-11eb-b46f-005056898fe0"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.monitor.branch.list",
+      "path": [
+        "sdwan",
+        "monitor",
+        "branch",
+        "list"
+      ],
+      "operation": "sdwan.monitor.branch.list",
+      "table": "sdwan.monitor.branch.list",
+      "parameters": [
+        {
+          "name": "edge_branch_id",
+          "flag": "edge-branch-id",
+          "target": "edgeBranchID",
+          "required": true,
+          "description": "Edge Branch ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-monitor-branch-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5980&isNormal=1",
+      "examples": [
+        "ctyun sdwan monitor branch list --edge-branch-id 3a5644b2-e9c4-11eb-b46f-005056898fe0"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.access-control.create",
+      "path": [
+        "sdwan",
+        "access-control",
+        "create"
+      ],
+      "operation": "sdwan.access-control.create",
+      "table": "sdwan.access-control.create",
+      "parameters": [
+        {
+          "name": "acl_name",
+          "flag": "acl-name",
+          "target": "aclName",
+          "required": true,
+          "description": "Acl Name"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": true,
+          "description": "Project ID"
+        },
+        {
+          "name": "rules",
+          "flag": "rules",
+          "target": "rules",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Rules as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-access-control-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5981&isNormal=1",
+      "examples": [
+        "ctyun sdwan access-control create --acl-name acl-001 --project-id 0 --rules '[{\"direction\":\"in\",\"protocol\":\"tcp\",\"ipVersion\":\"IPv4\",\"dstCidr\":\"10.0.0.0/16\",\"dstPortRange\":\"-1/-1\",\"priority\":\"50\",\"action\":\"deny\",\"srcCidr\":\"11.0.0.0/16\",\"srcPortRange\":\"-1/-1\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "sdwan.access-control.delete",
+      "path": [
+        "sdwan",
+        "access-control",
+        "delete"
+      ],
+      "operation": "sdwan.access-control.delete",
+      "table": "sdwan.access-control.delete",
+      "parameters": [
+        {
+          "name": "acl_id",
+          "flag": "acl-id",
+          "target": "aclID",
+          "required": true,
+          "description": "Acl ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-access-control-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5983&isNormal=1",
+      "examples": [
+        "ctyun sdwan access-control delete --acl-id be012e8f-ea32-4a2c-89da-7db35eedb334"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "sdwan.access-control.update",
+      "path": [
+        "sdwan",
+        "access-control",
+        "update"
+      ],
+      "operation": "sdwan.access-control.update",
+      "table": "sdwan.access-control.update",
+      "parameters": [
+        {
+          "name": "acl_name",
+          "flag": "acl-name",
+          "target": "aclName",
+          "required": true,
+          "description": "Acl Name"
+        },
+        {
+          "name": "acl_id",
+          "flag": "acl-id",
+          "target": "aclID",
+          "required": true,
+          "description": "Acl ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-access-control-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5984&isNormal=1",
+      "examples": [
+        "ctyun sdwan access-control update --acl-name acl-002 --acl-id be012e8f-ea32-4a2c-89da-7db35eedb334"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "sdwan.access-control.list",
+      "path": [
+        "sdwan",
+        "access-control",
+        "list"
+      ],
+      "operation": "sdwan.access-control.list",
+      "table": "sdwan.access-control.list",
+      "parameters": [
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "description": "Project ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "search",
+          "flag": "search",
+          "target": "search",
+          "required": false,
+          "description": "Search"
+        },
+        {
+          "name": "acl_id",
+          "flag": "acl-id",
+          "target": "aclID",
+          "required": false,
+          "description": "Acl ID"
+        },
+        {
+          "name": "acl_name",
+          "flag": "acl-name",
+          "target": "aclName",
+          "required": false,
+          "description": "Acl Name"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-access-control-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5985&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.access-control.rule.create",
+      "path": [
+        "sdwan",
+        "access-control",
+        "rule",
+        "create"
+      ],
+      "operation": "sdwan.access-control.rule.create",
+      "table": "sdwan.access-control.rule.create",
+      "parameters": [
+        {
+          "name": "acl_id",
+          "flag": "acl-id",
+          "target": "aclID",
+          "required": true,
+          "description": "Acl ID"
+        },
+        {
+          "name": "add_rules",
+          "flag": "add-rules",
+          "target": "addRules",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Add Rules as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-access-control-rule-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5987&isNormal=1",
+      "examples": [
+        "ctyun sdwan access-control rule create --acl-id be012e8f-ea32-4a2c-89da-7db35eedb334"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "sdwan.access-control.rule.delete",
+      "path": [
+        "sdwan",
+        "access-control",
+        "rule",
+        "delete"
+      ],
+      "operation": "sdwan.access-control.rule.delete",
+      "table": "sdwan.access-control.rule.delete",
+      "parameters": [
+        {
+          "name": "acl_id",
+          "flag": "acl-id",
+          "target": "aclID",
+          "required": true,
+          "description": "Acl ID"
+        },
+        {
+          "name": "delete_rules",
+          "flag": "delete-rules",
+          "target": "deleteRules",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Delete Rules as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-access-control-rule-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5989&isNormal=1",
+      "examples": [
+        "ctyun sdwan access-control rule delete --acl-id be012e8f-ea32-4a2c-89da-7db35eedb334"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "sdwan.access-control.rule.update",
+      "path": [
+        "sdwan",
+        "access-control",
+        "rule",
+        "update"
+      ],
+      "operation": "sdwan.access-control.rule.update",
+      "table": "sdwan.access-control.rule.update",
+      "parameters": [
+        {
+          "name": "acl_id",
+          "flag": "acl-id",
+          "target": "aclID",
+          "required": true,
+          "description": "Acl ID"
+        },
+        {
+          "name": "update_rules",
+          "flag": "update-rules",
+          "target": "updateRules",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Update Rules as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-access-control-rule-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5990&isNormal=1",
+      "examples": [
+        "ctyun sdwan access-control rule update --acl-id be012e8f-ea32-4a2c-89da-7db35eedb334 --update-rules '[{\"aclRuleID\":\"be012e8f-ea32-4a2c-89da-7db35eedb334\",\"direction\":\"in\",\"protocol\":\"tcp\",\"ipVersion\":\"IPv4\",\"dstCidr\":\"10.0.0.0/16\",\"dstPortRange\":\"-1/-1\",\"priority\":\"50\",\"action\":\"allow\",\"srcCidr\":\"11.0.0.0/16\",\"srcPortRange\":\"-1/-1\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "sdwan.access-control.rule.list",
+      "path": [
+        "sdwan",
+        "access-control",
+        "rule",
+        "list"
+      ],
+      "operation": "sdwan.access-control.rule.list",
+      "table": "sdwan.access-control.rule.list",
+      "parameters": [
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "search",
+          "flag": "search",
+          "target": "search",
+          "required": false,
+          "description": "Search"
+        },
+        {
+          "name": "acl_id",
+          "flag": "acl-id",
+          "target": "aclID",
+          "required": false,
+          "description": "Acl ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-access-control-rule-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5992&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.access-control.gateway.bind",
+      "path": [
+        "sdwan",
+        "access-control",
+        "gateway",
+        "bind"
+      ],
+      "operation": "sdwan.access-control.gateway.bind",
+      "table": "sdwan.access-control.gateway.bind",
+      "parameters": [
+        {
+          "name": "acl_id",
+          "flag": "acl-id",
+          "target": "aclID",
+          "required": true,
+          "description": "Acl ID"
+        },
+        {
+          "name": "action",
+          "flag": "action",
+          "target": "action",
+          "required": true,
+          "description": "Action"
+        },
+        {
+          "name": "edge_ids",
+          "flag": "edge-ids",
+          "target": "edgeIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Edge IDs as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-access-control-gateway-bind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5993&isNormal=1",
+      "examples": [
+        "ctyun sdwan access-control gateway bind --acl-id 0197dd90-4a1a-11ed-b0e4-005056898fe0 --action create --edge-ids '[\"be012e8f-ea32-4a2c-89da-7db35eedb334\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "bind"
+      }
+    },
+    {
+      "id": "sdwan.access-control.gateway.unbind",
+      "path": [
+        "sdwan",
+        "access-control",
+        "gateway",
+        "unbind"
+      ],
+      "operation": "sdwan.access-control.gateway.unbind",
+      "table": "sdwan.access-control.gateway.unbind",
+      "parameters": [
+        {
+          "name": "acl_id",
+          "flag": "acl-id",
+          "target": "aclID",
+          "required": true,
+          "description": "Acl ID"
+        },
+        {
+          "name": "edge_ids",
+          "flag": "edge-ids",
+          "target": "edgeIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Edge IDs as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-access-control-gateway-unbind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5994&isNormal=1",
+      "examples": [
+        "ctyun sdwan access-control gateway unbind --acl-id 0197dd90-4a1a-11ed-b0e4-005056898fe0 --edge-ids '[\"be012e8f-ea32-4a2c-89da-7db35eedb334\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unbind"
+      }
+    },
+    {
+      "id": "sdwan.application.list",
+      "path": [
+        "sdwan",
+        "application",
+        "list"
+      ],
+      "operation": "sdwan.application.list",
+      "table": "sdwan.application.list",
+      "parameters": [
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "search",
+          "flag": "search",
+          "target": "search",
+          "required": false,
+          "description": "Search"
+        },
+        {
+          "name": "group_id",
+          "flag": "group-id",
+          "target": "groupID",
+          "required": false,
+          "description": "Group ID"
+        },
+        {
+          "name": "app_type",
+          "flag": "app-type",
+          "target": "appType",
+          "required": false,
+          "description": "App Type"
+        },
+        {
+          "name": "app_id",
+          "flag": "app-id",
+          "target": "appID",
+          "required": false,
+          "description": "App ID"
+        },
+        {
+          "name": "app_name",
+          "flag": "app-name",
+          "target": "appName",
+          "required": false,
+          "description": "App Name"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-application-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5995&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.application.create",
+      "path": [
+        "sdwan",
+        "application",
+        "create"
+      ],
+      "operation": "sdwan.application.create",
+      "table": "sdwan.application.create",
+      "parameters": [
+        {
+          "name": "group_id",
+          "flag": "group-id",
+          "target": "groupID",
+          "required": true,
+          "description": "Group ID"
+        },
+        {
+          "name": "app_name",
+          "flag": "app-name",
+          "target": "appName",
+          "required": true,
+          "description": "App Name"
+        },
+        {
+          "name": "rule_type",
+          "flag": "rule-type",
+          "target": "ruleType",
+          "required": true,
+          "description": "Rule Type"
+        },
+        {
+          "name": "rule_list",
+          "flag": "rule-list",
+          "target": "ruleList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Rule List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-application-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5997&isNormal=1",
+      "examples": [
+        "ctyun sdwan application create --group-id be012e8f-ea32-4a2c-89da-7db35eedb334 --app-name app-001 --rule-type ace"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "sdwan.application.update",
+      "path": [
+        "sdwan",
+        "application",
+        "update"
+      ],
+      "operation": "sdwan.application.update",
+      "table": "sdwan.application.update",
+      "parameters": [
+        {
+          "name": "app_id",
+          "flag": "app-id",
+          "target": "appID",
+          "required": true,
+          "description": "App ID"
+        },
+        {
+          "name": "app_name",
+          "flag": "app-name",
+          "target": "appName",
+          "required": true,
+          "description": "App Name"
+        },
+        {
+          "name": "add_rule_list",
+          "flag": "add-rule-list",
+          "target": "addRuleList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Add Rule List as a JSON array"
+        },
+        {
+          "name": "delete_rule_list",
+          "flag": "delete-rule-list",
+          "target": "deleteRuleList",
+          "required": true,
+          "value_type": "integer_array",
+          "description": "Delete Rule List as a JSON array"
+        },
+        {
+          "name": "modify_rule",
+          "flag": "modify-rule",
+          "target": "modifyRule",
+          "required": true,
+          "value_type": "json",
+          "description": "Modify Rule as a JSON object"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-application-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5998&isNormal=1",
+      "examples": [
+        "ctyun sdwan application update --app-id be012e8f-ea32-4a2c-89da-7db35eedb334 --app-name app-001 --add-rule-list '[{\"srcCidr\":\"10.20.0.0/16\",\"srcPort\":\"8080\",\"dstCidr\":\"10.10.0.0/16\",\"dstPort\":\"8080\",\"protocol\":\"tcp\"}]' --delete-rule-list '[0]' --modify-rule '{\"ruleID\":\"12578e8f-ea32-4a2c-89da-7db35eedb334\",\"hostname\":\"天翼云生产机\",\"srcCidr\":\"10.20.0.0/16\",\"srcPort\":\"8080\",\"dstCidr\":\"10.10.0.0/16\",\"dstPort\":\"8080\",\"protocol\":\"tcp\"}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "sdwan.application.delete",
+      "path": [
+        "sdwan",
+        "application",
+        "delete"
+      ],
+      "operation": "sdwan.application.delete",
+      "table": "sdwan.application.delete",
+      "parameters": [
+        {
+          "name": "app_id_list",
+          "flag": "app-id-list",
+          "target": "appIDList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "App ID List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-application-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5999&isNormal=1",
+      "examples": [
+        "ctyun sdwan application delete --app-id-list '[\"3157c06e-4a0f-11ed-b0e4-005056898fe0\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "sdwan.application-group.list",
+      "path": [
+        "sdwan",
+        "application-group",
+        "list"
+      ],
+      "operation": "sdwan.application-group.list",
+      "table": "sdwan.application-group.list",
+      "parameters": [
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "search",
+          "flag": "search",
+          "target": "search",
+          "required": false,
+          "description": "Search"
+        },
+        {
+          "name": "group_name",
+          "flag": "group-name",
+          "target": "groupName",
+          "required": false,
+          "description": "Group Name"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-application-group-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=6000&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.application-group.create",
+      "path": [
+        "sdwan",
+        "application-group",
+        "create"
+      ],
+      "operation": "sdwan.application-group.create",
+      "table": "sdwan.application-group.create",
+      "parameters": [
+        {
+          "name": "group_name",
+          "flag": "group-name",
+          "target": "groupName",
+          "required": true,
+          "description": "Group Name"
+        },
+        {
+          "name": "group_type",
+          "flag": "group-type",
+          "target": "groupType",
+          "required": false,
+          "description": "Group Type"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-application-group-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=6001&isNormal=1",
+      "examples": [
+        "ctyun sdwan application-group create --group-name group-001"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "sdwan.application-group.migrate",
+      "path": [
+        "sdwan",
+        "application-group",
+        "migrate"
+      ],
+      "operation": "sdwan.application-group.migrate",
+      "table": "sdwan.application-group.migrate",
+      "parameters": [
+        {
+          "name": "group_id",
+          "flag": "group-id",
+          "target": "groupID",
+          "required": true,
+          "description": "Group ID"
+        },
+        {
+          "name": "app_ids",
+          "flag": "app-ids",
+          "target": "appIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "App IDs as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-application-group-migrate.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=6003&isNormal=1",
+      "examples": [
+        "ctyun sdwan application-group migrate --group-id be012e8f-ea32-4a2c-89da-7db35eedb334 --app-ids '[\"3157c06e-4a0f-11ed-b0e4-005056898fe0\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "migrate"
+      }
+    },
+    {
+      "id": "sdwan.application-group.delete",
+      "path": [
+        "sdwan",
+        "application-group",
+        "delete"
+      ],
+      "operation": "sdwan.application-group.delete",
+      "table": "sdwan.application-group.delete",
+      "parameters": [
+        {
+          "name": "group_id_list",
+          "flag": "group-id-list",
+          "target": "groupIDList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Group ID List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-application-group-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=6004&isNormal=1",
+      "examples": [
+        "ctyun sdwan application-group delete --group-id-list '[\"58\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "sdwan.application.traffic.list",
+      "path": [
+        "sdwan",
+        "application",
+        "traffic",
+        "list"
+      ],
+      "operation": "sdwan.application.traffic.list",
+      "table": "sdwan.application.traffic.list",
+      "parameters": [
+        {
+          "name": "sn",
+          "flag": "sn",
+          "target": "sn",
+          "required": false,
+          "description": "Sn"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": false,
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": false,
+          "description": "End Time"
+        },
+        {
+          "name": "direction",
+          "flag": "direction",
+          "target": "direction",
+          "required": false,
+          "description": "Direction"
+        },
+        {
+          "name": "limit",
+          "flag": "limit",
+          "target": "limit",
+          "required": false,
+          "description": "Limit"
+        },
+        {
+          "name": "time_range",
+          "flag": "time-range",
+          "target": "timeRange",
+          "required": false,
+          "description": "Time Range"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-application-traffic-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=6006&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.application-group.traffic.list",
+      "path": [
+        "sdwan",
+        "application-group",
+        "traffic",
+        "list"
+      ],
+      "operation": "sdwan.application-group.traffic.list",
+      "table": "sdwan.application-group.traffic.list",
+      "parameters": [
+        {
+          "name": "sn",
+          "flag": "sn",
+          "target": "sn",
+          "required": false,
+          "description": "Sn"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": false,
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": false,
+          "description": "End Time"
+        },
+        {
+          "name": "time_range",
+          "flag": "time-range",
+          "target": "timeRange",
+          "required": false,
+          "description": "Time Range"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-application-group-traffic-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=6007&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.task.status.list",
+      "path": [
+        "sdwan",
+        "task",
+        "status",
+        "list"
+      ],
+      "operation": "sdwan.task.status.list",
+      "table": "sdwan.task.status.list",
+      "parameters": [
+        {
+          "name": "operation_id",
+          "flag": "operation-id",
+          "target": "operationID",
+          "required": true,
+          "description": "Operation ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-task-status-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=6008&isNormal=1",
+      "examples": [
+        "ctyun sdwan task status list --operation-id 717168d0-1d7a-11eb-91a1-005056898fe0"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.routing-policy.list",
+      "path": [
+        "sdwan",
+        "routing-policy",
+        "list"
+      ],
+      "operation": "sdwan.routing-policy.list",
+      "table": "sdwan.routing-policy.list",
+      "parameters": [
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "search",
+          "flag": "search",
+          "target": "search",
+          "required": false,
+          "description": "Search"
+        },
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-routing-policy-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=6009&isNormal=1",
+      "examples": [
+        "ctyun sdwan routing-policy list --edge-id 2893f150-19b5-11eb-8e79-824da1059800"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.routing-policy.show",
+      "path": [
+        "sdwan",
+        "routing-policy",
+        "show"
+      ],
+      "operation": "sdwan.routing-policy.show",
+      "table": "sdwan.routing-policy.show",
+      "parameters": [
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyID",
+          "required": false,
+          "description": "Policy ID"
+        },
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-routing-policy-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=6010&isNormal=1",
+      "examples": [
+        "ctyun sdwan routing-policy show --edge-id 2893f150-19b5-11eb-8e79-824da1059800"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.routing-policy.create",
+      "path": [
+        "sdwan",
+        "routing-policy",
+        "create"
+      ],
+      "operation": "sdwan.routing-policy.create",
+      "table": "sdwan.routing-policy.create",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "policy_name",
+          "flag": "policy-name",
+          "target": "policyName",
+          "required": true,
+          "description": "Policy Name"
+        },
+        {
+          "name": "select_type",
+          "flag": "select-type",
+          "target": "selectType",
+          "required": true,
+          "description": "Select Type"
+        },
+        {
+          "name": "protocol",
+          "flag": "protocol",
+          "target": "protocol",
+          "required": true,
+          "description": "Protocol"
+        },
+        {
+          "name": "priority",
+          "flag": "priority",
+          "target": "priority",
+          "required": true,
+          "value_type": "integer",
+          "description": "Priority"
+        },
+        {
+          "name": "src_cidr",
+          "flag": "src-cidr",
+          "target": "srcCidr",
+          "required": true,
+          "description": "Src Cidr"
+        },
+        {
+          "name": "src_port",
+          "flag": "src-port",
+          "target": "srcPort",
+          "required": true,
+          "description": "Src Port"
+        },
+        {
+          "name": "dst_cidr",
+          "flag": "dst-cidr",
+          "target": "dstCidr",
+          "required": true,
+          "description": "Dst Cidr"
+        },
+        {
+          "name": "dst_port",
+          "flag": "dst-port",
+          "target": "dstPort",
+          "required": true,
+          "description": "Dst Port"
+        },
+        {
+          "name": "link_list",
+          "flag": "link-list",
+          "target": "linkList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Link List as a JSON array"
+        },
+        {
+          "name": "link_quality_id",
+          "flag": "link-quality-id",
+          "target": "linkQualityID",
+          "required": false,
+          "description": "Link Quality ID"
+        },
+        {
+          "name": "link_quality_name",
+          "flag": "link-quality-name",
+          "target": "linkQualityName",
+          "required": false,
+          "description": "Link Quality Name"
+        },
+        {
+          "name": "app_list",
+          "flag": "app-list",
+          "target": "appList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "App List as a JSON array"
+        },
+        {
+          "name": "quality",
+          "flag": "quality",
+          "target": "quality",
+          "required": false,
+          "value_type": "json",
+          "description": "Quality as a JSON object"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "select_type",
+            "equals": "quality"
+          },
+          "required": [
+            "link_quality_id",
+            "link_quality_name"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-routing-policy-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=6011&isNormal=1",
+      "examples": [
+        "ctyun sdwan routing-policy create --edge-id 2893f150-19b5-11eb-8e79-824da1059800 --policy-name policy-001 --select-type priority --protocol tcp --priority 50 --src-cidr 10.20.0.0/16 --src-port -1/-1 --dst-cidr 10.10.0.0/16 --dst-port -1/-1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "sdwan.routing-policy.update",
+      "path": [
+        "sdwan",
+        "routing-policy",
+        "update"
+      ],
+      "operation": "sdwan.routing-policy.update",
+      "table": "sdwan.routing-policy.update",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyID",
+          "required": true,
+          "description": "Policy ID"
+        },
+        {
+          "name": "policy_name",
+          "flag": "policy-name",
+          "target": "policyName",
+          "required": true,
+          "description": "Policy Name"
+        },
+        {
+          "name": "priority",
+          "flag": "priority",
+          "target": "priority",
+          "required": true,
+          "value_type": "integer",
+          "description": "Priority"
+        },
+        {
+          "name": "select_type",
+          "flag": "select-type",
+          "target": "selectType",
+          "required": true,
+          "description": "Select Type"
+        },
+        {
+          "name": "protocol",
+          "flag": "protocol",
+          "target": "protocol",
+          "required": true,
+          "description": "Protocol"
+        },
+        {
+          "name": "src_cidr",
+          "flag": "src-cidr",
+          "target": "srcCidr",
+          "required": true,
+          "description": "Src Cidr"
+        },
+        {
+          "name": "src_port",
+          "flag": "src-port",
+          "target": "srcPort",
+          "required": true,
+          "description": "Src Port"
+        },
+        {
+          "name": "dst_cidr",
+          "flag": "dst-cidr",
+          "target": "dstCidr",
+          "required": true,
+          "description": "Dst Cidr"
+        },
+        {
+          "name": "dst_port",
+          "flag": "dst-port",
+          "target": "dstPort",
+          "required": true,
+          "description": "Dst Port"
+        },
+        {
+          "name": "link_list",
+          "flag": "link-list",
+          "target": "linkList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Link List as a JSON array"
+        },
+        {
+          "name": "link_quality_id",
+          "flag": "link-quality-id",
+          "target": "linkQualityID",
+          "required": false,
+          "description": "Link Quality ID"
+        },
+        {
+          "name": "link_quality_name",
+          "flag": "link-quality-name",
+          "target": "linkQualityName",
+          "required": false,
+          "description": "Link Quality Name"
+        },
+        {
+          "name": "app_list",
+          "flag": "app-list",
+          "target": "appList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "App List as a JSON array"
+        },
+        {
+          "name": "quality",
+          "flag": "quality",
+          "target": "quality",
+          "required": false,
+          "value_type": "json",
+          "description": "Quality as a JSON object"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-routing-policy-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=6013&isNormal=1",
+      "examples": [
+        "ctyun sdwan routing-policy update --edge-id 2893f150-19b5-11eb-8e79-824da1059800 --policy-id be012e8f-ea32-4a2c-89da-7db35eedb334 --policy-name policy-001 --priority 50 --select-type priority --protocol tcp --src-cidr 10.20.0.0/16 --src-port -1/-1 --dst-cidr 10.10.0.0/16 --dst-port -1/-1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "sdwan.routing-policy.delete",
+      "path": [
+        "sdwan",
+        "routing-policy",
+        "delete"
+      ],
+      "operation": "sdwan.routing-policy.delete",
+      "table": "sdwan.routing-policy.delete",
+      "parameters": [
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyID",
+          "required": true,
+          "description": "Policy ID"
+        },
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-routing-policy-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=6015&isNormal=1",
+      "examples": [
+        "ctyun sdwan routing-policy delete --policy-id be012e8f-ea32-4a2c-89da-7db35eedb334 --edge-id 2893f150-19b5-11eb-8e79-824da1059800"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "sdwan.overload-protection.configure",
+      "path": [
+        "sdwan",
+        "overload-protection",
+        "configure"
+      ],
+      "operation": "sdwan.overload-protection.configure",
+      "table": "sdwan.overload-protection.configure",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "lines",
+          "flag": "lines",
+          "target": "lines",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Lines as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-overload-protection-configure.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=6017&isNormal=1",
+      "examples": [
+        "ctyun sdwan overload-protection configure --edge-id 3a5644b2-e9c4-11eb-b46f-005056898fe0 --lines '[{\"value\":\"{lines}\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "configure"
+      }
+    },
+    {
+      "id": "sdwan.overload-protection.list",
+      "path": [
+        "sdwan",
+        "overload-protection",
+        "list"
+      ],
+      "operation": "sdwan.overload-protection.list",
+      "table": "sdwan.overload-protection.list",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": false,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-overload-protection-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=6018&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.qos.rule.tuple.delete",
+      "path": [
+        "sdwan",
+        "qos",
+        "rule",
+        "tuple",
+        "delete"
+      ],
+      "operation": "sdwan.qos.rule.tuple.delete",
+      "table": "sdwan.qos.rule.tuple.delete",
+      "parameters": [
+        {
+          "name": "qos_id",
+          "flag": "qos-id",
+          "target": "qosID",
+          "required": true,
+          "description": "Qos ID"
+        },
+        {
+          "name": "rule_id",
+          "flag": "rule-id",
+          "target": "ruleID",
+          "required": true,
+          "description": "Rule ID"
+        },
+        {
+          "name": "ace_id_list",
+          "flag": "ace-id-list",
+          "target": "aceIDList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Ace ID List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-qos-rule-tuple-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=6240&isNormal=1",
+      "examples": [
+        "ctyun sdwan qos rule tuple delete --qos-id e5cb528a-5f05-11ed-837f-005056893e3e --rule-id 89520d5a-5f32-11ed-a6c2-00505689ad95 --ace-id-list '[\"89520f62-5f32-11ed-a6c2-00505689ad95\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "sdwan.qos.rule.application-group.delete",
+      "path": [
+        "sdwan",
+        "qos",
+        "rule",
+        "application-group",
+        "delete"
+      ],
+      "operation": "sdwan.qos.rule.application-group.delete",
+      "table": "sdwan.qos.rule.application-group.delete",
+      "parameters": [
+        {
+          "name": "qos_id",
+          "flag": "qos-id",
+          "target": "qosID",
+          "required": true,
+          "description": "Qos ID"
+        },
+        {
+          "name": "rule_id",
+          "flag": "rule-id",
+          "target": "ruleID",
+          "required": true,
+          "description": "Rule ID"
+        },
+        {
+          "name": "app_id_list",
+          "flag": "app-id-list",
+          "target": "appIDList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "App ID List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-qos-rule-application-group-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=6245&isNormal=1",
+      "examples": [
+        "ctyun sdwan qos rule application-group delete --qos-id e5cb528a-5f05-11ed-837f-005056893e3e --rule-id 89520d5a-5f32-11ed-a6c2-00505689ad95 --app-id-list '[\"89520f62-5f32-11ed-a6c2-00505689ad95\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "sdwan.gateway.order.create",
+      "path": [
+        "sdwan",
+        "gateway",
+        "order",
+        "create"
+      ],
+      "operation": "sdwan.gateway.order.create",
+      "table": "sdwan.gateway.order.create",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Client Token"
+        },
+        {
+          "name": "device_type",
+          "flag": "device-type",
+          "target": "deviceType",
+          "required": true,
+          "allowed_values": [
+            "hardware",
+            "software"
+          ],
+          "description": "Device Type"
+        },
+        {
+          "name": "base_info",
+          "flag": "base-info",
+          "target": "baseInfo",
+          "required": true,
+          "value_type": "json",
+          "description": "Base Info as a JSON object"
+        },
+        {
+          "name": "gateway_info",
+          "flag": "gateway-info",
+          "target": "gatewayInfo",
+          "required": false,
+          "value_type": "json",
+          "description": "Gateway Info as a JSON object"
+        },
+        {
+          "name": "software_info",
+          "flag": "software-info",
+          "target": "softwareInfo",
+          "required": false,
+          "value_type": "json",
+          "description": "Software Info as a JSON object"
+        },
+        {
+          "name": "addr_info",
+          "flag": "addr-info",
+          "target": "addrInfo",
+          "required": false,
+          "value_type": "json",
+          "description": "Addr Info as a JSON object"
+        },
+        {
+          "name": "added_service",
+          "flag": "added-service",
+          "target": "addedService",
+          "required": false,
+          "value_type": "json",
+          "description": "Added Service as a JSON object"
+        },
+        {
+          "name": "on_demand",
+          "flag": "on-demand",
+          "target": "onDemand",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "description": "On Demand"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": false,
+          "description": "Cycle Type"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": false,
+          "value_type": "integer",
+          "description": "Cycle Count"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "device_type",
+            "equals": "hardware"
+          },
+          "required": [
+            "gateway_info"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "device_type",
+            "equals": "software"
+          },
+          "required": [
+            "software_info"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "on_demand",
+            "equals": "false"
+          },
+          "required": [
+            "cycle_type",
+            "cycle_count"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-order-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=6528&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway order create --device-type hardware --base-info '{\"edgeName\":\"edge111201-openapi\",\"desc\":\"test\",\"bandwidth\":5}' --gateway-info '{\"isInstall\":1,\"edgeType\":\"economic\",\"useType\":\"singleNode\"}' --cycle-type YEAR --cycle-count 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "sdwan.gateway.order.renew",
+      "path": [
+        "sdwan",
+        "gateway",
+        "order",
+        "renew"
+      ],
+      "operation": "sdwan.gateway.order.renew",
+      "table": "sdwan.gateway.order.renew",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Client Token"
+        },
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceID",
+          "required": true,
+          "description": "Resource ID"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": false,
+          "description": "Cycle Type"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": false,
+          "value_type": "integer",
+          "description": "Cycle Count"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-order-renew.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=6529&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway order renew --resource-id 6f887fa6d89f4617a5a21c7955a15e22"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "renew"
+      }
+    },
+    {
+      "id": "sdwan.gateway.order.unsubscribe",
+      "path": [
+        "sdwan",
+        "gateway",
+        "order",
+        "unsubscribe"
+      ],
+      "operation": "sdwan.gateway.order.unsubscribe",
+      "table": "sdwan.gateway.order.unsubscribe",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Client Token"
+        },
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceID",
+          "required": true,
+          "description": "Resource ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-order-unsubscribe.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=6530&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway order unsubscribe --resource-id 6f887fa6d89f4617a5a21c7955a15e22"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unsubscribe"
+      }
+    },
+    {
+      "id": "sdwan.gateway.order.upgrade",
+      "path": [
+        "sdwan",
+        "gateway",
+        "order",
+        "upgrade"
+      ],
+      "operation": "sdwan.gateway.order.upgrade",
+      "table": "sdwan.gateway.order.upgrade",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Client Token"
+        },
+        {
+          "name": "bandwidth",
+          "flag": "bandwidth",
+          "target": "bandwidth",
+          "required": true,
+          "value_type": "integer",
+          "description": "Bandwidth"
+        },
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceID",
+          "required": true,
+          "description": "Resource ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-order-upgrade.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=6531&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway order upgrade --bandwidth 10 --resource-id 6f887fa6d89f4617a5a21c7955a15e22"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "upgrade"
+      }
+    },
+    {
+      "id": "sdwan.monitor.item.list",
+      "path": [
+        "sdwan",
+        "monitor",
+        "item",
+        "list"
+      ],
+      "operation": "sdwan.monitor.item.list",
+      "table": "sdwan.monitor.item.list",
+      "parameters": [
+        {
+          "name": "serial_numbers",
+          "flag": "serial-numbers",
+          "target": "serialNumbers",
+          "required": true,
+          "description": "Serial Numbers"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-monitor-item-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=7107&isNormal=1",
+      "examples": [
+        "ctyun sdwan monitor item list --serial-numbers G65GBCS210540452"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.bandwidth-package.order.create",
+      "path": [
+        "sdwan",
+        "bandwidth-package",
+        "order",
+        "create"
+      ],
+      "operation": "sdwan.bandwidth-package.order.create",
+      "table": "sdwan.bandwidth-package.order.create",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Client Token"
+        },
+        {
+          "name": "edge_name",
+          "flag": "edge-name",
+          "target": "edgeName",
+          "required": true,
+          "description": "Edge Name"
+        },
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "bandwidth",
+          "flag": "bandwidth",
+          "target": "bandwidth",
+          "required": true,
+          "value_type": "integer",
+          "description": "Bandwidth"
+        },
+        {
+          "name": "on_demand",
+          "flag": "on-demand",
+          "target": "onDemand",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "description": "On Demand"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": false,
+          "description": "Cycle Type"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": false,
+          "value_type": "integer",
+          "description": "Cycle Count"
+        },
+        {
+          "name": "effective_time",
+          "flag": "effective-time",
+          "target": "effectiveTime",
+          "required": false,
+          "description": "Effective Time"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "on_demand",
+            "equals": "false"
+          },
+          "required": [
+            "cycle_type",
+            "cycle_count"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-bandwidth-package-order-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=7261&isNormal=1",
+      "examples": [
+        "ctyun sdwan bandwidth-package order create --edge-name openapi-sdwanapp-01 --edge-id b35fcd88-5e7b-11ed-9fa7-525400af7402 --bandwidth 5 --on-demand false --cycle-type DAY --cycle-count 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "sdwan.bandwidth-package.order.unsubscribe",
+      "path": [
+        "sdwan",
+        "bandwidth-package",
+        "order",
+        "unsubscribe"
+      ],
+      "operation": "sdwan.bandwidth-package.order.unsubscribe",
+      "table": "sdwan.bandwidth-package.order.unsubscribe",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Client Token"
+        },
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceID",
+          "required": true,
+          "description": "Resource ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-bandwidth-package-order-unsubscribe.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=7262&isNormal=1",
+      "examples": [
+        "ctyun sdwan bandwidth-package order unsubscribe --resource-id 6f887fa6d89f4617a5a21c7955a15e22"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unsubscribe"
+      }
+    },
+    {
+      "id": "sdwan.bandwidth-package.list",
+      "path": [
+        "sdwan",
+        "bandwidth-package",
+        "list"
+      ],
+      "operation": "sdwan.bandwidth-package.list",
+      "table": "sdwan.bandwidth-package.list",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-bandwidth-package-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=7263&isNormal=1",
+      "examples": [
+        "ctyun sdwan bandwidth-package list --edge-id 2893f150-19b5-11eb-8e79-824da1059800"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.bandwidth-package.activate",
+      "path": [
+        "sdwan",
+        "bandwidth-package",
+        "activate"
+      ],
+      "operation": "sdwan.bandwidth-package.activate",
+      "table": "sdwan.bandwidth-package.activate",
+      "parameters": [
+        {
+          "name": "bandwidth_package_id",
+          "flag": "bandwidth-package-id",
+          "target": "bandwidthPackageID",
+          "required": true,
+          "description": "Bandwidth Package ID"
+        },
+        {
+          "name": "is_effect",
+          "flag": "is-effect",
+          "target": "isEffect",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Is Effect"
+        },
+        {
+          "name": "effective_time",
+          "flag": "effective-time",
+          "target": "effectiveTime",
+          "required": false,
+          "description": "Effective Time"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-bandwidth-package-activate.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=7264&isNormal=1",
+      "examples": [
+        "ctyun sdwan bandwidth-package activate --bandwidth-package-id 22f2b7ba-b7f4-11ed-bd26-525400af7402 --is-effect false"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "activate"
+      }
+    },
+    {
+      "id": "sdwan.bandwidth-package.delete",
+      "path": [
+        "sdwan",
+        "bandwidth-package",
+        "delete"
+      ],
+      "operation": "sdwan.bandwidth-package.delete",
+      "table": "sdwan.bandwidth-package.delete",
+      "parameters": [
+        {
+          "name": "bandwidth_package_id",
+          "flag": "bandwidth-package-id",
+          "target": "bandwidthPackageID",
+          "required": true,
+          "description": "Bandwidth Package ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-bandwidth-package-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=7265&isNormal=1",
+      "examples": [
+        "ctyun sdwan bandwidth-package delete --bandwidth-package-id 22f2b7ba-b7f4-11ed-bd26-525400af7402"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "sdwan.link.probe-address.list",
+      "path": [
+        "sdwan",
+        "link",
+        "probe-address",
+        "list"
+      ],
+      "operation": "sdwan.link.probe-address.list",
+      "table": "sdwan.link.probe-address.list",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "edge_port",
+          "flag": "edge-port",
+          "target": "edgePort",
+          "required": true,
+          "description": "Edge Port"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-link-probe-address-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=7266&isNormal=1",
+      "examples": [
+        "ctyun sdwan link probe-address list --edge-id 2893f150-19b5-11eb-8e79-824da1059800 --edge-port WAN1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.link.monitoring.enable",
+      "path": [
+        "sdwan",
+        "link",
+        "monitoring",
+        "enable"
+      ],
+      "operation": "sdwan.link.monitoring.enable",
+      "table": "sdwan.link.monitoring.enable",
+      "parameters": [
+        {
+          "name": "link_id",
+          "flag": "link-id",
+          "target": "linkID",
+          "required": true,
+          "description": "Link ID"
+        },
+        {
+          "name": "detect_policy_list",
+          "flag": "detect-policy-list",
+          "target": "detectPolicyList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Detect Policy List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-link-monitoring-enable.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=7267&isNormal=1",
+      "examples": [
+        "ctyun sdwan link monitoring enable --link-id edffd3e2-bd4f-11ed-a635-005056893e3e"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "enable"
+      }
+    },
+    {
+      "id": "sdwan.link.monitoring.disable",
+      "path": [
+        "sdwan",
+        "link",
+        "monitoring",
+        "disable"
+      ],
+      "operation": "sdwan.link.monitoring.disable",
+      "table": "sdwan.link.monitoring.disable",
+      "parameters": [
+        {
+          "name": "link_id",
+          "flag": "link-id",
+          "target": "linkID",
+          "required": true,
+          "description": "Link ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-link-monitoring-disable.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=7268&isNormal=1",
+      "examples": [
+        "ctyun sdwan link monitoring disable --link-id edffd3e2-bd4f-11ed-a635-005056893e3e"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "disable"
+      }
+    },
+    {
+      "id": "sdwan.link.quality-weight.show",
+      "path": [
+        "sdwan",
+        "link",
+        "quality-weight",
+        "show"
+      ],
+      "operation": "sdwan.link.quality-weight.show",
+      "table": "sdwan.link.quality-weight.show",
+      "fixture_response": "fixtures/sdwan-link-quality-weight-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=7269&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.link.quality-weight.update",
+      "path": [
+        "sdwan",
+        "link",
+        "quality-weight",
+        "update"
+      ],
+      "operation": "sdwan.link.quality-weight.update",
+      "table": "sdwan.link.quality-weight.update",
+      "parameters": [
+        {
+          "name": "delay",
+          "flag": "delay",
+          "target": "delay",
+          "required": true,
+          "description": "Delay"
+        },
+        {
+          "name": "jitter",
+          "flag": "jitter",
+          "target": "jitter",
+          "required": true,
+          "description": "Jitter"
+        },
+        {
+          "name": "loss",
+          "flag": "loss",
+          "target": "loss",
+          "required": true,
+          "description": "Loss"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-link-quality-weight-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=7270&isNormal=1",
+      "examples": [
+        "ctyun sdwan link quality-weight update --delay 40 --jitter 30 --loss 30"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "sdwan.access-control.gateway.bound.list",
+      "path": [
+        "sdwan",
+        "access-control",
+        "gateway",
+        "bound",
+        "list"
+      ],
+      "operation": "sdwan.access-control.gateway.bound.list",
+      "table": "sdwan.access-control.gateway.bound.list",
+      "parameters": [
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "search",
+          "flag": "search",
+          "target": "search",
+          "required": false,
+          "description": "Search"
+        },
+        {
+          "name": "acl_id",
+          "flag": "acl-id",
+          "target": "aclID",
+          "required": true,
+          "description": "Acl ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-access-control-gateway-bound-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=7272&isNormal=1",
+      "examples": [
+        "ctyun sdwan access-control gateway bound list --acl-id 14eba528-bd80-11ed-a12a-005056893e3e"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.serial-number.migrate",
+      "path": [
+        "sdwan",
+        "gateway",
+        "serial-number",
+        "migrate"
+      ],
+      "operation": "sdwan.gateway.serial-number.migrate",
+      "table": "sdwan.gateway.serial-number.migrate",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "master_sn",
+          "flag": "master-sn",
+          "target": "masterSN",
+          "required": true,
+          "description": "Master Sn"
+        },
+        {
+          "name": "slave_sn",
+          "flag": "slave-sn",
+          "target": "slaveSN",
+          "required": false,
+          "description": "Slave Sn"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-serial-number-migrate.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=7273&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway serial-number migrate --edge-id 2b7f58b2-adf3-11ed-ab7a-005056893e3e --master-sn CTCE20230804001"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "migrate"
+      }
+    },
+    {
+      "id": "sdwan.gateway.lan.interface.list",
+      "path": [
+        "sdwan",
+        "gateway",
+        "lan",
+        "interface",
+        "list"
+      ],
+      "operation": "sdwan.gateway.lan.interface.list",
+      "table": "sdwan.gateway.lan.interface.list",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-lan-interface-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=7274&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway lan interface list --edge-id 2893f150-19b5-11eb-8e79-824da1059800"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.port-linkage.configure",
+      "path": [
+        "sdwan",
+        "gateway",
+        "port-linkage",
+        "configure"
+      ],
+      "operation": "sdwan.gateway.port-linkage.configure",
+      "table": "sdwan.gateway.port-linkage.configure",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "interface_name",
+          "flag": "interface-name",
+          "target": "interfaceName",
+          "required": true,
+          "description": "Interface Name"
+        },
+        {
+          "name": "slave_interface_name",
+          "flag": "slave-interface-name",
+          "target": "slaveInterfaceName",
+          "required": true,
+          "description": "Slave Interface Name"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-port-linkage-configure.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=7276&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway port-linkage configure --edge-id 6dd6ad42-ac3f-11ed-ab7a-005056893e3e --interface-name GigabitEthernet2/0/0 --slave-interface-name GigabitEthernet2/0/0"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "configure"
+      }
+    },
+    {
+      "id": "sdwan.gateway.port-linkage.show",
+      "path": [
+        "sdwan",
+        "gateway",
+        "port-linkage",
+        "show"
+      ],
+      "operation": "sdwan.gateway.port-linkage.show",
+      "table": "sdwan.gateway.port-linkage.show",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-port-linkage-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=7278&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway port-linkage show --edge-id 2893f150-19b5-11eb-8e79-824da1059800"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.port-linkage.delete",
+      "path": [
+        "sdwan",
+        "gateway",
+        "port-linkage",
+        "delete"
+      ],
+      "operation": "sdwan.gateway.port-linkage.delete",
+      "table": "sdwan.gateway.port-linkage.delete",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-port-linkage-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=7280&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway port-linkage delete --edge-id 6dd6ad42-ac3f-11ed-ab7a-005056893e3e"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "sdwan.gateway.dedicated-line.configure",
+      "path": [
+        "sdwan",
+        "gateway",
+        "dedicated-line",
+        "configure"
+      ],
+      "operation": "sdwan.gateway.dedicated-line.configure",
+      "table": "sdwan.gateway.dedicated-line.configure",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "special_line_config_list",
+          "flag": "special-line-config-list",
+          "target": "specialLineConfigList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Special Line Config List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-dedicated-line-configure.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=7282&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway dedicated-line configure --edge-id 3a5644b2-e9c4-11eb-b46f-005056898fe0 --special-line-config-list '[{\"edgePort\":\"WAN1\",\"serialNumber\":\"CTCC21168210800ZTT3\",\"lineType\":\"static\",\"lineStatus\":\"processing\",\"IPAddress\":\"192.168.0.0/24\",\"subMask\":\"255.255.255.0\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "configure"
+      }
+    },
+    {
+      "id": "sdwan.gateway.a8c.activate",
+      "path": [
+        "sdwan",
+        "gateway",
+        "a8c",
+        "activate"
+      ],
+      "operation": "sdwan.gateway.a8c.activate",
+      "table": "sdwan.gateway.a8c.activate",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "dc_id",
+          "flag": "dc-id",
+          "target": "dcID",
+          "required": true,
+          "description": "Dc ID"
+        },
+        {
+          "name": "subnet_list",
+          "flag": "subnet-list",
+          "target": "subnetList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Subnet List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-a8c-activate.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=8011&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway a8c activate --edge-id 65768712-3890-11ed-a977-005056898fe0 --dc-id 9aa1a302-388d-11ed-a977-005056898fe0 --subnet-list '[\"1.2.3.0/24\",\"2.3.4.0/24\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "activate"
+      }
+    },
+    {
+      "id": "sdwan.snat.create",
+      "path": [
+        "sdwan",
+        "snat",
+        "create"
+      ],
+      "operation": "sdwan.snat.create",
+      "table": "sdwan.snat.create",
+      "parameters": [
+        {
+          "name": "site_id",
+          "flag": "site-id",
+          "target": "siteID",
+          "required": true,
+          "description": "Site ID"
+        },
+        {
+          "name": "snat_ip",
+          "flag": "snat-ip",
+          "target": "snatIP",
+          "required": true,
+          "description": "Snat IP"
+        },
+        {
+          "name": "subnets",
+          "flag": "subnets",
+          "target": "subnets",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Subnets as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-snat-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=9293&isNormal=1",
+      "examples": [
+        "ctyun sdwan snat create --site-id CTCB4NH03210700174 --snat-ip 100.119.254.7 --subnets '[\"23.2.21.0/24\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "sdwan.snat.update",
+      "path": [
+        "sdwan",
+        "snat",
+        "update"
+      ],
+      "operation": "sdwan.snat.update",
+      "table": "sdwan.snat.update",
+      "parameters": [
+        {
+          "name": "site_id",
+          "flag": "site-id",
+          "target": "siteID",
+          "required": true,
+          "description": "Site ID"
+        },
+        {
+          "name": "snat_id",
+          "flag": "snat-id",
+          "target": "snatID",
+          "required": true,
+          "description": "Snat ID"
+        },
+        {
+          "name": "snat_ip",
+          "flag": "snat-ip",
+          "target": "snatIP",
+          "required": true,
+          "description": "Snat IP"
+        },
+        {
+          "name": "subnets",
+          "flag": "subnets",
+          "target": "subnets",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Subnets as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-snat-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=9294&isNormal=1",
+      "examples": [
+        "ctyun sdwan snat update --site-id CTCB4NH03210700174 --snat-id c6d6354c-0e88-11ee-bfb5-525400af7402 --snat-ip 100.119.254.7 --subnets '[\"23.2.21.0/24\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "sdwan.snat.delete",
+      "path": [
+        "sdwan",
+        "snat",
+        "delete"
+      ],
+      "operation": "sdwan.snat.delete",
+      "table": "sdwan.snat.delete",
+      "parameters": [
+        {
+          "name": "site_id",
+          "flag": "site-id",
+          "target": "siteID",
+          "required": true,
+          "description": "Site ID"
+        },
+        {
+          "name": "snat_id",
+          "flag": "snat-id",
+          "target": "snatID",
+          "required": true,
+          "description": "Snat ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-snat-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=9295&isNormal=1",
+      "examples": [
+        "ctyun sdwan snat delete --site-id CTCB4NH03210700174 --snat-id c6d6354c-0e88-11ee-bfb5-525400af7402"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "sdwan.snat.list",
+      "path": [
+        "sdwan",
+        "snat",
+        "list"
+      ],
+      "operation": "sdwan.snat.list",
+      "table": "sdwan.snat.list",
+      "parameters": [
+        {
+          "name": "site_id",
+          "flag": "site-id",
+          "target": "siteID",
+          "required": true,
+          "description": "Site ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-snat-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=9296&isNormal=1",
+      "examples": [
+        "ctyun sdwan snat list --site-id CTCB4NH03210700174"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.dnat.create",
+      "path": [
+        "sdwan",
+        "dnat",
+        "create"
+      ],
+      "operation": "sdwan.dnat.create",
+      "table": "sdwan.dnat.create",
+      "parameters": [
+        {
+          "name": "site_id",
+          "flag": "site-id",
+          "target": "siteID",
+          "required": true,
+          "description": "Site ID"
+        },
+        {
+          "name": "internal_ip",
+          "flag": "internal-ip",
+          "target": "internalIP",
+          "required": true,
+          "description": "Internal IP"
+        },
+        {
+          "name": "protocol",
+          "flag": "protocol",
+          "target": "protocol",
+          "required": true,
+          "description": "Protocol"
+        },
+        {
+          "name": "internal_port",
+          "flag": "internal-port",
+          "target": "internalPort",
+          "required": true,
+          "description": "Internal Port"
+        },
+        {
+          "name": "external_port",
+          "flag": "external-port",
+          "target": "externalPort",
+          "required": true,
+          "description": "External Port"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-dnat-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=9297&isNormal=1",
+      "examples": [
+        "ctyun sdwan dnat create --site-id CTCB4NH03210700174 --internal-ip 123.45.22.22 --protocol TCP --internal-port 10-20 --external-port 10-20"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "sdwan.dnat.delete",
+      "path": [
+        "sdwan",
+        "dnat",
+        "delete"
+      ],
+      "operation": "sdwan.dnat.delete",
+      "table": "sdwan.dnat.delete",
+      "parameters": [
+        {
+          "name": "site_id",
+          "flag": "site-id",
+          "target": "siteID",
+          "required": true,
+          "description": "Site ID"
+        },
+        {
+          "name": "dnat_id_list",
+          "flag": "dnat-id-list",
+          "target": "dnatIDList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Dnat ID List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-dnat-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=9298&isNormal=1",
+      "examples": [
+        "ctyun sdwan dnat delete --site-id CTCB4NH03210700174 --dnat-id-list '[\"e5b101a4-0f41-11ee-9fb1-525400af7402\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "sdwan.dnat.list",
+      "path": [
+        "sdwan",
+        "dnat",
+        "list"
+      ],
+      "operation": "sdwan.dnat.list",
+      "table": "sdwan.dnat.list",
+      "parameters": [
+        {
+          "name": "site_id",
+          "flag": "site-id",
+          "target": "siteID",
+          "required": true,
+          "description": "Site ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-dnat-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=9299&isNormal=1",
+      "examples": [
+        "ctyun sdwan dnat list --site-id CTCB4NH03210700174"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.offline.lock",
+      "path": [
+        "sdwan",
+        "gateway",
+        "offline",
+        "lock"
+      ],
+      "operation": "sdwan.gateway.offline.lock",
+      "table": "sdwan.gateway.offline.lock",
+      "parameters": [
+        {
+          "name": "site_id",
+          "flag": "site-id",
+          "target": "siteID",
+          "required": true,
+          "description": "Site ID"
+        },
+        {
+          "name": "lock_time",
+          "flag": "lock-time",
+          "target": "lockTime",
+          "required": true,
+          "value_type": "integer",
+          "description": "Lock Time"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-offline-lock.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=9300&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway offline lock --site-id CTCB4NH03210700174 --lock-time 3"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "lock"
+      }
+    },
+    {
+      "id": "sdwan.gateway.offline.unlock",
+      "path": [
+        "sdwan",
+        "gateway",
+        "offline",
+        "unlock"
+      ],
+      "operation": "sdwan.gateway.offline.unlock",
+      "table": "sdwan.gateway.offline.unlock",
+      "parameters": [
+        {
+          "name": "site_id",
+          "flag": "site-id",
+          "target": "siteID",
+          "required": true,
+          "description": "Site ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-offline-unlock.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=9301&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway offline unlock --site-id CTCB4NH03210700174"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unlock"
+      }
+    },
+    {
+      "id": "sdwan.datacenter.list",
+      "path": [
+        "sdwan",
+        "datacenter",
+        "list"
+      ],
+      "operation": "sdwan.datacenter.list",
+      "table": "sdwan.datacenter.list",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "manager_type",
+          "flag": "manager-type",
+          "target": "managerType",
+          "required": true,
+          "description": "Manager Type"
+        },
+        {
+          "name": "search_name",
+          "flag": "search-name",
+          "target": "searchName",
+          "required": false,
+          "description": "Search Name"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-datacenter-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=9356&isNormal=1",
+      "examples": [
+        "ctyun sdwan datacenter list --edge-id 3a5644b2-e9c4-11eb-b46f-005056898fe0 --manager-type DAGW"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.area.list",
+      "path": [
+        "sdwan",
+        "area",
+        "list"
+      ],
+      "operation": "sdwan.area.list",
+      "table": "sdwan.area.list",
+      "parameters": [
+        {
+          "name": "province",
+          "flag": "province",
+          "target": "province",
+          "required": false,
+          "description": "Province"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-area-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=9978&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.price.creation.show",
+      "path": [
+        "sdwan",
+        "price",
+        "creation",
+        "show"
+      ],
+      "operation": "sdwan.price.creation.show",
+      "table": "sdwan.price.creation.show",
+      "parameters": [
+        {
+          "name": "device_type",
+          "flag": "device-type",
+          "target": "deviceType",
+          "required": true,
+          "allowed_values": [
+            "hardware",
+            "software"
+          ],
+          "description": "Device Type"
+        },
+        {
+          "name": "base_info",
+          "flag": "base-info",
+          "target": "baseInfo",
+          "required": true,
+          "value_type": "json",
+          "description": "Base Info as a JSON object"
+        },
+        {
+          "name": "gateway_info",
+          "flag": "gateway-info",
+          "target": "gatewayInfo",
+          "required": false,
+          "value_type": "json",
+          "description": "Gateway Info as a JSON object"
+        },
+        {
+          "name": "software_info",
+          "flag": "software-info",
+          "target": "softwareInfo",
+          "required": false,
+          "value_type": "json",
+          "description": "Software Info as a JSON object"
+        },
+        {
+          "name": "addr_info",
+          "flag": "addr-info",
+          "target": "addrInfo",
+          "required": true,
+          "value_type": "json",
+          "description": "Addr Info as a JSON object"
+        },
+        {
+          "name": "added_service",
+          "flag": "added-service",
+          "target": "addedService",
+          "required": true,
+          "value_type": "json",
+          "description": "Added Service as a JSON object"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": true,
+          "description": "Cycle Type"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": true,
+          "value_type": "integer",
+          "description": "Cycle Count"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "device_type",
+            "equals": "hardware"
+          },
+          "required": [
+            "gateway_info"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "device_type",
+            "equals": "software"
+          },
+          "required": [
+            "software_info"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-price-creation-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=10683&isNormal=1",
+      "examples": [
+        "ctyun sdwan price creation show --device-type hardware --base-info '{\"edgeName\":\"edge1122-openapi\",\"desc\":\"test\",\"bandwidth\":5}' --addr-info '{\"name\":\"openapi-test\",\"mobile\":\"13000000000\",\"spareMobile\":\"13111111111\",\"email\":\"asd@123.com\",\"province\":\"河北\",\"city\":\"shijiazhuang\",\"address\":\"哈哈哈\"}' --added-service '{\"is5G\":true,\"isWIFI\":false,\"isLTE\":false}' --cycle-type MONTH --cycle-count 1 --gateway-info '{\"isInstall\":1,\"edgeType\":\"economic\",\"useType\":\"singleNode\"}'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.price.renewal.show",
+      "path": [
+        "sdwan",
+        "price",
+        "renewal",
+        "show"
+      ],
+      "operation": "sdwan.price.renewal.show",
+      "table": "sdwan.price.renewal.show",
+      "parameters": [
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceID",
+          "required": true,
+          "description": "Resource ID"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": true,
+          "description": "Cycle Type"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": true,
+          "value_type": "integer",
+          "description": "Cycle Count"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-price-renewal-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=10686&isNormal=1",
+      "examples": [
+        "ctyun sdwan price renewal show --resource-id 6f887fa6d89f4617a5a21c7955a15e22 --cycle-type YEAR --cycle-count 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.price.upgrade.show",
+      "path": [
+        "sdwan",
+        "price",
+        "upgrade",
+        "show"
+      ],
+      "operation": "sdwan.price.upgrade.show",
+      "table": "sdwan.price.upgrade.show",
+      "parameters": [
+        {
+          "name": "bandwidth",
+          "flag": "bandwidth",
+          "target": "bandwidth",
+          "required": true,
+          "value_type": "integer",
+          "description": "Bandwidth"
+        },
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceID",
+          "required": true,
+          "description": "Resource ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-price-upgrade-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=10688&isNormal=1",
+      "examples": [
+        "ctyun sdwan price upgrade show --bandwidth 10 --resource-id 6f887fa6d89f4617a5a21c7955a15e22"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.cross-account.authorization.create",
+      "path": [
+        "sdwan",
+        "cross-account",
+        "authorization",
+        "create"
+      ],
+      "operation": "sdwan.cross-account.authorization.create",
+      "table": "sdwan.cross-account.authorization.create",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "auth_customer_id",
+          "flag": "auth-customer-id",
+          "target": "authCustomerID",
+          "required": true,
+          "description": "Auth Customer ID"
+        },
+        {
+          "name": "auth_sdwan_id",
+          "flag": "auth-sdwan-id",
+          "target": "authSdwanID",
+          "required": true,
+          "description": "Auth Sdwan ID"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-cross-account-authorization-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=11623&isNormal=1",
+      "examples": [
+        "ctyun sdwan cross-account authorization create --edge-id e0beeef2-c952-11ed-9c19-525400af7402 --auth-customer-id 77fa32cfcd82403a98ab4a517f859ad2 --auth-sdwan-id 1266efd2-5827-11ee-ba6e-525400af7402"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "sdwan.cross-account.authorization.delete",
+      "path": [
+        "sdwan",
+        "cross-account",
+        "authorization",
+        "delete"
+      ],
+      "operation": "sdwan.cross-account.authorization.delete",
+      "table": "sdwan.cross-account.authorization.delete",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-cross-account-authorization-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=11624&isNormal=1",
+      "examples": [
+        "ctyun sdwan cross-account authorization delete --edge-id e0beeef2-c952-11ed-9c19-525400af7402"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "sdwan.cross-account.authorization-candidate.list",
+      "path": [
+        "sdwan",
+        "cross-account",
+        "authorization-candidate",
+        "list"
+      ],
+      "operation": "sdwan.cross-account.authorization-candidate.list",
+      "table": "sdwan.cross-account.authorization-candidate.list",
+      "parameters": [
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "search",
+          "flag": "search",
+          "target": "search",
+          "required": false,
+          "description": "Search"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "description": "Project ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-cross-account-authorization-candidate-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=11625&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.cross-account.granted.list",
+      "path": [
+        "sdwan",
+        "cross-account",
+        "granted",
+        "list"
+      ],
+      "operation": "sdwan.cross-account.granted.list",
+      "table": "sdwan.cross-account.granted.list",
+      "parameters": [
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "description": "Project ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-cross-account-granted-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=11626&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.cross-account.received.list",
+      "path": [
+        "sdwan",
+        "cross-account",
+        "received",
+        "list"
+      ],
+      "operation": "sdwan.cross-account.received.list",
+      "table": "sdwan.cross-account.received.list",
+      "parameters": [
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "description": "Project ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-cross-account-received-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=11627&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.network.bound.list",
+      "path": [
+        "sdwan",
+        "gateway",
+        "network",
+        "bound",
+        "list"
+      ],
+      "operation": "sdwan.gateway.network.bound.list",
+      "table": "sdwan.gateway.network.bound.list",
+      "parameters": [
+        {
+          "name": "sdwan_id",
+          "flag": "sdwan-id",
+          "target": "sdwanID",
+          "required": true,
+          "description": "Sdwan ID"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "description": "Status"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "description": "Project ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "search",
+          "flag": "search",
+          "target": "search",
+          "required": false,
+          "description": "Search"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-network-bound-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=11628&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway network bound list --sdwan-id be012e8f-ea32-4a2c-89da-7db35eedb334"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.access-control.gateway.relation.list",
+      "path": [
+        "sdwan",
+        "access-control",
+        "gateway",
+        "relation",
+        "list"
+      ],
+      "operation": "sdwan.access-control.gateway.relation.list",
+      "table": "sdwan.access-control.gateway.relation.list",
+      "parameters": [
+        {
+          "name": "relation",
+          "flag": "relation",
+          "target": "relation",
+          "required": true,
+          "description": "Relation"
+        },
+        {
+          "name": "sdwan_id",
+          "flag": "sdwan-id",
+          "target": "sdwanID",
+          "required": false,
+          "description": "Sdwan ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "search",
+          "flag": "search",
+          "target": "search",
+          "required": false,
+          "description": "Search"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-access-control-gateway-relation-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=11629&isNormal=1",
+      "examples": [
+        "ctyun sdwan access-control gateway relation list --relation bind"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.network.cidr.check",
+      "path": [
+        "sdwan",
+        "network",
+        "cidr",
+        "check"
+      ],
+      "operation": "sdwan.network.cidr.check",
+      "table": "sdwan.network.cidr.check",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        },
+        {
+          "name": "check_type",
+          "flag": "check-type",
+          "target": "checkType",
+          "required": true,
+          "description": "Check Type"
+        },
+        {
+          "name": "sdwan_id",
+          "flag": "sdwan-id",
+          "target": "sdwanID",
+          "required": false,
+          "description": "Sdwan ID"
+        },
+        {
+          "name": "ipv4_cidr",
+          "flag": "ipv4-cidr",
+          "target": "ipv4Cidr",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Ipv4 Cidr as a JSON array"
+        },
+        {
+          "name": "ipv6_cidr",
+          "flag": "ipv6-cidr",
+          "target": "ipv6Cidr",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Ipv6 Cidr as a JSON array"
+        },
+        {
+          "name": "snat_ip",
+          "flag": "snat-ip",
+          "target": "snatIP",
+          "required": false,
+          "description": "Snat IP"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "check_type",
+            "equals": "sdwan"
+          },
+          "required": [
+            "sdwan_id"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "check_type",
+            "equals": "edge"
+          },
+          "required": [
+            "sdwan_id"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "check_type",
+            "equals": "edge"
+          },
+          "required": [
+            "ipv4_cidr"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "check_type",
+            "equals": "snat"
+          },
+          "required": [
+            "snat_ip"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-network-cidr-check.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=11630&isNormal=1",
+      "examples": [
+        "ctyun sdwan network cidr check --edge-id be012e8f-ea32-4a2c-89da-7db35eedb334 --check-type edge --sdwan-id be012e8f-ea32-4a2c-89da-7db35eedb334 --ipv4-cidr '[\"12.3.4.0/24\"]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.dedicated-line.list",
+      "path": [
+        "sdwan",
+        "gateway",
+        "dedicated-line",
+        "list"
+      ],
+      "operation": "sdwan.gateway.dedicated-line.list",
+      "table": "sdwan.gateway.dedicated-line.list",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-dedicated-line-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=11631&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway dedicated-line list --edge-id 2893f150-19b5-11eb-8e79-824da1059800"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "sdwan.gateway.inspection.synchronize",
+      "path": [
+        "sdwan",
+        "gateway",
+        "inspection",
+        "synchronize"
+      ],
+      "operation": "sdwan.gateway.inspection.synchronize",
+      "table": "sdwan.gateway.inspection.synchronize",
+      "parameters": [
+        {
+          "name": "edge_id",
+          "flag": "edge-id",
+          "target": "edgeID",
+          "required": true,
+          "description": "Edge ID"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-gateway-inspection-synchronize.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=12003&isNormal=1",
+      "examples": [
+        "ctyun sdwan gateway inspection synchronize --edge-id 99c0aba2-d529-11ed-b0f8-525400af7402"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "synchronize"
+      }
+    },
+    {
+      "id": "sdwan.qos.rule.tuple.create",
+      "path": [
+        "sdwan",
+        "qos",
+        "rule",
+        "tuple",
+        "create"
+      ],
+      "operation": "sdwan.qos.rule.tuple.create",
+      "table": "sdwan.qos.rule.tuple.create",
+      "parameters": [
+        {
+          "name": "qos_id",
+          "flag": "qos-id",
+          "target": "qosID",
+          "required": true,
+          "description": "Qos ID"
+        },
+        {
+          "name": "rule_id",
+          "flag": "rule-id",
+          "target": "ruleID",
+          "required": true,
+          "description": "Rule ID"
+        },
+        {
+          "name": "rule_type",
+          "flag": "rule-type",
+          "target": "ruleType",
+          "required": true,
+          "description": "Rule Type"
+        },
+        {
+          "name": "ace_list",
+          "flag": "ace-list",
+          "target": "aceList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Ace List as a JSON array"
+        },
+        {
+          "name": "app_list",
+          "flag": "app-list",
+          "target": "appList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "App List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-qos-rule-tuple-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=11927&isNormal=1",
+      "examples": [
+        "ctyun sdwan qos rule tuple create --qos-id 472a8c3c-4a9b-11ed-b0e4-005056898fe0 --rule-id 472a8e62-4a9b-11ed-b0e4-005056898fe0 --rule-type ace"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "sdwan.network.update",
+      "path": [
+        "sdwan",
+        "network",
+        "update"
+      ],
+      "operation": "sdwan.network.update",
+      "table": "sdwan.network.update",
+      "parameters": [
+        {
+          "name": "sdwan_id",
+          "flag": "sdwan-id",
+          "target": "sdwanID",
+          "required": true,
+          "description": "Sdwan ID"
+        },
+        {
+          "name": "sdwan_name",
+          "flag": "sdwan-name",
+          "target": "sdwanName",
+          "required": false,
+          "description": "Sdwan Name"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        }
+      ],
+      "fixture_response": "fixtures/sdwan-network-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=38&vid=1&data=1&api=5969&isNormal=1",
+      "examples": [
+        "ctyun sdwan network update --sdwan-id ea631478-3efc-11ed-bca7-005056893e3e"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    }
+  ]
+}

@@ -4216,7 +4216,7 @@
           "target": "sourceInfo",
           "required": true,
           "value_type": "object_array",
-          "description": "Source array: sourceType defaults to S3 and supports S3, OSS, COS, OBS, OOS, or ZOS; endpoint starts with http:// or https://; sourceBucketType defaults to Bucket and supports Bucket, Folder, Files, or Prefix with at most one folder, 100 files, or one prefix."
+          "description": "Source array: sourceType defaults to S3 and supports S3, OSS, COS, OBS, OOS, or ZOS; endpoint starts with http:// or https://; sourceBucketType defaults to Bucket and supports Bucket, Folder, Files, Prefix, Regex, or File_list with at most one folder, 100 files, or one prefix. Regex accepts up to ten RE2 expressions of at most 500 characters in migrateRegex. File_list accepts one .txt or .csv object-list path of at most 1024 characters in migrateFileList; upload the list to the destination ZOS bucket, with one source object key per line and no header (the first line is also an object key)."
         },
         {
           "name": "destination_info",
@@ -4224,7 +4224,7 @@
           "target": "destinationInfo",
           "required": true,
           "value_type": "object_array",
-          "description": "ZOS destination array with an http:// or https:// endpoint, bucket, access key, and secret key."
+          "description": "ZOS destination array with an http:// or https:// endpoint, bucket, access key, and secret key. Optional destinationPrefix adds a prefix or directory prefix, at most 128 UTF-8 characters without emoji, a leading slash, consecutive slashes, or a .. directory component; use a single slash between directory levels."
         },
         {
           "name": "storage_type",
@@ -4281,6 +4281,49 @@
           "required": false,
           "pattern": "^\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}:\\d{2})?$",
           "description": "Upper LastModified bound in YYYY-MM-DD or YYYY-MM-DD HH:MM:SS format, from 1970-01-02 through 2037-12-31 and later than migrateStartTime; dynamic default is task creation time plus ten years."
+        },
+        {
+          "name": "rate_limit_type",
+          "flag": "rate-limit-type",
+          "target": "rateLimitType",
+          "required": false,
+          "allowed_values": [
+            "Disable",
+            "Global",
+            "Period"
+          ],
+          "default": "Disable",
+          "description": "Rate limiting for semi-managed migration only; disable limiting, apply one limit throughout migration, or apply a time-based policy"
+        },
+        {
+          "name": "rate_limit_num",
+          "flag": "rate-limit-num",
+          "target": "rateLimitNum",
+          "required": false,
+          "value_type": "integer",
+          "pattern": "^(?:[5-9][0-9]|[1-9][0-9]{2,4}|[1-4][0-9]{5}|500000)$",
+          "description": "Global rate limit in Mbps, from 50 to 500000; required when --rate-limit-type is Global"
+        },
+        {
+          "name": "rate_limit_policy",
+          "flag": "rate-limit-policy",
+          "target": "rateLimitPolicy",
+          "required": false,
+          "value_type": "json",
+          "description": "JSON object required when --rate-limit-type is Period: put else first for the fallback limit (-1 for unlimited), then at most ten non-overlapping hour:minute-hour:minute periods with the start earlier than the end; each limit is an integer from 50 to 500000 Mbps"
+        },
+        {
+          "name": "consistency_check",
+          "flag": "consistency-check",
+          "target": "consistencyCheck",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "description": "Enable data consistency checking using CRC64 when available; fall back to object size and LastModified when either endpoint lacks CRC64 metadata"
         }
       ],
       "conditional_requirements": [
@@ -4291,6 +4334,24 @@
           },
           "required": [
             "migration_agent"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "rate_limit_type",
+            "equals": "Global"
+          },
+          "required": [
+            "rate_limit_num"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "rate_limit_type",
+            "equals": "Period"
+          },
+          "required": [
+            "rate_limit_policy"
           ]
         }
       ],

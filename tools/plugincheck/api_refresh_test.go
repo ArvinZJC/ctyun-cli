@@ -56,21 +56,21 @@ func TestECPCRenewPriceRequiresBillingCycle(t *testing.T) {
 	}
 }
 
-// TestCloudAssistantSuspensionKeepsCommandVisible ensures a temporary upstream
-// suspension is explained in help without declaring permanent deprecation.
-func TestCloudAssistantSuspensionKeepsCommandVisible(t *testing.T) {
+// TestCloudAssistantDocumentationStatusKeepsCommandAvailable distinguishes
+// unavailable public documentation from the available command API.
+func TestCloudAssistantDocumentationStatusKeepsCommandAvailable(t *testing.T) {
 	ctx := loadStorageReviewContext(t, "cloud-assistant")
 	op := ctx.bundle.APIs.Operations["v4.cloud-assistant.command.run"]
 	if op.Deprecation != nil {
-		t.Fatal("temporary suspension marked deprecated")
+		t.Fatal("available API marked deprecated")
 	}
-	for _, tc := range []struct{ language, notice string }{{"en-US", "temporarily unavailable"}, {"en-GB", "temporarily unavailable"}, {"zh-CN", "暂时不可用"}} {
+	for _, tc := range []struct{ language, notice string }{{"en-US", "API is available, but its public documentation is currently unavailable"}, {"en-GB", "API is available, but its public documentation is currently unavailable"}, {"zh-CN", "API 可用，但公开文档目前不可用"}} {
 		var stdout bytes.Buffer
 		if err := cli.Run(cli.Config{Args: []string{"--lang", tc.language, "help", "cloud-assistant", "command", "run"}, Stdout: &stdout, PluginRoot: t.TempDir()}); err != nil {
 			t.Fatal(err)
 		}
 		if !strings.Contains(stdout.String(), tc.notice) {
-			t.Fatalf("%s help does not explain suspension:\n%s", tc.language, stdout.String())
+			t.Fatalf("%s help does not distinguish API and documentation availability:\n%s", tc.language, stdout.String())
 		}
 	}
 }

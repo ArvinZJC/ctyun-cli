@@ -1,0 +1,223 @@
+{
+  "operations": {
+    "cloud-search.instance.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/os/openapi/v1/order/new",
+      "content_type": "application/json",
+      "body": {
+        "auto_pay": "$param.auto_pay",
+        "available_zone_id": "$param.available_zone_id",
+        "cluster_name": "$param.cluster_name",
+        "cluster_type": "$param.cluster_type",
+        "component_pwd": "$param.component_pwd",
+        "cycle_cnt": "$param.cycle_cnt",
+        "cycle_type": "$param.cycle_type",
+        "enable_https": "$param.enable_https",
+        "enable_ipv6": "$param.enable_ipv6",
+        "labels": "$param.labels",
+        "node_details": "$param.node_details",
+        "os_type": "$param.os_type",
+        "pay_type": "$param.pay_type",
+        "project_id": "$param.project_id",
+        "region_id": "$param.region_id",
+        "security_group_Id": "$param.security_group_id",
+        "subnet_id": "$param.subnet_id",
+        "vpc_id": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "cloud-search.instance.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/os/openapi/v1/cluster/selectInstancePage",
+      "content_type": "application/json",
+      "body": {
+        "clusterName": "$param.cluster_name",
+        "clusterStateList": "$param.cluster_state_list",
+        "clusterType": "$param.cluster_type",
+        "isQueryNet": "$param.is_query_net",
+        "labelParam": "$param.label_param",
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size",
+        "projectId": "$param.project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "cloud-search.instance.resize": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/os/openapi/v1/cluster/extendInstance",
+      "content_type": "application/json",
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "clusterId": "$param.cluster_id",
+        "increaseHostNum": "$param.increase_host_num",
+        "nodeGroupName": "$param.node_group_name"
+      },
+      "retryable": false
+    },
+    "cloud-search.instance.restart": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/os/openapi/v1/cluster/restart",
+      "content_type": "application/json",
+      "body": {
+        "clusterId": "$param.cluster_id",
+        "hostInfo": "$param.host_info",
+        "operateType": "$param.operate_type",
+        "restartRole": "$param.restart_role",
+        "restartType": "$param.restart_type"
+      },
+      "retryable": false
+    },
+    "cloud-search.instance.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "200"
+            ]
+          },
+          {
+            "path": "success",
+            "values": [
+              "true"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/os/openapi/v1/cluster/getClusterById",
+      "content_type": "application/json",
+      "query": {
+        "clusterId": "$param.cluster_id"
+      },
+      "retryable": true
+    },
+    "cloud-search.instance.unsubscribe": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/os/openapi/v1/order/refund",
+      "content_type": "application/json",
+      "query": {
+        "clusterId": "$param.cluster_id"
+      },
+      "retryable": false
+    },
+    "cloud-search.logstash.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/os/openapi/v1/cluster/selectLogstashInstancePage",
+      "content_type": "application/json",
+      "body": {
+        "clusterName": "$param.cluster_name",
+        "clusterStateList": "$param.cluster_state_list",
+        "labelParam": "$param.label_param",
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size",
+        "projectId": "$param.project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    }
+  }
+}

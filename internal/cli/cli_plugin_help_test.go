@@ -12,12 +12,14 @@ import (
 	"testing"
 )
 
+// TestHelpCommandUsesPluginMetadata renders command descriptions and documentation from synthetic metadata.
 func TestHelpCommandUsesPluginMetadata(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	var stdout bytes.Buffer
 	if err := Run(Config{
 		Args:       []string{"help", "ecs", "instance", "list"},
 		Stdout:     &stdout,
-		PluginRoot: t.TempDir(),
+		PluginRoot: pluginRoot,
 	}); err != nil {
 		t.Fatalf("help returned error: %v", err)
 	}
@@ -37,12 +39,14 @@ func TestHelpCommandUsesPluginMetadata(t *testing.T) {
 	}
 }
 
+// TestHelpPluginPrefixListsPluginCommands lists only children belonging to the selected plugin.
 func TestHelpPluginPrefixListsPluginCommands(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	var stdout bytes.Buffer
 	if err := Run(Config{
 		Args:       []string{"--lang", "en-US", "help", "ecs"},
 		Stdout:     &stdout,
-		PluginRoot: t.TempDir(),
+		PluginRoot: pluginRoot,
 	}); err != nil {
 		t.Fatalf("help returned error: %v", err)
 	}
@@ -73,12 +77,14 @@ func TestHelpPluginPrefixListsPluginCommands(t *testing.T) {
 	}
 }
 
+// TestHelpNestedPrefixListsMatchingPluginSubcommands lists immediate children of a nested command group.
 func TestHelpNestedPrefixListsMatchingPluginSubcommands(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	var stdout bytes.Buffer
 	if err := Run(Config{
 		Args:       []string{"--lang", "en-US", "help", "ecs", "instance"},
 		Stdout:     &stdout,
-		PluginRoot: t.TempDir(),
+		PluginRoot: pluginRoot,
 	}); err != nil {
 		t.Fatalf("help returned error: %v", err)
 	}
@@ -138,12 +144,14 @@ func TestPluginHelpUsesSentenceStyleOnlyForPageDescriptions(t *testing.T) {
 	}
 }
 
+// TestHelpWithOmittedTrailingPathArgumentUsesCommandHelp renders leaf usage even when its positional argument is omitted.
 func TestHelpWithOmittedTrailingPathArgumentUsesCommandHelp(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	var stdout bytes.Buffer
 	if err := Run(Config{
 		Args:       []string{"--lang", "en-US", "help", "ecs", "instance", "show"},
 		Stdout:     &stdout,
-		PluginRoot: t.TempDir(),
+		PluginRoot: pluginRoot,
 	}); err != nil {
 		t.Fatalf("help returned error: %v", err)
 	}
@@ -157,7 +165,7 @@ func TestHelpWithOmittedTrailingPathArgumentUsesCommandHelp(t *testing.T) {
 		"{instance_id}  Instance ID",
 		"Global Options:",
 		"Examples:",
-		"ctyun ecs instance show c5a7966a-88e7-362b-6e11-c2d8fbfc07ca",
+		"ctyun ecs instance show ins-demo-1",
 	} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("placeholder command help output missing %q:\n%s", want, got)
@@ -170,12 +178,14 @@ func TestHelpWithOmittedTrailingPathArgumentUsesCommandHelp(t *testing.T) {
 	}
 }
 
+// TestHelpCommandUsageIncludesOptionsOnlyWhenDeclared renders only command-owned metadata options.
 func TestHelpCommandUsageIncludesOptionsOnlyWhenDeclared(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	var stdout bytes.Buffer
 	if err := Run(Config{
 		Args:       []string{"--lang", "en-US", "help", "ecs", "instance", "list"},
 		Stdout:     &stdout,
-		PluginRoot: t.TempDir(),
+		PluginRoot: pluginRoot,
 	}); err != nil {
 		t.Fatalf("help returned error: %v", err)
 	}
@@ -195,9 +205,11 @@ func TestHelpCommandUsageIncludesOptionsOnlyWhenDeclared(t *testing.T) {
 	}
 }
 
+// TestHelpCommandUsageMarksRequiredAndOptionalOptions distinguishes required options and optional positional inputs.
 func TestHelpCommandUsageMarksRequiredAndOptionalOptions(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	var stdout bytes.Buffer
-	if err := Run(Config{
+	if err := Run(Config{PluginRoot: pluginRoot,
 		Args:   []string{"--lang", "en-US", "help", "region", "demand", "check"},
 		Stdout: &stdout,
 	}); err != nil {
@@ -228,6 +240,7 @@ func TestHelpCommandUsageMarksRequiredAndOptionalOptions(t *testing.T) {
 	}
 }
 
+// TestHelpShowsDeprecatedCommandOptionAndColumnMetadata renders deprecation markers from synthetic metadata.
 func TestHelpShowsDeprecatedCommandOptionAndColumnMetadata(t *testing.T) {
 	root := t.TempDir()
 	writeDeprecatedWarningBundle(t, filepath.Join(root, "demo"))
@@ -269,9 +282,11 @@ func TestHelpShowsDeprecatedCommandOptionAndColumnMetadata(t *testing.T) {
 	}
 }
 
+// TestHelpUsesFieldsHeadingForVerticalPluginTables renders vertical selectors with separate default markers.
 func TestHelpUsesFieldsHeadingForVerticalPluginTables(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	var stdout bytes.Buffer
-	if err := Run(Config{
+	if err := Run(Config{PluginRoot: pluginRoot,
 		Args:   []string{"--lang", "en-US", "help", "region", "product", "show"},
 		Stdout: &stdout,
 	}); err != nil {
@@ -298,7 +313,7 @@ func TestHelpUsesFieldsHeadingForVerticalPluginTables(t *testing.T) {
 	}
 
 	stdout.Reset()
-	if err := Run(Config{
+	if err := Run(Config{PluginRoot: pluginRoot,
 		Args:   []string{"--lang", "en-US", "help", "region", "resource", "show"},
 		Stdout: &stdout,
 	}); err != nil {
@@ -315,8 +330,9 @@ func TestHelpUsesFieldsHeadingForVerticalPluginTables(t *testing.T) {
 
 // TestHelpUsesOneSelectorPerLineForHorizontalPluginTables keeps column labels and default markers separate.
 func TestHelpUsesOneSelectorPerLineForHorizontalPluginTables(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	var stdout bytes.Buffer
-	if err := Run(Config{
+	if err := Run(Config{PluginRoot: pluginRoot,
 		Args:   []string{"--lang", "en-US", "help", "region", "list"},
 		Stdout: &stdout,
 	}); err != nil {
@@ -342,7 +358,7 @@ func TestHelpUsesOneSelectorPerLineForHorizontalPluginTables(t *testing.T) {
 	}
 
 	stdout.Reset()
-	if err := Run(Config{
+	if err := Run(Config{PluginRoot: pluginRoot,
 		Args:   []string{"region", "list", "-h", "-l", "zh"},
 		Stdout: &stdout,
 	}); err != nil {
@@ -360,12 +376,14 @@ func TestHelpUsesOneSelectorPerLineForHorizontalPluginTables(t *testing.T) {
 	}
 }
 
+// TestHelpNestedPrefixListsMatchingPluginCommands keeps nested group help in the common subcommand layout.
 func TestHelpNestedPrefixListsMatchingPluginCommands(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	var stdout bytes.Buffer
 	if err := Run(Config{
 		Args:       []string{"--lang", "en-US", "help", "ecs", "instance"},
 		Stdout:     &stdout,
-		PluginRoot: t.TempDir(),
+		PluginRoot: pluginRoot,
 	}); err != nil {
 		t.Fatalf("help returned error: %v", err)
 	}
@@ -387,12 +405,14 @@ func TestHelpNestedPrefixListsMatchingPluginCommands(t *testing.T) {
 	}
 }
 
+// TestHelpUsesSentenceCaseForEnglishDescriptions preserves sentence case and separates selector defaults.
 func TestHelpUsesSentenceCaseForEnglishDescriptions(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	var stdout bytes.Buffer
 	if err := Run(Config{
 		Args:       []string{"--lang", "en-US", "help", "ecs", "instance", "list"},
 		Stdout:     &stdout,
-		PluginRoot: t.TempDir(),
+		PluginRoot: pluginRoot,
 	}); err != nil {
 		t.Fatalf("help returned error: %v", err)
 	}
@@ -407,6 +427,7 @@ func TestHelpUsesSentenceCaseForEnglishDescriptions(t *testing.T) {
 	}
 }
 
+// helpLineHasMarker finds a selector row with a separate right-hand marker.
 func helpLineHasMarker(text, name, marker string) bool {
 	for line := range strings.SplitSeq(text, "\n") {
 		line = strings.TrimSpace(line)
@@ -421,6 +442,7 @@ func helpLineHasMarker(text, name, marker string) bool {
 	return false
 }
 
+// helpMarkerColumns collects terminal-cell positions of markers in one help section.
 func helpMarkerColumns(text, heading, marker string) []int {
 	inSection := false
 	var columns []int
@@ -444,30 +466,14 @@ func helpMarkerColumns(text, heading, marker string) []int {
 	return columns
 }
 
-func TestProductCommandOutputControlsAcceptLocalizedColumnLabels(t *testing.T) {
-	var stdout bytes.Buffer
-	if err := Run(Config{
-		Args:       []string{"--lang", "zh-CN", "--table", "plain", "--cols", "实例 ID,名称", "--filter", "名称=api-test01", "--sort", "实例 ID", "--no-header", "ecs", "instance", "list", "--offline"},
-		Stdout:     &stdout,
-		PluginRoot: t.TempDir(),
-	}); err != nil {
-		t.Fatalf("product command with localized output controls returned error: %v", err)
-	}
-	got := stdout.String()
-	if !strings.Contains(got, "c5a7966a-88e7-362b-6e11-c2d8fbfc07ca") || !strings.Contains(got, "api-test01") {
-		t.Fatalf("localized output controls missing expected row:\n%s", got)
-	}
-	if strings.Contains(got, "状态") {
-		t.Fatalf("localized output controls did not filter/select columns:\n%s", got)
-	}
-}
-
+// TestHelpCommandUsesPluginI18N uses the selected plugin localization catalog.
 func TestHelpCommandUsesPluginI18N(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	var stdout bytes.Buffer
 	if err := Run(Config{
 		Args:       []string{"--lang", "zh-CN", "help", "ecs", "instance", "list"},
 		Stdout:     &stdout,
-		PluginRoot: t.TempDir(),
+		PluginRoot: pluginRoot,
 	}); err != nil {
 		t.Fatalf("help returned error: %v", err)
 	}

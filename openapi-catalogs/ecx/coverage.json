@@ -1,0 +1,159 @@
+{
+  "captured_at": "2026-09-25",
+  "service_id": 55,
+  "version_id": 52,
+  "published_api_count": 252,
+  "implemented_api_count": 252,
+  "blocked": [],
+  "fixtures_unavailable": [
+    {
+      "api_id": "15678",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "1491",
+      "title": "虚机列表",
+      "reason": "The captured example omits the status object required by its response schema; no successful fixture is fabricated."
+    }
+  ],
+  "example_normalisations": [
+    {
+      "api_id": "15649",
+      "section": "请求体body示例",
+      "normalisation": "Removed explanatory line comments outside JSON strings; values unchanged."
+    },
+    {
+      "api_id": "15665",
+      "section": "请求体body示例",
+      "normalisation": "Removed explanatory line comments outside JSON strings; values unchanged."
+    },
+    {
+      "api_id": "15666",
+      "section": "请求体body示例",
+      "normalisation": "Removed explanatory line comments outside JSON strings; values unchanged."
+    },
+    {
+      "api_id": "15667",
+      "section": "请求体body示例",
+      "normalisation": "Removed explanatory line comments outside JSON strings; values unchanged."
+    },
+    {
+      "api_id": "15668",
+      "section": "请求体body示例",
+      "normalisation": "Removed explanatory line comments outside JSON strings; values unchanged."
+    },
+    {
+      "api_id": "15650",
+      "section": "响应示例",
+      "normalisation": "Quoted the orderStatus JSON key to match the schema; values unchanged."
+    },
+    {
+      "api_id": "16860",
+      "section": "请求体body示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "16272",
+      "section": "请求体body示例",
+      "normalisation": "Removed explanatory line comments outside JSON strings; values unchanged."
+    },
+    {
+      "api_id": "12273",
+      "section": "请求体body示例",
+      "normalisation": "Removed explanatory line comments outside JSON strings; values unchanged."
+    },
+    {
+      "api_id": "12290",
+      "section": "请求体body示例",
+      "normalisation": "Removed explanatory line comments outside JSON strings; values unchanged."
+    },
+    {
+      "api_id": "1465",
+      "section": "请求体body示例",
+      "normalisation": "Removed explanatory line comments outside JSON strings; values unchanged."
+    },
+    {
+      "api_id": "15667",
+      "parameter": "period",
+      "normalisation": "Normalized the captured example scalar representation to the explicit parameter type; values retained."
+    },
+    {
+      "api_id": "12327",
+      "parameter": "certificateId",
+      "normalisation": "Normalized the captured example scalar representation to the explicit parameter type; values retained."
+    },
+    {
+      "api_id": "12331",
+      "parameter": "healthCheckPort",
+      "normalisation": "Normalized the captured example scalar representation to the explicit parameter type; values retained."
+    },
+    {
+      "api_id": "3739",
+      "parameter": "certificateId",
+      "normalisation": "Normalized the captured example scalar representation to the explicit parameter type; values retained."
+    },
+    {
+      "api_id": "1416",
+      "parameter": "healthCheckPort",
+      "normalisation": "Normalized the captured example scalar representation to the explicit parameter type; values retained."
+    },
+    {
+      "api_id": "16862",
+      "parameter": "peeringId",
+      "normalisation": "Normalized the captured example scalar representation to the explicit parameter type; values retained."
+    },
+    {
+      "api_id": "12316",
+      "parameter": "slbBackendGroupBindingIds",
+      "normalisation": "Converted the captured numeric string members to the declared integer array without changing values."
+    },
+    {
+      "api_id": "1501",
+      "parameter": "slbBackendGroupBindingIds",
+      "normalisation": "Converted the captured numeric string members to the declared integer array without changing values."
+    },
+    {
+      "api_id": "12276",
+      "field": "nodeCode",
+      "normalisation": "Use the captured nodeCode spelling in display columns; omit the duplicate NodeCode schema spelling and preserve raw evidence."
+    },
+    {
+      "api_id": "6583",
+      "field": "nodeCode",
+      "normalisation": "Use the captured nodeCode spelling in display columns; omit the duplicate NodeCode schema spelling and preserve raw evidence."
+    },
+    {
+      "api_id": "1465",
+      "parameter": "loginType",
+      "normalisation": "The parameter example 12 contradicts the documented PASSWD/SSH enum. The captured password-based request omits loginType; use the explicitly documented PASSWD mode for that request and retain all captured body values."
+    }
+  ],
+  "waiter_gaps": [],
+  "request_notes": [
+    "V3 uses statusCode 200; historical v1 uses status.code Success. Business failures are not accepted based on HTTP status alone.",
+    "Historical modifyNetworkAttribute and modifyVSwitchAttribute overview titles are swapped. Their VPC/subnet request identity fields and URI names establish the corrected visible command meanings.",
+    "Subnet IPv6 update API 16272 is a documented v3 exception retaining the status.code Success/data response envelope; do not infer its contract from the URI generation.",
+    "Image name and image ID are documented alternatives despite an unconditional required marker on imageName; both remain optional in usage with the either/or requirement in help and upstream validation.",
+    "Historical PASSWD login requires a password; SSH login no longer fails a contradictory unconditional password requirement. System disk size remains conditional on the chosen specification."
+  ],
+  "waiter_assessment": {
+    "implemented": [
+      "ecx.instance.running",
+      "ecx.instance.stopped",
+      "ecx.v1.instance.running",
+      "ecx.v1.instance.stopped",
+      "ecx.load-balancer.ready",
+      "ecx.v1.load-balancer.ready",
+      "ecx.vpc.ready",
+      "ecx.v1.vpc.ready",
+      "ecx.certificate.valid",
+      "ecx.v1.certificate.valid"
+    ],
+    "notes": [
+      "Order status documents named terminal states, but the captured example uses numeric 0 without a mapping; no order-completion waiter is inferred.",
+      "Disk, EIP, NAT, snapshot and peering terminal states are not established by the captured schemas; creation response success only confirms the request.",
+      "Backend membership and health-check status labels lack terminal enum evidence.",
+      "No wait-for-deletion command is inferred when the detail API may stop returning the deleted resource."
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "waiters": {
+    "rabbitmq.instance.running": {
+      "selector": {
+        "path": "returnObj.data",
+        "key": "prodInstId",
+        "value": "$param.prod_inst_id"
+      },
+      "commands": [
+        "rabbitmq.instance.list"
+      ],
+      "failure_values": [
+        "4",
+        "13",
+        "14",
+        "17",
+        "18",
+        "19",
+        "20",
+        "101"
+      ],
+      "path": "status",
+      "success": "1",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
+}

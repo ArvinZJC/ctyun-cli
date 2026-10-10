@@ -1,0 +1,683 @@
+{
+  "commands": [
+    {
+      "id": "emr.v1.cluster.show",
+      "path": [
+        "emr",
+        "v1",
+        "cluster",
+        "show"
+      ],
+      "operation": "emr.v1.cluster.show",
+      "table": "emr.v1.cluster.show",
+      "parameters": [
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "description": "ID"
+        }
+      ],
+      "fixture_response": "fixtures/emr-v1-cluster-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=99&vid=273&data=194&api=13726&isNormal=1",
+      "examples": [
+        "ctyun emr v1 cluster show --id 00c3a04292996955752f073c995a1cc6"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "emr.v1.node-group.list",
+      "path": [
+        "emr",
+        "v1",
+        "node-group",
+        "list"
+      ],
+      "operation": "emr.v1.node-group.list",
+      "table": "emr.v1.node-group.list",
+      "parameters": [
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        }
+      ],
+      "fixture_response": "fixtures/emr-v1-node-group-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=99&vid=273&data=194&api=13725&isNormal=1",
+      "examples": [
+        "ctyun emr v1 node-group list --cluster-id da595eb1d81503b323fdc01d9bf786b7"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "emr.v1.node-group.show",
+      "path": [
+        "emr",
+        "v1",
+        "node-group",
+        "show"
+      ],
+      "operation": "emr.v1.node-group.show",
+      "table": "emr.v1.node-group.show",
+      "parameters": [
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        },
+        {
+          "name": "node_state",
+          "flag": "node-state",
+          "target": "nodeState",
+          "required": false,
+          "value_type": "integer",
+          "description": "Node State"
+        },
+        {
+          "name": "select_key",
+          "flag": "select-key",
+          "target": "selectKey",
+          "required": false,
+          "description": "Select Key"
+        }
+      ],
+      "fixture_response": "fixtures/emr-v1-node-group-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=99&vid=273&data=194&api=13724&isNormal=1",
+      "examples": [
+        "ctyun emr v1 node-group show --cluster-id bdbbc8cc1288a78e5851839dc26f58b9"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "emr.v1.cluster.list",
+      "path": [
+        "emr",
+        "v1",
+        "cluster",
+        "list"
+      ],
+      "operation": "emr.v1.cluster.list",
+      "table": "emr.v1.cluster.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "page_index",
+          "flag": "page-index",
+          "target": "pageIndex",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Index"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "cluster_name",
+          "flag": "cluster-name",
+          "target": "clusterName",
+          "required": false,
+          "description": "Cluster Name"
+        },
+        {
+          "name": "cluster_state_code",
+          "flag": "cluster-state-code",
+          "target": "clusterStateCode",
+          "required": false,
+          "value_type": "integer",
+          "description": "Cluster State Code"
+        },
+        {
+          "name": "cluster_type_code",
+          "flag": "cluster-type-code",
+          "target": "clusterTypeCode",
+          "required": false,
+          "value_type": "integer",
+          "description": "Cluster Type Code"
+        }
+      ],
+      "fixture_response": "fixtures/emr-v1-cluster-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=99&vid=273&data=194&api=13723&isNormal=1",
+      "examples": [
+        "ctyun emr v1 cluster list --page-index 1 --page-size 10"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "emr.cluster.unsubscribe",
+      "path": [
+        "emr",
+        "cluster",
+        "unsubscribe"
+      ],
+      "operation": "emr.cluster.unsubscribe",
+      "table": "emr.cluster.unsubscribe",
+      "parameters": [
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        }
+      ],
+      "fixture_response": "fixtures/emr-cluster-unsubscribe.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=99&vid=273&data=194&api=17891&isNormal=1",
+      "examples": [
+        "ctyun emr cluster unsubscribe --cluster-id 00c3a04292996955752f073c995a1cc6"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unsubscribe"
+      }
+    },
+    {
+      "id": "emr.cluster.resize",
+      "path": [
+        "emr",
+        "cluster",
+        "resize"
+      ],
+      "operation": "emr.cluster.resize",
+      "table": "emr.cluster.resize",
+      "parameters": [
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "cluster_id",
+          "required": true,
+          "description": "Cluster ID"
+        },
+        {
+          "name": "node_group_name",
+          "flag": "node-group-name",
+          "target": "node_group_name",
+          "required": true,
+          "description": "Node Group Name"
+        },
+        {
+          "name": "count",
+          "flag": "count",
+          "target": "count",
+          "required": true,
+          "value_type": "integer",
+          "description": "Count"
+        },
+        {
+          "name": "auto_pay",
+          "flag": "auto-pay",
+          "target": "auto_pay",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Auto Pay"
+        },
+        {
+          "name": "scale_without_start",
+          "flag": "scale-without-start",
+          "target": "scale_without_start",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Scale Without Start"
+        },
+        {
+          "name": "component_role_list",
+          "flag": "component-role-list",
+          "target": "component_role_list",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Component Role List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/emr-cluster-resize.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=99&vid=273&data=194&api=17890&isNormal=1",
+      "examples": [
+        "ctyun emr cluster resize --cluster-id 22cbc1c6c69e5abe863e43a091cd02b7 --node-group-name core-1 --count 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "resize"
+      }
+    },
+    {
+      "id": "emr.cluster.list",
+      "path": [
+        "emr",
+        "cluster",
+        "list"
+      ],
+      "operation": "emr.cluster.list",
+      "table": "emr.cluster.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "page_index",
+          "flag": "page-index",
+          "target": "pageIndex",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Index"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "cluster_name",
+          "flag": "cluster-name",
+          "target": "clusterName",
+          "required": false,
+          "description": "Cluster Name"
+        },
+        {
+          "name": "cluster_state_code",
+          "flag": "cluster-state-code",
+          "target": "clusterStateCode",
+          "required": false,
+          "value_type": "integer",
+          "description": "Cluster State Code"
+        },
+        {
+          "name": "cluster_type_code",
+          "flag": "cluster-type-code",
+          "target": "clusterTypeCode",
+          "required": false,
+          "value_type": "integer",
+          "description": "Cluster Type Code"
+        }
+      ],
+      "fixture_response": "fixtures/emr-cluster-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=99&vid=273&data=194&api=17889&isNormal=1",
+      "examples": [
+        "ctyun emr cluster list --page-index 1 --page-size 10"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "emr.node-group.list",
+      "path": [
+        "emr",
+        "node-group",
+        "list"
+      ],
+      "operation": "emr.node-group.list",
+      "table": "emr.node-group.list",
+      "parameters": [
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        }
+      ],
+      "fixture_response": "fixtures/emr-node-group-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=99&vid=273&data=194&api=17886&isNormal=1",
+      "examples": [
+        "ctyun emr node-group list --cluster-id e7afb3bd9d7117d116893c03a352f4e3"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "emr.cluster.show",
+      "path": [
+        "emr",
+        "cluster",
+        "show"
+      ],
+      "operation": "emr.cluster.show",
+      "table": "emr.cluster.show",
+      "parameters": [
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "description": "ID"
+        }
+      ],
+      "fixture_response": "fixtures/emr-cluster-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=99&vid=273&data=194&api=17885&isNormal=1",
+      "examples": [
+        "ctyun emr cluster show --id e7afb3bd9d7117d116893c03a352f4e3"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "emr.cluster.create",
+      "path": [
+        "emr",
+        "cluster",
+        "create"
+      ],
+      "operation": "emr.cluster.create",
+      "table": "emr.cluster.create",
+      "parameters": [
+        {
+          "name": "cluster_name",
+          "flag": "cluster-name",
+          "target": "cluster_name",
+          "required": true,
+          "description": "Cluster Name"
+        },
+        {
+          "name": "cluster_type",
+          "flag": "cluster-type",
+          "target": "cluster_type",
+          "required": true,
+          "description": "Cluster Type"
+        },
+        {
+          "name": "components",
+          "flag": "components",
+          "target": "components",
+          "required": true,
+          "description": "Components"
+        },
+        {
+          "name": "region_id",
+          "flag": "region-id",
+          "target": "region_id",
+          "required": true,
+          "description": "Region ID"
+        },
+        {
+          "name": "available_zone_id",
+          "flag": "available-zone-id",
+          "target": "available_zone_id",
+          "required": true,
+          "description": "Available Zone ID"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "project_id",
+          "required": true,
+          "description": "Project ID"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpc_Id",
+          "required": true,
+          "description": "VPC ID"
+        },
+        {
+          "name": "subnet_id",
+          "flag": "subnet-id",
+          "target": "subnet_id",
+          "required": true,
+          "description": "Subnet ID"
+        },
+        {
+          "name": "security_groups_id",
+          "flag": "security-groups-id",
+          "target": "security_groups_id",
+          "required": true,
+          "description": "Security Groups ID"
+        },
+        {
+          "name": "enable_ipv6",
+          "flag": "enable-ipv6",
+          "target": "enable_ipv6",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Enable Ipv6"
+        },
+        {
+          "name": "node_root_password",
+          "flag": "node-root-password",
+          "target": "node_root_password",
+          "required": true,
+          "description": "Node Root Password"
+        },
+        {
+          "name": "os_type",
+          "flag": "os-type",
+          "target": "os_type",
+          "required": true,
+          "description": "Os Type"
+        },
+        {
+          "name": "host_type",
+          "flag": "host-type",
+          "target": "host_type",
+          "required": true,
+          "description": "Host Type"
+        },
+        {
+          "name": "cpu_type",
+          "flag": "cpu-type",
+          "target": "cpu_type",
+          "required": true,
+          "description": "CPU Type"
+        },
+        {
+          "name": "spec_type",
+          "flag": "spec-type",
+          "target": "spec_type",
+          "required": true,
+          "value_type": "integer",
+          "description": "Specification Type"
+        },
+        {
+          "name": "dps_type",
+          "flag": "dps-type",
+          "target": "dps_type",
+          "required": false,
+          "description": "Dps Type"
+        },
+        {
+          "name": "charge_info",
+          "flag": "charge-info",
+          "target": "charge_info",
+          "required": true,
+          "value_type": "json",
+          "description": "Charge Info as a JSON object"
+        },
+        {
+          "name": "datasource_configs",
+          "flag": "datasource-configs",
+          "target": "datasource_configs",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Datasource Configs as a JSON array"
+        },
+        {
+          "name": "node_details",
+          "flag": "node-details",
+          "target": "node_details",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Node Details as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/emr-cluster-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=99&vid=273&data=194&api=17884&isNormal=1",
+      "examples": [
+        "ctyun emr cluster create --cluster-name sjfw-test-1 --cluster-type data-lake --components OpenLDAP,Kerberos,ZooKeeper,HDFS,YARN,Hive,Tez,Spark,Hudi,Iceberg,HBase,Trino,Kyuubi,Doris,Ranger,Kafka,Knox,Flink,JeekeFS,Flume --region-id bb9fdb42056f11eda1610242ac110002 --available-zone-id cn-huadong1-jsnj3A-public-ctcloud --project-id 0 --vpc-id vpc-n83zi9vuo0 --subnet-id subnet-8hzbyype9r --security-groups-id sg-zfh4pgydhe --node-root-password 'Juhwqe7h!21Da.' --os-type CTyun --host-type ecs --cpu-type X86 --spec-type 1 --charge-info '{\"charge_mode\":\"prePaid\",\"period_type\":\"month\",\"period_num\":1,\"auto_pay\":false,\"is_auto_renew\":false}' --node-details '[{\"group_name\":\"master\",\"node_num\":3,\"node_size\":\"physical.s5.2xlarge1\",\"affinity_group\":true,\"disk_specifications\":[{\"disk_function\":\"SYSTEM\",\"disk_type\":\"cloud\",\"io_type\":\"SATA\",\"disk_size\":100,\"disk_num\":1},{\"disk_function\":\"DATA\",\"disk_type\":\"cloud\",\"io_type\":\"SATA\",\"disk_size\":80,\"disk_num\":2}]},{\"group_name\":\"core-1\",\"node_num\":3,\"node_size\":\"physical.s5.2xlarge1\",\"affinity_group\":true,\"disk_specifications\":[{\"disk_function\":\"SYSTEM\",\"disk_type\":\"cloud\",\"io_type\":\"SATA\",\"disk_size\":100,\"disk_num\":1},{\"disk_function\":\"DATA\",\"disk_type\":\"cloud\",\"io_type\":\"SATA\",\"disk_size\":80,\"disk_num\":2}]},{\"group_name\":\"task-1\",\"node_num\":1,\"node_size\":\"physical.s5.2xlarge4\",\"affinity_group\":true,\"disk_specifications\":[{\"disk_function\":\"SYSTEM\",\"disk_type\":\"local\",\"raid_uuid\":\"r-wtzluqacgzzxgunnabdkpnpjew3d\"},{\"disk_function\":\"DATA\",\"disk_type\":\"local\",\"raid_uuid\":\"r-qytwf9r5h0yn9x4evjkyr0n1cwyb\"}]}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "emr.node-group.show",
+      "path": [
+        "emr",
+        "node-group",
+        "show"
+      ],
+      "operation": "emr.node-group.show",
+      "table": "emr.node-group.show",
+      "parameters": [
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        },
+        {
+          "name": "node_state",
+          "flag": "node-state",
+          "target": "nodeState",
+          "required": false,
+          "value_type": "integer",
+          "description": "Node State"
+        },
+        {
+          "name": "select_key",
+          "flag": "select-key",
+          "target": "selectKey",
+          "required": false,
+          "description": "Select Key"
+        }
+      ],
+      "fixture_response": "fixtures/emr-node-group-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=99&vid=273&data=194&api=17883&isNormal=1",
+      "examples": [
+        "ctyun emr node-group show --cluster-id e7afb3bd9d7117d116893c03a352f4e3"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "emr.metadata.table.show",
+      "path": [
+        "emr",
+        "metadata",
+        "table",
+        "show"
+      ],
+      "operation": "emr.metadata.table.show",
+      "table": "emr.metadata.table.show",
+      "parameters": [
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        },
+        {
+          "name": "timestamp",
+          "flag": "timestamp",
+          "target": "timestamp",
+          "required": true,
+          "value_type": "integer",
+          "description": "Timestamp"
+        },
+        {
+          "name": "database_name",
+          "flag": "database-name",
+          "target": "databaseName",
+          "required": true,
+          "description": "Database Name"
+        },
+        {
+          "name": "table_name",
+          "flag": "table-name",
+          "target": "tableName",
+          "required": true,
+          "description": "Table Name"
+        }
+      ],
+      "fixture_response": "fixtures/emr-metadata-table-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=99&vid=273&data=194&api=17888&isNormal=1",
+      "examples": [
+        "ctyun emr metadata table show --cluster-id da595eb1d81503b323fdc01d9bf786b7 --timestamp 1700000000 --database-name test_db1 --table-name test_table1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "emr.metadata.overview",
+      "path": [
+        "emr",
+        "metadata",
+        "overview"
+      ],
+      "operation": "emr.metadata.overview",
+      "table": "emr.metadata.overview",
+      "parameters": [
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        },
+        {
+          "name": "timestamp",
+          "flag": "timestamp",
+          "target": "timestamp",
+          "required": true,
+          "value_type": "integer",
+          "description": "Timestamp"
+        }
+      ],
+      "fixture_response": "fixtures/emr-metadata-overview.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=99&vid=273&data=194&api=17887&isNormal=1",
+      "examples": [
+        "ctyun emr metadata overview --cluster-id da595eb1d81503b323fdc01d9bf786b7 --timestamp 1700000000"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    }
+  ]
+}

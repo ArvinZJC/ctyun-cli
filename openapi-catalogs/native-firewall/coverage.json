@@ -1,0 +1,148 @@
+{
+  "captured_at": "2026-09-25",
+  "service_id": 191,
+  "version_id": 269,
+  "published_api_count": 109,
+  "implemented_api_count": 104,
+  "blocked": [
+    {
+      "api_id": "17171",
+      "title": "获取黑白名单规则的excel文件模板",
+      "path": "/vfw/v2_black_white_policy_export_module",
+      "reason": "The API claims a spreadsheet template or export, but publishes only a JSON success acknowledgement, with no file media type, populated download result or asynchronous export task contract."
+    },
+    {
+      "api_id": "17166",
+      "title": "获取访问规则的excel文件模板",
+      "path": "/vfw/v2_system_sec_policy_export_module",
+      "reason": "The API claims a spreadsheet template or export, but publishes only a JSON success acknowledgement, with no file media type, populated download result or asynchronous export task contract."
+    },
+    {
+      "api_id": "17180",
+      "title": "操作日志excel导出",
+      "path": "/vfw/v2_log_manager_exportoperatelog",
+      "reason": "The API claims a spreadsheet template or export, but publishes only a JSON success acknowledgement, with no file media type, populated download result or asynchronous export task contract."
+    },
+    {
+      "api_id": "17179",
+      "title": "流量日志excel导出",
+      "path": "/vfw/v2_log_manager_exportflowlog",
+      "reason": "The API claims a spreadsheet template or export, but publishes only a JSON success acknowledgement, with no file media type, populated download result or asynchronous export task contract."
+    },
+    {
+      "api_id": "17178",
+      "title": "入侵防御访问控制日志excel导出",
+      "path": "/vfw/v2_log_manager_exporteventlog",
+      "reason": "The API claims a spreadsheet template or export, but publishes only a JSON success acknowledgement, with no file media type, populated download result or asynchronous export task contract."
+    }
+  ],
+  "fixtures_unavailable": [
+    {
+      "api_id": "22740",
+      "reason": "The published upgrade-order example has a null statusCode despite the explicit 800-success/900-failure schema; no successful fixture is fabricated."
+    }
+  ],
+  "example_normalisations": [
+    {
+      "api_id": "12174",
+      "section": "响应示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "12171",
+      "section": "响应示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "12169",
+      "section": "响应示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "12062",
+      "section": "响应示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "17079",
+      "section": "响应示例",
+      "normalisation": "Corrected the opening returnObj bracket to match its closing bracket and named fields or sequence of objects; response values unchanged."
+    },
+    {
+      "api_id": "17076",
+      "section": "响应示例",
+      "normalisation": "Corrected the opening returnObj bracket to match its closing bracket and named fields or sequence of objects; response values unchanged."
+    },
+    {
+      "api_id": "12059",
+      "section": "响应示例",
+      "normalisation": "Corrected the opening returnObj bracket to match its closing bracket and named fields or sequence of objects; response values unchanged."
+    },
+    {
+      "api_id": "12016",
+      "section": "响应示例",
+      "normalisation": "Corrected the opening returnObj bracket to match its closing bracket and named fields or sequence of objects; response values unchanged."
+    },
+    {
+      "api_id": "12184",
+      "section": "响应示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "12061",
+      "section": "响应示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "12217",
+      "section": "响应示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "12218",
+      "section": "响应示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "12121",
+      "section": "响应示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "17184",
+      "section": "request example",
+      "normalisation": "Represented false delivery as integer 0 according to the explicit 0=do not deliver, 1=deliver schema."
+    },
+    {
+      "api_id": "12198",
+      "section": "request example",
+      "normalisation": "Omitted the empty array example for required string ids; no valid string example is published."
+    },
+    {
+      "api_id": "22739,22736",
+      "section": "parameter type",
+      "normalisation": "Mapped the nonstandard String of Array(String) resourceIds type to an array of strings, matching the explicit array description and populated request example."
+    }
+  ],
+  "waiter_gaps": [],
+  "waiter_review": {
+    "waiter_count": 8,
+    "notes": [
+      "Synchronization, asset protection and rule toggles use exact documented detail responses. Firewall readiness selects the exact required firewallId in the collection.",
+      "An order submission acknowledgement does not prove provisioning completion. Log delivery details do not expose an exact task identity input for a safe collection waiter."
+    ]
+  },
+  "request_notes": [
+    "The captured urlType header is CTAPI; expose it with that documented default and preserve identity/account headers separately from EOP signing.",
+    "Literal log URI segments are retained exactly as published; no undocumented path placeholder is invented.",
+    "Conditional timing and enterprise-edition requirements are enforced. Either-or input pairs, policy-position-dependent values and nested order requirements remain documented server validations.",
+    "API 12062 exposes its userId query and header fields through separate CLI inputs, preserving both published locations."
+  ],
+  "response_notes": [
+    "C100 examples explicitly use either 200 or 800 per operation; N100 schemas explicitly require 800. CFW_0000 is a documented success code, not an error merely because the field is named error.",
+    "N100 price schemas say isSuccess but all populated examples use isSucceed; preserve the captured wire field and enforce its Boolean success.",
+    "N100 order responses check the top-level submitted flag; per-order outcomes remain visible in the captured result and must be inspected for partial failures.",
+    "The malformed subnet example clearly contains a sequence of subnet objects and a closing array bracket although its schema says Object. Preserve the captured array shape with a repaired opening bracket.",
+    "Table columns use captured wire spellings where schema case or spelling variants would duplicate a key: vpcID/vpcId, vpcQuotaUsedCount/VpcQuotaUsedCount, firewallEdition/firewallEdtion, canCreateTask/canCreatTask and isSucceed/isSuccess."
+  ]
+}

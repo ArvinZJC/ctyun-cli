@@ -1,0 +1,137 @@
+{
+  "waiters": {
+    "cm.alarm-rule.disabled": {
+      "commands": [
+        "cm.alarm-rule.show"
+      ],
+      "path": "returnObj.alarmRule.status",
+      "success": "1",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "cm.alarm-rule.enabled": {
+      "commands": [
+        "cm.alarm-rule.show"
+      ],
+      "path": "returnObj.alarmRule.status",
+      "success": "0",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "cm.custom.alarm-rule.disabled": {
+      "commands": [
+        "cm.custom.alarm-rule.show"
+      ],
+      "path": "returnObj.status",
+      "success": "1",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "cm.custom.alarm-rule.enabled": {
+      "commands": [
+        "cm.custom.alarm-rule.show"
+      ],
+      "path": "returnObj.status",
+      "success": "0",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "cm.data-subscription.offline": {
+      "commands": [
+        "cm.data-subscription.show"
+      ],
+      "path": "returnObj.status",
+      "success": "1",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "cm.data-subscription.online": {
+      "commands": [
+        "cm.data-subscription.show"
+      ],
+      "path": "returnObj.status",
+      "success": "0",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "cm.event.alarm-rule.disabled": {
+      "commands": [
+        "cm.event.alarm-rule.show"
+      ],
+      "path": "returnObj.status",
+      "success": "1",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "cm.event.alarm-rule.enabled": {
+      "commands": [
+        "cm.event.alarm-rule.show"
+      ],
+      "path": "returnObj.status",
+      "success": "0",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "cm.export-task.completed": {
+      "selector": {
+        "path": "returnObj.taskList",
+        "key": "taskID",
+        "value": "$param.task_id"
+      },
+      "commands": [
+        "cm.export-task.list"
+      ],
+      "failure_values": [
+        "3",
+        "4"
+      ],
+      "path": "status",
+      "success": "2",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "cm.notification-package.ready": {
+      "selector": {
+        "path": "returnObj.packList",
+        "key": "packID",
+        "value": "$param.pack_id"
+      },
+      "commands": [
+        "cm.notification-package.list"
+      ],
+      "failure_values": [
+        "2",
+        "3",
+        "6"
+      ],
+      "path": "status",
+      "success": "1",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "cm.probe.completed": {
+      "commands": [
+        "cm.probe.task.show"
+      ],
+      "failure_values": [
+        "3",
+        "4"
+      ],
+      "path": "returnObj.status",
+      "success": "2",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    }
+  }
+}

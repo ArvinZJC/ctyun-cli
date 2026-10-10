@@ -1,0 +1,181 @@
+{
+  "captured_at": "2026-09-25",
+  "service_id": 170,
+  "version_id": 163,
+  "published_api_count": 89,
+  "implemented_api_count": 88,
+  "blocked": [
+    {
+      "api_id": "18090",
+      "title": "查看队列节点规格列表",
+      "path": "/v4/cwai/central/task-service/queue/list-node-device",
+      "reason": "No response schema, response example or status-code definition is published. Request fields alone cannot establish a response success contract."
+    }
+  ],
+  "fixtures_unavailable": [
+    {
+      "api_id": "18021",
+      "reason": "The only published response example is an authorization failure (statusCode 900). Success is explicitly documented as 800; no successful fixture is fabricated."
+    },
+    {
+      "api_id": "18086",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "18084",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "18065",
+      "reason": "The only published response example is an authorization failure (statusCode 900). Success is explicitly documented as 800; no successful fixture is fabricated."
+    },
+    {
+      "api_id": "18064",
+      "reason": "The only published response example is an authorization failure (statusCode 900). Success is explicitly documented as 800; no successful fixture is fabricated."
+    },
+    {
+      "api_id": "18063",
+      "reason": "The only published response example is an authorization failure (statusCode 900). Success is explicitly documented as 800; no successful fixture is fabricated."
+    },
+    {
+      "api_id": "12232",
+      "reason": "The only published response example is an authorization failure (statusCode 900). Success is explicitly documented as 800; no successful fixture is fabricated."
+    },
+    {
+      "api_id": "18089",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "18177",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "18176",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "18172",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "18190",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "18191",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "18198",
+      "reason": "The only published response example is an authorization failure (statusCode 900). Success is explicitly documented as 800; no successful fixture is fabricated."
+    },
+    {
+      "api_id": "18196",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "18171",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "18107",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "18104",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "18099",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "18096",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "18140",
+      "reason": "The only published response example is an authorization failure (statusCode 900). Success is explicitly documented as 800; no successful fixture is fabricated."
+    },
+    {
+      "api_id": "18139",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "18085",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "18079",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    }
+  ],
+  "example_normalisations": [
+    {
+      "api_id": "16255",
+      "section": "响应示例",
+      "normalisation": "Restored the missing comma between index and instance; values unchanged."
+    },
+    {
+      "api_id": "16255",
+      "section": "响应示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "16295",
+      "section": "请求体body示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "16250",
+      "section": "请求体body示例",
+      "normalisation": "Replaced nonbreaking whitespace outside quoted JSON strings with JSON whitespace; values unchanged."
+    },
+    {
+      "api_id": "18070",
+      "section": "请求体body示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "18081",
+      "section": "响应示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "14134",
+      "section": "响应示例",
+      "normalisation": "Restored the missing opening bracket of a timestamp/value pair; values unchanged."
+    },
+    {
+      "api_id": "18184",
+      "section": "request example",
+      "normalisation": "Converted pageNo to the documented integer type."
+    },
+    {
+      "api_id": "15941",
+      "section": "request example",
+      "normalisation": "Converted pageSize to the documented string type."
+    }
+  ],
+  "waiter_gaps": [],
+  "waiter_review": {
+    "waiter_count": 7,
+    "notes": [
+      "Task execution, diagnostic and script completion use documented outcomes; partial failures do not pass. Node lock waits select exact node identity.",
+      "Queue and storage states lack terminal enums, and several detail operations have no successful response examples. General readiness is not invented for those resources.",
+      "Script result rows identify individual nodes, not the overall invocation. Completion uses the separate invocation status."
+    ]
+  },
+  "response_notes": [
+    "Success is 800 and failure is 900 across the explicit operation schemas. Published authorization-error examples remain evidence only, not successful offline fixtures.",
+    "Registry certificate lookup documents JSON certificate content rather than an HTTP binary download.",
+    "Monitoring series retain all timestamp/value pairs and metric series; none is reduced to its first sample."
+  ],
+  "endpoint_notes": [
+    "Self-operated customer APIs under /v4/cwai/. The endpoint table names a test host, while 65 published request examples use cwai-global.ctapi.ctyun.cn. The production endpoint follows these captured request examples; original endpoint-table evidence is retained."
+  ],
+  "request_notes": [
+    "Task creation, update and create-and-run publish a required workspaceID header and an optional workspaceID body field, with different captured values. They remain distinct inputs: header-workspace-id and workspace-id. Monitoring regionID appears in both query and header and shares the existing profile-backed region binding.",
+    "Script content and task startup commands are supplied pre-encoded or encrypted according to upstream requirements; the CLI does not invent SM4 mode, padding or ciphertext representation missing from the docs."
+  ]
+}

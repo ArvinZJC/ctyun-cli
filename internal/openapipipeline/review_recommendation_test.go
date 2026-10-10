@@ -97,7 +97,7 @@ func TestReviewResolvedRecommendationIsReady(t *testing.T) {
 	if err != nil || !report.Ready {
 		t.Fatalf("ReviewDraft = %#v, %v", report, err)
 	}
-	if _, err := plugin.LoadBundle(workspace.ProductPath("ecs", "draft"), "0.4.0"); err != nil {
+	if _, err := plugin.LoadBundle(workspace.ProductPath("ecs", "draft"), "0.5.1"); err != nil {
 		t.Fatalf("load resolved recommendation draft: %v", err)
 	}
 }

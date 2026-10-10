@@ -13,6 +13,7 @@ import (
 	"testing"
 )
 
+// TestGoFilesStayUnderLineLimit enforces the strict source-file bound while ignoring local caches.
 func TestGoFilesStayUnderLineLimit(t *testing.T) {
 	root := repoRootForLineLimit(t)
 	var oversized []string
@@ -38,7 +39,7 @@ func TestGoFilesStayUnderLineLimit(t *testing.T) {
 		if len(data) > 0 && data[len(data)-1] != '\n' {
 			lines++
 		}
-		if lines > 1000 {
+		if lines >= 1000 {
 			oversized = append(oversized, filepath.ToSlash(strings.TrimPrefix(path, root+string(filepath.Separator))))
 		}
 		return nil
@@ -47,10 +48,11 @@ func TestGoFilesStayUnderLineLimit(t *testing.T) {
 		t.Fatalf("walk repo: %v", err)
 	}
 	if len(oversized) > 0 {
-		t.Fatalf("Go files exceed 1000 lines: %s", strings.Join(oversized, ", "))
+		t.Fatalf("Go files reach or exceed 1000 lines: %s", strings.Join(oversized, ", "))
 	}
 }
 
+// repoRootForLineLimit locates the checkout through its module file for repository-wide checks.
 func repoRootForLineLimit(t *testing.T) string {
 	t.Helper()
 	dir, err := os.Getwd()

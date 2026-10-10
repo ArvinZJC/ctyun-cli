@@ -1,0 +1,47 @@
+{
+  "waiters": {
+    "model-training.task.completed": {
+      "commands": [
+        "model-training.task.show"
+      ],
+      "failure_values": [
+        "FAILED",
+        "ENV_FAILED"
+      ],
+      "path": "returnObj.status",
+      "success": "COMPLETED",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "model-training.task.running": {
+      "commands": [
+        "model-training.task.show"
+      ],
+      "failure_values": [
+        "COMPLETED",
+        "FAILED",
+        "ENV_FAILED"
+      ],
+      "path": "returnObj.status",
+      "success": "RUNNING",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "model-training.task.stopped": {
+      "commands": [
+        "model-training.task.show"
+      ],
+      "failure_values": [
+        "FAILED",
+        "ENV_FAILED"
+      ],
+      "path": "returnObj.status",
+      "success": "WAITING",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    }
+  }
+}

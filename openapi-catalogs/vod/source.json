@@ -1,0 +1,6552 @@
+{
+  "waiters": {
+    "vod.video.approved": {
+      "commands": [
+        "vod.video.show"
+      ],
+      "failure_values": [
+        "NOT_PASSED"
+      ],
+      "path": "returnObj.data.status",
+      "success": "PASSED",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5,
+      "evidence": "API 2480 documents upload and review state enums for the required videoId detail query. Other and unknown states remain pending."
+    },
+    "vod.video.uploaded": {
+      "commands": [
+        "vod.video.show"
+      ],
+      "failure_values": [
+        "UPLOAD_FAILED"
+      ],
+      "path": "returnObj.data.uploadStatus",
+      "success": "UPLOAD_SUCCESS",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5,
+      "evidence": "API 2480 documents upload and review state enums for the required videoId detail query. Other and unknown states remain pending."
+    }
+  },
+  "schema_version": 1,
+  "product": {
+    "plugin_name": "vod",
+    "api_product": "vod",
+    "ctyun_product_id": 67,
+    "source_revision": "62",
+    "display_name": {
+      "en-GB": "Video on Demand",
+      "en-US": "Video on Demand",
+      "zh-CN": "云点播"
+    },
+    "display_name_policy": {
+      "kind": "descriptive"
+    },
+    "endpoint_url": "https://vod-dsp-sh-a.ctapi.ctyun.cn",
+    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67",
+    "api_scope": {
+      "include_uri_prefixes": [
+        "/v1/",
+        "/v1/accessControl/",
+        "/v1/category/",
+        "/v1/management/",
+        "/v1/stitching/",
+        "/v1/task/",
+        "/v1/template/",
+        "/v1/video/"
+      ],
+      "notes": "Published service 67, version 62; preserves historical/versioned operations in separate command groups. See coverage.json for response-evidence gaps."
+    }
+  },
+  "operations": [
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogIjAiLCAibWVzc2FnZSI6ICIifX0="
+      },
+      "id": "vod.region.default.set",
+      "api_id": "2503",
+      "title": "设置默认点播区域",
+      "description": {
+        "en-GB": "Set the default video region",
+        "en-US": "Set the default video region",
+        "zh-CN": "设置默认点播区域"
+      },
+      "category": "region",
+      "command_path": [
+        "region",
+        "default",
+        "set"
+      ],
+      "method": "POST",
+      "path": "/v1/management/region/default",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2503&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionCode",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域编码",
+          "descriptions": {
+            "en-GB": "Region Code",
+            "en-US": "Region Code",
+            "zh-CN": "区域编码"
+          },
+          "help_descriptions": {
+            "en-GB": "Region Code",
+            "en-US": "Region Code",
+            "zh-CN": "区域编码"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "region_code",
+          "cli_flag": "region-code",
+          "table_target": "",
+          "example": "xs-cn-shanghai-1"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Response Code",
+            "label_zh": "响应码",
+            "description": "本次请求的结果码,任务结果不为 0 时返回具体信息"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "错误文本信息，执行成功时，为空字符串"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "regionCode": "xs-cn-shanghai-1"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIiwgImRhdGEiOiB7InRlbXBsYXRlSWQiOiAxMDAwMDAwMDAwMDQsICJuYW1lIjogIuawtOWNsExPR08xIiwgImZhdm9yaXRlIjogInRydWUiLCAicmVtYXJrIjogIuaIkeeahOawtOWNsCIsICJzdG9yYWdlIjogeyJ1cmwiOiAiaHR0cHM6IC8vc2FtcGxlLmdkb3NzLnh0b3JlLmN0eXVuLmNuL3NhbXBsZS5qcGcifSwgInBvc2l0aW9uIjogeyJ0b3AiOiAiMTAlIiwgImJvdHRvbSI6ICIxMHB4IiwgImxlZnQiOiAiMTAlIiwgInJpZ2h0IjogIjEwJSIsICJoZWlnaHQiOiAiMTAlIiwgIndpZHRoIjogIjEwJSJ9fX19"
+      },
+      "id": "vod.watermark-template.show",
+      "api_id": "2472",
+      "title": "取得单个水印模板",
+      "description": {
+        "en-GB": "Show a watermark template",
+        "en-US": "Show a watermark template",
+        "zh-CN": "取得单个水印模板"
+      },
+      "category": "watermark-template",
+      "command_path": [
+        "watermark-template",
+        "show"
+      ],
+      "method": "POST",
+      "path": "/v1/template/watermark/get",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2472&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "templateId",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模板的ID",
+          "descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "模板的ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "模板的ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_id",
+          "cli_flag": "template-id",
+          "table_target": "",
+          "example": 100000000004
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "layout": "vertical",
+        "default_columns": [
+          "template_id",
+          "name",
+          "favorite",
+          "remark",
+          "storage",
+          "position"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "template_id",
+            "path": "templateId",
+            "label_en": "Template ID",
+            "label_zh": "模板 ID",
+            "description": "模板id"
+          },
+          {
+            "key": "name",
+            "path": "name",
+            "label_en": "Name",
+            "label_zh": "模板名称",
+            "description": "模板名称"
+          },
+          {
+            "key": "favorite",
+            "path": "favorite",
+            "label_en": "Favorite",
+            "label_zh": "是否为选定模板",
+            "description": "是否为选定模板"
+          },
+          {
+            "key": "remark",
+            "path": "remark",
+            "label_en": "Remark",
+            "label_zh": "水印模板备注",
+            "description": "水印模板备注"
+          },
+          {
+            "key": "storage",
+            "path": "storage",
+            "label_en": "Storage",
+            "label_zh": "上传之后 S3 的地址",
+            "description": "上传之后 s3 的地址"
+          },
+          {
+            "key": "position",
+            "path": "position",
+            "label_en": "Position",
+            "label_zh": "水印位置",
+            "description": "水印位置"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "templateId": 100000000004
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIiwgImRhdGEiOiBbeyJ0ZW1wbGF0ZUlkIjogMTAwMDAwMDAwMDA0LCAibmFtZSI6ICLmsLTljbBMT0dPMSIsICJmYXZvcml0ZSI6ICJ0cnVlIiwgInJlbWFyayI6ICLmiJHnmoTmsLTljbDmqKHmnb8iLCAic3RvcmFnZSI6IHsidXJsIjogImh0dHBzOiAvL2V4YW1wbGUuZ2Rvc3MueHN0b3JlLmN0eXVuLmNuL3NhbXBsZS5qcGcifSwgInBvc2l0aW9uIjogeyJ0b3AiOiAiMTAlIiwgImJvdHRvbSI6ICIxMHB4IiwgImxlZnQiOiAiMTAlIiwgInJpZ2h0IjogIjEwJSIsICJoZWlnaHQiOiAiMTAlIiwgIndpZHRoIjogIjEwJSJ9fV0sICJ0b3RhbCI6IDIsICJwYWdlQ291bnQiOiAxfX0="
+      },
+      "id": "vod.watermark-template.search",
+      "api_id": "2468",
+      "title": "搜索水印模板",
+      "description": {
+        "en-GB": "Search watermark templates",
+        "en-US": "Search watermark templates",
+        "zh-CN": "搜索水印模板"
+      },
+      "category": "watermark-template",
+      "command_path": [
+        "watermark-template",
+        "search"
+      ],
+      "method": "POST",
+      "path": "/v1/template/watermark/search",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2468&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "templateId",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模板id",
+          "descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "模板id"
+          },
+          "help_descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "模板id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_id",
+          "cli_flag": "template-id",
+          "table_target": "",
+          "example": 100000000004
+        },
+        {
+          "name": "name",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模板的名称，模糊匹配",
+          "descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "模板的名称，模糊匹配"
+          },
+          "help_descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "模板的名称，模糊匹配"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "name",
+          "cli_flag": "name",
+          "table_target": "",
+          "example": "自定义模板"
+        },
+        {
+          "name": "favorite",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "是否为默认模板",
+          "descriptions": {
+            "en-GB": "Favorite",
+            "en-US": "Favorite",
+            "zh-CN": "是否为默认模板"
+          },
+          "help_descriptions": {
+            "en-GB": "Favorite",
+            "en-US": "Favorite",
+            "zh-CN": "是否为默认模板"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "favorite",
+          "cli_flag": "favorite",
+          "table_target": "",
+          "example": true
+        },
+        {
+          "name": "pageSize",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "每页的数量，当 pageSize 与 pageIndex 为空时，表示不分页",
+          "descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "每页的数量，当 pageSize 与 pageIndex 为空时，表示不分页"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "每页的数量，当 pageSize 与 pageIndex 为空时，表示不分页"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        },
+        {
+          "name": "pageIndex",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "页码，由0开始，当 pageSize 与 pageIndex 为空时，表示不分页",
+          "descriptions": {
+            "en-GB": "Page Index",
+            "en-US": "Page Index",
+            "zh-CN": "页码，由0开始，当 pageSize 与 pageIndex 为空时，表示不分页"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Index",
+            "en-US": "Page Index",
+            "zh-CN": "页码，由0开始，当 pageSize 与 pageIndex 为空时，表示不分页"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_index",
+          "cli_flag": "page-index",
+          "table_target": "",
+          "example": 1
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "default_columns": [
+          "template_id",
+          "name",
+          "favorite",
+          "remark",
+          "storage",
+          "position"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "template_id",
+            "path": "templateId",
+            "label_en": "Template ID",
+            "label_zh": "模板 ID",
+            "description": "模板id"
+          },
+          {
+            "key": "name",
+            "path": "name",
+            "label_en": "Name",
+            "label_zh": "模板名称",
+            "description": "模板名称"
+          },
+          {
+            "key": "favorite",
+            "path": "favorite",
+            "label_en": "Favorite",
+            "label_zh": "是否为选定模板",
+            "description": "是否为选定模板"
+          },
+          {
+            "key": "remark",
+            "path": "remark",
+            "label_en": "Remark",
+            "label_zh": "水印模板备注",
+            "description": "水印模板备注"
+          },
+          {
+            "key": "storage",
+            "path": "storage",
+            "label_en": "Storage",
+            "label_zh": "存储地址",
+            "description": "存储地址"
+          },
+          {
+            "key": "position",
+            "path": "position",
+            "label_en": "Position",
+            "label_zh": "水印位置",
+            "description": "水印位置"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "favorite": true,
+        "name": "WaterMark",
+        "pageIndex": 0,
+        "pageSize": 10,
+        "templateId": 100000000004
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIiwgImRhdGEiOiB7InRlbXBsYXRlSWQiOiAxMDAwMDAwMDAwMDQsICJwcmVzaWduZWRVcmwiOiAiaHR0cHM6IC8vd2F0ZXJtYXJrLXV1aWR4eHguZ2Rvc3MueHN0b3JlLmN0eXVuLmNuL3h4eHh4eD9zaWduYXR1cmU9eHh4eHh4In19fQ=="
+      },
+      "id": "vod.watermark-template.create",
+      "api_id": "2464",
+      "title": "创建水印模板",
+      "description": {
+        "en-GB": "Create a watermark template",
+        "en-US": "Create a watermark template",
+        "zh-CN": "创建水印模板"
+      },
+      "category": "watermark-template",
+      "command_path": [
+        "watermark-template",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v1/template/watermark/create",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2464&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "name",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模板名称",
+          "descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "模板名称"
+          },
+          "help_descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "模板名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "name",
+          "cli_flag": "name",
+          "table_target": "",
+          "example": "WaterMark"
+        },
+        {
+          "name": "favorite",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "是否为选定模板，不填默认为false",
+          "descriptions": {
+            "en-GB": "Favorite",
+            "en-US": "Favorite",
+            "zh-CN": "是否为选定模板，不填默认为false"
+          },
+          "help_descriptions": {
+            "en-GB": "Favorite",
+            "en-US": "Favorite",
+            "zh-CN": "是否为选定模板，不填默认为false"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "favorite",
+          "cli_flag": "favorite",
+          "table_target": "",
+          "example": false
+        },
+        {
+          "name": "position",
+          "location": "body",
+          "required": true,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "水印所在的位置信息",
+          "descriptions": {
+            "en-GB": "Position as a JSON object",
+            "en-US": "Position as a JSON object",
+            "zh-CN": "水印所在的位置信息"
+          },
+          "help_descriptions": {
+            "en-GB": "Position as a JSON object",
+            "en-US": "Position as a JSON object",
+            "zh-CN": "水印所在的位置信息"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "position",
+          "cli_flag": "position",
+          "table_target": ""
+        },
+        {
+          "name": "remark",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "水印模板备注",
+          "descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "水印模板备注"
+          },
+          "help_descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "水印模板备注"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "remark",
+          "cli_flag": "remark",
+          "table_target": "",
+          "example": "模板备注"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "layout": "vertical",
+        "default_columns": [
+          "template_id",
+          "presigned_url"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "template_id",
+            "path": "templateId",
+            "label_en": "Template ID",
+            "label_zh": "模板 ID",
+            "description": "模板ID"
+          },
+          {
+            "key": "presigned_url",
+            "path": "presignedUrl",
+            "label_en": "Presigned URL",
+            "label_zh": "水印图片地址",
+            "description": "水印图片地址"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "favorite": true,
+        "name": "",
+        "position": {
+          "top": "10%",
+          "bottom": "10px",
+          "left": "10%",
+          "right": "10%",
+          "height": "10%",
+          "width": "10%"
+        },
+        "remark": "我的水印"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIn19"
+      },
+      "id": "vod.transcode-template.delete",
+      "api_id": "2461",
+      "title": "删除转码模板",
+      "description": {
+        "en-GB": "Delete a transcoding template",
+        "en-US": "Delete a transcoding template",
+        "zh-CN": "删除转码模板"
+      },
+      "category": "transcode-template",
+      "command_path": [
+        "transcode-template",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/v1/template/transcode/delete",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2461&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "templateId",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模板id",
+          "descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "模板id"
+          },
+          "help_descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "模板id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_id",
+          "cli_flag": "template-id",
+          "table_target": "",
+          "example": 100000000004
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Response Code",
+            "label_zh": "响应码",
+            "description": "本次请求的结果码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "错误文本信息，执行成功时，为空字符串"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "templateId": 100000000004
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIiwgImRhdGEiOiB7InRlbXBsYXRlSWQiOiAxMDAwMDAwMDAwMDN9fX0="
+      },
+      "id": "vod.transcode-template.create",
+      "api_id": "2454",
+      "title": "新增转码模板",
+      "description": {
+        "en-GB": "Create a transcoding template",
+        "en-US": "Create a transcoding template",
+        "zh-CN": "新增转码模板"
+      },
+      "category": "transcode-template",
+      "command_path": [
+        "transcode-template",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v1/template/transcode/create",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2454&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "name",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模板名称，必填，支持大小写字母数字以及汉字以及下划线及折线，长度最长为20个字符，并且同一个用户名称唯一",
+          "descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "模板名称，必填，支持大小写字母数字以及汉字以及下划线及折线，长度最长为20个字符，并且同一个用户名称唯一"
+          },
+          "help_descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "模板名称，必填，支持大小写字母数字以及汉字以及下划线及折线，长度最长为20个字符，并且同一个用户名称唯一"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "name",
+          "cli_flag": "name",
+          "table_target": "",
+          "example": "transcodeTemplate"
+        },
+        {
+          "name": "favorite",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "是否为选定模板，默认为否",
+          "descriptions": {
+            "en-GB": "Favorite",
+            "en-US": "Favorite",
+            "zh-CN": "是否为选定模板，默认为否"
+          },
+          "help_descriptions": {
+            "en-GB": "Favorite",
+            "en-US": "Favorite",
+            "zh-CN": "是否为选定模板，默认为否"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "favorite",
+          "cli_flag": "favorite",
+          "table_target": "",
+          "example": true
+        },
+        {
+          "name": "format",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "转码目标文件格式，可选为 MP4/FLV/HLS",
+          "descriptions": {
+            "en-GB": "Format",
+            "en-US": "Format",
+            "zh-CN": "转码目标文件格式，可选为 MP4/FLV/HLS"
+          },
+          "help_descriptions": {
+            "en-GB": "Format",
+            "en-US": "Format",
+            "zh-CN": "转码目标文件格式，可选为 MP4/FLV/HLS"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "format",
+          "cli_flag": "format",
+          "table_target": "",
+          "example": "MP4"
+        },
+        {
+          "name": "encrytion",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "表示是否加密目标视频，仅当 transcode.format == 'HLS' 时有效",
+          "descriptions": {
+            "en-GB": "Encrytion",
+            "en-US": "Encrytion",
+            "zh-CN": "表示是否加密目标视频，仅当 transcode.format == 'HLS' 时有效"
+          },
+          "help_descriptions": {
+            "en-GB": "Encrytion",
+            "en-US": "Encrytion",
+            "zh-CN": "表示是否加密目标视频，仅当 transcode.format == 'HLS' 时有效"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "encrytion",
+          "cli_flag": "encrytion",
+          "table_target": "",
+          "example": true
+        },
+        {
+          "name": "video",
+          "location": "body",
+          "required": false,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "视频的转码参数，video不传且audio有值表示新建音频转码模板，video和audio至少一个有值",
+          "descriptions": {
+            "en-GB": "Video as a JSON object",
+            "en-US": "Video as a JSON object",
+            "zh-CN": "视频的转码参数，video不传且audio有值表示新建音频转码模板，video和audio至少一个有值"
+          },
+          "help_descriptions": {
+            "en-GB": "Video as a JSON object",
+            "en-US": "Video as a JSON object",
+            "zh-CN": "视频的转码参数，video不传且audio有值表示新建音频转码模板，video和audio至少一个有值"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "video",
+          "cli_flag": "video",
+          "table_target": ""
+        },
+        {
+          "name": "audio",
+          "location": "body",
+          "required": false,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "音频的转码参数，不传时表示去除音频",
+          "descriptions": {
+            "en-GB": "Audio as a JSON object",
+            "en-US": "Audio as a JSON object",
+            "zh-CN": "音频的转码参数，不传时表示去除音频"
+          },
+          "help_descriptions": {
+            "en-GB": "Audio as a JSON object",
+            "en-US": "Audio as a JSON object",
+            "zh-CN": "音频的转码参数，不传时表示去除音频"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "audio",
+          "cli_flag": "audio",
+          "table_target": ""
+        },
+        {
+          "name": "remark",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "转码模板备注",
+          "descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "转码模板备注"
+          },
+          "help_descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "转码模板备注"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "remark",
+          "cli_flag": "remark",
+          "table_target": "",
+          "example": "模板备注"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "layout": "vertical",
+        "default_columns": [
+          "template_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "template_id",
+            "path": "templateId",
+            "label_en": "Template ID",
+            "label_zh": "模板 ID",
+            "description": "模板id"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "audio": {
+          "codec": "AAC",
+          "bitRate": "128k",
+          "sampleRate": 44100
+        },
+        "encrytion": "true",
+        "favorite": "true",
+        "format": "MP4",
+        "name": "template",
+        "remark": "模板备注",
+        "video": {
+          "codec": "H264",
+          "bitRate": "512K",
+          "frameRate": 24,
+          "height": 1024,
+          "width": 768,
+          "autoRotate": "true"
+        }
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIiwgImRhdGEiOiBbeyJ0ZW1wbGF0ZUlkIjogMTAwMDAwMDAwMDAzLCAibmFtZSI6ICLpq5jmuIUiLCAidHlwZSI6ICJTWVMiLCAiZmF2b3JpdGUiOiAidHJ1ZSIsICJmb3JtYXQiOiAiTVA0IiwgImVuY3J5dGlvbiI6ICJ0cnVlIiwgInJlbWFyayI6ICLovaznoIHmqKHmnb8xIiwgInZpZGVvIjogeyJjb2RlYyI6ICJIMjY0IiwgImJpdFJhdGUiOiAiMTAyNEsiLCAiZnJhbWVSYXRlIjogMjQsICJoZWlnaHQiOiAxMDI0LCAid2lkdGgiOiA3NjgsICJhdXRvUm90YXRlIjogdHJ1ZX0sICJhdWRpbyI6IHsiY29kZWMiOiAiQUFDIiwgImJpdFJhdGUiOiAiMTI4ayIsICJzYW1wbGVSYXRlIjogNDQxMDB9fSwgeyJ0ZW1wbGF0ZUlkIjogMTAwMDAwMDAwMDA0LCAibmFtZSI6ICLmoIfmuIUiLCAidHlwZSI6ICJVU0VSIiwgImZhdm9yaXRlIjogImZhbHNlIiwgImZvcm1hdCI6ICJNUDQiLCAiZW5jcnl0aW9uIjogInRydWUiLCAicmVtYXJrIjogIui9rOeggeaooeadvzIiLCAidmlkZW8iOiB7ImNvZGVjIjogIkgyNjQiLCAiYml0UmF0ZSI6ICI1MTJLIiwgImZyYW1lUmF0ZSI6IDI0LCAiaGVpZ2h0IjogMTAyNCwgIndpZHRoIjogNzY4LCAiYXV0b1JvdGF0ZSI6IHRydWV9LCAiYXVkaW8iOiB7ImNvZGVjIjogIkFBQyIsICJiaXRSYXRlIjogIjEyOGsiLCAic2FtcGxlUmF0ZSI6IDQ0MTAwfX1dLCAidG90YWwiOiAiMiIsICJwYWdlQ291bnQiOiAiMSJ9fQ=="
+      },
+      "id": "vod.transcode-template.search",
+      "api_id": "2455",
+      "title": "搜索转码模板",
+      "description": {
+        "en-GB": "Search transcoding templates",
+        "en-US": "Search transcoding templates",
+        "zh-CN": "搜索转码模板"
+      },
+      "category": "transcode-template",
+      "command_path": [
+        "transcode-template",
+        "search"
+      ],
+      "method": "POST",
+      "path": "/v1/template/transcode/search",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2455&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "name",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可选参数，模板的名称，模糊匹配。支持大小写字母数字以及汉字以及下划线及折线",
+          "descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "可选参数，模板的名称，模糊匹配。支持大小写字母数字以及汉字以及下划线及折线"
+          },
+          "help_descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "可选参数，模板的名称，模糊匹配"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "name",
+          "cli_flag": "name",
+          "table_target": "",
+          "example": "transcodeTemplate"
+        },
+        {
+          "name": "favorite",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "可选参数，是否为选定模板，默认全部查询",
+          "descriptions": {
+            "en-GB": "Favorite",
+            "en-US": "Favorite",
+            "zh-CN": "可选参数，是否为选定模板，默认全部查询"
+          },
+          "help_descriptions": {
+            "en-GB": "Favorite",
+            "en-US": "Favorite",
+            "zh-CN": "可选参数，是否为选定模板，默认全部查询"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "favorite",
+          "cli_flag": "favorite",
+          "table_target": "",
+          "example": true
+        },
+        {
+          "name": "type",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可选参数，指定模板类型，分别为 SYS（系统模板）/USER（用户自定义模板）",
+          "descriptions": {
+            "en-GB": "Type",
+            "en-US": "Type",
+            "zh-CN": "可选参数，指定模板类型，分别为 SYS（系统模板）/USER（用户自定义模板）"
+          },
+          "help_descriptions": {
+            "en-GB": "Type",
+            "en-US": "Type",
+            "zh-CN": "可选参数，指定模板类型，分别为 SYS（系统模板）/USER（用户自定义模板）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "type",
+          "cli_flag": "type",
+          "table_target": "",
+          "example": "SYS"
+        },
+        {
+          "name": "pageSize",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可选参数，每页的数量，当 pageSize 与 pageIndex 为空时，表示不分页。pageIndex或pageSize只有一个传值，另一个字段会取默认值。pageSize默认值为10，最大值不超过1000",
+          "descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "可选参数，每页的数量，当 pageSize 与 pageIndex 为空时，表示不分页。pageIndex或pageSize只有一个传值，另一个字段会取默认值。pageSize默认值为10，最大值不超过1000"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "可选参数，每页的数量，当 pageSize 与 pageIndex 为空时，表示不分页"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        },
+        {
+          "name": "pageIndex",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可选参数，页码，由0开始，当 pageSize 与 pageIndex 为空时，表示不分页。pageIndex默认值为0，最大值不超过1000",
+          "descriptions": {
+            "en-GB": "Page Index",
+            "en-US": "Page Index",
+            "zh-CN": "可选参数，页码，由0开始，当 pageSize 与 pageIndex 为空时，表示不分页。pageIndex默认值为0，最大值不超过1000"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Index",
+            "en-US": "Page Index",
+            "zh-CN": "可选参数，页码，由0开始，当 pageSize 与 pageIndex 为空时，表示不分页"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_index",
+          "cli_flag": "page-index",
+          "table_target": "",
+          "example": 0
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "default_columns": [
+          "template_id",
+          "name",
+          "type",
+          "favorite",
+          "format",
+          "encrytion"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "template_id",
+            "path": "templateId",
+            "label_en": "Template ID",
+            "label_zh": "模板 ID",
+            "description": "模板id"
+          },
+          {
+            "key": "name",
+            "path": "name",
+            "label_en": "Name",
+            "label_zh": "模板名称",
+            "description": "模板名称"
+          },
+          {
+            "key": "type",
+            "path": "type",
+            "label_en": "Type",
+            "label_zh": "类型",
+            "description": "类型"
+          },
+          {
+            "key": "favorite",
+            "path": "favorite",
+            "label_en": "Favorite",
+            "label_zh": "是否为选定模板",
+            "description": "是否为选定模板"
+          },
+          {
+            "key": "format",
+            "path": "format",
+            "label_en": "Format",
+            "label_zh": "转码目标文件格式",
+            "description": "转码目标文件格式"
+          },
+          {
+            "key": "encrytion",
+            "path": "encrytion",
+            "label_en": "Encrytion",
+            "label_zh": "表示是否加密目标视频",
+            "description": "表示是否加密目标视频"
+          },
+          {
+            "key": "remark",
+            "path": "remark",
+            "label_en": "Remark",
+            "label_zh": "转码模板备注",
+            "description": "转码模板备注"
+          },
+          {
+            "key": "video",
+            "path": "video",
+            "label_en": "Video",
+            "label_zh": "视频的转码参数",
+            "description": "视频的转码参数"
+          },
+          {
+            "key": "audio",
+            "path": "audio",
+            "label_en": "Audio",
+            "label_zh": "音频的转码参数",
+            "description": "音频的转码参数"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "favorite": false,
+        "name": "",
+        "pageIndex": 0,
+        "pageSize": 10,
+        "type": "USER"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAiZGF0YSI6IHsiY29kZSI6ICIwIiwgIm1lc3NhZ2UiOiAiIiwgInN1Y2Nlc3NmdWwiOiB0cnVlfX19"
+      },
+      "id": "vod.task.cancel",
+      "api_id": "4215",
+      "title": "取消转码任务",
+      "description": {
+        "en-GB": "Cancel a transcoding task",
+        "en-US": "Cancel a transcoding task",
+        "zh-CN": "取消转码任务"
+      },
+      "category": "task",
+      "command_path": [
+        "task",
+        "cancel"
+      ],
+      "method": "DELETE",
+      "path": "/v1/task",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=4215&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "taskId",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "必填参数，转码任务id",
+          "descriptions": {
+            "en-GB": "Task ID",
+            "en-US": "Task ID",
+            "zh-CN": "必填参数，转码任务id"
+          },
+          "help_descriptions": {
+            "en-GB": "Task ID",
+            "en-US": "Task ID",
+            "zh-CN": "必填参数，转码任务id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "task_id",
+          "cli_flag": "task-id",
+          "table_target": "",
+          "example": "34c71dba-f280-4f5e-a05f-f4daed837fef"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.data.code",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.data.successful",
+              "values": [
+                "true"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message",
+          "successful"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Code",
+            "label_zh": "本次请求的结果码",
+            "description": "本次请求的结果码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "错误文本信息",
+            "description": "错误文本信息，取消成功时，为空字符串"
+          },
+          {
+            "key": "successful",
+            "path": "successful",
+            "label_en": "Successful",
+            "label_zh": "取消转码任务结果请求状态",
+            "description": "取消转码任务结果请求状态"
+          }
+        ]
+      },
+      "dangerous": true,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAiZGF0YSI6IFt7InRhc2tJZCI6ICIwMjAwMDAxI2ExY2E1YzNmMjg3YTRiZTY4MDY5ODgxMzllNTIyYmU1IiwgIndvcmtGbG93SWQiOiAiMTAwMTAwMDAwMDAxIiwgInRhc2tTdGF0ZSI6ICJXT1JLSU5HIiwgInRhc2tNZXNzYWdlIjogIiIsICJvcmlnaW5SZWdpb25OYW1lIjogIuW5v+S4nOi1hOa6kOaxoDHljLoiLCAib3JpZ2luVmlkZW9LZXkiOiAiaW5wdXQvdGVzdC82MHMubXA0IiwgImNyZWF0ZVRpbWUiOiAiMjAyMS0wMy0xMCAwODogMDg6IDA4IiwgInRhc2tFbmRUaW1lIjogIjIwMjEtMDMtMTAgMDg6IDIwOiAyMyJ9LCB7InRhc2tJZCI6ICIwMjAwMDAxI2U3NmU5ZjNjODBkODQyMTliYzk0ZWZlOWYxNmI1N2VlIiwgIndvcmtGbG93SWQiOiAiMTAwMTAwMDAwMDAxIiwgInRhc2tTdGF0ZSI6ICJGQUlMIiwgInRhc2tNZXNzYWdlIjogIuinhumikeagvOW8j+W3suegtOaNn+aIluivpeagvOW8j+i9rOeggeS4jeaUr+aMge+8jOi9rOeggeWksei0pSIsICJvcmlnaW5SZWdpb25OYW1lIjogIuW5v+S4nOi1hOa6kOaxoDHljLoiLCAib3JpZ2luVmlkZW9LZXkiOiAiaW5wdXQvdGVzdC/lip/lpKsubXA0IiwgImNyZWF0ZVRpbWUiOiAiMjAyMS0wMy0xMCAwOTogMTA6IDA4IiwgInRhc2tFbmRUaW1lIjogIjIwMjEtMDMtMTAgMDk6IDIwOiAyMyJ9XSwgInRvdGFsIjogIjIiLCAicGFnZUNvdW50IjogIjEifX0="
+      },
+      "id": "vod.task.list",
+      "api_id": "4216",
+      "title": "查询转码任务列表接口",
+      "description": {
+        "en-GB": "List transcoding tasks",
+        "en-US": "List transcoding tasks",
+        "zh-CN": "查询转码任务列表接口"
+      },
+      "category": "task",
+      "command_path": [
+        "task",
+        "list"
+      ],
+      "method": "POST",
+      "path": "/v1/task/list",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=4216&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "taskId",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "任务id",
+          "descriptions": {
+            "en-GB": "Task ID",
+            "en-US": "Task ID",
+            "zh-CN": "任务id"
+          },
+          "help_descriptions": {
+            "en-GB": "Task ID",
+            "en-US": "Task ID",
+            "zh-CN": "任务id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "task_id",
+          "cli_flag": "task-id",
+          "table_target": "",
+          "example": "0200001#a1ca5c3f287a4be6806988139e522be5"
+        },
+        {
+          "name": "taskState",
+          "location": "body",
+          "required": false,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "任务状态，'WORKING','SUCCESS','WARNING','FAIL','CANCELED'",
+          "descriptions": {
+            "en-GB": "Task State as a JSON array",
+            "en-US": "Task State as a JSON array",
+            "zh-CN": "任务状态，'WORKING','SUCCESS','WARNING','FAIL','CANCELED'"
+          },
+          "help_descriptions": {
+            "en-GB": "Task State as a JSON array",
+            "en-US": "Task State as a JSON array",
+            "zh-CN": "任务状态，'WORKING','SUCCESS','WARNING','FAIL','CANCELED'"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "task_state",
+          "cli_flag": "task-state",
+          "table_target": ""
+        },
+        {
+          "name": "originRegionName",
+          "location": "body",
+          "required": false,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池名称",
+          "descriptions": {
+            "en-GB": "Origin Region Name as a JSON array",
+            "en-US": "Origin Region Name as a JSON array",
+            "zh-CN": "资源池名称"
+          },
+          "help_descriptions": {
+            "en-GB": "Origin Region Name as a JSON array",
+            "en-US": "Origin Region Name as a JSON array",
+            "zh-CN": "资源池名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "origin_region_name",
+          "cli_flag": "origin-region-name",
+          "table_target": ""
+        },
+        {
+          "name": "originVideoKey",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "文件路径",
+          "descriptions": {
+            "en-GB": "Origin Video Key",
+            "en-US": "Origin Video Key",
+            "zh-CN": "文件路径"
+          },
+          "help_descriptions": {
+            "en-GB": "Origin Video Key",
+            "en-US": "Origin Video Key",
+            "zh-CN": "文件路径"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "origin_video_key",
+          "cli_flag": "origin-video-key",
+          "table_target": "",
+          "example": "test/video.mp4"
+        },
+        {
+          "name": "startTime",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "任务开始时间。该参数需要与任务结束时间参数同时存在",
+          "descriptions": {
+            "en-GB": "Start Time",
+            "en-US": "Start Time",
+            "zh-CN": "任务开始时间。该参数需要与任务结束时间参数同时存在"
+          },
+          "help_descriptions": {
+            "en-GB": "Start Time",
+            "en-US": "Start Time",
+            "zh-CN": "任务开始时间"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "start_time",
+          "cli_flag": "start-time",
+          "table_target": "",
+          "example": "2021-03-09 10:00:00"
+        },
+        {
+          "name": "endTime",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "任务结束时间。该参数需要与任务开始时间参数同时存在",
+          "descriptions": {
+            "en-GB": "End Time",
+            "en-US": "End Time",
+            "zh-CN": "任务结束时间。该参数需要与任务开始时间参数同时存在"
+          },
+          "help_descriptions": {
+            "en-GB": "End Time",
+            "en-US": "End Time",
+            "zh-CN": "任务结束时间"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "end_time",
+          "cli_flag": "end-time",
+          "table_target": "",
+          "example": "2021-03-10 10:00:00"
+        },
+        {
+          "name": "pageIndex",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "页码，不传时默认为0查询第一页",
+          "descriptions": {
+            "en-GB": "Page Index",
+            "en-US": "Page Index",
+            "zh-CN": "页码，不传时默认为0查询第一页"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Index",
+            "en-US": "Page Index",
+            "zh-CN": "页码，不传时默认为0查询第一页"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_index",
+          "cli_flag": "page-index",
+          "table_target": "",
+          "example": 0
+        },
+        {
+          "name": "pageSize",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "每页的数量，不传默认为10表示每页10条数据",
+          "descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "每页的数量，不传默认为10表示每页10条数据"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "每页的数量，不传默认为10表示每页10条数据"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "default_columns": [
+          "task_id",
+          "work_flow_id",
+          "task_state",
+          "task_message",
+          "origin_region_name",
+          "origin_video_key"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "task_id",
+            "path": "taskId",
+            "label_en": "Task ID",
+            "label_zh": "任务 ID",
+            "description": "任务ID"
+          },
+          {
+            "key": "work_flow_id",
+            "path": "workFlowId",
+            "label_en": "Work Flow ID",
+            "label_zh": "工作流 ID",
+            "description": "工作流ID"
+          },
+          {
+            "key": "task_state",
+            "path": "taskState",
+            "label_en": "Task State",
+            "label_zh": "任务状态",
+            "description": "任务状态"
+          },
+          {
+            "key": "task_message",
+            "path": "taskMessage",
+            "label_en": "Task Message",
+            "label_zh": "任务备注",
+            "description": "任务备注"
+          },
+          {
+            "key": "origin_region_name",
+            "path": "originRegionName",
+            "label_en": "Origin Region Name",
+            "label_zh": "资源池 ID",
+            "description": "资源池ID"
+          },
+          {
+            "key": "origin_video_key",
+            "path": "originVideoKey",
+            "label_en": "Origin Video Key",
+            "label_zh": "文件路径",
+            "description": "文件路径"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Create Time",
+            "label_zh": "任务开始时间",
+            "description": "任务开始时间"
+          },
+          {
+            "key": "task_end_time",
+            "path": "taskEndTime",
+            "label_en": "Task End Time",
+            "label_zh": "任务结束时间",
+            "description": "任务结束时间"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "endTime": "2021-03-10 10: 00: 00",
+        "originRegionName": [
+          "广东资源池1区",
+          "福建资源池1区"
+        ],
+        "originVideoKey": "test/video.mp4",
+        "pageIndex": 0,
+        "pageSize": 10,
+        "startTime": "2021-03-09 10: 00: 00",
+        "taskId": "",
+        "taskState": [
+          "WORKING",
+          "SUCCESS",
+          "FAIL",
+          "CANCELED"
+        ]
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIiwgImRhdGEiOiBbeyJ0YXNrSWQiOiAiMDAwMSMxYTYxOWNkZDNmMTk0MDY3OTRmOTY2M2VlMjQ2Y2I3ZSIsICJjYWxsYmFjayI6ICJodHRwOi8veW91ci5jYWxsLmJhY2svdXJsIiwgImNhbGxiYWNrTWVzc2FnZSI6ICJcbiAgICAgICAgICAgICAgICB7XG4gICAgICAgICAgICAgICAgICAgIFwiY29kZVwiOlwiMFwiLFxuICAgICAgICAgICAgICAgICAgICBcIm1lc3NhZ2VcIjpcIuS7u+WKoeaIkOWKn1wiLFxuICAgICAgICAgICAgICAgICAgICBcInN1Y2Nlc3NmdWxcIjp0cnVlLFxuICAgICAgICAgICAgICAgICAgICBcInRyYWNlXCI6e1xuICAgICAgICAgICAgICAgICAgICAgICAgXCJub2RlXCI6XCIxMC54eC54eC54eFwiLFxuICAgICAgICAgICAgICAgICAgICAgICAgXCJ4VHJhbnNjb2RlQWRkclwiOlwieHMtc2hhbmdoYWktMVwiXG4gICAgICAgICAgICAgICAgICAgIH0sXG4gICAgICAgICAgICAgICAgICAgIFwid2FybmluZ1wiOmZhbHNlXG4gICAgICAgICAgICAgICAgfVxuICAgICAgICAgICAgICAgICIsICJzdGF0dXMiOiAiRE9ORSIsICJjcmVhdGVUaW1lIjogIjIwMTktMDYtMTYgMTM6MzQ6MDMiLCAidmlkZW9JZCI6ICIzNGM3MWRiYS1mMjgwLTRmNWUtYTA1Zi1mNGRhZWQ4MzdmZWYiLCAidHJhbnNjb2RlVGVtcGxhdGVJZCI6IDEwMDAwMDAwMDAwMywgIndhdGVybWFya0lkIjogMTAwMDAwMDAwMDAzfSwgeyJ0YXNrSWQiOiAiMDAwMSMxYTYxOWNkZDNmMTk0MDY3OTRmOTY2M2VlMjQ2Y2I3ZSIsICJjYWxsYmFjayI6ICJodHRwOi8veW91ci5jYWxsLmJhY2svdXJsIiwgInN0YXR1cyI6ICJXT1JLSU5HIiwgImNyZWF0ZVRpbWUiOiAiMjAxOS0wNi0xNiAxMzozNjowMyIsICJ2aWRlb0lkIjogIjM0YzcxZGJhLWYyODAtNGY1ZS1hMDVmLWY0ZGFlZDgzN2ZlZSIsICJ0cmFuc2NvZGVUZW1wbGF0ZUlkIjogMTAwMDAwMDAwMDAzfV19fQ=="
+      },
+      "id": "vod.task.search",
+      "api_id": "2501",
+      "title": "搜索转码任务",
+      "description": {
+        "en-GB": "Search transcoding tasks",
+        "en-US": "Search transcoding tasks",
+        "zh-CN": "搜索转码任务"
+      },
+      "category": "task",
+      "command_path": [
+        "task",
+        "search"
+      ],
+      "method": "POST",
+      "path": "/v1/task/search",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2501&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "status",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "任务状态，分别为 WORKING（工作中）、DONE（完成）、WARNING（执行结束）、FAIL（失败）",
+          "descriptions": {
+            "en-GB": "Status",
+            "en-US": "Status",
+            "zh-CN": "任务状态，分别为 WORKING（工作中）、DONE（完成）、WARNING（执行结束）、FAIL（失败）"
+          },
+          "help_descriptions": {
+            "en-GB": "Status",
+            "en-US": "Status",
+            "zh-CN": "任务状态，分别为 WORKING（工作中）、DONE（完成）、WARNING（执行结束）、FAIL（失败）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "status",
+          "cli_flag": "status",
+          "table_target": "",
+          "example": "DONE"
+        },
+        {
+          "name": "createTime",
+          "location": "body",
+          "required": false,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "用户的创建时间",
+          "descriptions": {
+            "en-GB": "Create Time as a JSON object",
+            "en-US": "Create Time as a JSON object",
+            "zh-CN": "用户的创建时间"
+          },
+          "help_descriptions": {
+            "en-GB": "Create Time as a JSON object",
+            "en-US": "Create Time as a JSON object",
+            "zh-CN": "用户的创建时间"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "create_time",
+          "cli_flag": "create-time",
+          "table_target": ""
+        },
+        {
+          "name": "pageSize",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "每页的数量，由于任务数量多，请必须传入该参数，该参数最大数值为1000",
+          "descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "每页的数量，由于任务数量多，请必须传入该参数，该参数最大数值为1000"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "每页的数量，由于任务数量多，请必须传入该参数，该参数最大数值为1000"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        },
+        {
+          "name": "pageIndex",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "页码，由0开始",
+          "descriptions": {
+            "en-GB": "Page Index",
+            "en-US": "Page Index",
+            "zh-CN": "页码，由0开始"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Index",
+            "en-US": "Page Index",
+            "zh-CN": "页码，由0开始"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_index",
+          "cli_flag": "page-index",
+          "table_target": "",
+          "example": 0
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "default_columns": [
+          "task_id",
+          "callback",
+          "callback_message",
+          "status",
+          "create_time",
+          "video_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "task_id",
+            "path": "taskId",
+            "label_en": "Task ID",
+            "label_zh": "任务 ID",
+            "description": "任务id"
+          },
+          {
+            "key": "callback",
+            "path": "callback",
+            "label_en": "Callback",
+            "label_zh": "回调地址",
+            "description": "回调地址"
+          },
+          {
+            "key": "callback_message",
+            "path": "callbackMessage",
+            "label_en": "Callback Message",
+            "label_zh": "回调信息",
+            "description": "回调信息"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态",
+            "description": "状态"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Create Time",
+            "label_zh": "创建时间",
+            "description": "创建时间"
+          },
+          {
+            "key": "video_id",
+            "path": "videoId",
+            "label_en": "Video ID",
+            "label_zh": "视频 ID",
+            "description": "视频id"
+          },
+          {
+            "key": "transcode_template_id",
+            "path": "transcodeTemplateId",
+            "label_en": "Transcode Template ID",
+            "label_zh": "转码模板 ID",
+            "description": "转码模板id"
+          },
+          {
+            "key": "watermark_id",
+            "path": "watermarkId",
+            "label_en": "Watermark ID",
+            "label_zh": "水印模板 ID",
+            "description": "水印模板id"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "createTime": {
+          "from": "2019-05-15 03:15:30",
+          "to": "2019-05-15 03:15:30"
+        },
+        "pageIndex": 0,
+        "pageSize": 10,
+        "status": "DONE"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIn19"
+      },
+      "id": "vod.watermark-template.delete",
+      "api_id": "2473",
+      "title": "删除水印模板",
+      "description": {
+        "en-GB": "Delete a watermark template",
+        "en-US": "Delete a watermark template",
+        "zh-CN": "删除水印模板"
+      },
+      "category": "watermark-template",
+      "command_path": [
+        "watermark-template",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/v1/template/watermark/delete",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2473&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "templateId",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模板ID",
+          "descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "模板ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "模板ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_id",
+          "cli_flag": "template-id",
+          "table_target": "",
+          "example": 100000000004
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Response Code",
+            "label_zh": "响应码",
+            "description": "本次请求的结果码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "错误文本信息，执行成功时，为空字符串"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "templateId": 100000000004
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAiZGF0YSI6IFt7InJlZ2lvbiI6IHsibmFtZSI6ICLljY7ljZcxIiwgImNvZGUiOiAieHMtY24tZ3Vhbmd6aG91LTEifSwgImlzRGVmYXVsdCI6IHRydWUsICJidWNrZXRzIjogeyJvcmlnaW4iOiAidm9kLW9yaWdpbi1jN2E1NWY4ZS1lMTc4LTRkY2ItYjgxMy03YzI4MDFjNThlZTUiLCAidHJhbnNjb2RlIjogInZvZC10cmFuc2NvZGUtYzdhNTVmOGUtZTE3OC00ZGNiLWI4MTMtN2MyODAxYzU4ZWU1In0sICJhY2wiOiAiUFVCTElDLVJFQUQiLCAicmVmZXJlciI6IHsiZW5hYmxlIjogdHJ1ZSwgInR5cGUiOiAiV0hJVEUtTElTVCIsICJhbGxvd0VtcHR5IjogZmFsc2UsICJyZWZlcmVycyI6IFsiaHR0cDogLy93d3cuY3R5dW4uY24iLCAiaHR0cDogLy8qLmN0eXVuYXBpLmNvbSJdfX0sIHsicmVnaW9uIjogeyJuYW1lIjogIuWNjuS4rTEiLCAiY29kZSI6ICJ4cy1jbi1zaGFuZ2hhaS0xIn0sICJpc0RlZmF1bHQiOiBmYWxzZSwgImJ1Y2tldHMiOiB7Im9yaWdpbiI6ICJ2b2Qtb3JpZ2luLWM3YTU1ZjhlLWUxNzgtNGRjYi1iODEzLTdjMjgwMWM1OGVlNiIsICJ0cmFuc2NvYWNsZGUiOiAidm9kLXRyYW5zY29kZS1jN2E1NWY4ZS1lMTc4LTRkY2ItYjgxMy03YzI4MDFjNThlZTYifSwgImFjbCI6ICJQVUJMSUMtUkVBRCIsICJyZWZlcmVyIjogeyJlbmFibGUiOiB0cnVlLCAidHlwZSI6ICJCTEFDSy1MSVNUIiwgImFsbG93RW1wdHkiOiBmYWxzZSwgInJlZmVyZXJzIjogWyJodHRwOiAvL3d3dy5jdHl1bi5jbiIsICJodHRwOiAvLyouY3R5dW5hcGkuY29tIl19fV19fQ=="
+      },
+      "id": "vod.region.list",
+      "api_id": "2502",
+      "title": "取得开通服务的点播区域列表",
+      "description": {
+        "en-GB": "List enabled video regions",
+        "en-US": "List enabled video regions",
+        "zh-CN": "取得开通服务的点播区域列表"
+      },
+      "category": "region",
+      "command_path": [
+        "region",
+        "list"
+      ],
+      "method": "POST",
+      "path": "/v1/management/region/list",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2502&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionCode",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可选参数，点播区域地址，传入了该参数之后，仅返回在此指定的点播区域信息",
+          "descriptions": {
+            "en-GB": "Region Code",
+            "en-US": "Region Code",
+            "zh-CN": "可选参数，点播区域地址，传入了该参数之后，仅返回在此指定的点播区域信息"
+          },
+          "help_descriptions": {
+            "en-GB": "Region Code",
+            "en-US": "Region Code",
+            "zh-CN": "可选参数，点播区域地址，传入了该参数之后，仅返回在此指定的点播区域信息"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "region_code",
+          "cli_flag": "region-code",
+          "table_target": "",
+          "example": "xs-cn-guangzhou-1"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "default_columns": [
+          "region",
+          "is_default",
+          "buckets",
+          "acl",
+          "referer"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "region",
+            "path": "region",
+            "label_en": "Region",
+            "label_zh": "区域",
+            "description": "区域"
+          },
+          {
+            "key": "is_default",
+            "path": "isDefault",
+            "label_en": "Is Default",
+            "label_zh": "是否为默认区域",
+            "description": "是否为默认区域"
+          },
+          {
+            "key": "buckets",
+            "path": "buckets",
+            "label_en": "Buckets",
+            "label_zh": "相关的存储桶信息",
+            "description": "相关的存储桶信息"
+          },
+          {
+            "key": "acl",
+            "path": "acl",
+            "label_en": "ACL",
+            "label_zh": "读写权限",
+            "description": "读写权限，包含 PRIVATE/PUBLIC-READ/PUBLIC-READ-WRITE"
+          },
+          {
+            "key": "referer",
+            "path": "referer",
+            "label_en": "Referrer Access Control",
+            "label_zh": "来源访问控制",
+            "description": "Referer防盗链信息"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "regionCode": "xs-cn-guangzhou-1"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIiwgImRhdGEiOiB7InZpZGVvSWQiOiAiMzRjNzFkYmEtZjI4MC00ZjVlLWEwNWYtZjRkYWVkODM3ZmVmIiwgInZpZGVvVXJsIjogImh0dHA6Ly9leGFtcGxlLmdkb3NzLnhzdG9yZS5jdHl1bi5jbi9idWNrZXQveHh4eC5tcDQifX19"
+      },
+      "id": "vod.video.upload.complete",
+      "api_id": "2475",
+      "title": "完成上传视频",
+      "description": {
+        "en-GB": "Complete a video upload",
+        "en-US": "Complete a video upload",
+        "zh-CN": "完成上传视频"
+      },
+      "category": "video",
+      "command_path": [
+        "video",
+        "upload",
+        "complete"
+      ],
+      "method": "POST",
+      "path": "/v1/video/create/complete",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2475&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "videoId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "视频ID",
+          "descriptions": {
+            "en-GB": "Video ID",
+            "en-US": "Video ID",
+            "zh-CN": "视频ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Video ID",
+            "en-US": "Video ID",
+            "zh-CN": "视频ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "video_id",
+          "cli_flag": "video-id",
+          "table_target": "",
+          "example": "34c71dba-f280-4f5e-a05f-f4daed837fef"
+        },
+        {
+          "name": "etags",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "每个分片eTag信息的列表。必须将所有分片的eTag信息都传入",
+          "descriptions": {
+            "en-GB": "Etags as a JSON array",
+            "en-US": "Etags as a JSON array",
+            "zh-CN": "每个分片eTag信息的列表。必须将所有分片的eTag信息都传入"
+          },
+          "help_descriptions": {
+            "en-GB": "Etags as a JSON array",
+            "en-US": "Etags as a JSON array",
+            "zh-CN": "每个分片eTag信息的列表"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "etags",
+          "cli_flag": "etags",
+          "table_target": ""
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "layout": "vertical",
+        "default_columns": [
+          "video_id",
+          "video_url"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "video_id",
+            "path": "videoId",
+            "label_en": "Video ID",
+            "label_zh": "视频的 ID",
+            "description": "视频的 id，仅可用在完成上传视频接口以及删除视频接口"
+          },
+          {
+            "key": "video_url",
+            "path": "videoUrl",
+            "label_en": "Video URL",
+            "label_zh": "视频的 URL",
+            "description": "视频的 url"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "etags": [
+          {
+            "partNumber": 1,
+            "eTag": "f2a7e5e125df0be8e9098df369b32486-1"
+          },
+          {
+            "partNumber": 2,
+            "eTag": "f2a7e5e125df0be8e9098df369b32486-2"
+          }
+        ],
+        "videoId": "34c71dba-f280-4f5e-a05f-f4daed837fef"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIn19"
+      },
+      "id": "vod.watermark-template.upload.complete",
+      "api_id": "2466",
+      "title": "完成上传水印",
+      "description": {
+        "en-GB": "Complete a watermark upload",
+        "en-US": "Complete a watermark upload",
+        "zh-CN": "完成上传水印"
+      },
+      "category": "watermark-template",
+      "command_path": [
+        "watermark-template",
+        "upload",
+        "complete"
+      ],
+      "method": "POST",
+      "path": "/v1/template/watermark/create/complete",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2466&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "templateId",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模板id",
+          "descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "模板id"
+          },
+          "help_descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "模板id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_id",
+          "cli_flag": "template-id",
+          "table_target": "",
+          "example": 100000000004
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Response Code",
+            "label_zh": "响应码",
+            "description": "本次请求的结果码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "错误文本信息，执行成功时，为空字符串"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "templateId": 100000000004
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIn19"
+      },
+      "id": "vod.access-control.referer.set",
+      "api_id": "2506",
+      "title": "设置Referer防盗链",
+      "description": {
+        "en-GB": "Set referer access controls",
+        "en-US": "Set referer access controls",
+        "zh-CN": "设置Referer防盗链"
+      },
+      "category": "access-control",
+      "command_path": [
+        "access-control",
+        "referer",
+        "set"
+      ],
+      "method": "POST",
+      "path": "/v1/accessControl/referer/set",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2506&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionCode",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池编码。如不传入则设置默认资源池的acl",
+          "descriptions": {
+            "en-GB": "Region Code",
+            "en-US": "Region Code",
+            "zh-CN": "资源池编码。如不传入则设置默认资源池的acl"
+          },
+          "help_descriptions": {
+            "en-GB": "Region Code",
+            "en-US": "Region Code",
+            "zh-CN": "资源池编码"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "region_code",
+          "cli_flag": "region-code",
+          "table_target": "",
+          "example": "xs-cn-guangzhou-1"
+        },
+        {
+          "name": "enable",
+          "location": "body",
+          "required": true,
+          "type": "Boolean",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "是否启用：true-启用;false-禁用。(1)true：表示设置防盗链，下面的字段均为必填；(2)false：表示删除防盗链，下面的字段均不用填",
+          "descriptions": {
+            "en-GB": "Enable",
+            "en-US": "Enable",
+            "zh-CN": "是否启用：true-启用;false-禁用。(1)true：表示设置防盗链，下面的字段均为必填；(2)false：表示删除防盗链，下面的字段均不用填"
+          },
+          "help_descriptions": {
+            "en-GB": "Enable",
+            "en-US": "Enable",
+            "zh-CN": "是否启用：true-启用;false-禁用"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "enable",
+          "cli_flag": "enable",
+          "table_target": "",
+          "example": true
+        },
+        {
+          "name": "type",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "类型，包含 WHITE-LIST/BLACK-LIST",
+          "descriptions": {
+            "en-GB": "Type",
+            "en-US": "Type",
+            "zh-CN": "类型，包含 WHITE-LIST/BLACK-LIST"
+          },
+          "help_descriptions": {
+            "en-GB": "Type",
+            "en-US": "Type",
+            "zh-CN": "类型，包含 WHITE-LIST/BLACK-LIST"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "type",
+          "cli_flag": "type",
+          "table_target": "",
+          "example": "BLACK-LIST"
+        },
+        {
+          "name": "allowEmpty",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "是否允许为空",
+          "descriptions": {
+            "en-GB": "Allow Empty",
+            "en-US": "Allow Empty",
+            "zh-CN": "是否允许为空"
+          },
+          "help_descriptions": {
+            "en-GB": "Allow Empty",
+            "en-US": "Allow Empty",
+            "zh-CN": "是否允许为空"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "allow_empty",
+          "cli_flag": "allow-empty",
+          "table_target": "",
+          "example": false
+        },
+        {
+          "name": "referers",
+          "location": "body",
+          "required": false,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "设置的名单",
+          "descriptions": {
+            "en-GB": "Referers as a JSON array",
+            "en-US": "Referers as a JSON array",
+            "zh-CN": "设置的名单"
+          },
+          "help_descriptions": {
+            "en-GB": "Referers as a JSON array",
+            "en-US": "Referers as a JSON array",
+            "zh-CN": "设置的名单"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "referers",
+          "cli_flag": "referers",
+          "table_target": ""
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Response Code",
+            "label_zh": "响应码",
+            "description": "本次请求的结果码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "错误文本信息，执行成功时，为空字符串"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "allowEmpty": false,
+        "enable": true,
+        "referers": [
+          "http: //www.ctyun.cn"
+        ],
+        "regionCode": "xs-cn-guangzhou-1",
+        "type": "BLACK-LIST"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAiZGF0YSI6IHsiaWQiOiAxMDAwNjAwMTJ9fX0="
+      },
+      "id": "vod.category.create",
+      "api_id": "14032",
+      "title": "新增视频分类",
+      "description": {
+        "en-GB": "Create a video category",
+        "en-US": "Create a video category",
+        "zh-CN": "新增视频分类"
+      },
+      "category": "category",
+      "command_path": [
+        "category",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v1/category/create",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=14032&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "name",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "新增视频分类名称，最多16个中文字符。分类名称不允许包含*.?-'%等特殊字符",
+          "descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "新增视频分类名称，最多16个中文字符。分类名称不允许包含*.?-'%等特殊字符"
+          },
+          "help_descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "新增视频分类名称，最多16个中文字符"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "name",
+          "cli_flag": "name",
+          "table_target": "",
+          "example": "纪录片"
+        },
+        {
+          "name": "parentId",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "父分类id,若新增分类为一级分类则parentId直接传0；否则传入具体父分类id",
+          "descriptions": {
+            "en-GB": "Parent ID",
+            "en-US": "Parent ID",
+            "zh-CN": "父分类id,若新增分类为一级分类则parentId直接传0；否则传入具体父分类id"
+          },
+          "help_descriptions": {
+            "en-GB": "Parent ID",
+            "en-US": "Parent ID",
+            "zh-CN": "父分类id,若新增分类为一级分类则parentId直接传0；否则传入具体父分类id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "parent_id",
+          "cli_flag": "parent-id",
+          "table_target": "",
+          "example": 0
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "layout": "vertical",
+        "default_columns": [
+          "id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "id",
+            "path": "id",
+            "label_en": "ID",
+            "label_zh": "新增分类 ID",
+            "description": "新增分类ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "name": "电影",
+        "parentId": 0
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAiZGF0YSI6IFt7ImlkIjogMTAwMDYwMDAwMSwgIm5hbWUiOiAi55S15b2xIiwgInBhcmVudElkIjogMCwgImNoaWxkcmVuIjogW3siaWQiOiAxMDAwNjAwMDEzLCAibmFtZSI6ICLliqjkvZzniYciLCAicGFyZW50SWQiOiAxMDAwNjAwMDAxLCAiY2hpbGRyZW4iOiBbeyJpZCI6IDEwMDA2MDAyMCwgIm5hbWUiOiAi5ouz5Ye7IiwgInBhcmVudElkIjogMTAwMDYwMDAxM31dfV19XX19"
+      },
+      "id": "vod.category.search",
+      "api_id": "14033",
+      "title": "查询视频分类",
+      "description": {
+        "en-GB": "Search video categories",
+        "en-US": "Search video categories",
+        "zh-CN": "查询视频分类"
+      },
+      "category": "category",
+      "command_path": [
+        "category",
+        "search"
+      ],
+      "method": "GET",
+      "path": "/v1/category/search",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=14033&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "default_columns": [
+          "id",
+          "name",
+          "parent_id",
+          "children"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "id",
+            "path": "id",
+            "label_en": "ID",
+            "label_zh": "分类 ID",
+            "description": "分类ID"
+          },
+          {
+            "key": "name",
+            "path": "name",
+            "label_en": "Name",
+            "label_zh": "分类名称",
+            "description": "分类名称"
+          },
+          {
+            "key": "parent_id",
+            "path": "parentId",
+            "label_en": "Parent Category ID",
+            "label_zh": "父分类 ID",
+            "description": "关联的parentId，如为0代表未分类，如为非0则代表本条目为parentId管理视频条目的子条目"
+          },
+          {
+            "key": "children",
+            "path": "children",
+            "label_en": "Children",
+            "label_zh": "下级视频分类条目",
+            "description": "下级视频分类条目，支持嵌套。目前同一视频条目仅支持最多三级分类，即父-子-子"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogIjAiLCAibWVzc2FnZSI6ICIifX0="
+      },
+      "id": "vod.category.delete",
+      "api_id": "14035",
+      "title": "删除视频分类",
+      "description": {
+        "en-GB": "Delete a video category",
+        "en-US": "Delete a video category",
+        "zh-CN": "删除视频分类"
+      },
+      "category": "category",
+      "command_path": [
+        "category",
+        "delete"
+      ],
+      "method": "DELETE",
+      "path": "/v1/category/delete",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=14035&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "id",
+          "location": "query",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "视频分类ID",
+          "descriptions": {
+            "en-GB": "ID",
+            "en-US": "ID",
+            "zh-CN": "视频分类ID"
+          },
+          "help_descriptions": {
+            "en-GB": "ID",
+            "en-US": "ID",
+            "zh-CN": "视频分类ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "id",
+          "cli_flag": "id",
+          "table_target": "",
+          "example": 1000000600035
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Response Code",
+            "label_zh": "响应码",
+            "description": "接口业务响应码：0-删除成功；非0-删除失败"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "删除失败时为具体失败信息；成功时为\"\""
+          }
+        ]
+      },
+      "dangerous": true,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogIjAiLCAibWVzc2FnZSI6ICIifX0="
+      },
+      "id": "vod.category.update",
+      "api_id": "14034",
+      "title": "修改视频分类",
+      "description": {
+        "en-GB": "Update a video category",
+        "en-US": "Update a video category",
+        "zh-CN": "修改视频分类"
+      },
+      "category": "category",
+      "command_path": [
+        "category",
+        "update"
+      ],
+      "method": "PUT",
+      "path": "/v1/category/set",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=14034&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "id",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "待修改视频分类id",
+          "descriptions": {
+            "en-GB": "ID",
+            "en-US": "ID",
+            "zh-CN": "待修改视频分类id"
+          },
+          "help_descriptions": {
+            "en-GB": "ID",
+            "en-US": "ID",
+            "zh-CN": "待修改视频分类id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "id",
+          "cli_flag": "id",
+          "table_target": "",
+          "example": 10000060012
+        },
+        {
+          "name": "name",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "修改后分类名称",
+          "descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "修改后分类名称"
+          },
+          "help_descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "修改后分类名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "name",
+          "cli_flag": "name",
+          "table_target": "",
+          "example": "最新电影"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Response Code",
+            "label_zh": "响应码",
+            "description": "接口业务响应码：0-执行成功；非0-执行失败"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "执行失败时为具体失败信息；成功时为\"\""
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "id": 10000060012,
+        "name": "武侠"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIiwgImRhdGEiOiB7ImZpbGVJZCI6ICIzNGM3MWRiYS1mMjgwLTRmNWUtYTA1Zi1mNGRhZWQ4MzdmZWYvMTAwMDAwMDAwMDAzLm0zdTgiLCAidXJsIjogImh0dHBzOiAvL2V4YW1wbGUuZ2Rvc3MueHN0b3JlLmN0eXVuLmNuL3ZvZC10cmFuc2NvZGVkLXh4eHh4LzM0YzcxZGJhLWYyODAtNGY1ZS1hMDVmLWY0ZGFlZDgzN2ZlZi8xMDAwMDAwMDAwMDNfc2lnbmVkLm0zdTg/c2lnbmF0dXJlPXh4eHh4JkV4cGlyZXM9MTExMTExMSJ9fX0="
+      },
+      "id": "vod.video.file.sign",
+      "api_id": "2483",
+      "title": "对视频文件进行签名",
+      "description": {
+        "en-GB": "Sign a video file URL",
+        "en-US": "Sign a video file URL",
+        "zh-CN": "对视频文件进行签名"
+      },
+      "category": "video",
+      "command_path": [
+        "video",
+        "file",
+        "sign"
+      ],
+      "method": "POST",
+      "path": "/v1/video/file/sign",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2483&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "fileId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "文件id",
+          "descriptions": {
+            "en-GB": "File ID",
+            "en-US": "File ID",
+            "zh-CN": "文件id"
+          },
+          "help_descriptions": {
+            "en-GB": "File ID",
+            "en-US": "File ID",
+            "zh-CN": "文件id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "file_id",
+          "cli_flag": "file-id",
+          "table_target": "",
+          "example": "34c71dba-f280-4f5e-a05f-f4daed837fef/100000000003.m3u8"
+        },
+        {
+          "name": "signatureVersion",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "默认为 s3v4，可选 s3v4/s3v2",
+          "descriptions": {
+            "en-GB": "Signature Version",
+            "en-US": "Signature Version",
+            "zh-CN": "默认为 s3v4，可选 s3v4/s3v2"
+          },
+          "help_descriptions": {
+            "en-GB": "Signature Version",
+            "en-US": "Signature Version",
+            "zh-CN": "默认为 s3v4，可选 s3v4/s3v2"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "signature_version",
+          "cli_flag": "signature-version",
+          "table_target": "",
+          "example": "s3v4"
+        },
+        {
+          "name": "expiresIn",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "过期时间，由签名一刻算起，过期时间的秒数。如3600（即一个小时）",
+          "descriptions": {
+            "en-GB": "Expires In",
+            "en-US": "Expires In",
+            "zh-CN": "过期时间，由签名一刻算起，过期时间的秒数。如3600（即一个小时）"
+          },
+          "help_descriptions": {
+            "en-GB": "Expires In",
+            "en-US": "Expires In",
+            "zh-CN": "过期时间，由签名一刻算起，过期时间的秒数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "expires_in",
+          "cli_flag": "expires-in",
+          "table_target": "",
+          "example": 3600
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "layout": "vertical",
+        "default_columns": [
+          "file_id",
+          "url"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "file_id",
+            "path": "fileId",
+            "label_en": "File ID",
+            "label_zh": "文件 ID",
+            "description": "文件id"
+          },
+          {
+            "key": "url",
+            "path": "url",
+            "label_en": "URL",
+            "label_zh": "视频播放的 URL",
+            "description": "视频播放的url，返回数据库中当前的url，如果没有调用签名接口签名，返回的是无签名的url，如果有调用则是上一次签名的url"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "expiresIn": 3600,
+        "fileId": "34c71dba-f280-4f5e-a05f-f4daed837fef/100000000003.m3u8",
+        "signatureVersion": "s3v4"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAiZGF0YSI6IHsiYXVkaW8iOiAiXG4gICAgICAgICAgICB7XG4gICAgICAgICAgICAgICAgXCJyZW1vdmVcIjogZmFsc2UsXG4gICAgICAgICAgICAgICAgXCJiaXRSYXRlXCI6IFwiMTI4a1wiXG4gICAgICAgICAgICB9XG4gICAgICAgICAgICAiLCAiY3JlYXRlVGltZSI6IDE2OTU4NjQ5ODgwMDAsICJoZWFkIjogW3siSUQiOiAiNjg3ZmEyM2U1ODI3NDkxZWE0M2NkYmQ2YmUwZTY0NmEubXA0IiwgImJ1Y2tldCI6ICJ2b2Qtb3JpZ2luLXh4eHgiLCAibmFtZSI6ICI2ODdmYTIzZTU4Mjc0OTFlYTQzY2RiZDZiZTBlNjQ2YS5tcDQiLCAicmVnaW9uQ29kZSI6ICIwMjEwMDAxIiwgInJlZ2lvbk5hbWUiOiAi5LiK5rW36LWE5rqQ5rGgMeWMuiIsICJzb3VyY2UiOiAiVk9EIn1dLCAiaWQiOiAxMDAwMDAwMjM2ODUsICJuYW1lIjogInRlc3RuZXciLCAicmVtYXJrIjogInRlc3ROZXciLCAidGFpbCI6IFt7IklEIjogIjY4N2ZhMjNlNTgyNzQ5MWVhNDNjZGJkNmJlMGU2NDZhLm1wNCIsICJidWNrZXQiOiAidm9kLW9yaWdpbi14eHh4IiwgIm5hbWUiOiAiNjg3ZmEyM2U1ODI3NDkxZWE0M2NkYmQ2YmUwZTY0NmEubXA0IiwgInJlZ2lvbkNvZGUiOiAiMDIxMDAwMSIsICJyZWdpb25OYW1lIjogIuS4iua1t+i1hOa6kOaxoDHljLoiLCAic291cmNlIjogIlZPRCJ9XSwgInRlbXBsYXRlU3RhdGUiOiAiRjBBIiwgInVwZGF0ZVRpbWUiOiAxNjk1ODY0OTg4MDAwLCAidmlkZW8iOiAiXG4gICAgICAgICAgICB7XG4gICAgICAgICAgICAgICAgXCJmb2xsb3dcIjogdHJ1ZSxcbiAgICAgICAgICAgICAgICBcImJpdFJhdGVcIjogXCIxMjhrXCIsXG4gICAgICAgICAgICAgICAgXCJoZWlnaHRcIjogMCxcbiAgICAgICAgICAgICAgICBcIndpZHRoXCI6IDBcbiAgICAgICAgICAgIH1cbiAgICAgICAgICAgICJ9fX0="
+      },
+      "id": "vod.stitching-template.show",
+      "api_id": "6537",
+      "title": "获取指定拼接模板详情接口",
+      "description": {
+        "en-GB": "Show a stitching template",
+        "en-US": "Show a stitching template",
+        "zh-CN": "获取指定拼接模板详情接口"
+      },
+      "category": "stitching-template",
+      "command_path": [
+        "stitching-template",
+        "show"
+      ],
+      "method": "POST",
+      "path": "/v1/stitching/template/get",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=6537&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "templateId",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "拼接模板ID",
+          "descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "拼接模板ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "拼接模板ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_id",
+          "cli_flag": "template-id",
+          "table_target": "",
+          "example": 100000023685
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "layout": "vertical",
+        "default_columns": [
+          "audio",
+          "create_time",
+          "head",
+          "id",
+          "name",
+          "remark"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "audio",
+            "path": "audio",
+            "label_en": "Audio",
+            "label_zh": "音频编码",
+            "description": "音频编码"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Create Time",
+            "label_zh": "创建时间"
+          },
+          {
+            "key": "head",
+            "path": "head",
+            "label_en": "HEAD",
+            "label_zh": "片头",
+            "description": "片头"
+          },
+          {
+            "key": "id",
+            "path": "id",
+            "label_en": "ID",
+            "label_zh": "模板 ID",
+            "description": "模板ID"
+          },
+          {
+            "key": "name",
+            "path": "name",
+            "label_en": "Name",
+            "label_zh": "视频名称",
+            "description": "视频名称"
+          },
+          {
+            "key": "remark",
+            "path": "remark",
+            "label_en": "Remark",
+            "label_zh": "备注",
+            "description": "备注"
+          },
+          {
+            "key": "tail",
+            "path": "tail",
+            "label_en": "Tail",
+            "label_zh": "片尾",
+            "description": "片尾"
+          },
+          {
+            "key": "template_state",
+            "path": "templateState",
+            "label_en": "Template State",
+            "label_zh": "模板状态"
+          },
+          {
+            "key": "update_time",
+            "path": "updateTime",
+            "label_en": "Update Time",
+            "label_zh": "更新时间"
+          },
+          {
+            "key": "video",
+            "path": "video",
+            "label_en": "Video",
+            "label_zh": "视频编码",
+            "description": "视频编码"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "templateId": 100000023685
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIiwgImRhdGEiOiAiIn19"
+      },
+      "id": "vod.stitching-template.delete",
+      "api_id": "6538",
+      "title": "删除指定拼接模板接口",
+      "description": {
+        "en-GB": "Delete a stitching template",
+        "en-US": "Delete a stitching template",
+        "zh-CN": "删除指定拼接模板接口"
+      },
+      "category": "stitching-template",
+      "command_path": [
+        "stitching-template",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/v1/stitching/template/delete",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=6538&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "templateId",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "拼接模板ID",
+          "descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "拼接模板ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "拼接模板ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_id",
+          "cli_flag": "template-id",
+          "table_target": "",
+          "example": 100000000004
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message",
+          "data"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Response Code",
+            "label_zh": "响应码",
+            "description": "本次请求的结果码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "错误文本信息，执行成功时，为空字符串"
+          },
+          {
+            "key": "data",
+            "path": "data",
+            "label_en": "Data",
+            "label_zh": "数据",
+            "description": "返回数据"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "templateId": 100000000004
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIiwgImRhdGEiOiB7InRlbXBsYXRlSWQiOiAxMDAwMDAwMDAwMDQsICJuYW1lIjogIumrmOa4hSIsICJ0eXBlIjogIlNZUyIsICJmYXZvcml0ZSI6ICJ0cnVlIiwgImZvcm1hdCI6ICJNUDQiLCAiZW5jcnl0aW9uIjogInRydWUiLCAicmVtYXJrIjogIuaooeadv+Wkh+azqCIsICJ2aWRlbyI6IHsiY29kZWMiOiAiSDI2NCIsICJiaXRSYXRlIjogIjEwMjRLIiwgImZyYW1lUmF0ZSI6IDI0LCAiaGVpZ2h0IjogMTAyNCwgIndpZHRoIjogNzY4LCAiYXV0b1JvdGF0ZSI6IHRydWV9LCAiYXVkaW8iOiB7ImNvZGVjIjogIkFBQyIsICJiaXRSYXRlIjogIjEyOGsiLCAic2FtcGxlUmF0ZSI6IDQ0MTAwfX19fQ=="
+      },
+      "id": "vod.transcode-template.show",
+      "api_id": "2456",
+      "title": "取得单个转码模板",
+      "description": {
+        "en-GB": "Show a transcoding template",
+        "en-US": "Show a transcoding template",
+        "zh-CN": "取得单个转码模板"
+      },
+      "category": "transcode-template",
+      "command_path": [
+        "transcode-template",
+        "show"
+      ],
+      "method": "POST",
+      "path": "/v1/template/transcode/get",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2456&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "templateId",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模板id",
+          "descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "模板id"
+          },
+          "help_descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "模板id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_id",
+          "cli_flag": "template-id",
+          "table_target": "",
+          "example": 100000000004
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "layout": "vertical",
+        "default_columns": [
+          "template_id",
+          "name",
+          "type",
+          "favorite",
+          "format",
+          "encrytion"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "template_id",
+            "path": "templateId",
+            "label_en": "Template ID",
+            "label_zh": "模板 ID",
+            "description": "模板id"
+          },
+          {
+            "key": "name",
+            "path": "name",
+            "label_en": "Name",
+            "label_zh": "模板名称",
+            "description": "模板名称"
+          },
+          {
+            "key": "type",
+            "path": "type",
+            "label_en": "Type",
+            "label_zh": "类型",
+            "description": "类型"
+          },
+          {
+            "key": "favorite",
+            "path": "favorite",
+            "label_en": "Favorite",
+            "label_zh": "是否为选定模板",
+            "description": "是否为选定模板"
+          },
+          {
+            "key": "format",
+            "path": "format",
+            "label_en": "Format",
+            "label_zh": "转码目标文件格式",
+            "description": "转码目标文件格式"
+          },
+          {
+            "key": "encrytion",
+            "path": "encrytion",
+            "label_en": "Encrytion",
+            "label_zh": "表示是否加密目标视频",
+            "description": "表示是否加密目标视频"
+          },
+          {
+            "key": "remark",
+            "path": "remark",
+            "label_en": "Remark",
+            "label_zh": "转码模板备注",
+            "description": "转码模板备注"
+          },
+          {
+            "key": "video",
+            "path": "video",
+            "label_en": "Video",
+            "label_zh": "视频的转码参数",
+            "description": "视频的转码参数"
+          },
+          {
+            "key": "audio",
+            "path": "audio",
+            "label_en": "Audio",
+            "label_zh": "音频的转码参数",
+            "description": "音频的转码参数"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "templateId": 100000000004
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIn19"
+      },
+      "id": "vod.video.cover.upload.complete",
+      "api_id": "2510",
+      "title": "完成视频封面上传",
+      "description": {
+        "en-GB": "Complete a video cover upload",
+        "en-US": "Complete a video cover upload",
+        "zh-CN": "完成视频封面上传"
+      },
+      "category": "video",
+      "command_path": [
+        "video",
+        "cover",
+        "upload",
+        "complete"
+      ],
+      "method": "POST",
+      "path": "/v1/video/cover/upload/complete",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2510&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "videoId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "视频id",
+          "descriptions": {
+            "en-GB": "Video ID",
+            "en-US": "Video ID",
+            "zh-CN": "视频id"
+          },
+          "help_descriptions": {
+            "en-GB": "Video ID",
+            "en-US": "Video ID",
+            "zh-CN": "视频id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "video_id",
+          "cli_flag": "video-id",
+          "table_target": "",
+          "example": "34c71dba-f280-4f5e-a05f-f4daed837fef"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Response Code",
+            "label_zh": "响应码",
+            "description": "本次请求的结果码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "错误文本信息，执行成功时，为空字符串"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "videoId": "34c71dba-f280-4f5e-a05f-f4daed837fef"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIiwgImRhdGEiOiB7InByZXNpZ25lZFVybCI6ICJodHRwOiAvL2NvdmVyLXV1aWR4eHguZ2Rvc3MueHN0b3JlLmN0eXVuLmNuL3h4eHh4eD9zaWduYXR1cmU9eHh4eHh4In19fQ=="
+      },
+      "id": "vod.video.cover.upload.initialize",
+      "api_id": "2509",
+      "title": "初始化视频封面上传",
+      "description": {
+        "en-GB": "Initialize a video cover upload",
+        "en-US": "Initialize a video cover upload",
+        "zh-CN": "初始化视频封面上传"
+      },
+      "category": "video",
+      "command_path": [
+        "video",
+        "cover",
+        "upload",
+        "initialize"
+      ],
+      "method": "POST",
+      "path": "/v1/video/cover/upload/init",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2509&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "videoId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "必填参数，视频id",
+          "descriptions": {
+            "en-GB": "Video ID",
+            "en-US": "Video ID",
+            "zh-CN": "必填参数，视频id"
+          },
+          "help_descriptions": {
+            "en-GB": "Video ID",
+            "en-US": "Video ID",
+            "zh-CN": "必填参数，视频id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "video_id",
+          "cli_flag": "video-id",
+          "table_target": "",
+          "example": "34c71dba-f280-4f5e-a05f-f4daed837fef"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "layout": "vertical",
+        "default_columns": [
+          "presigned_url"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "presigned_url",
+            "path": "presignedUrl",
+            "label_en": "Presigned URL",
+            "label_zh": "用以上传的地址",
+            "description": "用以上传的地址"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "videoId": "34c71dba-f280-4f5e-a05f-f4daed837fef"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIn19"
+      },
+      "id": "vod.access-control.storage.set",
+      "api_id": "2505",
+      "title": "设置点播存储桶权限",
+      "description": {
+        "en-GB": "Set video storage permissions",
+        "en-US": "Set video storage permissions",
+        "zh-CN": "设置点播存储桶权限"
+      },
+      "category": "access-control",
+      "command_path": [
+        "access-control",
+        "storage",
+        "set"
+      ],
+      "method": "POST",
+      "path": "/v1/accessControl/acl/set",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2505&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionCode",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可选参数，资源池编码，如不传入则设置默认资源池的acl",
+          "descriptions": {
+            "en-GB": "Region Code",
+            "en-US": "Region Code",
+            "zh-CN": "可选参数，资源池编码，如不传入则设置默认资源池的acl"
+          },
+          "help_descriptions": {
+            "en-GB": "Region Code",
+            "en-US": "Region Code",
+            "zh-CN": "可选参数，资源池编码，如不传入则设置默认资源池的acl"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "region_code",
+          "cli_flag": "region-code",
+          "table_target": "",
+          "example": "xs-cn-guangzhou-1"
+        },
+        {
+          "name": "acl",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "必填参数，设置存储桶的权限，可选为PRIVATE（私有）/PUBLIC-READ（公有读）/PUBLIC-READ-WRITE（公共读写）",
+          "descriptions": {
+            "en-GB": "Acl",
+            "en-US": "Acl",
+            "zh-CN": "必填参数，设置存储桶的权限，可选为PRIVATE（私有）/PUBLIC-READ（公有读）/PUBLIC-READ-WRITE（公共读写）"
+          },
+          "help_descriptions": {
+            "en-GB": "Acl",
+            "en-US": "Acl",
+            "zh-CN": "必填参数，设置存储桶的权限，可选为PRIVATE（私有）/PUBLIC-READ（公有读）/PUBLIC-READ-WRITE（公共读写）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "acl",
+          "cli_flag": "acl",
+          "table_target": "",
+          "example": "PUBLIC-READ"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Response Code",
+            "label_zh": "响应码",
+            "description": "本次请求的结果码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "错误文本信息，执行成功时，为空字符串"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "acl": "PUBLIC-READ",
+        "regionCode": "xs-cn-guangzhou-1"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIiwgImRhdGEiOiB7InByb2dyZXNzIjogMC4zMDI0LCAidGFza0lkIjogIjAwMDEjMWE2MTljZGQzZjE5NDA2Nzk0Zjk2NjNlZTI0NmNiN2UiLCAic3RhdHVzIjogIldPUktJTkcifX19"
+      },
+      "id": "vod.task.status.show",
+      "api_id": "2495",
+      "title": "取得任务状态",
+      "description": {
+        "en-GB": "Show a task state",
+        "en-US": "Show a task state",
+        "zh-CN": "取得任务状态"
+      },
+      "category": "task",
+      "command_path": [
+        "task",
+        "status",
+        "show"
+      ],
+      "method": "POST",
+      "path": "/v1/task/status",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2495&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "taskId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "由提交任务返回的任务id",
+          "descriptions": {
+            "en-GB": "Task ID",
+            "en-US": "Task ID",
+            "zh-CN": "由提交任务返回的任务id"
+          },
+          "help_descriptions": {
+            "en-GB": "Task ID",
+            "en-US": "Task ID",
+            "zh-CN": "由提交任务返回的任务id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "task_id",
+          "cli_flag": "task-id",
+          "table_target": "",
+          "example": "0001#1a619cdd3f19406794f9663ee246cb7e"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "layout": "vertical",
+        "default_columns": [
+          "progress",
+          "task_id",
+          "status"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "progress",
+            "path": "progress",
+            "label_en": "Progress",
+            "label_zh": "0 ~ 1 之间的浮点数",
+            "description": "0 ~ 1 之间的浮点数，代表当前任务执行进度"
+          },
+          {
+            "key": "task_id",
+            "path": "taskId",
+            "label_en": "Task ID",
+            "label_zh": "任务 ID",
+            "description": "任务id"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态",
+            "description": "状态，WORKING/DONE/WARNING/FAIL"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "taskId": "0001#1a619cdd3f19406794f9663ee246cb7e"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIiwgImRhdGEiOiB7InRyYW5zY29kZVRhc2tJZHMiOiBbIjAwMDEjMWE2MTljZGQzZjE5NDA2Nzk0Zjk2NjNlZTI0NmNiN2UiLCAiMDAwMSMxYTYxOWNkZDNmMTk0MDY3OTRmOTY2M2VlMjQ2Y2JyOCJdfX19"
+      },
+      "id": "vod.task.submit",
+      "api_id": "2493",
+      "title": "提交转码任务",
+      "description": {
+        "en-GB": "Submit a transcoding task",
+        "en-US": "Submit a transcoding task",
+        "zh-CN": "提交转码任务"
+      },
+      "category": "task",
+      "command_path": [
+        "task",
+        "submit"
+      ],
+      "method": "POST",
+      "path": "/v1/task/submit",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2493&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "videoId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "视频id",
+          "descriptions": {
+            "en-GB": "Video ID",
+            "en-US": "Video ID",
+            "zh-CN": "视频id"
+          },
+          "help_descriptions": {
+            "en-GB": "Video ID",
+            "en-US": "Video ID",
+            "zh-CN": "视频id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "video_id",
+          "cli_flag": "video-id",
+          "table_target": "",
+          "example": "34c71dba-f280-4f5e-a05f-f4daed837fef"
+        },
+        {
+          "name": "useDefaultTranscodeTemplate",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "可选参数，是否使用默认的转码模板。如果不传入默认为 false",
+          "descriptions": {
+            "en-GB": "Use Default Transcode Template",
+            "en-US": "Use Default Transcode Template",
+            "zh-CN": "可选参数，是否使用默认的转码模板。如果不传入默认为 false"
+          },
+          "help_descriptions": {
+            "en-GB": "Use Default Transcode Template",
+            "en-US": "Use Default Transcode Template",
+            "zh-CN": "可选参数，是否使用默认的转码模板"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "use_default_transcode_template",
+          "cli_flag": "use-default-transcode-template",
+          "table_target": "",
+          "example": true
+        },
+        {
+          "name": "transcodeTemplates",
+          "location": "body",
+          "required": false,
+          "type": "Array of Integers",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "当useDefaultTranscodeTemplate为true时，该字段无效。当useDefaultTranscodeTemplate为fasle或者不传入时，该字段必填",
+          "descriptions": {
+            "en-GB": "Transcode Templates as a JSON array",
+            "en-US": "Transcode Templates as a JSON array",
+            "zh-CN": "当useDefaultTranscodeTemplate为true时，该字段无效。当useDefaultTranscodeTemplate为fasle或者不传入时，该字段必填"
+          },
+          "help_descriptions": {
+            "en-GB": "Transcode Templates as a JSON array",
+            "en-US": "Transcode Templates as a JSON array",
+            "zh-CN": "当useDefaultTranscodeTemplate为true时，该字段无效"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "transcode_templates",
+          "cli_flag": "transcode-templates",
+          "table_target": "",
+          "example": [
+            100000000003,
+            100000000004
+          ]
+        },
+        {
+          "name": "watermarkTemplate",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可选参数，水印模板id：若传入表示加水印；不传入则不加水印",
+          "descriptions": {
+            "en-GB": "Watermark Template",
+            "en-US": "Watermark Template",
+            "zh-CN": "可选参数，水印模板id：若传入表示加水印；不传入则不加水印"
+          },
+          "help_descriptions": {
+            "en-GB": "Watermark Template",
+            "en-US": "Watermark Template",
+            "zh-CN": "可选参数，水印模板id：若传入表示加水印；不传入则不加水印"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "watermark_template",
+          "cli_flag": "watermark-template",
+          "table_target": "",
+          "example": 100000000003
+        },
+        {
+          "name": "callback",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可选参数，任务结束之后将回调到该地址告知任务状态",
+          "descriptions": {
+            "en-GB": "Callback",
+            "en-US": "Callback",
+            "zh-CN": "可选参数，任务结束之后将回调到该地址告知任务状态"
+          },
+          "help_descriptions": {
+            "en-GB": "Callback",
+            "en-US": "Callback",
+            "zh-CN": "可选参数，任务结束之后将回调到该地址告知任务状态"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "callback",
+          "cli_flag": "callback",
+          "table_target": "",
+          "example": "http://your.callback.url"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "layout": "vertical",
+        "default_columns": [
+          "transcode_task_ids"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "transcode_task_ids",
+            "path": "transcodeTaskIds",
+            "label_en": "Transcode Task IDs",
+            "label_zh": "转码任务的 ID",
+            "description": "转码任务的id，可以通过这些转码任务id查询相关的任务"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "callback": "http://your.callback.url",
+        "transcodeTemplates": [
+          100000000003,
+          100000000004
+        ],
+        "useDefaultTranscodeTemplate": true,
+        "videoId": "34c71dba-f280-4f5e-a05f-f4daed837fef",
+        "watermarkTemplate": 100000000003
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIiwgImRhdGEiOiB7ImNvdmVyVXJsIjogImh0dHBzOiAvL2V4YW1wbGUuZ2Rvc3MueHN0b3JlLmN0eXVuLmNuL2E0ZWEzNjAzMWMzMDQ2ZjdhMDE3NDJmM2ZkYTRlMjQ5LmpwZyJ9fX0="
+      },
+      "id": "vod.video.cover.extract",
+      "api_id": "2492",
+      "title": "截屏换封面",
+      "description": {
+        "en-GB": "Extract a frame as the video cover",
+        "en-US": "Extract a frame as the video cover",
+        "zh-CN": "截屏换封面"
+      },
+      "category": "video",
+      "command_path": [
+        "video",
+        "cover",
+        "extract"
+      ],
+      "method": "POST",
+      "path": "/v1/task/extractFrame",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2492&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "videoId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "视频id",
+          "descriptions": {
+            "en-GB": "Video ID",
+            "en-US": "Video ID",
+            "zh-CN": "视频id"
+          },
+          "help_descriptions": {
+            "en-GB": "Video ID",
+            "en-US": "Video ID",
+            "zh-CN": "视频id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "video_id",
+          "cli_flag": "video-id",
+          "table_target": "",
+          "example": "34c71dba-f280-4f5e-a05f-f4daed837fef"
+        },
+        {
+          "name": "time",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可选参数，截屏的时间，默认为0，如传入小数会自动四舍五入",
+          "descriptions": {
+            "en-GB": "Time",
+            "en-US": "Time",
+            "zh-CN": "可选参数，截屏的时间，默认为0，如传入小数会自动四舍五入"
+          },
+          "help_descriptions": {
+            "en-GB": "Time",
+            "en-US": "Time",
+            "zh-CN": "可选参数，截屏的时间，默认为0，如传入小数会自动四舍五入"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "time",
+          "cli_flag": "time",
+          "table_target": "",
+          "example": 0
+        },
+        {
+          "name": "quality",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可选参数，图片质量，1 ~ 31，1表示质量最好，31 质量最差，默认为 2",
+          "descriptions": {
+            "en-GB": "Quality",
+            "en-US": "Quality",
+            "zh-CN": "可选参数，图片质量，1 ~ 31，1表示质量最好，31 质量最差，默认为 2"
+          },
+          "help_descriptions": {
+            "en-GB": "Quality",
+            "en-US": "Quality",
+            "zh-CN": "可选参数，图片质量，1 ~ 31，1表示质量最好，31 质量最差，默认为 2"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "quality",
+          "cli_flag": "quality",
+          "table_target": "",
+          "example": 2
+        },
+        {
+          "name": "width",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可选参数，宽以及高，可传入其中一个，剩下的会根据源视频进行等比例缩放",
+          "descriptions": {
+            "en-GB": "Width",
+            "en-US": "Width",
+            "zh-CN": "可选参数，宽以及高，可传入其中一个，剩下的会根据源视频进行等比例缩放"
+          },
+          "help_descriptions": {
+            "en-GB": "Width",
+            "en-US": "Width",
+            "zh-CN": "可选参数，宽以及高，可传入其中一个，剩下的会根据源视频进行等比例缩放"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "width",
+          "cli_flag": "width",
+          "table_target": "",
+          "example": 1024
+        },
+        {
+          "name": "height",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可选参数，宽以及高，可传入其中一个，剩下的会根据源视频进行等比例缩放",
+          "descriptions": {
+            "en-GB": "Height",
+            "en-US": "Height",
+            "zh-CN": "可选参数，宽以及高，可传入其中一个，剩下的会根据源视频进行等比例缩放"
+          },
+          "help_descriptions": {
+            "en-GB": "Height",
+            "en-US": "Height",
+            "zh-CN": "可选参数，宽以及高，可传入其中一个，剩下的会根据源视频进行等比例缩放"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "height",
+          "cli_flag": "height",
+          "table_target": "",
+          "example": 768
+        },
+        {
+          "name": "useDefaultWatermarkTemplate",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "可选参数，是否使用水印默认模板，如果不填写默认为 false",
+          "descriptions": {
+            "en-GB": "Use Default Watermark Template",
+            "en-US": "Use Default Watermark Template",
+            "zh-CN": "可选参数，是否使用水印默认模板，如果不填写默认为 false"
+          },
+          "help_descriptions": {
+            "en-GB": "Use Default Watermark Template",
+            "en-US": "Use Default Watermark Template",
+            "zh-CN": "可选参数，是否使用水印默认模板，如果不填写默认为 false"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "use_default_watermark_template",
+          "cli_flag": "use-default-watermark-template",
+          "table_target": "",
+          "example": true
+        },
+        {
+          "name": "watermarkTemplate",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可选参数，当 userDefaultWatermarkTemplate 为 true 时无效。当 userDefaultWatermarkTemplate 为 false 或者不传入，watermarkTemplate 也不传入时表示不使用水印",
+          "descriptions": {
+            "en-GB": "Watermark Template",
+            "en-US": "Watermark Template",
+            "zh-CN": "可选参数，当 userDefaultWatermarkTemplate 为 true 时无效。当 userDefaultWatermarkTemplate 为 false 或者不传入，watermarkTemplate 也不传入时表示不使用水印"
+          },
+          "help_descriptions": {
+            "en-GB": "Watermark Template",
+            "en-US": "Watermark Template",
+            "zh-CN": "可选参数，当 userDefaultWatermarkTemplate 为 true 时无效"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "watermark_template",
+          "cli_flag": "watermark-template",
+          "table_target": "",
+          "example": 100000000003
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "layout": "vertical",
+        "default_columns": [
+          "cover_url"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "cover_url",
+            "path": "coverUrl",
+            "label_en": "Cover URL",
+            "label_zh": "新封面访问地址",
+            "description": "新封面访问地址"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "height": 768,
+        "quality": 2,
+        "time": 0,
+        "useDefaultWatermarkTemplate": true,
+        "videoId": "34c71dba-f280-4f5e-a05f-f4daed837fef",
+        "watermarkTemplate": 100000000003,
+        "width": 1024
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIiwgImRhdGEiOiB7InRlbXBsYXRlSWQiOiAxMDAwMDAwMDAwMDR9fX0="
+      },
+      "id": "vod.stitching-template.create",
+      "api_id": "6536",
+      "title": "新增拼接模板接口",
+      "description": {
+        "en-GB": "Create a stitching template",
+        "en-US": "Create a stitching template",
+        "zh-CN": "新增拼接模板接口"
+      },
+      "category": "stitching-template",
+      "command_path": [
+        "stitching-template",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v1/stitching/template/create",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=6536&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "name",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "拼接模板名称",
+          "descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "拼接模板名称"
+          },
+          "help_descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "拼接模板名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "name",
+          "cli_flag": "name",
+          "table_target": "",
+          "example": "测试拼接模板1"
+        },
+        {
+          "name": "head",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "片头视频，但head与tail两个选填入参至少需要传一个",
+          "descriptions": {
+            "en-GB": "Head as a JSON array",
+            "en-US": "Head as a JSON array",
+            "zh-CN": "片头视频，但head与tail两个选填入参至少需要传一个"
+          },
+          "help_descriptions": {
+            "en-GB": "Head as a JSON array",
+            "en-US": "Head as a JSON array",
+            "zh-CN": "片头视频，但head与tail两个选填入参至少需要传一个"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "head",
+          "cli_flag": "head",
+          "table_target": ""
+        },
+        {
+          "name": "tail",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "片尾视频，但head与tail两个选填入参至少需要传一个",
+          "descriptions": {
+            "en-GB": "Tail as a JSON array",
+            "en-US": "Tail as a JSON array",
+            "zh-CN": "片尾视频，但head与tail两个选填入参至少需要传一个"
+          },
+          "help_descriptions": {
+            "en-GB": "Tail as a JSON array",
+            "en-US": "Tail as a JSON array",
+            "zh-CN": "片尾视频，但head与tail两个选填入参至少需要传一个"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "tail",
+          "cli_flag": "tail",
+          "table_target": ""
+        },
+        {
+          "name": "video",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "拼接视频信息",
+          "descriptions": {
+            "en-GB": "Video",
+            "en-US": "Video",
+            "zh-CN": "拼接视频信息"
+          },
+          "help_descriptions": {
+            "en-GB": "Video",
+            "en-US": "Video",
+            "zh-CN": "拼接视频信息"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "video",
+          "cli_flag": "video",
+          "table_target": ""
+        },
+        {
+          "name": "audio",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "音频信息",
+          "descriptions": {
+            "en-GB": "Audio",
+            "en-US": "Audio",
+            "zh-CN": "音频信息"
+          },
+          "help_descriptions": {
+            "en-GB": "Audio",
+            "en-US": "Audio",
+            "zh-CN": "音频信息"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "audio",
+          "cli_flag": "audio",
+          "table_target": ""
+        },
+        {
+          "name": "remark",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "拼接模板备注",
+          "descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "拼接模板备注"
+          },
+          "help_descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "拼接模板备注"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "remark",
+          "cli_flag": "remark",
+          "table_target": "",
+          "example": "测试拼接模板1"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "layout": "vertical",
+        "default_columns": [
+          "template_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "template_id",
+            "path": "templateId",
+            "label_en": "Template ID",
+            "label_zh": "模板 ID",
+            "description": "模板ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "audio": "\n    {\n        \"remove\":  false,\n        \"bitRate\":  \"128k\"\n    }\n    ",
+        "head": [
+          {
+            "visitUrl": "https: //vod-origin-test.gdoss.ctyun.store/1c5df1379a714dd39ce97c1ee1c305d7.mp4"
+          }
+        ],
+        "name": "测试拼接模板1",
+        "remark": "这是一个测试用的视频拼接模板",
+        "tail": [
+          {
+            "visitUrl": "https: //vod-transcode-test.gdoss.ctyun.store/adedb99a97b940dab21746656e04c58f/224.flv"
+          }
+        ],
+        "video": "\n    {\n        \"follow\":  false,\n        \"bitRate\":  \"512k\",\n        \"height\":  720,\n        \"width\":  1280\n    }\n    "
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIiwgImRhdGEiOiB7InZpZGVvSWQiOiAiMzRjNzFkYmEtZjI4MC00ZjVlLWEwNWYtZjRkYWVkODM3ZmVmIiwgInR5cGUiOiAiVFJBTlNDT0RFRCIsICJ0cmFuc2NvZGVUZW1wbGF0ZUlkIjogMTAwMDAwMDAwMDAzLCAiZmlsZUlkIjogIjM0YzcxZGJhLWYyODAtNGY1ZS1hMDVmLWY0ZGFlZDgzN2ZlZi8xMDAwMDAwMDAwMDMubTN1OCIsICJ1cmwiOiAiaHR0cHM6IC8vZXhhbXBsZS5nZG9zcy54c3RvcmUuY3R5dW4uY24vdm9kLXRyYW5zY29kZWQteHh4eHgvMzRjNzFkYmEtZjI4MC00ZjVlLWEwNWYtZjRkYWVkODM3ZmVmLzEwMDAwMDAwMDAwM19zaWduZWQubTN1OD9zaWduYXR1cmU9eHh4eHgmRXhwaXJlcz0xMTExMTExIn19fQ=="
+      },
+      "id": "vod.video.file.show",
+      "api_id": "2482",
+      "title": "取得视频文件信息",
+      "description": {
+        "en-GB": "Show video file information",
+        "en-US": "Show video file information",
+        "zh-CN": "取得视频文件信息"
+      },
+      "category": "video",
+      "command_path": [
+        "video",
+        "file",
+        "show"
+      ],
+      "method": "POST",
+      "path": "/v1/video/file/get",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2482&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "fileId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "文件id",
+          "descriptions": {
+            "en-GB": "File ID",
+            "en-US": "File ID",
+            "zh-CN": "文件id"
+          },
+          "help_descriptions": {
+            "en-GB": "File ID",
+            "en-US": "File ID",
+            "zh-CN": "文件id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "file_id",
+          "cli_flag": "file-id",
+          "table_target": "",
+          "example": "34c71dba-f280-4f5e-a05f-f4daed837fef/100001.m3u8"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "layout": "vertical",
+        "default_columns": [
+          "video_id",
+          "type",
+          "transcode_template_id",
+          "file_id",
+          "url"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "video_id",
+            "path": "videoId",
+            "label_en": "Video ID",
+            "label_zh": "视频 ID",
+            "description": "视频id"
+          },
+          {
+            "key": "type",
+            "path": "type",
+            "label_en": "Type",
+            "label_zh": "视频类型",
+            "description": "视频类型，包含 ORIGINAL(源视频)/MASTER_M3U8(自适应的主m3u8文件)/TRANSCODED(转码后视频)"
+          },
+          {
+            "key": "transcode_template_id",
+            "path": "transcodeTemplateId",
+            "label_en": "Transcode Template ID",
+            "label_zh": "转码模板 ID",
+            "description": "转码模板id，当视频为原视频时，不返回该字段"
+          },
+          {
+            "key": "file_id",
+            "path": "fileId",
+            "label_en": "File ID",
+            "label_zh": "文件 ID",
+            "description": "文件id"
+          },
+          {
+            "key": "url",
+            "path": "url",
+            "label_en": "URL",
+            "label_zh": "视频播放的 URL",
+            "description": "视频播放的url，返回数据库中当前的url，如果没有调用签名接口签名，返回的是无签名的url，如果有调用则是上一次签名的url"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "fileId": "34c71dba-f280-4f5e-a05f-f4daed837fef/100000000003.m3u8"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIiwgImRhdGEiOiBbeyJ2aWRlb0lkIjogIjM0YzcxZGJhLWYyODAtNGY1ZS1hMDVmLWY0ZGFlZDgzN2ZlZiIsICJ0eXBlIjogIk9SSUdJTkFMIiwgImZpbGVJZCI6ICIzNGM3MWRiYS1mMjgwLTRmNWUtYTA1Zi1mNGRhZWQ4MzdmZWYvMTAwMDAxLm0zdTgiLCAidXJsIjogImh0dHBzOiAvL2V4YW1wbGUuZ2Rvc3MueHN0b3JlLmN0eXVuLmNuL3ZvZC10cmFuc2NvZGVkLXh4eHh4LzM0YzcxZGJhLWYyODAtNGY1ZS1hMDVmLWY0ZGFlZDgzN2ZlZi8xMDAwMDFfc2lnbmVkLm0zdTg/c2lnbmF0dXJlPXh4eHh4JkV4cGlyZXM9MTExMTExMSJ9LCB7InZpZGVvSWQiOiAiMzRjNzFkYmEtZjI4MC00ZjVlLWEwNWYtZDEycjRkMmYxMmYyIiwgInR5cGUiOiAiVFJBTlNDT0RFRCIsICJmaWxlSWQiOiAiMzRjNzFkYmEtZjI4MC00ZjVlLWEwNWYtZjRkYWVkODM3ZmVmLzEwMDAwNy5tM3U4IiwgInRyYW5zY29kZVRlbXBsYXRlSWQiOiAxMDAwMDAwMDAwMDMsICJ1cmwiOiAiaHR0cHM6IC8vZXhhbXBsZS5nZG9zcy54c3RvcmUuY3R5dW4uY24vdm9kLXRyYW5zY29kZWQteHh4eHgvMzRjNzFkYmEtZjI4MC00ZjVlLWEwNWYtZjRkYWVkODM3ZmVmLzEwMDAwN19zaWduZWQubTN1OD9zaWduYXR1cmU9eHh4eHgmRXhwaXJlcz0xMTExMTExIn1dfX0="
+      },
+      "id": "vod.video.file.list",
+      "api_id": "2481",
+      "title": "取得视频文件",
+      "description": {
+        "en-GB": "List video files",
+        "en-US": "List video files",
+        "zh-CN": "取得视频文件"
+      },
+      "category": "video",
+      "command_path": [
+        "video",
+        "file",
+        "list"
+      ],
+      "method": "POST",
+      "path": "/v1/video/files",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2481&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "videoId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "源视频id",
+          "descriptions": {
+            "en-GB": "Video ID",
+            "en-US": "Video ID",
+            "zh-CN": "源视频id"
+          },
+          "help_descriptions": {
+            "en-GB": "Video ID",
+            "en-US": "Video ID",
+            "zh-CN": "源视频id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "video_id",
+          "cli_flag": "video-id",
+          "table_target": "",
+          "example": "34c71dba-f280-4f5e-a05f-f4daed837fef"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "default_columns": [
+          "video_id",
+          "type",
+          "file_id",
+          "url",
+          "transcode_template_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "video_id",
+            "path": "videoId",
+            "label_en": "Video ID",
+            "label_zh": "源视频 ID",
+            "description": "源视频id"
+          },
+          {
+            "key": "type",
+            "path": "type",
+            "label_en": "Type",
+            "label_zh": "视频类型",
+            "description": "视频类型，包含 ORIGINAL(源视频)/MASTER_M3U8(自适应的主m3u8文件)/TRANSCODED(转码后视频) "
+          },
+          {
+            "key": "file_id",
+            "path": "fileId",
+            "label_en": "File ID",
+            "label_zh": "文件 ID",
+            "description": "文件id"
+          },
+          {
+            "key": "url",
+            "path": "url",
+            "label_en": "URL",
+            "label_zh": "视频播放的 URL",
+            "description": "视频播放的url，返回数据库中当前的url，如果没有调用签名接口签名，返回的是无签名的url，如果有调用则是上一次签名的url"
+          },
+          {
+            "key": "transcode_template_id",
+            "path": "transcodeTemplateId",
+            "label_en": "Transcode Template ID",
+            "label_zh": "视频对应的转码模板 ID",
+            "description": "视频对应的转码模板id，只有源视频存在转码后的文件集才会返回"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "videoId": "34c71dba-f280-4f5e-a05f-f4daed837fef"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAiZGF0YSI6IHsiY292ZXJVcmwiOiAiaHR0cHM6Ly9kZWZhdWx0LWRhdGEucWhvc3MueHN0b3JlLmN0eXVuLmNuL2RlZmF1bHQtY292ZXIucG5nIiwgInZpZGVvVXJsIjogImh0dHBzOi8vdm9kLW9yaWdpbi15cTJtLnNob3NzLnhzdG9yZS5jdHl1bi5jbi82ODdmYTIzZTU4Mjc0OTFlYTQzY2RiZDZiZTBlNjQ2YS5tcDQiLCAiY3JlYXRlVGltZSI6ICIyMDIzLTA2LTMwIDE2OjI0OjExIiwgIm5hbWUiOiAi5aSp57+85LqR5aqS5L2T5a2Y5YKoLm1wNCIsICJ1cGxvYWRTdGF0dXMiOiAiVVBMT0FEX1NVQ0NFU1MiLCAidmlkZW9JZCI6ICI2ODdmYTIzZTU4Mjc0OTFlYTQzY2RiZDZiZTBlNjQ2YSIsICJyZW1hcmsiOiAiIiwgInJlZ2lvbiI6IHsiY29kZSI6ICJ4cy1zaGFuZ2hhaS0xIiwgIm5hbWUiOiAi5LiK5rW36LWE5rqQ5rGgMeWMuiJ9LCAiY2F0ZWdvcnkiOiB7ImlkIjogMTAwMDYwMDAwMTM0LCAibmFtZSI6ICLmkJ7nrJEiLCAicGFyZW50SWQiOiAwLCAiY2hpbGQiOiB7ImlkIjogMTAwMDA2MDAwMTQ1LCAibmFtZSI6ICLmrrXlrZAiLCAicGFyZW50SWQiOiAxMDAwNjAwMDAxMzR9fSwgInRhZ3MiOiBbIiJdLCAic3RhdHVzIjogIlBBU1NFRCJ9LCAidG90YWwiOiAxfX0="
+      },
+      "id": "vod.video.show",
+      "api_id": "2480",
+      "title": "取得视频信息",
+      "description": {
+        "en-GB": "Show a video",
+        "en-US": "Show a video",
+        "zh-CN": "取得视频信息"
+      },
+      "category": "video",
+      "command_path": [
+        "video",
+        "show"
+      ],
+      "method": "POST",
+      "path": "/v1/video/get",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2480&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "videoId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "视频ID",
+          "descriptions": {
+            "en-GB": "Video ID",
+            "en-US": "Video ID",
+            "zh-CN": "视频ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Video ID",
+            "en-US": "Video ID",
+            "zh-CN": "视频ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "video_id",
+          "cli_flag": "video-id",
+          "table_target": "",
+          "example": "34c71dba-f280-4f5e-a05f-f4daed837fef"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "layout": "vertical",
+        "default_columns": [
+          "cover_url",
+          "video_url",
+          "create_time",
+          "name",
+          "upload_status",
+          "video_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "cover_url",
+            "path": "coverUrl",
+            "label_en": "Cover URL",
+            "label_zh": "封面地址",
+            "description": "封面地址，可能为空"
+          },
+          {
+            "key": "video_url",
+            "path": "videoUrl",
+            "label_en": "Video URL",
+            "label_zh": "源视频 URL",
+            "description": "源视频url"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Create Time",
+            "label_zh": "视频创建时间",
+            "description": "视频创建时间"
+          },
+          {
+            "key": "name",
+            "path": "name",
+            "label_en": "Name",
+            "label_zh": "资源池名称",
+            "description": "资源池名称"
+          },
+          {
+            "key": "upload_status",
+            "path": "uploadStatus",
+            "label_en": "Upload Status",
+            "label_zh": "视频上传状态",
+            "description": "视频上传状态：UPLOAD_SUCCESS(上传成功)/UPLOADING(上传中)/UPLOAD_FAILED(上传失败)"
+          },
+          {
+            "key": "video_id",
+            "path": "videoId",
+            "label_en": "Video ID",
+            "label_zh": "视频 ID",
+            "description": "视频ID"
+          },
+          {
+            "key": "remark",
+            "path": "remark",
+            "label_en": "Remark",
+            "label_zh": "视频简介",
+            "description": "视频简介"
+          },
+          {
+            "key": "region",
+            "path": "region",
+            "label_en": "Region",
+            "label_zh": "区域信息",
+            "description": "区域信息"
+          },
+          {
+            "key": "category",
+            "path": "category",
+            "label_en": "Category",
+            "label_zh": "视频分类信息",
+            "description": "视频分类信息"
+          },
+          {
+            "key": "tags",
+            "path": "tags",
+            "label_en": "Tags",
+            "label_zh": "视频标签",
+            "description": "视频标签"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "视频审核结果",
+            "description": "视频审核结果：UNAUDITED(未审核)/PASSED(审核通过)/NOT_PASSED(审核不通过)"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "videoId": "34c71dba-f280-4f5e-a05f-f4daed837fef"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIiwgImRhdGEiOiBbeyJ2aWRlb0lkIjogIjM0YzcxZGJhLWYyODAtNGY1ZS1hMDVmLWY0ZGFlZDgzN2ZlZiIsICJuYW1lIjogIuaIkeeahOeUteW9sSIsICJyZW1hcmsiOiAiIiwgInRhZ3MiOiBbIueIseaDheeJhyIsICLliqjkvZzniYciXSwgImNhdGVnb3J5IjogeyJpZCI6IDEwMDA2MDAwNDUsICJuYW1lIjogIueUteW9sSIsICJwYXJlbnRJZCI6IDAsICJjaGlsZCI6IHsiaWQiOiAxMDAwNjc2LCAibmFtZSI6ICLmrabkvqAiLCAicGFyZW50SWQiOiAxMDAwNjAwMDQ1LCAiY2hpbGQiOiB7ImlkIjogMTAwMDYwMDkxLCAibmFtZSI6ICLmiJDpvpkiLCAicGFyZW50SWQiOiAxMDAwNjc2fX19LCAicmVnaW9uIjogeyJuYW1lIjogIuWNjuWNlzEiLCAiY29kZSI6ICJ4cy1jbi1ndWFuZ3pob3UtMSJ9LCAidmlkZW9VcmwiOiAiIiwgInN0YXR1cyI6ICJVTkFVRElURUQiLCAidXBsb2FkU3RhdHVzIjogIlVQTE9BRF9TVUNDRVNTIiwgImNvdmVyVXJsIjogIiIsICJjcmVhdGVUaW1lIjogIjIwMTktMDYtMTAgMTQ6MzA6NTAifV19fQ=="
+      },
+      "id": "vod.video.search",
+      "api_id": "2479",
+      "title": "搜索视频",
+      "description": {
+        "en-GB": "Search videos",
+        "en-US": "Search videos",
+        "zh-CN": "搜索视频"
+      },
+      "category": "video",
+      "command_path": [
+        "video",
+        "search"
+      ],
+      "method": "POST",
+      "path": "/v1/video/search",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2479&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "name",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "视频的名称，模糊匹配",
+          "descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "视频的名称，模糊匹配"
+          },
+          "help_descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "视频的名称，模糊匹配"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "name",
+          "cli_flag": "name",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "regionCode",
+          "location": "body",
+          "required": false,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域编码列表，需要查询的视频的区域，不传则为全部区域",
+          "descriptions": {
+            "en-GB": "Region Code as a JSON array",
+            "en-US": "Region Code as a JSON array",
+            "zh-CN": "区域编码列表，需要查询的视频的区域，不传则为全部区域"
+          },
+          "help_descriptions": {
+            "en-GB": "Region Code as a JSON array",
+            "en-US": "Region Code as a JSON array",
+            "zh-CN": "区域编码列表，需要查询的视频的区域，不传则为全部区域"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "region_code",
+          "cli_flag": "region-code",
+          "table_target": ""
+        },
+        {
+          "name": "pageSize",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "每页的数量，当 pageSize 与 pageIndex 为空时，表示不分页",
+          "descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "每页的数量，当 pageSize 与 pageIndex 为空时，表示不分页"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "每页的数量，当 pageSize 与 pageIndex 为空时，表示不分页"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        },
+        {
+          "name": "pageIndex",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "页码，由0开始，当 pageSize 与 pageIndex 为空时，表示不分页",
+          "descriptions": {
+            "en-GB": "Page Index",
+            "en-US": "Page Index",
+            "zh-CN": "页码，由0开始，当 pageSize 与 pageIndex 为空时，表示不分页"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Index",
+            "en-US": "Page Index",
+            "zh-CN": "页码，由0开始，当 pageSize 与 pageIndex 为空时，表示不分页"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_index",
+          "cli_flag": "page-index",
+          "table_target": "",
+          "example": 0
+        },
+        {
+          "name": "categoryId",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "视频所属分类ID",
+          "descriptions": {
+            "en-GB": "Category ID",
+            "en-US": "Category ID",
+            "zh-CN": "视频所属分类ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Category ID",
+            "en-US": "Category ID",
+            "zh-CN": "视频所属分类ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "category_id",
+          "cli_flag": "category-id",
+          "table_target": "",
+          "example": 1000000600035
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "default_columns": [
+          "video_id",
+          "name",
+          "remark",
+          "tags",
+          "category",
+          "region"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "video_id",
+            "path": "videoId",
+            "label_en": "Video ID",
+            "label_zh": "视频 ID",
+            "description": "视频ID"
+          },
+          {
+            "key": "name",
+            "path": "name",
+            "label_en": "Name",
+            "label_zh": "视频名称",
+            "description": "视频名称"
+          },
+          {
+            "key": "remark",
+            "path": "remark",
+            "label_en": "Remark",
+            "label_zh": "视频简介",
+            "description": "视频简介"
+          },
+          {
+            "key": "tags",
+            "path": "tags",
+            "label_en": "Tags",
+            "label_zh": "视频标签",
+            "description": "视频标签"
+          },
+          {
+            "key": "category",
+            "path": "category",
+            "label_en": "Category",
+            "label_zh": "视频分类信息",
+            "description": "视频分类信息"
+          },
+          {
+            "key": "region",
+            "path": "region",
+            "label_en": "Region",
+            "label_zh": "区域信息",
+            "description": "区域信息"
+          },
+          {
+            "key": "video_url",
+            "path": "videoUrl",
+            "label_en": "Video URL",
+            "label_zh": "源视频 URL",
+            "description": "源视频url"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态",
+            "description": "视频审核结果：UNAUDITED(未审核)/PASSED(审核通过)/NOT_PASSED(审核不通过)"
+          },
+          {
+            "key": "upload_status",
+            "path": "uploadStatus",
+            "label_en": "Upload Status",
+            "label_zh": "视频上传状态",
+            "description": "视频上传状态：UPLOAD_SUCCESS(上传成功)/UPLOADING(上传中)/UPLOAD_FAILED(上传失败)"
+          },
+          {
+            "key": "cover_url",
+            "path": "coverUrl",
+            "label_en": "Cover URL",
+            "label_zh": "封面地址",
+            "description": "封面地址，可能为空"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Create Time",
+            "label_zh": "视频创建时间",
+            "description": "视频创建时间"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "categoryId": 1000600001,
+        "name": "",
+        "pageIndex": 0,
+        "pageSize": 10,
+        "regionCode": [
+          "xs-cn-guangzhou-1",
+          "xs-cn-shanghai-1"
+        ]
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIn19"
+      },
+      "id": "vod.video.audit",
+      "api_id": "2478",
+      "title": "人工审核视频",
+      "description": {
+        "en-GB": "Audit a video manually",
+        "en-US": "Audit a video manually",
+        "zh-CN": "人工审核视频"
+      },
+      "category": "video",
+      "command_path": [
+        "video",
+        "audit"
+      ],
+      "method": "POST",
+      "path": "/v1/video/audit",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2478&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "videoId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "视频ID",
+          "descriptions": {
+            "en-GB": "Video ID",
+            "en-US": "Video ID",
+            "zh-CN": "视频ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Video ID",
+            "en-US": "Video ID",
+            "zh-CN": "视频ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "video_id",
+          "cli_flag": "video-id",
+          "table_target": "",
+          "example": "34c71dba-f280-4f5e-a05f-f4daed837fef"
+        },
+        {
+          "name": "status",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "人工审核结果：PASSED-公开视频（即通过审核）;NOT_PASSED-屏蔽视频",
+          "descriptions": {
+            "en-GB": "Status",
+            "en-US": "Status",
+            "zh-CN": "人工审核结果：PASSED-公开视频（即通过审核）;NOT_PASSED-屏蔽视频"
+          },
+          "help_descriptions": {
+            "en-GB": "Status",
+            "en-US": "Status",
+            "zh-CN": "人工审核结果：PASSED-公开视频（即通过审核）;NOT_PASSED-屏蔽视频"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "status",
+          "cli_flag": "status",
+          "table_target": "",
+          "example": "NOT_PASSED"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Response Code",
+            "label_zh": "响应码",
+            "description": "本次请求的结果码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "错误文本信息，执行成功时，为空字符串"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "status": "NOT_PASSED",
+        "videoId": "34c71dba-f280-4f5e-a05f-f4daed837fef"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIn19"
+      },
+      "id": "vod.video.update",
+      "api_id": "2477",
+      "title": "修改视频信息",
+      "description": {
+        "en-GB": "Update video information",
+        "en-US": "Update video information",
+        "zh-CN": "修改视频信息"
+      },
+      "category": "video",
+      "command_path": [
+        "video",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v1/video/update",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2477&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "videoId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "视频ID",
+          "descriptions": {
+            "en-GB": "Video ID",
+            "en-US": "Video ID",
+            "zh-CN": "视频ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Video ID",
+            "en-US": "Video ID",
+            "zh-CN": "视频ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "video_id",
+          "cli_flag": "video-id",
+          "table_target": "",
+          "example": "34c71dba-f280-4f5e-a05f-f4daed837fef"
+        },
+        {
+          "name": "name",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "视频的名称，如果不传入则不修改",
+          "descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "视频的名称，如果不传入则不修改"
+          },
+          "help_descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "视频的名称，如果不传入则不修改"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "name",
+          "cli_flag": "name",
+          "table_target": "",
+          "example": "我的视频"
+        },
+        {
+          "name": "remark",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "视频简介，如不传入则不修改，注意：传入空字符串也会修改为空",
+          "descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "视频简介，如不传入则不修改，注意：传入空字符串也会修改为空"
+          },
+          "help_descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "视频简介，如不传入则不修改，注意：传入空字符串也会修改为空"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "remark",
+          "cli_flag": "remark",
+          "table_target": "",
+          "example": "备注"
+        },
+        {
+          "name": "tags",
+          "location": "body",
+          "required": false,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "视频标签，不传入则不修改，注意：传入空列表或者空字符串将会删除所有标签",
+          "descriptions": {
+            "en-GB": "Tags as a JSON array",
+            "en-US": "Tags as a JSON array",
+            "zh-CN": "视频标签，不传入则不修改，注意：传入空列表或者空字符串将会删除所有标签"
+          },
+          "help_descriptions": {
+            "en-GB": "Tags as a JSON array",
+            "en-US": "Tags as a JSON array",
+            "zh-CN": "视频标签，不传入则不修改，注意：传入空列表或者空字符串将会删除所有标签"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "tags",
+          "cli_flag": "tags",
+          "table_target": ""
+        },
+        {
+          "name": "categoryId",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "视频分类ID。不传默认将该视频分类为【未分类】",
+          "descriptions": {
+            "en-GB": "Category ID",
+            "en-US": "Category ID",
+            "zh-CN": "视频分类ID。不传默认将该视频分类为【未分类】"
+          },
+          "help_descriptions": {
+            "en-GB": "Category ID",
+            "en-US": "Category ID",
+            "zh-CN": "视频分类ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "category_id",
+          "cli_flag": "category-id",
+          "table_target": "",
+          "example": 10000600098
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Response Code",
+            "label_zh": "响应码",
+            "description": "本次请求的结果码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "错误文本信息，执行成功时，为空字符串"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "categoryId": 10000600098,
+        "name": "我的视频",
+        "remark": "备注",
+        "tags": [
+          "爱情片",
+          "历史片"
+        ],
+        "videoId": "34c71dba-f280-4f5e-a05f-f4daed837fef"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIn19"
+      },
+      "id": "vod.video.delete",
+      "api_id": "2476",
+      "title": "删除视频",
+      "description": {
+        "en-GB": "Delete a video",
+        "en-US": "Delete a video",
+        "zh-CN": "删除视频"
+      },
+      "category": "video",
+      "command_path": [
+        "video",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/v1/video/delete",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2476&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "videoId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "视频ID",
+          "descriptions": {
+            "en-GB": "Video ID",
+            "en-US": "Video ID",
+            "zh-CN": "视频ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Video ID",
+            "en-US": "Video ID",
+            "zh-CN": "视频ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "video_id",
+          "cli_flag": "video-id",
+          "table_target": "",
+          "example": "34c71dba-f280-4f5e-a05f-f4daed837fef"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "message"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Response Code",
+            "label_zh": "响应码",
+            "description": "本次请求的结果码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "错误文本信息，执行成功时，为空字符串"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "videoId": "34c71dba-f280-4f5e-a05f-f4daed837fef"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogIjAiLCAibWVzc2FnZSI6ICIiLCAicmV0dXJuT2JqIjogeyJjb2RlIjogMCwgIm1lc3NhZ2UiOiAiIiwgImRhdGEiOiB7InZpZGVvSWQiOiAiMzRjNzFkYmEtZjI4MC00ZjVlLWEwNWYtZjRkYWVkODM3ZmVmIiwgInVwbG9hZFVybHMiOiBbImh0dHBzOiAgLy9leGFtcGxlLnhzdG9yZS5jdHl1bi5jbi9PYmplY3RuYW1lL3VwbG9hZFBhcnQ/cGFydE51bT0xc2lnbmF0dXJlPXh4eHh4eCIsICJodHRwczogIC8vZXhhbXBsZS54c3RvcmUuY3R5dW4uY24vT2JqZWN0bmFtZS91cGxvYWRQYXJ0P3BhcnROdW09MnNpZ25hdHVyZT14eHh4eHgiXX19fQ=="
+      },
+      "id": "vod.video.create",
+      "api_id": "2474",
+      "title": "创建视频",
+      "description": {
+        "en-GB": "Create a video",
+        "en-US": "Create a video",
+        "zh-CN": "创建视频"
+      },
+      "category": "video",
+      "command_path": [
+        "video",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v1/video/create",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=67&vid=62&data=67&api=2474&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "name",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "视频的名称",
+          "descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "视频的名称"
+          },
+          "help_descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "视频的名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "name",
+          "cli_flag": "name",
+          "table_target": "",
+          "example": "平凡的世界"
+        },
+        {
+          "name": "regionCode",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "视频存储的区域，请保证您开通了该区域的存储，当不填写或填写空字符串/空格时使用默认资源池",
+          "descriptions": {
+            "en-GB": "Region Code",
+            "en-US": "Region Code",
+            "zh-CN": "视频存储的区域，请保证您开通了该区域的存储，当不填写或填写空字符串/空格时使用默认资源池"
+          },
+          "help_descriptions": {
+            "en-GB": "Region Code",
+            "en-US": "Region Code",
+            "zh-CN": "视频存储的区域，请保证您开通了该区域的存储，当不填写或填写空字符串/空格时使用默认资源池"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "region_code",
+          "cli_flag": "region-code",
+          "table_target": "",
+          "example": "xs-shanghai-1"
+        },
+        {
+          "name": "remark",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "视频简介",
+          "descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "视频简介"
+          },
+          "help_descriptions": {
+            "en-GB": "Remark",
+            "en-US": "Remark",
+            "zh-CN": "视频简介"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "remark",
+          "cli_flag": "remark",
+          "table_target": "",
+          "example": "讲述了在面对现实压力和人生抉择时，兄弟俩依旧坚守最初梦想和对爱情执着的追求的故事。"
+        },
+        {
+          "name": "tags",
+          "location": "body",
+          "required": false,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "视频标签",
+          "descriptions": {
+            "en-GB": "Tags as a JSON array",
+            "en-US": "Tags as a JSON array",
+            "zh-CN": "视频标签"
+          },
+          "help_descriptions": {
+            "en-GB": "Tags as a JSON array",
+            "en-US": "Tags as a JSON array",
+            "zh-CN": "视频标签"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "tags",
+          "cli_flag": "tags",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "fileInfo",
+          "location": "body",
+          "required": true,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "视频信息",
+          "descriptions": {
+            "en-GB": "File Info as a JSON object",
+            "en-US": "File Info as a JSON object",
+            "zh-CN": "视频信息"
+          },
+          "help_descriptions": {
+            "en-GB": "File Info as a JSON object",
+            "en-US": "File Info as a JSON object",
+            "zh-CN": "视频信息"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "file_info",
+          "cli_flag": "file-info",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "categoryId",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "视频所属分类ID",
+          "descriptions": {
+            "en-GB": "Category ID",
+            "en-US": "Category ID",
+            "zh-CN": "视频所属分类ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Category ID",
+            "en-US": "Category ID",
+            "zh-CN": "视频所属分类ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "category_id",
+          "cli_flag": "category-id",
+          "table_target": "",
+          "example": 10000600056
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            },
+            {
+              "path": "returnObj.code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "layout": "vertical",
+        "default_columns": [
+          "video_id",
+          "upload_urls"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "video_id",
+            "path": "videoId",
+            "label_en": "Video ID",
+            "label_zh": "视频的 ID",
+            "description": "视频的id，仅可用在完成上传视频接口以及删除视频接口"
+          },
+          {
+            "key": "upload_urls",
+            "path": "uploadUrls",
+            "label_en": "Upload Urls",
+            "label_zh": "上传地址列表",
+            "description": "上传地址列表"
+          }
+        ]
+      },
+      "dangerous": true,
+      "example_response": null
+    }
+  ]
+}

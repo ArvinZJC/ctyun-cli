@@ -1,0 +1,1696 @@
+{
+  "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=74&vid=2&data=2",
+  "captured_at": "2026-09-25",
+  "operations": [
+    {
+      "api_id": "11673",
+      "title": "查询模板",
+      "sections": [
+        {
+          "updatedTime": "2023-11-03 15:39:05",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "申请短信模板后，可以通过接口QuerySmsTemplate查询短信模板的审核状态。\n如果审核未通过，会返回审核失败的原因，请针对具体原因重新修改短信模板。\n<strong>备注:</strong>实际使用时，可直接调用统一URL：https://sms-global.ctapi.ctyun.cn/sms/api/v2"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/sms/api/v2/querySmsTemplate"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"templateCode\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"短信模板CODE。\\n您可以在控制台模板管理页面或API接口AddSmsTemplate的返回参数中获取短信模板CODE。\",\"lowerObject\":\"\",\"example\":\"SMS64124870510\"},{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统规定参数。取值：QuerySmsTemplate。\",\"lowerObject\":\"\",\"example\":\"QuerySmsTemplate\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 响应参数说明\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"请求状态码。\\n返回10000代表请求成功。\\n其他错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。。\",\"lowerObject\":\"\",\"example\":\"30001\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"请求错误码。\\n请参考<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\",\"lowerObject\":\"\",\"example\":\"SMS_30001\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"状态码的描述。\",\"lowerObject\":\"\",\"example\":\"变量参数错误\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"请求ID。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"查询返回的模板对象\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"templateCode\",\"paramType\":\"String\",\"describe\":\"短信模板CODE。\",\"lowerObject\":\"\",\"example\":\"SMS67753530327\"},{\"support_auto_recovery\":\"templateStatus\",\"paramType\":\"Integer\",\"describe\":\"模板审核状态。其中：\\n0：审核中。\\n1：审核通过。\\n2：审核失败，请在返回参数Reason中查看审核失败原因。\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"createTime\",\"paramType\":\"String\",\"describe\":\"短信模板的创建日期和时间。\",\"lowerObject\":\"\",\"example\":\"2023-07-14T09:34:04.412Z\"},{\"support_auto_recovery\":\"templateContent\",\"paramType\":\"String\",\"describe\":\"模板内容。\",\"lowerObject\":\"\",\"example\":\"亲爱的会员！天翼云短信服务祝您新年快乐！\"},{\"support_auto_recovery\":\"templateType\",\"paramType\":\"Integer\",\"describe\":\"短信类型。其中：\\n1：验证码。\\n2：短信通知。\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"templateName\",\"paramType\":\"String\",\"describe\":\"模板名称。\",\"lowerObject\":\"\",\"example\":\"登陆验证码\"},{\"support_auto_recovery\":\"reason\",\"paramType\":\"String\",\"describe\":\"审核备注。\\n如果审核状态为审核中，参数Reason显示为“”。\\n如果审核状态为审核通过，参数Reason显示审核通过的详细信息。\\n如果审核状态为审核未通过，参数Reason显示审核未通过的原因。\",\"lowerObject\":\"\",\"example\":\"通过\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"action\" : \"QuerySmsTemplate\",\n  \"templateCode\" : \"SMS13889962005\"\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "//成功\n{\n    \"statusCode\": 10000,\n    \"message\": \"成功\",\n    \"requestId\": \"ckrolqbbtfe0kfch7h7g\",\n    \"returnObj\": {\n        \"templateType\": 1,\n        \"templateName\": \"验证码测试\",\n        \"reason\": \"通过\",\n        \"templateCode\": \"SMS64124870510\",\n        \"templateStatus\": 1,\n        \"createTime\": \"2022-07-19T07:40:03.337Z\",\n        \"templateContent\": \"您的验证码是：${code}，有效期2分钟，请勿泄露给他人，如非本人操作，请忽略此信息。\"\n    }\n}\n//异常\n{\n    \"statusCode\":30001,\n    \"error\":\"SMS_30001\",\n    \"message\":\"变量参数错误\",\n    \"requestId\":\"cknkbmqflsojbf48h8ng\"\n}\n"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "11668",
+      "title": "查询模板列表",
+      "sections": [
+        {
+          "updatedTime": "2023-11-03 15:35:58",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "申请短信模板后，可以通过接口QuerySmsTemplateList查询短信模板的审核状态。如果审核未通过，会返回审核失败的原因，请针对具体原因重新修改短信模板。\n<strong>备注:</strong>实际使用时，可直接调用统一URL：https://sms-global.ctapi.ctyun.cn/sms/api/v2"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/sms/api/v2/querySmsTemplateList"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统规定参数。取值：QuerySmsTemplateList。\",\"lowerObject\":\"\",\"example\":\"QuerySmsTemplateList\"},{\"support_auto_recovery\":\"pageIndex\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"页码，即获取第几页的模板\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"pageSize\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"个数，即每页包含多少条模板\",\"lowerObject\":\"\",\"example\":\"10\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 响应参数说明\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"请求状态码。\\n返回10000代表请求成功。\\n其他错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\",\"lowerObject\":\"\",\"example\":\"30001\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"请求错误码。\\n请参考<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\",\"lowerObject\":\"\",\"example\":\"SMS_30001\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"状态码的描述。\",\"lowerObject\":\"\",\"example\":\"变量参数错误\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"请求ID。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"返回数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"total\",\"paramType\":\"Integer\",\"describe\":\"查询到的模板总数\",\"lowerObject\":\"\",\"example\":\"14\"},{\"support_auto_recovery\":\"data\",\"paramType\":\"Array of Objects\",\"describe\":\"模板列表详情\",\"lowerObject\":\"data\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 data\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"templateCode\",\"paramType\":\"String\",\"describe\":\"短信模板编码。\",\"lowerObject\":\"\",\"example\":\"SMS67753530327\"},{\"support_auto_recovery\":\"createTime\",\"paramType\":\"String\",\"describe\":\"创建时间。\",\"lowerObject\":\"\",\"example\":\"2022-07-19T07:40:03.337Z\"},{\"support_auto_recovery\":\"templateContent\",\"paramType\":\"String\",\"describe\":\"模板内容。\",\"lowerObject\":\"\",\"example\":\"您正在进行天翼云门户注册，验证码为：132456，5分钟内有效!\"},{\"support_auto_recovery\":\"templateType\",\"paramType\":\"Integer\",\"describe\":\"短信类型。\\n1：验证码；\\n2：短信通知；\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"templateName\",\"paramType\":\"String\",\"describe\":\"模板名称。\",\"lowerObject\":\"\",\"example\":\"天翼云测试1\"},{\"support_auto_recovery\":\"reason\",\"paramType\":\"String\",\"describe\":\"审核备注。\\n如果审核状态为审核中，参数Reason显示为“”。\\n如果审核状态为审核通过，参数Reason显示为审核通过的详细信息。\\n如果审核状态为审核未通过，参数Reason显示审核未通过的原因。\",\"lowerObject\":\"\",\"example\":\"通过\"},{\"support_auto_recovery\":\"status\",\"paramType\":\"Integer\",\"describe\":\"模板审核状态：\\n0：未审核； \\n1：审核通过； \\n2：审核未通过； \",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"remark\",\"paramType\":\"String\",\"describe\":\"短信模板申请说明。\\n用来描述业务使用场景。\",\"lowerObject\":\"\",\"example\":\"内部测试\"},{\"support_auto_recovery\":\"updateTime\",\"paramType\":\"String\",\"describe\":\"更新时间\",\"lowerObject\":\"\",\"example\":\"2022-07-19T07:40:03.337Z\"},{\"support_auto_recovery\":\"example\",\"paramType\":\"String\",\"describe\":\"短信示例。\\n申请模板时由用户填写。\",\"lowerObject\":\"\",\"example\":\"您正在进行天翼云门户注册，验证码为：132456，5分钟内有效!\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"action\" : \"QuerySmsTemplateList\",\n  \"pageIndex\" : 1,\n  \"pageSize\" : 1\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "//成功\n{\n    \"statusCode\": 10000,\n    \"message\": \"成功\",\n    \"requestId\": \"ckrmljj00fe0kfch6j00\",\n    \"returnObj\": {\n        \"total\": 14,\n        \"data\": [\n            {\n                \"templateType\": 1,\n                \"templateName\": \"验证码测试\",\n                \"templateContent\": \"您的验证码是：${code}，有效期2分钟，请勿泄露给他人，如非本人操作，请忽略此信息。\",\n                \"status\": 1,\n                \"remark\": \"1\",\n                \"reason\": \"通过\",\n                \"createTime\": \"2022-07-19T07:40:03.337Z\",\n                \"updateTime\": \"2022-07-19T07:40:03.337Z\",\n                \"templateCode\": \"SMS64124870510\",\n                \"example\": \"您的验证码是：123456，有效期2分钟，请勿泄露给他人，如非本人操作，请忽略此信息。\"\n            },\n            {\n                \"status\": 1,\n                \"templateType\": 2,\n                \"remark\": \"内部测试\",\n                \"templateContent\": \"您正在进行天翼云门户注册，验证码为：${code}，5分钟内有效!\",\n                \"templateCode\": \"SMS22111378000\",\n                \"templateName\": \"天翼云测试2\",\n                \"reason\": \"通过\",\n                \"createTime\": \"2023-08-24T07:14:05.822Z\",\n                \"updateTime\": \"2022-07-19T07:40:03.337Z\",\n                \"example\": \"\"\n            }\n        ]\n    }\n}\n//失败\n{\n    \"statusCode\": 30001,\n    \"error\": \"SMS_30001\",\n    \"message\": \"变量参数错误\",\n    \"requestId\": \"cknkbmqflsojbf48h8ng\"\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "11677",
+      "title": "删除模板",
+      "sections": [
+        {
+          "updatedTime": "2023-11-03 15:38:26",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "调用接口DeleteSmsTemplate删除短信模板。\n<strong>注意 :</strong>\n不支持删除正在审核中的模板。\n删除短信模板后不可恢复，请谨慎操作。\n<strong>备注:</strong>实际使用时，可直接调用统一URL：https://sms-global.ctapi.ctyun.cn/sms/api/v2"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/sms/api/v2/deleteSmsTemplate"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统规定参数。取值：DeleteSmsTemplate 。\",\"lowerObject\":\"\",\"example\":\"DeleteSmsTemplate\"},{\"support_auto_recovery\":\"templateCode\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"短信模板CODE。您可以在控制台模板管理页面或API接口AddSmsTemplate的返回参数中获取短信模板CODE。\",\"lowerObject\":\"\",\"example\":\"SMS73419576145\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 响应参数说明\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"请求状态码。\\n返回10000代表请求成功。\\n其他错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\",\"lowerObject\":\"\",\"example\":\"30001\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"状态码或错误码的描述。\",\"lowerObject\":\"\",\"example\":\"变量参数错误\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"请求ID。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"返回删除模板结果\",\"lowerObject\":\"returnObj\",\"example\":\"\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"错误码。\\n异常返回时，返回该字段。\\n请参考<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\",\"lowerObject\":\"\",\"example\":\"SMS_30001\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"templateCode\",\"paramType\":\"String\",\"describe\":\"短信模板CODE。您可以使用模板CODE通过API接口QuerySmsTemplate或在控制台查看模板申请状态和结果。\",\"lowerObject\":\"\",\"example\":\"SMS67753530327\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"action\" : \"DeleteSmsTemplate\",\n  \"templateCode\" : \"SMS13889962005\"\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "//成功\n{\n    \"statusCode\":10000,\n    \"message\":\"成功\",\n    \"requestId\":\"cknkbmqflsojbf48h8ng\",\n    \"returnObj\":{\n        \"templateCode\":\"SMS67753530327\"\n    }\n}\n//异常\n{\n    \"statusCode\":30001,\n    \"error\":\"SMS_30001\",\n    \"message\":\"变量参数错误\",\n    \"requestId\":\"cknkbmqflsojbf48h8ng\"\n}\n"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "954",
+      "title": "短信v1",
+      "sections": [
+        {
+          "updatedTime": "2024-11-08 16:23:27",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "短信能力"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "发送短信v1接口的实际调用URL为：https://sms-global.ctapi.ctyun.cn/sms/api/v1，云通信后台将通过action字段区分接口功能。"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/sms/api/v1"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"SendSms\",\"isRequir\":\"否\",\"paramType\":\"Object\",\"describe\":\"您可以使用SendSms接口来发送短信。\\nSendSms接口是短信发送接口，支持在一次请求中向多个不同的手机号码发送同样内容的短信。\\n调用该接口发送短信时，请注意：发送短信会根据发送量计费，价格请参见<a href='https://www.ctyun.cn/document/10020426/10021564'>产品定价</a>。\",\"lowerObject\":\"SendSms\",\"example\":\"\"},{\"support_auto_recovery\":\"QuerySendDetails\",\"isRequir\":\"否\",\"paramType\":\"Object\",\"describe\":\"调用QuerySendDetails接口查看短信发送记录和发送状态。\\n通过调用QuerySendDetails接口，可以根据短信发送日期查看发送记录和短信内容，也可以添加发送流水号，根据流水号查询指定日期指定请求的发送详情。如果指定日期短信发送量较大，可以分页查看。指定每页显示的短信详情数量和查看的页数，即可分页查看发送记录。\",\"lowerObject\":\"QuerySendDetails\",\"example\":\"\"},{\"support_auto_recovery\":\"QuerySmsSignList\",\"isRequir\":\"否\",\"paramType\":\"Object\",\"describe\":\"调用接口QuerySmsSignList查询所有已申请短信签名\\n申请短信签名后，您可以在控制台或通过接口QuerySmsSignList查看所有短信签名。\",\"lowerObject\":\"QuerySmsSignList\",\"example\":\"\"},{\"support_auto_recovery\":\"AddSmsSign\",\"isRequir\":\"否\",\"paramType\":\"Object\",\"describe\":\"您可以通过短信服务API接口或云通信控制台申请短信签名，签名需要符合<a href='https://www.ctyun.cn/document/10020426/10021524'>签名规范</a>。\\n短信签名审核流程请参见<a href='https://www.ctyun.cn/document/10020426/10021526'>签名审核</a>流程。\\n说明： 个人用户每天最多可以申请一个短信签名。企业用户每天最多可以申请100个签名。\",\"lowerObject\":\"AddSmsSign\",\"example\":\"\"},{\"support_auto_recovery\":\"DeleteSmsSign\",\"isRequir\":\"否\",\"paramType\":\"Object\",\"describe\":\"调用接口DeleteSmsSign删除短信签名。\\n说明:\\n不支持删除正在审核中的签名。\\n短信签名删除后不可恢复，请谨慎操作。\",\"lowerObject\":\"DeleteSmsSign\",\"example\":\"\"},{\"support_auto_recovery\":\"ModifySmsSign\",\"isRequir\":\"否\",\"paramType\":\"Object\",\"describe\":\"调用接口ModifySmsSign修改未审核通过的短信签名证明文件，并重新提交审核。\\n申请短信签名后，如果签名未通过审核，可以通过本接口修改短信签名证明文件，并重新申请，提交审核。\\n签名需要符合<a href='https://www.ctyun.cn/document/10020426/10021524'>签名规范</a>。短信签名审核流程请参见<a href='https://www.ctyun.cn/document/10020426/10021526'>签名审核</a>流程。\\n说明： 个人用户每天最多可以申请一个短信签名。企业用户每天最多可以申请100个签名。\",\"lowerObject\":\"ModifySmsSign\",\"example\":\"\"},{\"support_auto_recovery\":\"QuerySmsSign\",\"isRequir\":\"否\",\"paramType\":\"Object\",\"describe\":\"调用接口QuerySmsSign查询短信签名申请状态。\\n申请短信签名后，您可以在控制台或通过接口QuerySmsSign查看短信签名的申请状态。如果未通过审核，接口会返回未通过审核的原因，请针对具体原因修改签名并重新提交审核。\",\"lowerObject\":\"QuerySmsSign\",\"example\":\"\"},{\"support_auto_recovery\":\"QuerySmsTemplateList\",\"isRequir\":\"否\",\"paramType\":\"Object\",\"describe\":\"申请短信模板后，可以通过接口QuerySmsTemplateList查询短信模板的审核状态。如果审核未通过，会返回审核失败的原因，请针对具体原因重新修改短信模板。\",\"lowerObject\":\"QuerySmsTemplateList\",\"example\":\"\"},{\"support_auto_recovery\":\"AddSmsTemplate\",\"isRequir\":\"否\",\"paramType\":\"Object\",\"describe\":\"您可以通过短信服务API接口或云通信控制台申请短信模板，模板内容需要符合<a href='https://www.ctyun.cn/document/10020426/10021517'>模板规范</a>。\\n短信模板审核流程请参考<a href='https://www.ctyun.cn/document/10020426/10021518'>模板审核</a>流程。\\n说明： 一个自然日最多可以申请100个模板，间隔建议您控制在30S以上。\",\"lowerObject\":\"AddSmsTemplate\",\"example\":\"\"},{\"support_auto_recovery\":\"DeleteSmsTemplate\",\"isRequir\":\"否\",\"paramType\":\"Object\",\"describe\":\"调用接口DeleteSmsTemplate删除短信模板。\\n注意 ：\\n不支持删除正在审核中的模板。\\n删除短信模板后不可恢复，请谨慎操作。\",\"lowerObject\":\"DeleteSmsTemplate\",\"example\":\"\"},{\"support_auto_recovery\":\"ModifySmsTemplate\",\"isRequir\":\"否\",\"paramType\":\"Object\",\"describe\":\"调用接口ModifySmsTemplate修改未通过审核的短信模板。\\n申请短信模板后，如果模板未通过审核，可以通过接口ModifySmsTemplate修改短信模板，并重新申请，提交审核。\\n模板内容需要符合<a href='https://www.ctyun.cn/document/10020426/10021517'>模板规范</a>。短信模板审核流程请参考<a href='https://www.ctyun.cn/document/10020426/10021518'>模板审核</a>流程。\\n说明： 一个自然日最多可以申请100个模板。\",\"lowerObject\":\"ModifySmsTemplate\",\"example\":\"\"},{\"support_auto_recovery\":\"QuerySmsTemplate\",\"isRequir\":\"否\",\"paramType\":\"Object\",\"describe\":\"申请短信模板后，可以通过接口QuerySmsTemplate查询短信模板的审核状态。如果审核未通过，会返回审核失败的原因，请针对具体原因重新修改短信模板。\",\"lowerObject\":\"QuerySmsTemplate\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 SendSms\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统规定参数。取值：SendSms。\",\"lowerObject\":\"\",\"example\":\"SendSms\"},{\"support_auto_recovery\":\"phoneNumber\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"接收短信的手机号码。格式：国内短信：无任何前缀的11位手机号码，例如1381111****。多个手机号码使用英文','隔开，最多支持一次提交200个手机号码。\",\"lowerObject\":\"\",\"example\":\"1381111*****\"},{\"support_auto_recovery\":\"signName\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"短信签名名称。请在控制台的签名管理页签下签名名称一列查看。\\n<strong>说明：</strong>必须是已添加、并通过审核的短信签名。\",\"lowerObject\":\"\",\"example\":\"天翼云测试\"},{\"support_auto_recovery\":\"templateCode\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"短信模板ID。请在控制台的模板管理页签下模板CODE一列查看。\\n<strong>说明：</strong>必须是已添加、并通过审核的短信模板。\",\"lowerObject\":\"\",\"example\":\"SMS64124870510\"},{\"support_auto_recovery\":\"templateParam\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"短信模板变量对应的实际值，JSON字符串格式。\\n<strong>说明：</strong>如果JSON中需要带换行符，请参照标准的JSON协议处理。\\n调试时会自动转换jsonString\\n示例：{code:123456}\\n通过代码调用接口时，格式请参考请求示例。\",\"lowerObject\":\"\",\"example\":\"{code:123456}\"},{\"support_auto_recovery\":\"extendCode\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"上行短信扩展码，上行短信，指发送给通信服务提供商的短信，用于定制某种服务、完成查询，或是办理某种业务等，需要收费的，按运营商普通短信资费进行扣费。\\n<strong>说明：</strong>无特殊需要此字段的用户请忽略此字段。\",\"lowerObject\":\"\",\"example\":\"90999\"},{\"support_auto_recovery\":\"sessionId\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"客户自带短信标识，在状态报告中会原样返回。说明：无特殊需要此字段的用户请忽略此字段。\",\"lowerObject\":\"\",\"example\":\"123456\"}]}},{\"table\":{\"title\":\"表 QuerySendDetails\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统规定参数。取值：QuerySendDetails 。\",\"lowerObject\":\"\",\"example\":\"QuerySendDetails\"},{\"support_auto_recovery\":\"currentPage\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"分页查看发送记录，指定发送记录的当前页码。\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"pageSize\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"分页查看发送记录，指定每页显示的短信记录数量。\",\"lowerObject\":\"\",\"example\":\"10\"},{\"support_auto_recovery\":\"phoneNumber\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"接收短信的手机号码。格式：国内短信：11位手机号码，例如1590000****。\",\"lowerObject\":\"\",\"example\":\"1590000****\"},{\"support_auto_recovery\":\"sendDate\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"短信发送日期，支持查询最近30天的记录。格式为yyyy-MM-dd，例如2018-12-25。\",\"lowerObject\":\"\",\"example\":\"2022-03-28\"},{\"support_auto_recovery\":\"signName\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"对应发送内容的签名。\",\"lowerObject\":\"\",\"example\":\"天翼云测试\"},{\"support_auto_recovery\":\"templateCode\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"对应发送内容的模板编号。\",\"lowerObject\":\"\",\"example\":\"SMS64124870510\"},{\"support_auto_recovery\":\"requestId\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"对用发送时返回的流水号。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"}]}},{\"table\":{\"title\":\"表 QuerySmsSignList\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统规定参数。取值：QuerySmsSignList。\",\"lowerObject\":\"\",\"example\":\"QuerySmsSignList\"},{\"support_auto_recovery\":\"pageIndex\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"页码，即获取第几页的模板\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"pageSize\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"个数，即每页包含多少条模板\",\"lowerObject\":\"\",\"example\":\"10\"}]}},{\"table\":{\"title\":\"表 DeleteSmsSign\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统规定参数。取值：DeleteSmsSign。\",\"lowerObject\":\"\",\"example\":\"DeleteSmsSign\"},{\"support_auto_recovery\":\"signName\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"短信签名。\\n说明:必须是本账号已申请的短信签名。\",\"lowerObject\":\"\",\"example\":\"天翼云测试\"}]}},{\"table\":{\"title\":\"表 QuerySmsSign\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统规定参数。取值：QuerySmsSign。\",\"lowerObject\":\"\",\"example\":\"QuerySmsSign\"},{\"support_auto_recovery\":\"signName\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"签名名称。\",\"lowerObject\":\"\",\"example\":\"天翼云测试\"}]}},{\"table\":{\"title\":\"表 QuerySmsTemplateList\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统规定参数。取值：QuerySmsTemplateList。\",\"lowerObject\":\"\",\"example\":\"QuerySmsTemplateList\"},{\"support_auto_recovery\":\"pageIndex\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"页码，即获取第几页的模板\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"pageSize\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"个数，即每页包含多少条模板\",\"lowerObject\":\"\",\"example\":\"10\"}]}},{\"table\":{\"title\":\"表 AddSmsTemplate\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统规定参数。取值：AddSmsTemplate 。\",\"lowerObject\":\"\",\"example\":\"AddSmsTemplate\"},{\"support_auto_recovery\":\"templateType\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"短信类型。其中：\\n1：验证码。\\n2：短信通知。\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"templateName\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"模板名称，长度为1~30个字符。\",\"lowerObject\":\"\",\"example\":\"天翼云测试\"},{\"support_auto_recovery\":\"templateContent\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"模板内容，长度为1~500个字符。<br/>模板内容需要符合<a href='https://www.ctyun.cn/document/10020426/10021517'>模板规范</a>。\",\"lowerObject\":\"\",\"example\":\"您正在进行天翼云门户注册，验证码为：${code}，5分钟内有效！\"},{\"support_auto_recovery\":\"remark\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"短信模板申请说明。\\n请在申请说明中描述您的业务使用场景，长度不超过200个字符。\",\"lowerObject\":\"\",\"example\":\"天翼云注册\"}]}},{\"table\":{\"title\":\"表 DeleteSmsTemplate\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统规定参数。取值：DeleteSmsTemplate 。\",\"lowerObject\":\"\",\"example\":\"DeleteSmsTemplate\"},{\"support_auto_recovery\":\"templateCode\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"短信模板CODE。<br/>您可以在控制台模板管理页面或API接口AddSmsTemplate的返回参数中获取短信模板CODE。\",\"lowerObject\":\"\",\"example\":\"SMS64124870510\"}]}},{\"table\":{\"title\":\"表 ModifySmsTemplate\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统规定参数。取值：ModifySmsTemplate。\",\"lowerObject\":\"\",\"example\":\"ModifySmsTemplate\"},{\"support_auto_recovery\":\"templateType\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"短信类型。其中：\\n1： 验证码。\\n2：短信通知。\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"templateName\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"模板名称，长度为1~30个字符。\",\"lowerObject\":\"\",\"example\":\"天翼云短信测试模板\"},{\"support_auto_recovery\":\"templateContent\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"模板内容，长度为1~500个字符。模板内容需要符合<a href='https://www.ctyun.cn/document/10020426/10021517'>模板规范</a>。\\n说明:修改模板时，请针对审核意见合理设计模板内容。\",\"lowerObject\":\"\",\"example\":\"您正在申请手机注册，验证码为：${code}，5分钟内有效！\"},{\"support_auto_recovery\":\"remark\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"短信模板申请说明。请在申请说明中描述您的业务使用场景，长度不超过200个字符。\",\"lowerObject\":\"\",\"example\":\"当前的短信模板应用于双11大促推广营销\"},{\"support_auto_recovery\":\"templateCode\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"短信模板CODE。<br/>您可以在控制台模板管理页面或API接口AddSmsTemplate的返回参数中获取短信模板CODE。\",\"lowerObject\":\"\",\"example\":\"SMS64124870510\"}]}},{\"table\":{\"title\":\"表 QuerySmsTemplate\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统规定参数。取值：QuerySmsTemplate。\",\"lowerObject\":\"\",\"example\":\"QuerySmsTemplate\"},{\"support_auto_recovery\":\"templateCode\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"短信模板CODE。<br/>您可以在控制台模板管理页面或API接口AddSmsTemplate的返回参数中获取短信模板CODE。\",\"lowerObject\":\"\",\"example\":\"SMS64124870510\"}]}},{\"table\":{\"title\":\"表 AddSmsSign\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统规定参数。取值：AddSmsSign\",\"lowerObject\":\"\",\"example\":\"AddSmsSign\"},{\"support_auto_recovery\":\"signName\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"签名名称。必须符合<a href=\\\"https://www.ctyun.cn/document/10020426/10021524\\\">签名规范</a>。\",\"lowerObject\":\"\",\"example\":\"天翼云测试\"},{\"support_auto_recovery\":\"signPurpos\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"是否自用。<br/>0、自用；<br/>1、他用\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"signType\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"签名来源。取值：\\n0：企事业单位的全称或简称;<br/>1：工信部备案网站的全称或简称;<br/>2：App应用的全称或简称;<br/>3：公众号或小程序的全称或简称;<br/>4：电商平台店铺名的全称或简称;<br/>5：商标名的全称或简称。<br/><strong>说明:</strong>签名来源为工信部备案网站的全称或简称时，请在申请说明中添加网站域名，加快审核速度。\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"papersType\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"证件类型：<br/>0：三证合一;<br/>1：企业营业执照;<br/>2：组织机构代码证书;<br/>3：社会信用代码证书;<br/>4：应用后台管理截图（个人开发APP）;<br/>5：网站备案后台截图（个人开发网站）;<br/>6：小程序设置页面截图（个人认证小程序）;<br/>7：商标注册书;<br/>8：公众号设置页面截图（个人认证公众号）。\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"remark\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"短信签名申请说明。<br/>请在申请说明中详细描述您的业务使用场景，申请工信部备案网站的全称或简称，请在此处填写域名，长度不超过200个字符。\",\"lowerObject\":\"\",\"example\":\"当前的短信签名应用于企业内部网络登录验证\"},{\"support_auto_recovery\":\"signFileList\",\"isRequir\":\"是\",\"paramType\":\"Array of Objects\",\"describe\":\"签名的证明文件列表\",\"lowerObject\":\"signFile\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 signFile\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"FileSuffix\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"签名的证明文件格式，支持上传多张图片。当前支持jpg、png、jpeg、bmp格式的图片。个别场景下，申请签名需要上传证明文件。详细说明请参见签名规范。说明：他用也需要上传证明文件，您可以上传营业执照附件或者其他相关的证明文件。\",\"lowerObject\":\"\",\"example\":\"png\"},{\"support_auto_recovery\":\"FileContents\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"签名的资质证明文件经base64编码后的字符串。建议图片不超过5MB。个别场景下，申请签名需要上传证明文件。详细说明请参见<a href=\\\"https://www.ctyun.cn/document/10020426/10021524\\\">签名规范</a>。\",\"lowerObject\":\"\",\"example\":\"data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAE......\"}]}},{\"table\":{\"title\":\"表 ModifySmsSign\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统规定参数。取值：ModifySmsSign 。\",\"lowerObject\":\"\",\"example\":\"ModifySmsSign\"},{\"support_auto_recovery\":\"signName\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"签名内容。说明：签名内容必须符合<a href=\\\"https://www.ctyun.cn/document/10020426/10021524\\\">签名规范</a>。\",\"lowerObject\":\"\",\"example\":\"天翼云测试\"},{\"support_auto_recovery\":\"signPurpose\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"是否自用。\\n0、自用；\\n1、他用\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"signType\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"签名来源。取值：0：企事业单位的全称或简称;\\n1：工信部备案网站的全称或简称;\\n2：App应用的全称或简称;\\n3：公众号或小程序的全称或简称;\\n4：电商平台店铺名的全称或简称;\\n5：商标名的全称或简称。\\n说明:签名来源为工信部备案网站的全称或简称时，请在申请说明中添加网站域名，加快审核速度。\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"papersType\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"证件类型：0：三证合一;\\n1：企业营业执照;\\n2：组织机构代码证书;\\n3：社会信用代码证书;\\n4：应用后台管理截图（个人开发APP）;\\n5：网站备案后台截图（个人开发网站）;\\n6：小程序设置页面截图（个人认证小程序）;\\n7：商标注册书;\\n8：公众号设置页面截图（个人认证公众号）。\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"remark\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"短信签名申请说明。请在申请说明中详细描述您的业务使用场景，申请工信部备案网站的全称或简称请在此处填写域名，长度不超过200个字符。\",\"lowerObject\":\"\",\"example\":\"当前的短信签名应用于企业内部网络登录验证。\"},{\"support_auto_recovery\":\"signFileList\",\"isRequir\":\"是\",\"paramType\":\"Array of Objects\",\"describe\":\"签名的证明文件列表\",\"lowerObject\":\"signFile\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 signFile\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"FileSuffix\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"签名的证明文件格式，支持上传多张图片。当前支持jpg、png、jpeg、bmp格式的图片。个别场景下，申请签名需要上传证明文件。详细说明请参见<a href=\\\"https://www.ctyun.cn/document/10020426/10021524\\\">签名规范</a>。\",\"lowerObject\":\"\",\"example\":\"png\"},{\"support_auto_recovery\":\"FileContents\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"签名的质证明文件经base64编码后的字符串。建议图片不超过5MB。个别场景下，申请签名需要上传证明文件。详细说明请参见<a href=\\\"https://www.ctyun.cn/document/10020426/10021524\\\">签名规范</a>。\",\"lowerObject\":\"\",\"example\":\"data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAE......\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 响应参数说明\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"SendSms\",\"paramType\":\"Object\",\"describe\":\"发送短信接口返回参数\\n\",\"lowerObject\":\"SendSms1\",\"example\":\"\"},{\"support_auto_recovery\":\"DeleteSmsSign\",\"paramType\":\"Object\",\"describe\":\"删除签名接口返回参数\",\"lowerObject\":\"DeleteSmsSign1\",\"example\":\"\"},{\"support_auto_recovery\":\"QuerySmsSign\",\"paramType\":\"Object\",\"describe\":\"查询签名接口返回参数\",\"lowerObject\":\"QuerySmsSign1\",\"example\":\"\"},{\"support_auto_recovery\":\"QuerySmsTemplateList\",\"paramType\":\"Object\",\"describe\":\"查询短信模板接口返回参数\",\"lowerObject\":\"QuerySmsTemplateList1\",\"example\":\"接口返回参数\"},{\"support_auto_recovery\":\"AddSmsTemplate\",\"paramType\":\"Object\",\"describe\":\"添加短信模板接口返回参数\",\"lowerObject\":\"AddSmsTemplate1\",\"example\":\"\"},{\"support_auto_recovery\":\"DeleteSmsTemplate\",\"paramType\":\"Object\",\"describe\":\"删除短信模板接口返回参数\",\"lowerObject\":\"DeleteSmsTemplate1\",\"example\":\"\"},{\"support_auto_recovery\":\"ModifySmsTemplate\",\"paramType\":\"Object\",\"describe\":\"修改短信模板接口返回参数\",\"lowerObject\":\"ModifySmsTemplate1\",\"example\":\"\"},{\"support_auto_recovery\":\"QuerySmsTemplate\",\"paramType\":\"Object\",\"describe\":\"查询短信模板接口返回参数\",\"lowerObject\":\"QuerySmsTemplate1\",\"example\":\"\"},{\"support_auto_recovery\":\"SmsMo\",\"paramType\":\"Object\",\"describe\":\"上行回调接口参数详情\",\"lowerObject\":\"SmsMo1\",\"example\":\"\"},{\"support_auto_recovery\":\"EventReport\",\"paramType\":\"Object\",\"describe\":\"事件回调接口参数详情\",\"lowerObject\":\"EventReport1\",\"example\":\"\"},{\"support_auto_recovery\":\"SmsReport\",\"paramType\":\"Object\",\"describe\":\"状态报告接口参数详情\",\"lowerObject\":\"SmsReport1\",\"example\":\"\"},{\"support_auto_recovery\":\"AddSmsSign\",\"paramType\":\"Object\",\"describe\":\"添加签名接口参数详情\",\"lowerObject\":\"AddSmsSign1\",\"example\":\"\"},{\"support_auto_recovery\":\"ModifySmsSign\",\"paramType\":\"Object\",\"describe\":\"修改签名接口返回参数\",\"lowerObject\":\"ModifySmsSign1\",\"example\":\"\"},{\"support_auto_recovery\":\"QuerySendDetails\",\"paramType\":\"Object\",\"describe\":\"查询发送记录接口返回参数\",\"lowerObject\":\"QuerySendDetails1\",\"example\":\"\"},{\"support_auto_recovery\":\"QuerySmsSignList\",\"paramType\":\"Object\",\"describe\":\"查询签名列表接口返回参数\",\"lowerObject\":\"QuerySmsSignList1\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 SendSms1\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"code\",\"paramType\":\"String\",\"describe\":\"请求状态码。\\n返回OK代表请求成功。\\n其他错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\\n<strong>注意</strong>：v1版本返回错误码 没有\\\"SMS_\\\" 开头。\",\"lowerObject\":\"\",\"example\":\"OK\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"状态码描述。\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"请求ID。多个手机号码的请求ID使用','隔开。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"}]}},{\"table\":{\"title\":\"表 DeleteSmsSign1\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"code\",\"paramType\":\"String\",\"describe\":\"请求状态码。\\n返回OK代表请求成功。\\n其他错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\\n<strong>注意</strong>：v1版本返回错误码 没有\\\"SMS_\\\" 开头。\",\"lowerObject\":\"\",\"example\":\"OK\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"状态码描述。\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"请求ID。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"}]}},{\"table\":{\"title\":\"表 QuerySmsSign1\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"code\",\"paramType\":\"String\",\"describe\":\"请求状态码。\\n返回OK代表请求成功。\\n其他错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\\n<strong>注意</strong>：v1版本返回错误码 没有\\\"SMS_\\\" 开头。\",\"lowerObject\":\"\",\"example\":\"OK\"},{\"support_auto_recovery\":\"createTime\",\"paramType\":\"String\",\"describe\":\"短信签名的创建日期和时间。\",\"lowerObject\":\"\",\"example\":\"2023-07-14T09:34:04.412Z\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"状态码描述。\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"reason\",\"paramType\":\"String\",\"describe\":\"审核备注。\\n如果审核状态为审核中，参数Reason显示为“”。\\n如果审核状态为审核通过，参数Reason显示为“通过”。\\n如果审核状态为审核未通过，参数Reason显示审核的具体原因。\",\"lowerObject\":\"\",\"example\":\"文件不能证明信息真实性，请重新上传\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"请求ID。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"},{\"support_auto_recovery\":\"signName\",\"paramType\":\"String\",\"describe\":\"短信签名。\",\"lowerObject\":\"\",\"example\":\"天翼云测试\"},{\"support_auto_recovery\":\"signStatus\",\"paramType\":\"Integer\",\"describe\":\"签名审核状态。其中：\\n0：审核中。\\n1：审核通过。\\n2：审核失败，请在返回参数Reason中查看审核失败原因。\",\"lowerObject\":\"\",\"example\":\"1\"}]}},{\"table\":{\"title\":\"表 QuerySmsTemplateList1\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"code\",\"paramType\":\"String\",\"describe\":\"请求状态码。\\n返回OK代表请求成功。\\n其他错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\\n<strong>注意</strong>：v1版本返回错误码 没有\\\"SMS_\\\" 开头。\",\"lowerObject\":\"\",\"example\":\"OK\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"状态码的描述。\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"请求ID。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"},{\"support_auto_recovery\":\"totalCount\",\"paramType\":\"Integer\",\"describe\":\"模板数量描述。\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"data\",\"paramType\":\"Object\",\"describe\":\"模板列表详情\",\"lowerObject\":\"data\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 data1\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"templateCode\",\"paramType\":\"String\",\"describe\":\"短信模板CODE。\",\"lowerObject\":\"\",\"example\":\"SMS64124870510\"},{\"support_auto_recovery\":\"status\",\"paramType\":\"String\",\"describe\":\"审核状态 。\\n0: 未审核；\\n1：审核通过；\\n2：审核未通过\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"createTime\",\"paramType\":\"String\",\"describe\":\"创建时间。\",\"lowerObject\":\"\",\"example\":\"2022-12-01T14:26:06.466Z\"},{\"support_auto_recovery\":\"templateContent\",\"paramType\":\"String\",\"describe\":\"模板内容。\",\"lowerObject\":\"\",\"example\":\"亲爱的会员！天翼云短信服务祝您新年快乐！\"},{\"support_auto_recovery\":\"templateType\",\"paramType\":\"String\",\"describe\":\"短信类型。\\n1：验证码；\\n2：短信通知；\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"templateName\",\"paramType\":\"String\",\"describe\":\"模板名称。\",\"lowerObject\":\"\",\"example\":\"天翼云短信测试模板\"},{\"support_auto_recovery\":\"reason\",\"paramType\":\"String\",\"describe\":\"审核备注。\\n如果审核状态为审核中，参数Reason显示为“”。\\n如果审核状态为审核通过，参数Reason显示为“通过”。\\n如果审核状态为审核未通过，参数Reason显示审核的具体原因。\",\"lowerObject\":\"\",\"example\":\"通过\"},{\"support_auto_recovery\":\"remark\",\"paramType\":\"String\",\"describe\":\"模板备注\",\"lowerObject\":\"\",\"example\":\"测试\"},{\"support_auto_recovery\":\"updateTime\",\"paramType\":\"String\",\"describe\":\"2022-07-19T07:40:03.337Z\",\"lowerObject\":\"\",\"example\":\"更新时间\"},{\"support_auto_recovery\":\"example\",\"paramType\":\"String\",\"describe\":\"您正在进行天翼云门户注册，验证码为：132456，5分钟内有效!\",\"lowerObject\":\"\",\"example\":\"短信示例。\\n申请模板时由用户填写。\"}]}},{\"table\":{\"title\":\"表 AddSmsTemplate1\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"code\",\"paramType\":\"String\",\"describe\":\"请求状态码。\\n返回OK代表请求成功。\\n其他错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\\n<strong>注意</strong>：v1版本返回错误码 没有\\\"SMS_\\\" 开头。\",\"lowerObject\":\"\",\"example\":\"OK\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"状态码的描述。\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"请求ID。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"},{\"support_auto_recovery\":\"templateCode\",\"paramType\":\"String\",\"describe\":\"短信模板CODE。\\n您可以使用模板CODE通过API接口QuerySmsTemplate或在控制台查看模板申请状态和结果。\",\"lowerObject\":\"\",\"example\":\"SMS64124870510\"}]}},{\"table\":{\"title\":\"表 DeleteSmsTemplate1\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"code\",\"paramType\":\"String\",\"describe\":\"请求状态码。\\n返回OK代表请求成功。\\n其他错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\\n<strong>注意</strong>：v1版本返回错误码 没有\\\"SMS_\\\" 开头。\",\"lowerObject\":\"\",\"example\":\"OK\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"状态码的描述。\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"请求ID。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"},{\"support_auto_recovery\":\"templateCode\",\"paramType\":\"String\",\"describe\":\"短信模板CODE。\",\"lowerObject\":\"\",\"example\":\"SMS64124870510\"}]}},{\"table\":{\"title\":\"表 ModifySmsTemplate1\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"code\",\"paramType\":\"String\",\"describe\":\"请求状态码。\\n返回OK代表请求成功。\\n其他错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\\n<strong>注意</strong>：v1版本返回错误码 没有\\\"SMS_\\\" 开头。\",\"lowerObject\":\"\",\"example\":\"OK\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"状态码的描述。\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"请求ID。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"},{\"support_auto_recovery\":\"templateCode\",\"paramType\":\"String\",\"describe\":\"短信模板CODE。\\n您可以使用模板CODE通过API接口QuerySmsTemplate或在控制台查看模板申请状态和结果。\",\"lowerObject\":\"\",\"example\":\"SMS64124870510\"}]}},{\"table\":{\"title\":\"表 QuerySmsTemplate1\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"code\",\"paramType\":\"String\",\"describe\":\"请求状态码。\\n返回OK代表请求成功。\\n其他错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\\n<strong>注意</strong>：v1版本返回错误码 没有\\\"SMS_\\\" 开头。\",\"lowerObject\":\"\",\"example\":\"OK\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"状态码的描述。\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"createTime\",\"paramType\":\"String\",\"describe\":\"短信模板的创建日期和时间。\",\"lowerObject\":\"\",\"example\":\"2022-02-11T02:03:32.711Z\"},{\"support_auto_recovery\":\"reason\",\"paramType\":\"String\",\"describe\":\"审核备注。\\n如果审核状态为审核中，参数Reason显示为“”。\\n如果审核状态为审核通过，参数Reason显示为“通过”。\\n如果审核状态为审核未通过，参数Reason显示审核的具体原因。\",\"lowerObject\":\"\",\"example\":\"非验证码类型短信，请选择通知类型短信。\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"请求ID。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"},{\"support_auto_recovery\":\"templateCode\",\"paramType\":\"String\",\"describe\":\"短信模板CODE。\",\"lowerObject\":\"\",\"example\":\"SMS64124870510\"},{\"support_auto_recovery\":\"templateContent\",\"paramType\":\"String\",\"describe\":\"模板内容。\",\"lowerObject\":\"\",\"example\":\"亲爱的会员！天翼云短信服务祝您新年快乐！\"},{\"support_auto_recovery\":\"templateName\",\"paramType\":\"String\",\"describe\":\"模板名称。\",\"lowerObject\":\"\",\"example\":\"天翼云短信测试模板\"},{\"support_auto_recovery\":\"templateStatus\",\"paramType\":\"Integer\",\"describe\":\"模板审核状态。其中：\\n0：审核中。\\n1：审核通过。\\n2：审核失败，请在返回参数Reason中查看审核失败原因。\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"templateType\",\"paramType\":\"Integer\",\"describe\":\"短信类型。其中：\\n1：验证码。\\n2：短信通知。\",\"lowerObject\":\"\",\"example\":\"1\"}]}},{\"table\":{\"title\":\"表 AddSmsSign1\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"code\",\"paramType\":\"String\",\"describe\":\"请求状态码。\\n返回OK代表请求成功。\\n其他错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\\n<strong>注意</strong>：v1版本返回错误码 没有\\\"SMS_\\\" 开头。\",\"lowerObject\":\"\",\"example\":\"OK\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"状态码描述。\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"请求ID。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"}]}},{\"table\":{\"title\":\"表 ModifySmsSign1\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"code\",\"paramType\":\"String\",\"describe\":\"请求状态码。\\n返回OK代表请求成功。\\n其他错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\\n<strong>注意</strong>：v1版本返回错误码 没有\\\"SMS_\\\" 开头。\",\"lowerObject\":\"\",\"example\":\"OK\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"状态码描述。\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"请求ID。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"}]}},{\"table\":{\"title\":\"表 QuerySendDetails1\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"code\",\"paramType\":\"String\",\"describe\":\"请求状态码。\\n返回OK代表请求成功。\\n其他错误码，请参见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\\n<strong>注意</strong>：v1版本返回错误码 没有\\\"SMS_\\\" 开头。\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"状态码的描述。\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"请求ID。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"},{\"support_auto_recovery\":\"totalCount\",\"paramType\":\"Integer\",\"describe\":\"短信发送总条数。\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"data\",\"paramType\":\"Array of Objects\",\"describe\":\"发送记录i列表\",\"lowerObject\":\"data\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 data1\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"_id\",\"paramType\":\"String\",\"describe\":\"发送记录Id\",\"lowerObject\":\"\",\"example\":\"65212dcb79e914605da641ef\"},{\"support_auto_recovery\":\"phone\",\"paramType\":\"String\",\"describe\":\"手机号码\",\"lowerObject\":\"\",\"example\":\"1330000****\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"当为群发任务时,该字段为JobId\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"},{\"support_auto_recovery\":\"receiveTime\",\"paramType\":\"String\",\"describe\":\"接收到发送短信请求的时间\",\"lowerObject\":\"\",\"example\":\"2022-03-28T06:29:35.171Z\"},{\"support_auto_recovery\":\"deliverTime\",\"paramType\":\"Integer\",\"describe\":\"下发短信时间\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"reportTime\",\"paramType\":\"String\",\"describe\":\"接收短信状态报告时间\",\"lowerObject\":\"\",\"example\":\"2022-03-28T06:29:35.171Z\"},{\"support_auto_recovery\":\"notifyTime\",\"paramType\":\"String\",\"describe\":\"回调时间\",\"lowerObject\":\"\",\"example\":\"2022-03-28T06:29:35.171Z\"},{\"support_auto_recovery\":\"index\",\"paramType\":\"Integer\",\"describe\":\"该记录在所属短信的全部发送记录中的编号。\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"total\",\"paramType\":\"Integer\",\"describe\":\"该记录所属短信的总发送记录条数。\",\"lowerObject\":\"\",\"example\":\"10\"},{\"support_auto_recovery\":\"templateCode\",\"paramType\":\"String\",\"describe\":\"短信模板CODE。\",\"lowerObject\":\"\",\"example\":\"SMS64124870510\"},{\"support_auto_recovery\":\"signName\",\"paramType\":\"String\",\"describe\":\"签名名称。\",\"lowerObject\":\"\",\"example\":\"天翼云测试\"},{\"support_auto_recovery\":\"status\",\"paramType\":\"Integer\",\"describe\":\"短信发送状态：\\n1 发送中,\\n2 发送失败,\\n3 发送成功\",\"lowerObject\":\"\",\"example\":\"3\"},{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"String\",\"describe\":\"短信的最终发送状态码\",\"lowerObject\":\"\",\"example\":\"DELIVRD\"},{\"support_auto_recovery\":\"type\",\"paramType\":\"Integer\",\"describe\":\"短信类型。其中：\\n1：验证码。\\n2：短信通知。\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"content\",\"paramType\":\"String\",\"describe\":\"短信内容\",\"lowerObject\":\"\",\"example\":\"您的验证码为123,有效期为5分钟!\"}]}},{\"table\":{\"title\":\"表 QuerySmsSignList1\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"code\",\"paramType\":\"String\",\"describe\":\"请求状态码。\\n返回OK代表请求成功。\\n其他错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\\n<strong>注意</strong>：v1版本返回错误码 没有\\\"SMS_\\\" 开头。\",\"lowerObject\":\"\",\"example\":\"OK\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"状态码描述。\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"请求ID。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"},{\"support_auto_recovery\":\"totalCount\",\"paramType\":\"Integer\",\"describe\":\"返回签名列表中的签名个数\",\"lowerObject\":\"\",\"example\":\"10\"},{\"support_auto_recovery\":\"data\",\"paramType\":\"Object\",\"describe\":\"签名列表\",\"lowerObject\":\"data1\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 data1\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"signName\",\"paramType\":\"String\",\"describe\":\"短信签名。\",\"lowerObject\":\"\",\"example\":\"天翼云测试\"},{\"support_auto_recovery\":\"signPurpose\",\"paramType\":\"Integer\",\"describe\":\"签名用途\\n0：自用；\\n1：他用；\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"signType\",\"paramType\":\"Integer\",\"describe\":\"签名类型\\n0：企事业单位的全称或简称；\\n1：工信部备案网站的全称或简称；\\n2：App应用的全称或简称；\\n3：公众号或小程序的全称或简称；\\n4：电商平台店铺名的全称或简称；\\n5：商标名的全称或简称\",\"lowerObject\":\"\",\"example\":\"3\"},{\"support_auto_recovery\":\"papersType\",\"paramType\":\"Integer\",\"describe\":\"证明类型\\n0：三证合一;\\n1：企业营业执照;\\n2：组织机构代码证书;\\n3：社会信用代码证书;\\n4：应用后台管理截图（个人开发APP）;\\n5：网站备案后台截图（个人开发网站）;\\n6：小程序设置页面截图（个人认证小程序）;\\n7：商标注册书;\\n8：公众号设置页面截图（个人认证公众号）;\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"status\",\"paramType\":\"Integer\",\"describe\":\"签名审核状态。\\n0：审核中\\n1：审核通过\\n2：审核失败，请在返回参数Reason中查看审核失败原因。\",\"lowerObject\":\"\",\"example\":\"2\"},{\"support_auto_recovery\":\"createTime\",\"paramType\":\"String\",\"describe\":\"短信签名的创建日期和时间。\",\"lowerObject\":\"\",\"example\":\"2023-02-16T06:45:35.039Z\"},{\"support_auto_recovery\":\"remark\",\"paramType\":\"String\",\"describe\":\"申请说明\",\"lowerObject\":\"\",\"example\":\"测试\"},{\"support_auto_recovery\":\"extCode\",\"paramType\":\"String\",\"describe\":\"当签名设置了扩展码时，返回签名的扩展码。\",\"lowerObject\":\"\",\"example\":\"111, 222\"},{\"support_auto_recovery\":\"reason\",\"paramType\":\"String\",\"describe\":\"审核备注。\\n如果审核状态为审核中，参数Reason显示为“”。\\n如果审核状态为审核通过，参数Reason显示为“通过”。\\n如果审核状态为审核未通过，参数Reason显示审核的具体原因。\",\"lowerObject\":\"\",\"example\":\"文件不能证明信息真实性，请重新上传\"},{\"support_auto_recovery\":\"updateTime\",\"paramType\":\"String\",\"describe\":\"2023-02-16T06:45:35.039Z\",\"lowerObject\":\"\",\"example\":\"短信签名的更新日期和时间\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "//SendSms:发送短信\n{\n    \"action\": \"SendSms\",\n    \"signName\": \"天翼云测试\",\n    \"phoneNumber\": \"13301110000\",\n    \"templateCode\": \"SMS64124870510\",\n    \"templateParam\": \"{\\\"code\\\":\\\"123456\\\"}\",\n    \"extendCode\": \"123\"\n}\n\n//QuerySendDetails；查询发送记录\n{\n  \"action\": \"QuerySendDetails\",\n  \"phoneNumber\": \"18616065511\",\n  \"sendDate\": \"2022-01-18\",\n  \"currentPage\": 1,\n  \"pageSize\": 10,\n  \"signName\":\"天翼云测试\",\n  \"templateCode\":\"SMS64124870510\"，\n}\n\n//QuerySmsSignList:查询签名列表\n{\n  \"action\": \"QuerySmsSignList\",\n  \"pageIndex\": 1,\n  \"pageSize\": 10,\n}\n\n//AddSmsSign：添加签名\n{\n  \"action\": \"AddSmsSign\",\n  \"signName\": \"天翼云测试\",\n  \"signPurpose\": 0,\n  \"signType\": 1,\n  \"papersType\": 1,\n  \"remark\": \"测试\",\n  \"signFileList\": [\n    {\n      \"FileSuffix\": \"png\",\n      \"FileContents\": \"data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAE......\"\n    }\n  ]\n}\n\n//DeleteSmsSign：删除签名\n{\n  \"action\": \"DeleteSmsSign\",\n  \"signName\": \"天翼云测试\"\n}\n\n//ModifySmsSign：修改签名\n{\n  \"action\": \"ModifySmsSign\",\n  \"signName\": \"天翼云测试\",\n  \"signPurpose\": 1,\n  \"signType\": 2,\n  \"papersType\": 1,\n  \"remark\": \"测试\",\n  \"signFileList\": [\n    {\n      \"FileSuffix\": \"png\",\n      \"FileContents\": \"data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAE......\"\n    }\n  ]\n}\n\n//QuerySmsSign：查询签名\n{\n  \"action\": \"QuerySmsSign\",\n  \"signName\": \"天翼云\"\n}\n\n//QuerySmsTemplateList：查询模板列表\n{\n  \"action\": \"QuerySmsTemplateList\",\n  \"pageIndex\": 1,\n  \"pageSize\": 10,\n}\n\n//AddSmsTemplate：添加模板\n{\n  \"action\": \"AddSmsTemplate\",\n  \"templateType\": 0,\n  \"templateContent\": \"您正在进行天翼云门户注册，验证码为：${code}，5分钟内有效！\",\n  \"templateName\": \"天翼云注册\",\n  \"remark\": \"天翼云注册\"\n}\n\n//DeleteSmsTemplate：删除模板\n{\n  \"action\": \"DeleteSmsTemplate\",\n  \"templateCode\": \"SMS64124870510\"\n}\n\n//ModifySmsTemplate:修改模板\n{\n  \"action\": \"ModifySmsTemplate\",\n  \"templateCode\": \"SMS64124870510\",\n  \"templateType\": 1,\n  \"templateContent\": \"您的验证码为${code},有效期为5分钟!\",\n  \"templateName\": \"登陆验证码\",\n  \"remark\": \"测试\"\n}\n\n//QuerySmsTemplate：查询模板\n{\n  \"action\": \"QuerySmsTemplate\",\n  \"templateCode\": \"SMS64124870510\"\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "//SendSms:发送短信\n{\n  \"code\": \"OK\",\n  \"message\": \"success\",\n  \"requestId\": \"cknkbmqflsojbf48h8ng\"\n}\n\n//QuerySendDetails；查询发送记录\n{\n  \"code\": 0,\n  \"message\": \"success\",\n  \"totalCount\": 1,\n  \"data\": [\n    {\n      \"_id\":\"65212dcb79e914605da641ef\",\n      \"phone\": \"13300000000\",\n      \"requestId\": \"cgudgor511imr7nhlltg\",\n      \"templateCode\": \"SMS64124870510\",\n      \"signName\": \"天翼云测试\",\n      \"total\": 0,\n      \"index\": 0,\n      \"type\": 1,\n      \"content\": \"您的验证码为123,有效期为5分钟!\",\n      \"status\": 3,\n      \"statusCode\": \"DELIVRD\",\n      \"receiveTime\": \"2022-03-28T06:29:34.819Z\",\n      \"deliverTime\": \"2022-03-28T06:29:34.824Z\",\n      \"reportTime\": \"2022-03-28T06:29:35.171Z\",\n      \"notifyTime\": \"2022-03-28T06:29:35.171Z\"\n    }\n  ],\n  \"requestId\": \"cknkbmqflsojbf48h8ng\"\n}\n\n//QuerySmsSignList:查询签名列表\n{\n    \"code\": \"OK\",\n    \"message\": \"success\"\n    \"requestId\": \"cknkbmqflsojbf48h8ng\",\n    \"totalCount\": 14,\n    \"data\": [\n        {\n               \"extCode\": [\"\"],\n                \"signPurpose\": 0,\n                \"papersType\": 5,\n                \"remark\": \"测试\",\n                \"status\": 1,\n                \"createTime\": \"2023-10-16T09:12:58.047Z\",\n                \"updateTime\": \"2023-10-16T09:12:58.047Z\",\n                \"signName\": \"天翼云测试\",\n                \"signType\": 1,\n                \"reason\": \"通过\"\n        }\n    ]  \n}\n\n//AddSmsSign：添加签名\n{\n  \"code\": \"OK\",\n  \"message\": \"success\",\n  \"requestId\": \"cknkbmqflsojbf48h8ng\"\n}\n\n//DeleteSmsSign：删除签名\n{\n  \"code\": \"OK\",\n  \"message\": \"success\",\n  \"requestId\": \"cknkbmqflsojbf48h8ng\"\n}\n\n//ModifySmsSign：修改签名\n{\n  \"code\": \"OK\",\n  \"message\": \"success\",\n  \"requestId\": \"cknkbmqflsojbf48h8ng\"\n}\n\n//QuerySmsSign：查询签名\n{\n  \"code\": \"OK\",\n  \"createTime\": \"2022-02-11T01:35:16.492Z\",\n  \"message\": \"success\",\n  \"reason\": \"\",\n  \"requestId\": \"cknkbmqflsojbf48h8ng\",\n  \"signName\": \"天翼云测试\",\n  \"signStatus\": 0\n}\n\n//QuerySmsTemplateList：查询模板列表\n{\n    \"code\": \"OK\",\n    \"message\": \"success\",\n    \"requestId\": \"cknkbmqflsojbf48h8ng\",\n    \"totalCount\": 1,\n    \"data\": [\n        {\n            \"reason\": \"通过\",\n            \"createTime\": \"2022-12-01T14:26:06.466Z\",\n            \"updateTime\": \"2022-07-19T07:40:03.337Z\",\n            \"remark\": \"测试\",\n            \"status\": 1,\n            \"templateCode\": \"SMS64124870510\",\n            \"templateType\": 2,\n            \"templateName\": \"验证码测试\",\n            \"example\": \"\",\n            \"templateContent\": \"您的验证码${code}，有效期5分钟。\"\n        }\n    ]\n}\n\n//AddSmsTemplate：添加模板\n{\n  \"code\": \"OK\",\n  \"message\": \"success\",\n  \"requestId\": \"cknkbmqflsojbf48h8ng\",\n  \"templateCode\": \"SMS64124870510\"\n}\n\n//DeleteSmsTemplate：删除模板\n{\n  \"code\": \"OK\",\n  \"message\": \"success\",\n  \"requestId\": \"cknkbmqflsojbf48h8ng\",\n  \"templateCode\": \"SMS64124870510\"\n}\n\n//ModifySmsTemplate:修改模板\n{\n  \"code\": \"OK\",\n  \"message\": \"success\",\n  \"requestId\": \"cknkbmqflsojbf48h8ng\",\n  \"templateCode\": \"SMS64124870510\"\n}\n\n//QuerySmsTemplate：查询模板\n{\n  \"code\": \"OK\",\n  \"createTime\": \"2022-02-11T02:03:32.711Z\",\n  \"message\": \"success\",\n  \"reason\": \"\",\n  \"requestId\": \"cknkbmqflsojbf48h8ng\",\n  \"templateCode\": \"SMS64124870510\",\n  \"templateContent\": \"您的验证码为${code},有效期为5分钟!\",\n  \"templateName\": \"登陆验证码\",\n  \"templateStatus\": 0,\n  \"templateType\": 0\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "120000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "11675",
+      "title": "添加模板",
+      "sections": [
+        {
+          "updatedTime": "2023-12-06 11:05:49",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "您可以通过短信服务API接口或云通信控制台申请短信模板，模板内容需要符合<a href=\"https://www.ctyun.cn/document/10020426/10021517\">模板规范</a>。\n短信模板审核流程请参考<a href=\"https://www.ctyun.cn/document/10020426/10021518\">模板审核</a>流程。\n说明： 一个自然日最多可以申请100个模板，间隔建议您控制在30S以上。\n<strong>备注:</strong>实际使用时，可直接调用统一URL：https://sms-global.ctapi.ctyun.cn/sms/api/v2"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/sms/api/v2/addSmsTemplate"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统规定参数。取值：AddSmsTemplate 。\",\"lowerObject\":\"\",\"example\":\"AddSmsTemplate\"},{\"support_auto_recovery\":\"templateType\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"短信类型。其中：1：验证码。\\n2：短信通知。\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"templateName\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"模板名称，长度为1~30个字。\",\"lowerObject\":\"\",\"example\":\"天翼云注册\"},{\"support_auto_recovery\":\"templateContent\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"模板内容，长度为1~500个字。模板内容需要符合<a href='https://www.ctyun.cn/document/10020426/10021517'>模板规范</a>。\",\"lowerObject\":\"\",\"example\":\"您正在进行天翼云门户注册，验证码为：${code}，5分钟内有效！\"},{\"support_auto_recovery\":\"remark\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"短信模板申请说明。请在申请说明中描述您的业务使用场景，长度不超过200个字。\",\"lowerObject\":\"\",\"example\":\"天翼云注册\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 响应参数说明\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"请求状态码。\\n返回10000代表请求成功。\\n其他错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\",\"lowerObject\":\"\",\"example\":\"30001\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"状态码或错误码的描述。\",\"lowerObject\":\"\",\"example\":\"变量参数错误\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"请求ID。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"返回添加模板结果\",\"lowerObject\":\"returnObj\",\"example\":\"\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"错误码。\\n异常返回时，返回该字段。\\n请参考<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\",\"lowerObject\":\"\",\"example\":\"SMS_30001\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"templateCode\",\"paramType\":\"String\",\"describe\":\"短信模板CODE。您可以使用模板CODE通过API接口QuerySmsTemplate或在控制台查看模板申请状态和结果。\",\"lowerObject\":\"\",\"example\":\"SMS67753530327\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"action\" : \"AddSmsTemplate\",\n  \"templateType\" : 1,\n  \"templateContent\" : \"您正在进行天翼云门户注册，验证码为：${code},5分钟内有效！\",\n  \"templateName\" : \"天翼云注册\",\n  \"remark\" : \"天翼云注册\"\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "//成功\n{\n    \"statusCode\":10000,\n    \"message\":\"成功\",\n    \"requestId\":\"cknkbmqflsojbf48h8ng\",\n    \"returnObj\":{\n        \"templateCode\":\"SMS67753530327\"\n    }\n}\n//异常\n{\n    \"statusCode\":30001,\n    \"error\":\"SMS_30001\",\n    \"message\":\"变量参数错误\",\n    \"requestId\":\"cknkbmqflsojbf48h8ng\"\n}\n"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "11651",
+      "title": "删除签名",
+      "sections": [
+        {
+          "updatedTime": "2023-11-03 15:35:38",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "调用接口DeleteSmsSign删除短信签名。\n<strong>说明:</strong>不支持删除正在审核中的签名。短信签名删除后不可恢复，请谨慎操作。\n<strong>备注:</strong>实际使用时，可直接调用统一URL：https://sms-global.ctapi.ctyun.cn/sms/api/v2"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/sms/api/v2/deleteSmsSign"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统规定参数。取值：DeleteSmsSign。\",\"lowerObject\":\"\",\"example\":\"DeleteSmsSign\"},{\"support_auto_recovery\":\"signName\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"短信签名。\\n说明:必须是本账号已申请的短信签名。\",\"lowerObject\":\"\",\"example\":\"天翼云\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 响应参数说明\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"请求状态码。\\n返回10000代表请求成功。\\n其他错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\",\"lowerObject\":\"\",\"example\":\"30001\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"状态码或错误码的描述。\",\"lowerObject\":\"\",\"example\":\"变量参数错误\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"请求ID。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"请求错误码。\\n错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\",\"lowerObject\":\"\",\"example\":\"SMS_30001\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"action\" : \"DeleteSmsSign\",\n  \"signName\" : \"天翼云\"\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "//成功\n{\n    \"statusCode\":10000,\n    \"message\":\"成功\",\n    \"requestId\":\"cknkbmqflsojbf48h8ng\"\n}\n//异常\n{\n    \"statusCode\":30001,\n    \"error\":\"SMS_30001\",\n    \"message\":\"变量参数错误\",\n    \"requestId\":\"cknkbmqflsojbf48h8ng\"\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "11650",
+      "title": "查询签名列表",
+      "sections": [
+        {
+          "updatedTime": "2024-10-21 17:44:12",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "申请短信签名后，您可以在控制台或通过接口QuerySmsSignList查看所有短信签名。\n<strong>备注:</strong>实际使用时，可直接调用统一URL：https://sms-global.ctapi.ctyun.cn/sms/api/v2"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "无"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/sms/api/v2/querySmsSignList"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统规定参数。取值：QuerySmsSignList。\",\"lowerObject\":\"\",\"example\":\"QuerySmsSignList\"},{\"support_auto_recovery\":\"pageIndex\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"页码，即获取第几页的模板\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"pageSize\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"个数，即每页包含多少条模板\",\"lowerObject\":\"\",\"example\":\"10\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 响应参数说明\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"请求状态码。\\n返回10000代表请求成功。\\n其他错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\",\"lowerObject\":\"\",\"example\":\"30001\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"状态码或错误码的描述。\",\"lowerObject\":\"\",\"example\":\"变量参数错误\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"请求ID。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"返回签名列表\",\"lowerObject\":\"returnObj\",\"example\":\"\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"请求错误码。\\n错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\",\"lowerObject\":\"\",\"example\":\"SMS_30001\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"total\",\"paramType\":\"Integer\",\"describe\":\"查询到的签名总数\",\"lowerObject\":\"\",\"example\":\"14\"},{\"support_auto_recovery\":\"data\",\"paramType\":\"Array of Objects\",\"describe\":\"签名列表详情\",\"lowerObject\":\"data\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 data\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"signName\",\"paramType\":\"String\",\"describe\":\"短信签名。\",\"lowerObject\":\"\",\"example\":\"天翼云测试\"},{\"support_auto_recovery\":\"signPurpose\",\"paramType\":\"Integer\",\"describe\":\"签名用途0：自用；1：他用；\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"signType\",\"paramType\":\"Integer\",\"describe\":\"签名类型\\n0：企事业单位的全称或简称；\\n1：工信部备案网站的全称或简称；\\n2：App应用的全称或简称；\\n3：公众号或小程序的全称或简称；\\n4：电商平台店铺名的全称或简称；\\n5：商标名的全称或简称\\n6、其他\",\"lowerObject\":\"\",\"example\":\"3\"},{\"support_auto_recovery\":\"businessType\",\"paramType\":\"Integer\",\"describe\":\"业务类型。取值：\\n1、账号注册；\\n2、账号登录；\\n3、广告促销；\\n4、通知提醒；\\n5、公共服务；\\n6、其他\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"status\",\"paramType\":\"Integer\",\"describe\":\"签名审核状态。\\n0：审核中\\n1：审核通过\\n2：审核失败，请在返回参数Reason中查看审核失败原因。\",\"lowerObject\":\"\",\"example\":\"2\"},{\"support_auto_recovery\":\"createTime\",\"paramType\":\"String\",\"describe\":\"短信签名的创建日期和时间。\",\"lowerObject\":\"\",\"example\":\"2023-02-16T06:45:35.039Z\"},{\"support_auto_recovery\":\"remark\",\"paramType\":\"String\",\"describe\":\"申请说明\",\"lowerObject\":\"\",\"example\":\"测试\"},{\"support_auto_recovery\":\"extCode\",\"paramType\":\"Array of Strings\",\"describe\":\"当签名设置了扩展码时，返回签名的扩展码。\",\"lowerObject\":\"\",\"example\":\"111, 222\"},{\"support_auto_recovery\":\"reason\",\"paramType\":\"String\",\"describe\":\"审核备注。\\n如果审核状态为审核中，参数Reason显示为“”。\\n如果审核状态为审核通过，参数Reason显示审核通过的详细信息。\\n如果审核状态为审核未通过，参数Reason显示审核未通过的原因。\",\"lowerObject\":\"\",\"example\":\"文件不能证明信息真实性，请重新上传\"},{\"support_auto_recovery\":\"updateTime\",\"paramType\":\"String\",\"describe\":\"短信签名的更新日期和时间\",\"lowerObject\":\"\",\"example\":\"2023-02-16T06:45:35.039Z\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"action\": \"QuerySmsSignList\",\n  \"pageIndex\": 1,\n  \"pageSize\": 1,\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "//成功\n{\n    \"statusCode\": 10000,\n    \"message\": \"成功\",\n    \"requestId\": \"ckrmv7rbtfe0k0000r70\",\n    \"returnObj\": {\n        \"total\": 14,\n        \"data\": [\n            {\n                \"extCode\": [\n                    \"\"\n                ],\n                \"signPurpose\": 0,\n                \"businessType\": 5,\n                \"remark\": \"测试\",\n                \"status\": 1,\n                \"createTime\": \"2023-10-16T09:12:58.047Z\",\n                \"updateTime\": \"2023-10-16T09:12:58.047Z\",\n                \"signName\": \"天翼云测试\",\n                \"signType\": 1,\n                \"reason\": \"通过\"\n            },\n            {\n                \"extCode\": [\n                    \"92417823\",\n                    \"92417824\"\n                ],\n                \"signPurpose\": 0,\n                \"reason\": \"通过\",\n                \"signName\": \"天翼云\",\n                \"createTime\": \"2023-04-12T09:53:25.487Z\",\n                \"updateTime\": \"2023-04-12T09:53:25.487Z\",\n                \"businessType\": 5,\n                \"status\": 1,\n                \"signType\": 1,\n                \"remark\": \"测试\"\n            }\n        ]\n    }\n}\n//异常\n{\n    \"statusCode\":30001,\n    \"error\":\"SMS_30001\",\n    \"message\":\"变量参数错误\",\n    \"requestId\":\"cknkbmqflsojbf48h8ng\"\n}\n"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "11652",
+      "title": "修改签名",
+      "sections": [
+        {
+          "updatedTime": "2024-10-18 15:58:55",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "调用接口ModifySmsSign修改未审核通过的短信签名证明文件，并重新提交审核。\n申请短信签名后，如果签名未通过审核，可以通过本接口修改短信签名证明文件，并重新申请，提交审核。\n签名需要符合<a href=\"https://www.ctyun.cn/document/10020426/10021524\">签名规范</a>。短信签名审核流程请参见<a href=\"https://www.ctyun.cn/document/10020426/10021526\">签名审核</a>流程。\n<strong>说明</strong> 个人用户每天最多可以申请一个短信签名。企业用户每天最多可以申请100个签名。\n<strong>备注:</strong>实际使用时，可直接调用统一URL：https://sms-global.ctapi.ctyun.cn/sms/api/v2"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "无"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/sms/api/v2/modifySmsSign"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统规定参数。取值：ModifySmsSign 。\",\"lowerObject\":\"\",\"example\":\"ModifySmsSign\"},{\"support_auto_recovery\":\"signName\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"签名内容。说明：签名内容必须符合签名规范。\",\"lowerObject\":\"\",\"example\":\"天翼云\"},{\"support_auto_recovery\":\"signPurpose\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"是否自用。0、自用；1、他用\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"signType\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"签名来源。取值：\\n0、企事业单位的全称或简称；\\n1、工信部备案网站的全称或简称；\\n2、App应用的全称或简称；\\n3、公众号或小程序的全称或简称；\\n4、电商平台店铺名的全称或简称；\\n5、商标名的全称或简称；\\n6、其他\\n说明:签名来源为工信部备案网站的全称或简称时，请在申请说明中添加网站域名，加快审核速度。\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"businessType\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"业务类型。取值：\\n1、账号注册；\\n2、账号登录；\\n3、广告促销；\\n4、通知提醒；\\n5、公共服务；\\n6、其他\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"businessName\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"自定义业务类型。businessType=6时，为必填项。\",\"lowerObject\":\"\",\"example\":\"告警提醒\"},{\"support_auto_recovery\":\"qualificationUuid\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"已经审核通过的资质ID。\",\"lowerObject\":\"\",\"example\":\"4573aea4-854e-498d-829f-88ea4522df17\"},{\"support_auto_recovery\":\"remark\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"短信签名申请说明。请在申请说明中详细描述您的业务使用场景，申请工信部备案网站的全称或简称请在此处填写域名，长度不超过200个字符。\",\"lowerObject\":\"\",\"example\":\"测试签名\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 响应参数说明\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"请求状态码。\\n返回10000代表请求成功。\\n其他错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\",\"lowerObject\":\"\",\"example\":\"30001\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"状态码或错误码的描述。\",\"lowerObject\":\"\",\"example\":\"变量参数错误\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"请求ID。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"请求错误码。\\n错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\",\"lowerObject\":\"\",\"example\":\"SMS_30001\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"action\" : \"ModifySmsSign\",\n  \"signName\" : \"天翼云\",\n  \"signPurpose\" : 1,\n  \"signType\" : 2,\n  \"businessType\" : 6,\n  \"businessName\" : \"告警提醒\",\n  \"qualificationUuid\" : \"4573aea4-854e-498d-829f-88ea4522df17\",\n  \"remark\" : \"测试签名\"\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "//成功\n{\n    \"statusCode\":10000,\n    \"message\":\"成功\",\n    \"requestId\":\"cknkbmqflsojbf48h8ng\"\n}\n//异常\n{\n    \"statusCode\":30001,\n    \"error\":\"SMS_30001\",\n    \"message\":\"变量参数错误\",\n    \"requestId\":\"cknkbmqflsojbf48h8ng\"\n}\n"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "11681",
+      "title": "修改模板",
+      "sections": [
+        {
+          "updatedTime": "2023-12-06 11:05:29",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "调用接口ModifySmsTemplate修改未通过审核的短信模板。\n申请短信模板后，如果模板未通过审核，可以通过接口ModifySmsTemplate修改短信模板，并重新申请，提交审核。 模板内容需要符合<a href=\"https://www.ctyun.cn/document/10020426/10021517\">模板规范</a>。\n短信模板审核流程请参考<a href=\"https://www.ctyun.cn/document/10020426/10021518\">模板审核</a>流程。\n<strong>说明：</strong> 一个自然日最多可以申请100个模板。\n<strong>备注:</strong>实际使用时，可直接调用统一URL：https://sms-global.ctapi.ctyun.cn/sms/api/v2"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/sms/api/v2/modifySmsTemplate"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"templateType\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"短信类型。其中：\\n1： 验证码。\\n2：短信通知。\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"templateName\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"模板名称，长度为1~30个字符。\",\"lowerObject\":\"\",\"example\":\"天翼云短信测试模板\"},{\"support_auto_recovery\":\"templateContent\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"模板内容，长度为1~500个字。模板内容需要符合<a href='https://www.ctyun.cn/document/10020426/10021517'>模板规范</a>。\\n说明:修改模板时，请针对审核意见合理设计模板内容。\",\"lowerObject\":\"\",\"example\":\"您正在申请手机注册，验证码为：${code}，5分钟内有效！\"},{\"support_auto_recovery\":\"remark\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"短信模板申请说明。请在申请说明中描述您的业务使用场景，长度不超过200个字。\",\"lowerObject\":\"\",\"example\":\"当前的短信模板应用于双11大促推广营销\"},{\"support_auto_recovery\":\"templateCode\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"短信模板CODE。您可以在控制台模板管理页面或API接口AddSmsTemplate的返回参数中获取短信模板CODE\",\"lowerObject\":\"\",\"example\":\"SMS73419576145\"},{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统规定参数。取值：ModifySmsTemplate。\",\"lowerObject\":\"\",\"example\":\"ModifySmsTemplate\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 响应参数说明\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"请求状态码。\\n返回10000代表请求成功。\\n其他错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\",\"lowerObject\":\"\",\"example\":\"30001\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"状态码或错误码的描述。\",\"lowerObject\":\"\",\"example\":\"变量参数错误\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"请求ID。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"返回修改结果\",\"lowerObject\":\"returnObj\",\"example\":\"\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"错误码。\\n异常返回时，返回该字段。\\n请参考<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\",\"lowerObject\":\"\",\"example\":\"SMS_30001\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"templateCode\",\"paramType\":\"String\",\"describe\":\"短信模板CODE。您可以使用模板CODE通过API接口QuerySmsTemplate或在控制台查看模板申请状态和结果。\",\"lowerObject\":\"\",\"example\":\"SMS67753530327\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"action\" : \"ModifySmsTemplate\",\n  \"templateCode\" : \"SMS13889962005\",\n  \"templateType\" : 1,\n  \"templateContent\" : \"您的验证码为${code},有效期为${time}分钟!\",\n  \"templateName\" : \"登陆验证码\",\n  \"remark\" : \"测试\"\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "//成功\n{\n    \"statusCode\":10000,\n    \"message\":\"成功\",\n    \"requestId\":\"cknkbmqflsojbf48h8ng\",\n    \"returnObj\":{\n        \"templateCode\":\"SMS67753530327\"\n    }\n}\n//异常\n{\n    \"statusCode\":30001,\n    \"error\":\"SMS_30001\",\n    \"message\":\"变量参数错误\",\n    \"requestId\":\"cknkbmqflsojbf48h8ng\"\n}\n"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "11647",
+      "title": "查询签名",
+      "sections": [
+        {
+          "updatedTime": "2023-11-10 11:05:56",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "申请短信签名后，您可以在控制台或通过接口QuerySmsSign查看短信签名的申请状态。如果未通过审核，接口会返回未通过审核的原因，请针对具体原因修改签名并重新提交审核。\n<strong>备注:</strong>实际使用时，可直接调用统一URL：https://sms-global.ctapi.ctyun.cn/sms/api/v2"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/sms/api/v2/querySmsSign"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"signName\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"签名名称。\",\"lowerObject\":\"\",\"example\":\"天翼云\"},{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统规定参数。取值：QuerySmsSign。\",\"lowerObject\":\"\",\"example\":\"QuerySmsSign\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 响应参数说明\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"请求状态码。\\n返回10000代表请求成功。\\n其他错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\",\"lowerObject\":\"\",\"example\":\"30001\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"状态码或错误码的描述。\",\"lowerObject\":\"\",\"example\":\"变量参数错误\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"请求ID。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"返回签名对象\",\"lowerObject\":\"returnObj\",\"example\":\"\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"请求错误码。\\n错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\",\"lowerObject\":\"\",\"example\":\"SMS_30001\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"signName\",\"paramType\":\"String\",\"describe\":\"短信签名。\",\"lowerObject\":\"\",\"example\":\"天翼云\"},{\"support_auto_recovery\":\"signStatus\",\"paramType\":\"Integer\",\"describe\":\"签名审核状态。其中：\\n0：审核中。\\n1：审核通过。\\n2：审核失败，请在返回参数Reason中查看审核失败原因。\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"createTime\",\"paramType\":\"String\",\"describe\":\"短信签名的创建日期和时间。\",\"lowerObject\":\"\",\"example\":\"2023-07-14T09:34:04.412Z\"},{\"support_auto_recovery\":\"reason\",\"paramType\":\"String\",\"describe\":\"审核备注。\\n如果审核状态为审核中，参数Reason显示为“”。\\n如果审核状态为审核通过，参数Reason显示审核通过的详细信息。\\n如果审核状态为审核未通过，参数Reason显示审核未通过的原因。\",\"lowerObject\":\"\",\"example\":\"通过\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"action\" : \"QuerySmsSign\",\n  \"signName\" : \"天翼云\"\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "//成功\n{\n    \"statusCode\": 10000,\n    \"message\": \"成功\",\n    \"requestId\": \"ckroktrbtfe0kfch7fpg\",\n    \"returnObj\": {\n        \"signName\": \"天翼云测试\",\n        \"signStatus\": 1,\n        \"createTime\": \"2023-04-12T09:53:25.487Z\",\n        \"reason\": \"通过。\"\n    }\n}\n//异常\n{\n    \"statusCode\":30001,\n    \"error\":\"SMS_30001\",\n    \"message\":\"变量参数错误\",\n    \"requestId\":\"cknkbmqflsojbf48h8ng\"\n}\n\n"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "11649",
+      "title": "添加签名",
+      "sections": [
+        {
+          "updatedTime": "2024-10-18 16:01:45",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "您可以通过AddSmsSign接口或云通信控制台申请短信签名，签名需要符合<a href=\"https://www.ctyun.cn/document/10020426/10021524\">签名规范</a>。 短信签名审核流程请参见<a href=\"https://www.ctyun.cn/document/10020426/10021526\">签名审核</a>流程。\n<strong>说明：</strong> 个人用户每天最多可以申请一个短信签名。企业用户每天最多可以申请100个签名。\n<strong>备注:</strong>实际使用时，可直接调用统一URL：https://sms-global.ctapi.ctyun.cn/sms/api/v2"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "无"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/sms/api/v2/addSmsSign"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统规定参数。取值：AddSmsSign\",\"lowerObject\":\"\",\"example\":\"AddSmsSign\"},{\"support_auto_recovery\":\"signName\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"签名名称。必须符合<a href='https://www.ctyun.cn/document/10020426/10021524'>签名规范</a>。\",\"lowerObject\":\"\",\"example\":\"天翼云\"},{\"support_auto_recovery\":\"signPurpose\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"是否自用。0、自用；1、他用\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"signType\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"签名来源。取值：\\n0、企事业单位的全称或简称；\\n1、工信部备案网站的全称或简称；\\n2、App应用的全称或简称；\\n3、公众号或小程序的全称或简称；\\n4、电商平台店铺名的全称或简称；\\n5、商标名的全称或简称；\\n6、其他\\n说明:签名来源为工信部备案网站的全称或简称时，请在申请说明中添加网站域名，加快审核速度。\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"businessType\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"\\t业务类型。 取值：\\n1、账号注册；\\n2、账号登录；\\n3、广告促销；\\n4、通知提醒；\\n5、公共服务；\\n6、其他\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"businessName\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"自定义业务类型。businessType=6时，为必填项。\",\"lowerObject\":\"\",\"example\":\"告警提醒\"},{\"support_auto_recovery\":\"qualificationUuid\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"已经审核通过的资质ID。\",\"lowerObject\":\"\",\"example\":\"4573aea4-854e-498d-829f-88ea4522df17\"},{\"support_auto_recovery\":\"remark\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"短信签名申请说明。\\n请在申请说明中详细描述您的业务使用场景，申请工信部备案网站的全称或简称，请在此处填写域名，长度不超过200个字符。\",\"lowerObject\":\"\",\"example\":\"测试签名\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 响应参数说明\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"请求状态码。\\n返回10000代表请求成功。\\n其他错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\",\"lowerObject\":\"\",\"example\":\"30001\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"状态码或错误码的描述。\",\"lowerObject\":\"\",\"example\":\"变量参数错误\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"请求ID。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"请求错误码。\\n错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\",\"lowerObject\":\"\",\"example\":\"SMS_30001\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"action\" : \"AddSmsSign\",\n  \"signName\" : \"天翼云\",\n  \"signPurpose\" : 0,\n  \"signType\" : 1,\n  \"businessType\" : 6,\n  \"businessName\" : \"告警提醒\",\n  \"qualificationUuid\" : \"4573aea4-854e-498d-829f-88ea4522df17\",\n  \"remark\" : \"测试签名\"\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "//成功\n{\n    \"statusCode\":10000,\n    \"message\":\"成功\",\n    \"requestId\":\"cknkbmqflsojbf48h8ng\"\n}\n//异常\n{\n    \"statusCode\":30001,\n    \"error\":\"SMS_30001\",\n    \"message\":\"变量参数错误\",\n    \"requestId\":\"cknkbmqflsojbf48h8ng\"\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "11695",
+      "title": "发送短信",
+      "sections": [
+        {
+          "updatedTime": "2024-02-06 16:52:32",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "SendSms接口是短信发送接口，支持在一次请求中向多个不同的手机号码发送同样内容的短信。\n调用该接口发送短信时，请注意：发送短信会根据发送量计费，价格请参见<a href=\"https://www.ctyun.cn/document/10020426/10021564\">产品定价</a>。"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/sms/api/v2"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统规定参数。取值：SendSms。\",\"lowerObject\":\"\",\"example\":\"SendSms\"},{\"support_auto_recovery\":\"phoneNumber\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"接收短信的手机号码。格式：国内短信：无任何前缀的11位手机号码，例如1381111****。多个手机号码使用英文','隔开，最多支持一次提交200个手机号码。\",\"lowerObject\":\"\",\"example\":\"1381111*****\"},{\"support_auto_recovery\":\"signName\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"短信签名名称。请在控制台的签名管理页签下签名名称一列查看。说明：必须是已添加、并通过审核的短信签名。\",\"lowerObject\":\"\",\"example\":\"天翼云测试\"},{\"support_auto_recovery\":\"templateCode\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"短信模板ID。请在控制台的模板管理页签下模板CODE一列查看。说明：必须是已添加、并通过审核的短信模板。\",\"lowerObject\":\"\",\"example\":\"SMS64124870510\"},{\"support_auto_recovery\":\"templateParam\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"短信模板变量对应的实际值，JSON字符串格式。说明：如果JSON中需要带换行符，请参照标准的JSON协议处理。\\n调试时会自动转换jsonString\\n示例：{code:123456}\\n通过代码调用接口时，格式请参考请求示例。\",\"lowerObject\":\"\",\"example\":\"{code:123456}\"},{\"support_auto_recovery\":\"extendCode\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"上行短信扩展码，上行短信，指发送给通信服务提供商的短信，用于定制某种服务、完成查询，或是办理某种业务等，需要收费的，按运营商普通短信资费进行扣费。说明：无特殊需要此字段的用户请忽略此字段。\",\"lowerObject\":\"\",\"example\":\"90999\"},{\"support_auto_recovery\":\"sessionId\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"客户自带短信标识，在状态报告中会原样返回。说明：无特殊需要此字段的用户请忽略此字段。\",\"lowerObject\":\"\",\"example\":\"123456\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 响应参数说明\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"请求状态码。\\n返回10000代表请求成功。\\n其他错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\",\"lowerObject\":\"\",\"example\":\"30001\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"状态码描述。\",\"lowerObject\":\"\",\"example\":\"变量参数错误\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"请求ID。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"错误码。\\n异常返回时，返回该字段。\\n请参考<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\",\"lowerObject\":\"\",\"example\":\"SMS_30001\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"action\" : \"SendSms\",\n  \"signName\" : \"天翼云测试\",\n  \"phoneNumber\" : \"13301110000\",\n  \"templateCode\" : \"SMS64124870510\",\n  \"templateParam\" : \"{\\\"code\\\": \\\"123456\\\"}\",\n  \"extendCode\" : \"123\"\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "//成功\n{\n    \"statusCode\":10000,\n    \"message\":\"成功\",\n    \"requestId\":\"cknkbmqflsojbf48h8ng\"\n}\n//异常\n{\n    \"statusCode\":30001,\n    \"error\":\"SMS_30001\",\n    \"message\":\"变量参数错误\",\n    \"requestId\":\"cknkbmqflsojbf48h8ng\"\n}\n"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "5000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "11653",
+      "title": "查询发送记录",
+      "sections": [
+        {
+          "updatedTime": "2024-11-08 16:21:16",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "调用QuerySendDetails接口查看短信发送记录和发送状态。\n通过调用QuerySendDetails接口，可以根据短信发送日期查看发送记录和短信内容，也可以添加发送流水号，根据流水号查询指定日期指定请求的发送详情。如果指定日期短信发送量较大，可以分页查看。指定每页显示的短信详情数量和查看的页数，即可分页查看发送记录。\n<strong>备注:</strong>实际使用时，可直接调用统一URL：https://sms-global.ctapi.ctyun.cn/sms/api/v2"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "无"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/sms/api/v2/querySendDetails"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统规定参数。取值：QuerySendDetails 。\",\"lowerObject\":\"\",\"example\":\"QuerySendDetails\"},{\"support_auto_recovery\":\"currentPage\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"分页查看发送记录，指定发送记录的当前页码。\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"pageSize\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"分页查看发送记录，指定每页显示的短信记录数量。\",\"lowerObject\":\"\",\"example\":\"10\"},{\"support_auto_recovery\":\"phoneNumber\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"接收短信的手机号码。格式：国内短信：11位手机号码，例如1590000****。\",\"lowerObject\":\"\",\"example\":\"1590000****\"},{\"support_auto_recovery\":\"sendDate\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"短信发送日期，支持查询最近30天的记录。格式为yyyy-MM-dd，例如2018-12-25。\",\"lowerObject\":\"\",\"example\":\"2022-03-28\"},{\"support_auto_recovery\":\"signName\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"对应发送内容的签名。\",\"lowerObject\":\"\",\"example\":\"签名\"},{\"support_auto_recovery\":\"templateCode\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"对应发送内容的模板编号。\",\"lowerObject\":\"\",\"example\":\"SMS73419576145\"},{\"support_auto_recovery\":\"requestId\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"对应发送时返回的流水号。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 响应参数说明\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"请求状态码。\\n返回10000代表请求成功。\\n其他错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>\",\"lowerObject\":\"\",\"example\":\"30001\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"请求错误码。\\n错误码详见<a href='https://eop.ctyun.cn/ebp/searchCtapi/ctapiErrorCode?api=11675&product=2'>错误码列表</a>。\",\"lowerObject\":\"\",\"example\":\"SMS_30001\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"\\t状态码的描述。\",\"lowerObject\":\"\",\"example\":\"变量参数错误\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"请求ID。\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"返回发送记录对象\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"total\",\"paramType\":\"String\",\"describe\":\"查询到的发送记录总数\",\"lowerObject\":\"\",\"example\":\"14\"},{\"support_auto_recovery\":\"data\",\"paramType\":\"Object\",\"describe\":\"返回发送记录列表\",\"lowerObject\":\"data\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 data\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"id\",\"paramType\":\"String\",\"describe\":\"发送记录Id\",\"lowerObject\":\"\",\"example\":\"65212dcb79e914605da641ef\"},{\"support_auto_recovery\":\"phone\",\"paramType\":\"String\",\"describe\":\"手机号码\",\"lowerObject\":\"\",\"example\":\"1330000****\"},{\"support_auto_recovery\":\"requestId\",\"paramType\":\"String\",\"describe\":\"当为群发任务时,该字段为JobId\",\"lowerObject\":\"\",\"example\":\"cknkbmqflsojbf48h8ng\"},{\"support_auto_recovery\":\"templateCode\",\"paramType\":\"String\",\"describe\":\"短信模板CODE。\",\"lowerObject\":\"\",\"example\":\"SMS81136825168\"},{\"support_auto_recovery\":\"signName\",\"paramType\":\"String\",\"describe\":\"签名名称。\",\"lowerObject\":\"\",\"example\":\"天翼云\"},{\"support_auto_recovery\":\"total\",\"paramType\":\"Integer\",\"describe\":\"该记录所属短信的总发送记录条数。\",\"lowerObject\":\"\",\"example\":\"2\"},{\"support_auto_recovery\":\"index\",\"paramType\":\"Integer\",\"describe\":\"该记录在所属短信的全部发送记录中的编号。\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"type\",\"paramType\":\"Integer\",\"describe\":\"短信类型。其中：\\n0：模板异常。\\n1：验证码。\\n2：短信通知。\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"content\",\"paramType\":\"String\",\"describe\":\"短信内容\",\"lowerObject\":\"\",\"example\":\"您的验证码为123,有效期为5分钟!\"},{\"support_auto_recovery\":\"status\",\"paramType\":\"Integer\",\"describe\":\"短信发送状态：\\n1 发送中,\\n2 发送失败,\\n3 发送成功\",\"lowerObject\":\"\",\"example\":\"3\"},{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"String\",\"describe\":\"短信的最终发送状态\",\"lowerObject\":\"\",\"example\":\"DELIVRD\"},{\"support_auto_recovery\":\"receiveTime\",\"paramType\":\"String\",\"describe\":\"接收到发送短信请求的时间\",\"lowerObject\":\"\",\"example\":\"2022-03-28T06:29:35.171Z\"},{\"support_auto_recovery\":\"deliverTime\",\"paramType\":\"String\",\"describe\":\"下发短信时间\",\"lowerObject\":\"\",\"example\":\"2022-03-28T06:29:35.171Z\"},{\"support_auto_recovery\":\"reportTime\",\"paramType\":\"String\",\"describe\":\"接收短信状态报告时间\",\"lowerObject\":\"\",\"example\":\"2022-03-28T06:29:35.171Z\"},{\"support_auto_recovery\":\"notifyTime\",\"paramType\":\"String\",\"describe\":\"回调时间\",\"lowerObject\":\"\",\"example\":\"2022-03-28T06:29:35.171Z\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"action\": \"QuerySendDetails\",\n  \"phoneNumber\": \"18616065511\",\n  \"sendDate\": \"2022-01-18\",\n  \"currentPage\": 1,\n  \"pageSize\": 1,\n  \"signName\":\"天翼云\",\n  \"templateCode\":\"SMS13889962005\"，\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "//成功\n{\n    \"statusCode\": 10000,\n    \"message\": \"成功\",\n    \"requestId\": \"dNFgPWV5Db14vg38\",\n    \"returnObj\": {\n        \"total\": 14,\n        \"data\": [\n            {\n                \"_id\": \"65212dcb79e914605da641ef\",\n                \"phone\": \"13301161312\",\n                \"requestId\": \"cknkbmqflsojbf48h8ng\",\n                \"templateCode\": \"SMS81136825168\",\n                \"signName\": \"天翼云\",\n                \"total\": 2,\n                \"index\":1,\n                \"type\": 1,\n                \"content\": \"您的验证码为123,有效期为5分钟!\",\n                \"status\": 3,\n                \"statusCode\": \"DELIVRD\",\n                \"receiveTime\": \"2022-03-28T06:29:34.819Z\",\n                \"deliverTime\": \"2022-03-28T06:29:34.824Z\",\n                \"reportTime\": \"2022-03-28T06:29:35.171Z\",\n                \"notifyTime\": \"2022-03-28T06:29:35.171Z\"\n            }\n        ]\n    }\n}\n//异常\n{\n    \"statusCode\":30001,\n    \"error\":\"SMS_30001\",\n    \"message\":\"变量参数错误\",\n    \"requestId\":\"cknkbmqflsojbf48h8ng\"\n}\n"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    }
+  ]
+}

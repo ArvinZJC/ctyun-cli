@@ -1,0 +1,672 @@
+{
+  "operations": {
+    "service-mesh.cluster.available.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/open/cluster/list_available",
+      "content_type": "application/json",
+      "query": {
+        "service_mesh_id": "$param.service_mesh_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "service-mesh.cluster.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/open/cluster/list",
+      "content_type": "application/json",
+      "query": {
+        "service_mesh_id": "$param.service_mesh_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "service-mesh.cluster.namespace.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/open/cluster/show_namespaces",
+      "content_type": "application/json",
+      "query": {
+        "cluster_id": "$param.cluster_id",
+        "service_mesh_id": "$param.service_mesh_id",
+        "show_labels": "$param.show_labels"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "service-mesh.cluster.pod.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/open/cluster/show_pods",
+      "content_type": "application/json",
+      "query": {
+        "cluster_id": "$param.cluster_id",
+        "namespace": "$param.namespace",
+        "service_mesh_id": "$param.service_mesh_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "service-mesh.gateway.disable": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/open/gateway/disable",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "gatewayType": "$param.gateway_type",
+        "serviceMeshId": "$param.service_mesh_id"
+      },
+      "retryable": false
+    },
+    "service-mesh.gateway.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/open/gateway/update",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "gatewayType": "$param.gateway_type",
+        "serviceMeshId": "$param.service_mesh_id",
+        "yamlStr": "$param.yaml_str"
+      },
+      "retryable": false
+    },
+    "service-mesh.mesh.kubeconfig.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/open/servicemesh/get_kube_config",
+      "content_type": "application/json",
+      "query": {
+        "service_mesh_id": "$param.service_mesh_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "service-mesh.mesh.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/open/servicemesh/list",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "service-mesh.mesh.rename": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/open/servicemesh/update_name",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "name": "$param.name",
+        "serviceMeshId": "$param.service_mesh_id"
+      },
+      "retryable": false
+    },
+    "service-mesh.mesh.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/open/servicemesh/detail",
+      "content_type": "application/json",
+      "query": {
+        "service_mesh_id": "$param.service_mesh_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "service-mesh.metadata.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/open/metadata/get",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "service-mesh.opa.disable": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/open/opa/disable",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "serviceMeshId": "$param.service_mesh_id"
+      },
+      "retryable": false
+    },
+    "service-mesh.opa.enable": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/open/opa/enable",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "serviceMeshId": "$param.service_mesh_id"
+      },
+      "retryable": false
+    },
+    "service-mesh.opa.policy.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/open/opa/policy/create",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "crContent": "$param.cr_content",
+        "namespace": "$param.namespace",
+        "serviceMeshId": "$param.service_mesh_id"
+      },
+      "retryable": false
+    },
+    "service-mesh.opa.policy.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/open/opa/policy/delete",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "name": "$param.name",
+        "namespace": "$param.namespace",
+        "serviceMeshId": "$param.service_mesh_id"
+      },
+      "retryable": false
+    },
+    "service-mesh.opa.policy.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/open/opa/policy/list",
+      "content_type": "application/json",
+      "query": {
+        "keyword": "$param.keyword",
+        "namespace": "$param.namespace",
+        "page_code": "$param.page_code",
+        "page_size": "$param.page_size",
+        "service_mesh_id": "$param.service_mesh_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "service-mesh.opa.policy.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/open/opa/policy/detail",
+      "content_type": "application/json",
+      "query": {
+        "name": "$param.name",
+        "namespace": "$param.namespace",
+        "service_mesh_id": "$param.service_mesh_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "service-mesh.opa.policy.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/open/opa/policy/update",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "crContent": "$param.cr_content",
+        "namespace": "$param.namespace",
+        "serviceMeshId": "$param.service_mesh_id"
+      },
+      "retryable": false
+    },
+    "service-mesh.opa.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/open/opa/update",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "clusterId": "$param.cluster_id",
+        "enableOpaInject": "$param.enable_opa_inject",
+        "namespace": "$param.namespace",
+        "serviceMeshId": "$param.service_mesh_id"
+      },
+      "retryable": false
+    },
+    "service-mesh.resource.template.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/open/resource/crd_template/list",
+      "content_type": "application/json",
+      "query": {
+        "kind": "$param.kind"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "service-mesh.sidecar.injection.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/open/sidecar/inject_config/update",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "enableIstioInjection": "$param.enable_istio_injection",
+        "namespace": "$param.namespace",
+        "serviceMeshId": "$param.service_mesh_id"
+      },
+      "retryable": false
+    },
+    "service-mesh.sidecar.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v1/open/sidecar/config/get",
+      "content_type": "application/json",
+      "query": {
+        "namespace": "$param.namespace",
+        "service_mesh_id": "$param.service_mesh_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "service-mesh.sidecar.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v1/open/sidecar/config/update",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "customProxyConfig": "$param.custom_proxy_config",
+        "name": "$param.name",
+        "namespace": "$param.namespace",
+        "scale": "$param.scale",
+        "serviceMeshId": "$param.service_mesh_id"
+      },
+      "retryable": false
+    }
+  }
+}

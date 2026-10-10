@@ -30,7 +30,18 @@ func reviewExecutionContract(report *ReviewReport, source Catalog, draftDir stri
 		addReviewFinding(report, "draft API execution contract does not match source catalog")
 	}
 	for _, operation := range source.Operations {
+		if operation.FixtureUnavailable != "" {
+			continue
+		}
 		if operation.Fixture == nil {
+			fixture, err := readDraftJSON[json.RawMessage](filepath.Join(draftDir, fixturePath(operation)))
+			expected := compactRawMessage(operation.ExampleResponse)
+			if len(expected) == 0 {
+				expected = json.RawMessage(`{}`)
+			}
+			if err != nil || !equivalentJSON(fixture, expected) {
+				addReviewFinding(report, fmt.Sprintf("operation %s JSON fixture does not match captured evidence", operation.ID))
+			}
 			continue
 		}
 		fixture, err := readDraftJSON[client.HTTPFixture](filepath.Join(draftDir, fixturePath(operation)))

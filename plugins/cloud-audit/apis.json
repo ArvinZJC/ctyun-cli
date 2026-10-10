@@ -1,0 +1,406 @@
+{
+  "operations": {
+    "cloud-audit.bucket.authorize": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/manager/user/arn",
+      "content_type": "application/json",
+      "headers": {
+        "accountid": "$param.accountid",
+        "regionid": "$profile.region",
+        "userid": "$param.userid"
+      },
+      "body": {
+        "arn": "$param.arn",
+        "authorizedId": "$param.authorized_id",
+        "bucketName": "$param.bucket_name",
+        "roleName": "$param.role_name",
+        "targetType": "$param.target_type"
+      },
+      "retryable": false
+    },
+    "cloud-audit.bucket.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/manager/user/authority",
+      "content_type": "application/json",
+      "headers": {
+        "accountid": "$param.accountid",
+        "regionid": "$profile.region",
+        "userid": "$param.userid"
+      },
+      "retryable": true
+    },
+    "cloud-audit.event.condition.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/manager/event/selection",
+      "content_type": "application/json",
+      "query": {
+        "fieldName": "$param.field_name"
+      },
+      "headers": {
+        "accountId": "$param.account_id",
+        "regionid": "$profile.region",
+        "userid": "$param.userid"
+      },
+      "retryable": true
+    },
+    "cloud-audit.event.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/manager/event/list",
+      "content_type": "application/json",
+      "query": {
+        "eventActType": "$param.event_act_type",
+        "eventLevel": "$param.event_level",
+        "filterKey": "$param.filter_key",
+        "filterValue": "$param.filter_value",
+        "fromTime": "$param.from_time",
+        "pageNumber": "$param.page_number",
+        "pageSize": "$param.page_size",
+        "srcProdTypeName": "$param.src_prod_type_name",
+        "srcServiceType": "$param.src_service_type",
+        "timeLabel": "$param.time_label",
+        "toTime": "$param.to_time",
+        "userId": "$param.user_id"
+      },
+      "headers": {
+        "regionid": "$profile.region"
+      },
+      "retryable": true
+    },
+    "cloud-audit.event.storage-region.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/region/storage/getInfo",
+      "content_type": "application/json",
+      "headers": {
+        "accountId": "$param.account_id",
+        "regionid": "$profile.region",
+        "userid": "$param.userid"
+      },
+      "retryable": true
+    },
+    "cloud-audit.region.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/region/available/getList",
+      "content_type": "application/json",
+      "headers": {
+        "accountid": "$param.accountid",
+        "regionid": "$profile.region",
+        "userid": "$param.userid"
+      },
+      "retryable": true
+    },
+    "cloud-audit.service.enable": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/manager/user",
+      "content_type": "application/json",
+      "headers": {
+        "accountid": "$param.accountid",
+        "regionid": "$profile.region",
+        "userid": "$param.userid"
+      },
+      "retryable": false
+    },
+    "cloud-audit.service.status": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/manager/user/enable",
+      "content_type": "application/json",
+      "headers": {
+        "accountid": "$param.accountid",
+        "regionid": "$profile.region",
+        "userid": "$param.userid"
+      },
+      "retryable": true
+    },
+    "cloud-audit.tracker.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/manager/auditTrack/create",
+      "content_type": "application/json",
+      "headers": {
+        "accountid": "$param.accountid",
+        "regionid": "$profile.region",
+        "userid": "$param.userid"
+      },
+      "body": {
+        "rwType": "$param.rw_type",
+        "state": "$param.state",
+        "targetDomain": "$param.target_domain",
+        "targetSpace": "$param.target_space",
+        "targetType": "$param.target_type",
+        "taskName": "$param.task_name"
+      },
+      "retryable": false
+    },
+    "cloud-audit.tracker.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/manager/auditTrack/delete",
+      "content_type": "application/json",
+      "headers": {
+        "accountid": "$param.accountid",
+        "regionid": "$profile.region",
+        "userid": "$param.userid"
+      },
+      "body": {
+        "taskId": "$param.task_id",
+        "taskName": "$param.task_name"
+      },
+      "retryable": false
+    },
+    "cloud-audit.tracker.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/manager/auditTrack/list",
+      "content_type": "application/json",
+      "headers": {
+        "accountid": "$param.accountid",
+        "regionid": "$profile.region",
+        "userid": "$param.userid"
+      },
+      "body": {
+        "pageNumber": "$param.page_number",
+        "pageSize": "$param.page_size"
+      },
+      "retryable": true
+    },
+    "cloud-audit.tracker.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/manager/auditTrack/get",
+      "content_type": "application/json",
+      "headers": {
+        "accountid": "$param.accountid",
+        "regionid": "$profile.region",
+        "userid": "$param.userid"
+      },
+      "body": {
+        "taskId": "$param.task_id",
+        "taskName": "$param.task_name"
+      },
+      "retryable": true
+    },
+    "cloud-audit.tracker.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/manager/auditTrack/update",
+      "content_type": "application/json",
+      "headers": {
+        "accountid": "$param.accountid",
+        "regionid": "$profile.region",
+        "userid": "$param.userid"
+      },
+      "body": {
+        "rwType": "$param.rw_type",
+        "state": "$param.state",
+        "targetDomain": "$param.target_domain",
+        "targetSpace": "$param.target_space",
+        "taskId": "$param.task_id",
+        "taskName": "$param.task_name",
+        "updateTaskName": "$param.update_task_name"
+      },
+      "retryable": false
+    }
+  }
+}

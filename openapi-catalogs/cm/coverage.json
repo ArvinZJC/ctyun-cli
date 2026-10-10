@@ -1,0 +1,58 @@
+{
+  "captured_at": "2026-09-25",
+  "service_id": 90,
+  "version_id": 84,
+  "published_api_count": 171,
+  "implemented_api_count": 169,
+  "blocked": [
+    {
+      "api_id": "12951",
+      "title": "通知记录：导出",
+      "path": "/v4/monitor/download-message-records",
+      "reason": "The operation publishes CSV file content rather than a JSON response, but no successful response media type or error representation is specified. Preserve the captured CSV evidence; a guarded non-JSON transport contract requires confirmation before promotion."
+    },
+    {
+      "api_id": "15774",
+      "title": "告警事件：导出告警历史",
+      "path": "/v4/monitor/export-alert-history",
+      "reason": "The operation publishes CSV file content rather than a JSON response, but no successful response media type or error representation is specified. Preserve the captured CSV evidence; a guarded non-JSON transport contract requires confirmation before promotion."
+    }
+  ],
+  "fixtures_unavailable": [],
+  "example_normalisations": [
+    {
+      "api_id": "15783",
+      "section": "请求体body示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "14079",
+      "section": "响应示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "23950",
+      "section": "响应示例",
+      "normalisation": "Restored the missing closing quote on name=test, matching the published schema example; value unchanged."
+    }
+  ],
+  "waiter_gaps": [],
+  "waiter_review": {
+    "waiter_count": 11,
+    "notes": [
+      "Probe tasks, exact export tasks, alarm configuration, subscription state and exact notification packages have documented terminal states.",
+      "Inspection task status exposes only a progress percentage without explicit terminal success/failure semantics. The summary refers to latest and previous successful tasks without an identity input; no completion waiter is inferred.",
+      "Site status and contact activation do not provide sufficient documented terminal state evidence for waiters."
+    ]
+  },
+  "request_notes": [
+    "External alarm sending, activation code sending, webhook testing, subscription dialing and token refresh remain confirmed mutations; the token refresh GET must not be retried.",
+    "Still-published page parameters scheduled for removal remain available with deprecation metadata and CLI-facing --page-no replacement guidance.",
+    "Resource-group creation modes enforce conditional inputs. Alternative phone/email inputs and mutually exclusive resource-group/resource-list inputs remain server validated."
+  ],
+  "response_notes": [
+    "Download APIs 12964 and 23954 return JSON download URLs and are exposed as URL queries, not local file downloads.",
+    "Two direct CSV export operations require transport review; their captured text must not be parsed as a JSON success envelope.",
+    "The malformed inspection summary example is repaired by restoring one closing quote; its values remain unchanged."
+  ]
+}

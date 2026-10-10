@@ -164,3 +164,19 @@ func TestReviewTableLabelsRejectsStructuralDrift(t *testing.T) {
 		t.Fatalf("empty optional source label produced findings: %#v", report.Findings)
 	}
 }
+
+// TestTechnicalNamesRemainPreciseInLocalizedLabels accepts recognizable technical
+// names without weakening the rejection of unrelated untranslated words.
+func TestTechnicalNamesRemainPreciseInLocalizedLabels(t *testing.T) {
+	for _, label := range []string{"MySQL 账号信息", "PostgreSQL 账号信息", "QQ 号", "Cookie 防护", "WebSocket 开关", "TLS 版本", "CVE 编号", "CDN 节点", "RTMP 回源", "FLV 回源", "HLS 回源", "URI 值", "容量 KB", "NPU 使用率", "PVC 名称", "vGPU 开关", "TensorBoard 状态", "Kubernetes 节点", "Pod 数量", "Python 版本", "启用 DeepSpeed", "Kafka 内核版本", "资源 YAML", "Tomcat 配置", "Java 启动参数", "API 编码", "MCP 服务", "AI 路由", "HMAC 认证", "JWT 认证", "Nacos 来源", "Eureka 来源", "MinIO 版本", "REST 协议", "ELB 地址", "CCEONE 集群", "Dubbo 版本", "Spring 服务名", "Helm Chart 仓库"} {
+		if finding := DisplayLabelQualityFinding("zh-CN", label); finding != "" {
+			t.Errorf("%s: %s", label, finding)
+		}
+		if got := NormalizeDisplayLabel("zh-CN", strings.ToLower(label)); got != label {
+			t.Errorf("normalized %q to %q, want %q", strings.ToLower(label), got, label)
+		}
+	}
+	if finding := DisplayLabelQualityFinding("zh-CN", "Custom 账号信息"); finding == "" {
+		t.Fatal("unrecognized English word accepted")
+	}
+}

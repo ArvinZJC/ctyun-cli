@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.1.0-beta.4 - 2026-10-10
+
+### Added
+
+- Added shared-bandwidth selection and result columns to bandwidth creation and listing, and shared-bandwidth floating-IP pricing; subnet and dedicated-bandwidth inputs remain required for ordinary billing branches. Shared-IP resize restrictions now appear in command help.
+
+### Changed
+
+- Raise the required core range `>=0.5.0 <1.0.0` → `>=0.5.1 <1.0.0` so explicit header, query and body bindings remain independent.
+
+### Fixed
+
+- Remove the incorrect API deprecation warning from desktop user logout.
+
 ## 0.1.0-beta.3 - 2026-09-23
 
 ### Added

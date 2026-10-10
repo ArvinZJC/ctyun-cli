@@ -1,0 +1,1298 @@
+{
+  "schema_version": 1,
+  "product": {
+    "plugin_name": "ai-security",
+    "api_product": "ai-security",
+    "ctyun_product_id": 224,
+    "source_revision": "352",
+    "display_name": {
+      "en-GB": "AI Security",
+      "en-US": "AI Security",
+      "zh-CN": "AI 安全"
+    },
+    "display_name_policy": {
+      "kind": "descriptive"
+    },
+    "endpoint_url": "https://aisec-global.ctapi.ctyun.cn",
+    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=224&vid=352&data=267",
+    "api_scope": {
+      "include_uri_prefixes": [
+        "/ai-datasecurity/file/",
+        "/ai-guard/open/",
+        "/open-api/",
+        "/open-api/file/",
+        "/open-api/watermark/"
+      ],
+      "notes": "Published service 267, version 352; preserves historical/versioned operations in separate command groups. See coverage.json for response-evidence gaps."
+    }
+  },
+  "operations": [
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIjIwMCIsICJzdWJDb2RlIjogIjIwMCIsICJtZXNzYWdlIjogIuivt+axguaIkOWKnyIsICJzdWNjZXNzIjogdHJ1ZSwgImRhdGEiOiB7ImNoZWNrUmVzdWx0IjogInBhc3MiLCAiZmFpbENvbnRlbnQiOiBudWxsLCAiZmFpbFR5cGUiOiBudWxsLCAiZmFpbFR5cGVFbiI6IG51bGwsICJwcmVzZXRSZXNwb25zZSI6IG51bGx9fQ=="
+      },
+      "id": "ai-security.guard.check",
+      "api_id": "22831",
+      "title": "大模型护栏业务检测",
+      "description": {
+        "en-GB": "Check model input or output",
+        "en-US": "Check model input or output",
+        "zh-CN": "大模型护栏业务检测"
+      },
+      "category": "guard",
+      "command_path": [
+        "guard",
+        "check"
+      ],
+      "method": "POST",
+      "path": "/ai-guard/open/chat/check",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=224&vid=352&data=267&api=22831&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "accountid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "天翼云账号Id",
+          "descriptions": {
+            "en-GB": "Accountid",
+            "en-US": "Accountid",
+            "zh-CN": "天翼云账号Id"
+          },
+          "help_descriptions": {
+            "en-GB": "Accountid",
+            "en-US": "Accountid",
+            "zh-CN": "天翼云账号Id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "accountid",
+          "cli_flag": "accountid",
+          "table_target": "",
+          "example": "tyyun123456"
+        },
+        {
+          "name": "X-APP-CODE",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "应用编码",
+          "descriptions": {
+            "en-GB": "X App Code",
+            "en-US": "X App Code",
+            "zh-CN": "应用编码"
+          },
+          "help_descriptions": {
+            "en-GB": "X App Code",
+            "en-US": "X App Code",
+            "zh-CN": "应用编码"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "x_app_code",
+          "cli_flag": "x-app-code",
+          "table_target": "",
+          "example": "gjjmtq"
+        },
+        {
+          "name": "X-REQUEST-DATE",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "当前毫秒时间戳",
+          "descriptions": {
+            "en-GB": "X Request Date",
+            "en-US": "X Request Date",
+            "zh-CN": "当前毫秒时间戳"
+          },
+          "help_descriptions": {
+            "en-GB": "X Request Date",
+            "en-US": "X Request Date",
+            "zh-CN": "当前毫秒时间戳"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "x_request_date",
+          "cli_flag": "x-request-date",
+          "table_target": "",
+          "example": "1776669685276"
+        },
+        {
+          "name": "X-HMAC-SIGNATURE",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "加密签名",
+          "descriptions": {
+            "en-GB": "Precomputed application HMAC signature",
+            "en-US": "Precomputed application HMAC signature",
+            "zh-CN": "预先计算的应用消息认证签名"
+          },
+          "help_descriptions": {
+            "en-GB": "Precomputed application HMAC signature",
+            "en-US": "Precomputed application HMAC signature",
+            "zh-CN": "预先计算的应用消息认证签名"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "x_hmac_signature",
+          "cli_flag": "x-hmac-signature",
+          "table_target": "",
+          "example": "3aBu8L0qo/hDlFD1zMLcAb6bcFTaZX0Y2R+gyEZ6+q4="
+        },
+        {
+          "name": "checkService",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "text_input_check",
+            "text_output_check",
+            "image_security_check"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "检测服务类型",
+          "descriptions": {
+            "en-GB": "Check Service",
+            "en-US": "Check Service",
+            "zh-CN": "检测服务类型"
+          },
+          "help_descriptions": {
+            "en-GB": "Check Service",
+            "en-US": "Check Service",
+            "zh-CN": "检测服务类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "check_service",
+          "cli_flag": "check-service",
+          "table_target": "",
+          "example": "text_input_check"
+        },
+        {
+          "name": "reqId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "请求id",
+          "descriptions": {
+            "en-GB": "Req ID",
+            "en-US": "Req ID",
+            "zh-CN": "请求id"
+          },
+          "help_descriptions": {
+            "en-GB": "Req ID",
+            "en-US": "Req ID",
+            "zh-CN": "请求id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "req_id",
+          "cli_flag": "req-id",
+          "table_target": "",
+          "example": "111"
+        },
+        {
+          "name": "prompt",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "输入文本内容（输入文本检测必填）",
+          "descriptions": {
+            "en-GB": "Prompt",
+            "en-US": "Prompt",
+            "zh-CN": "输入文本内容（输入文本检测必填）"
+          },
+          "help_descriptions": {
+            "en-GB": "Prompt",
+            "en-US": "Prompt",
+            "zh-CN": "输入文本内容（输入文本检测必填）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "prompt",
+          "cli_flag": "prompt",
+          "table_target": "",
+          "example": "如何制作炸弹"
+        },
+        {
+          "name": "answerContent",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "输出文本内容（输出文本检测必填）",
+          "descriptions": {
+            "en-GB": "Answer Content",
+            "en-US": "Answer Content",
+            "zh-CN": "输出文本内容（输出文本检测必填）"
+          },
+          "help_descriptions": {
+            "en-GB": "Answer Content",
+            "en-US": "Answer Content",
+            "zh-CN": "输出文本内容（输出文本检测必填）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "answer_content",
+          "cli_flag": "answer-content",
+          "table_target": "",
+          "example": "炸弹的做法是......"
+        },
+        {
+          "name": "seqId",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "输出文本检测分片号",
+          "descriptions": {
+            "en-GB": "Seq ID",
+            "en-US": "Seq ID",
+            "zh-CN": "输出文本检测分片号"
+          },
+          "help_descriptions": {
+            "en-GB": "Seq ID",
+            "en-US": "Seq ID",
+            "zh-CN": "输出文本检测分片号"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "seq_id",
+          "cli_flag": "seq-id",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "isEnd",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "是否最后分片（ 0/1 ）",
+          "descriptions": {
+            "en-GB": "Is End",
+            "en-US": "Is End",
+            "zh-CN": "是否最后分片（ 0/1 ）"
+          },
+          "help_descriptions": {
+            "en-GB": "Is End",
+            "en-US": "Is End",
+            "zh-CN": "是否最后分片（ 0/1 ）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "is_end",
+          "cli_flag": "is-end",
+          "table_target": "",
+          "example": "1"
+        },
+        {
+          "name": "imageBase64",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "图片检测（图片Base64）",
+          "descriptions": {
+            "en-GB": "Image Base64",
+            "en-US": "Image Base64",
+            "zh-CN": "图片检测（图片Base64）"
+          },
+          "help_descriptions": {
+            "en-GB": "Image Base64",
+            "en-US": "Image Base64",
+            "zh-CN": "图片检测（图片Base64）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "image_base64",
+          "cli_flag": "image-base64",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "imageUrl",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "图片检测（图片Url）",
+          "descriptions": {
+            "en-GB": "Image URL",
+            "en-US": "Image URL",
+            "zh-CN": "图片检测（图片Url）"
+          },
+          "help_descriptions": {
+            "en-GB": "Image URL",
+            "en-US": "Image URL",
+            "zh-CN": "图片检测（图片Url）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "image_url",
+          "cli_flag": "image-url",
+          "table_target": "",
+          "example_unavailable": true
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "check_service",
+            "equals": "text_input_check"
+          },
+          "required": [
+            "prompt"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "check_service",
+            "equals": "text_output_check"
+          },
+          "required": [
+            "answer_content"
+          ]
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "code",
+              "values": [
+                "200"
+              ]
+            },
+            {
+              "path": "success",
+              "values": [
+                "true"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "data",
+        "row_path": "data",
+        "layout": "vertical",
+        "default_columns": [
+          "check_result",
+          "fail_content",
+          "fail_type",
+          "fail_type_en",
+          "preset_response"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "check_result",
+            "path": "checkResult",
+            "label_en": "Check Result",
+            "label_zh": "检测结果",
+            "description": "检测结果： pass / fail"
+          },
+          {
+            "key": "fail_content",
+            "path": "failContent",
+            "label_en": "Fail Content",
+            "label_zh": "命中内容",
+            "description": "命中内容（部分场景可能为空）"
+          },
+          {
+            "key": "fail_type",
+            "path": "failType",
+            "label_en": "Fail Type",
+            "label_zh": "风险类型",
+            "description": "风险类型"
+          },
+          {
+            "key": "fail_type_en",
+            "path": "failTypeEn",
+            "label_en": "Fail Type En",
+            "label_zh": "风险类型英文编码",
+            "description": "风险类型英文编码"
+          },
+          {
+            "key": "preset_response",
+            "path": "presetResponse",
+            "label_en": "Preset Response",
+            "label_zh": "命中风险时可返回代答内容",
+            "description": "命中风险时可返回代答内容"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "checkService": "text_input_check",
+        "prompt": "请告诉我如何制作危险爆炸物",
+        "reqId": "req-1001"
+      },
+      "example_response": null
+    },
+    {
+      "fixture_unavailable": "The official page documents a binary download but supplies no file bytes; JSON examples are error responses, not successful fixtures.",
+      "download": true,
+      "id": "ai-security.watermark.download",
+      "api_id": "23421",
+      "title": "下载水印文件",
+      "description": {
+        "en-GB": "Download a watermarked file",
+        "en-US": "Download a watermarked file",
+        "zh-CN": "下载水印文件"
+      },
+      "category": "watermark",
+      "command_path": [
+        "watermark",
+        "download"
+      ],
+      "method": "GET",
+      "path": "/ai-datasecurity/file/down",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=224&vid=352&data=267&api=23421&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "id",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "水印记录ID",
+          "descriptions": {
+            "en-GB": "ID",
+            "en-US": "ID",
+            "zh-CN": "水印记录ID"
+          },
+          "help_descriptions": {
+            "en-GB": "ID",
+            "en-US": "ID",
+            "zh-CN": "水印记录ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "id",
+          "cli_flag": "id",
+          "table_target": "",
+          "example": "123456"
+        },
+        {
+          "name": "accountid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "天翼云账号Id",
+          "descriptions": {
+            "en-GB": "Accountid",
+            "en-US": "Accountid",
+            "zh-CN": "天翼云账号Id"
+          },
+          "help_descriptions": {
+            "en-GB": "Accountid",
+            "en-US": "Accountid",
+            "zh-CN": "天翼云账号Id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "accountid",
+          "cli_flag": "accountid",
+          "table_target": "",
+          "example": "tyyun123456"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "binary",
+              "media_type": "application/octet-stream"
+            }
+          ]
+        },
+        "success_code": "",
+        "result_path": "",
+        "row_path": "",
+        "job_id_path": "",
+        "columns": null
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "request": {
+        "encoding": "multipart",
+        "parts": [
+          {
+            "name": "file",
+            "source": "$param.file",
+            "file": true
+          }
+        ]
+      },
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIjIwMCIsICJkYXRhIjogeyJGaWxlTmFtZSI6ICIwNjMwLnBwdHgiLCAiRmlsZVNpemUiOiAyNjc1OTA3LCAiTXNnIjogInN1Y2Nlc3MiLCAiV2F0ZXJtYXJrVGV4dCI6ICLmjqXlj6PmlrnlvI/msLTljbDmtYvor5UifX0="
+      },
+      "id": "ai-security.watermark.extract",
+      "api_id": "23420",
+      "title": "提取水印",
+      "description": {
+        "en-GB": "Extract a watermark",
+        "en-US": "Extract a watermark",
+        "zh-CN": "提取水印"
+      },
+      "category": "watermark",
+      "command_path": [
+        "watermark",
+        "extract"
+      ],
+      "method": "POST",
+      "path": "/open-api/watermark/extract",
+      "content_type": "multipart/form-data",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=224&vid=352&data=267&api=23420&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "accountid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "天翼云账号Id",
+          "descriptions": {
+            "en-GB": "Accountid",
+            "en-US": "Accountid",
+            "zh-CN": "天翼云账号Id"
+          },
+          "help_descriptions": {
+            "en-GB": "Accountid",
+            "en-US": "Accountid",
+            "zh-CN": "天翼云账号Id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "accountid",
+          "cli_flag": "accountid",
+          "table_target": "",
+          "example": "tyyun123456"
+        },
+        {
+          "name": "X-APP-CODE",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "应用编码",
+          "descriptions": {
+            "en-GB": "X App Code",
+            "en-US": "X App Code",
+            "zh-CN": "应用编码"
+          },
+          "help_descriptions": {
+            "en-GB": "X App Code",
+            "en-US": "X App Code",
+            "zh-CN": "应用编码"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "x_app_code",
+          "cli_flag": "x-app-code",
+          "table_target": "",
+          "example": "gjjmtq"
+        },
+        {
+          "name": "X-REQUEST-DATE",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "当前毫秒时间戳",
+          "descriptions": {
+            "en-GB": "X Request Date",
+            "en-US": "X Request Date",
+            "zh-CN": "当前毫秒时间戳"
+          },
+          "help_descriptions": {
+            "en-GB": "X Request Date",
+            "en-US": "X Request Date",
+            "zh-CN": "当前毫秒时间戳"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "x_request_date",
+          "cli_flag": "x-request-date",
+          "table_target": "",
+          "example": "1776669685276"
+        },
+        {
+          "name": "X-HMAC-SIGNATURE",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "加密签名",
+          "descriptions": {
+            "en-GB": "Precomputed application HMAC signature",
+            "en-US": "Precomputed application HMAC signature",
+            "zh-CN": "预先计算的应用消息认证签名"
+          },
+          "help_descriptions": {
+            "en-GB": "Precomputed application HMAC signature",
+            "en-US": "Precomputed application HMAC signature",
+            "zh-CN": "预先计算的应用消息认证签名"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "x_hmac_signature",
+          "cli_flag": "x-hmac-signature",
+          "table_target": "",
+          "example": "3aBu8L0qo/hDlFD1zMLcAb6bcFTaZX0Y2R+gyEZ6+q4="
+        },
+        {
+          "input": "file",
+          "name": "file",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "需要提取水印的文件（支持 PDF、Office 等格式）",
+          "descriptions": {
+            "en-GB": "Local file to upload",
+            "en-US": "Local file to upload",
+            "zh-CN": "待上传的本地文件"
+          },
+          "help_descriptions": {
+            "en-GB": "Local file to upload",
+            "en-US": "Local file to upload",
+            "zh-CN": "待上传的本地文件"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "file",
+          "cli_flag": "file",
+          "table_target": "",
+          "example_unavailable": true
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "code",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "data",
+        "row_path": "data",
+        "layout": "vertical",
+        "default_columns": [
+          "file_name",
+          "file_size",
+          "msg",
+          "watermark_text"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "file_name",
+            "path": "FileName",
+            "label_en": "File Name",
+            "label_zh": "文件名称",
+            "description": "文件名称"
+          },
+          {
+            "key": "file_size",
+            "path": "FileSize",
+            "label_en": "File Size",
+            "label_zh": "文件大小",
+            "description": "文件大小（字节）"
+          },
+          {
+            "key": "msg",
+            "path": "Msg",
+            "label_en": "Msg",
+            "label_zh": "处理结果描述",
+            "description": "处理结果描述"
+          },
+          {
+            "key": "watermark_text",
+            "path": "WatermarkText",
+            "label_en": "Watermark Text",
+            "label_zh": "水印解码后的内容",
+            "description": "水印解码后的内容"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "request": {
+        "encoding": "multipart",
+        "parts": [
+          {
+            "name": "file",
+            "source": "$param.file",
+            "file": true
+          },
+          {
+            "name": "watermarkText",
+            "source": "$param.watermark_text"
+          }
+        ]
+      },
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIjIwMCIsICJkYXRhIjogeyJEYXRhIjogeyJpZCI6ICI1YTU0NjRmYmYzNWI0OTc0YWEyNmU2NzQ1MjJjYzRmZCIsICJmaWxlX25hbWUiOiAi54mI5pys5paH5qGjLVNNLnBkZiIsICJmaWxlX3BhdGgiOiAiL3RtcC93YXRlcm1hcmtfZmlsZXMvYjQ1N2NjNzgzYTFmNDRmYjFmMmJjZDZhZDk1NmE0Zi90ZXN0LnBkZiIsICJ3YXRlcm1hcmtfdGV4dCI6ICLmjqXlj6PmlrnlvI/msLTljbDmtYvor5UiLCAid2F0ZXJtYXJrX3RpbWUiOiAiMjAyNi0wNy0wMSAxNjo1MDowNyIsICJzdWNjZXNzIjogdHJ1ZSwgImZhaWxfcmVhc29uIjogIiJ9LCAiZG93bmxvYWRfdXJsIjogImh0dHA6Ly8qKioqKiovYWktZGF0YXNlY3VyaXR5L2ZpbGUvZG93bmxvYWQ/aWQ9KioqKioifSwgIk1zZyI6ICJzdWNjZXNzIn0="
+      },
+      "id": "ai-security.watermark.add",
+      "api_id": "23419",
+      "title": "添加水印",
+      "description": {
+        "en-GB": "Add a watermark",
+        "en-US": "Add a watermark",
+        "zh-CN": "添加水印"
+      },
+      "category": "watermark",
+      "command_path": [
+        "watermark",
+        "add"
+      ],
+      "method": "POST",
+      "path": "/open-api/watermark",
+      "content_type": "multipart/form-data",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=224&vid=352&data=267&api=23419&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "accountid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "天翼云账号Id",
+          "descriptions": {
+            "en-GB": "Accountid",
+            "en-US": "Accountid",
+            "zh-CN": "天翼云账号Id"
+          },
+          "help_descriptions": {
+            "en-GB": "Accountid",
+            "en-US": "Accountid",
+            "zh-CN": "天翼云账号Id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "accountid",
+          "cli_flag": "accountid",
+          "table_target": "",
+          "example": "tyyun123456"
+        },
+        {
+          "name": "X-APP-CODE",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "应用编码",
+          "descriptions": {
+            "en-GB": "X App Code",
+            "en-US": "X App Code",
+            "zh-CN": "应用编码"
+          },
+          "help_descriptions": {
+            "en-GB": "X App Code",
+            "en-US": "X App Code",
+            "zh-CN": "应用编码"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "x_app_code",
+          "cli_flag": "x-app-code",
+          "table_target": "",
+          "example": "gjjmtq"
+        },
+        {
+          "name": "X-REQUEST-DATE",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "当前毫秒时间戳",
+          "descriptions": {
+            "en-GB": "X Request Date",
+            "en-US": "X Request Date",
+            "zh-CN": "当前毫秒时间戳"
+          },
+          "help_descriptions": {
+            "en-GB": "X Request Date",
+            "en-US": "X Request Date",
+            "zh-CN": "当前毫秒时间戳"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "x_request_date",
+          "cli_flag": "x-request-date",
+          "table_target": "",
+          "example": "1776669685276"
+        },
+        {
+          "name": "X-HMAC-SIGNATURE",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "加密签名",
+          "descriptions": {
+            "en-GB": "Precomputed application HMAC signature",
+            "en-US": "Precomputed application HMAC signature",
+            "zh-CN": "预先计算的应用消息认证签名"
+          },
+          "help_descriptions": {
+            "en-GB": "Precomputed application HMAC signature",
+            "en-US": "Precomputed application HMAC signature",
+            "zh-CN": "预先计算的应用消息认证签名"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "x_hmac_signature",
+          "cli_flag": "x-hmac-signature",
+          "table_target": "",
+          "example": "3aBu8L0qo/hDlFD1zMLcAb6bcFTaZX0Y2R+gyEZ6+q4="
+        },
+        {
+          "input": "file",
+          "name": "file",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "需要添加水印的文件（支持 PDF、Office 等格式）",
+          "descriptions": {
+            "en-GB": "Local file to upload",
+            "en-US": "Local file to upload",
+            "zh-CN": "待上传的本地文件"
+          },
+          "help_descriptions": {
+            "en-GB": "Local file to upload",
+            "en-US": "Local file to upload",
+            "zh-CN": "待上传的本地文件"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "file",
+          "cli_flag": "file",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "watermarkText",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "水印文本内容",
+          "descriptions": {
+            "en-GB": "Watermark Text",
+            "en-US": "Watermark Text",
+            "zh-CN": "水印文本内容"
+          },
+          "help_descriptions": {
+            "en-GB": "Watermark Text",
+            "en-US": "Watermark Text",
+            "zh-CN": "水印文本内容"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "watermark_text",
+          "cli_flag": "watermark-text",
+          "table_target": "",
+          "example": "天翼云-张三-20260101"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "code",
+              "values": [
+                "200"
+              ]
+            },
+            {
+              "path": "data.Data.success",
+              "values": [
+                "true"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "data",
+        "row_path": "data",
+        "layout": "vertical",
+        "default_columns": [
+          "data",
+          "download_url"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "data",
+            "path": "Data",
+            "label_en": "Data",
+            "label_zh": "水印处理详情",
+            "description": "水印处理详情"
+          },
+          {
+            "key": "download_url",
+            "path": "download_url",
+            "label_en": "Download URL",
+            "label_zh": "添加水印后的文件下载地址",
+            "description": "添加水印后的文件下载地址"
+          }
+        ]
+      },
+      "dangerous": true,
+      "example_response": null
+    },
+    {
+      "request": {
+        "encoding": "multipart",
+        "parts": [
+          {
+            "name": "file",
+            "source": "$param.file",
+            "file": true
+          }
+        ]
+      },
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJjb2RlIjogIjIwMCIsICJzdWJDb2RlIjogIjIwMCIsICJtZXNzYWdlIjogIuivt+axguaIkOWKnyIsICJzdWNjZXNzIjogdHJ1ZSwgImRhdGEiOiB7InJlc3VsdCI6IGZhbHNlLCAibWVzc2FnZSI6ICLmlofku7bmo4DmtYvpgJrov4ciLCAibWF0Y2hlZENvbnRlbnQiOiBudWxsLCAibWF0Y2hlZFJ1bGVzIjogbnVsbCwgImF1ZGl0TG9nSWQiOiAxMDAxfX0="
+      },
+      "id": "ai-security.file.check",
+      "api_id": "23418",
+      "title": "文件检测",
+      "description": {
+        "en-GB": "Check a file for sensitive content",
+        "en-US": "Check a file for sensitive content",
+        "zh-CN": "文件检测"
+      },
+      "category": "file",
+      "command_path": [
+        "file",
+        "check"
+      ],
+      "method": "POST",
+      "path": "/open-api/file/check",
+      "content_type": "multipart/form-data",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=224&vid=352&data=267&api=23418&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "accountid",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "天翼云账号Id",
+          "descriptions": {
+            "en-GB": "Accountid",
+            "en-US": "Accountid",
+            "zh-CN": "天翼云账号Id"
+          },
+          "help_descriptions": {
+            "en-GB": "Accountid",
+            "en-US": "Accountid",
+            "zh-CN": "天翼云账号Id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "accountid",
+          "cli_flag": "accountid",
+          "table_target": "",
+          "example": "tyyun123456"
+        },
+        {
+          "name": "X-APP-CODE",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "应用编码",
+          "descriptions": {
+            "en-GB": "X App Code",
+            "en-US": "X App Code",
+            "zh-CN": "应用编码"
+          },
+          "help_descriptions": {
+            "en-GB": "X App Code",
+            "en-US": "X App Code",
+            "zh-CN": "应用编码"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "x_app_code",
+          "cli_flag": "x-app-code",
+          "table_target": "",
+          "example": "gjjmtq"
+        },
+        {
+          "name": "X-REQUEST-DATE",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "当前毫秒时间戳",
+          "descriptions": {
+            "en-GB": "X Request Date",
+            "en-US": "X Request Date",
+            "zh-CN": "当前毫秒时间戳"
+          },
+          "help_descriptions": {
+            "en-GB": "X Request Date",
+            "en-US": "X Request Date",
+            "zh-CN": "当前毫秒时间戳"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "x_request_date",
+          "cli_flag": "x-request-date",
+          "table_target": "",
+          "example": "1776669685276"
+        },
+        {
+          "name": "X-HMAC-SIGNATURE",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "加密签名",
+          "descriptions": {
+            "en-GB": "Precomputed application HMAC signature",
+            "en-US": "Precomputed application HMAC signature",
+            "zh-CN": "预先计算的应用消息认证签名"
+          },
+          "help_descriptions": {
+            "en-GB": "Precomputed application HMAC signature",
+            "en-US": "Precomputed application HMAC signature",
+            "zh-CN": "预先计算的应用消息认证签名"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "x_hmac_signature",
+          "cli_flag": "x-hmac-signature",
+          "table_target": "",
+          "example": "3aBu8L0qo/hDlFD1zMLcAb6bcFTaZX0Y2R+gyEZ6+q4="
+        },
+        {
+          "input": "file",
+          "name": "file",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "需要检测的文件（支持 PDF、Office 等常见格式）",
+          "descriptions": {
+            "en-GB": "Local file to upload",
+            "en-US": "Local file to upload",
+            "zh-CN": "待上传的本地文件"
+          },
+          "help_descriptions": {
+            "en-GB": "Local file to upload",
+            "en-US": "Local file to upload",
+            "zh-CN": "待上传的本地文件"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "file",
+          "cli_flag": "file",
+          "table_target": "",
+          "example_unavailable": true
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "code",
+              "values": [
+                "200"
+              ]
+            },
+            {
+              "path": "success",
+              "values": [
+                "true"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "data",
+        "row_path": "data",
+        "layout": "vertical",
+        "default_columns": [
+          "result",
+          "message",
+          "matched_content",
+          "matched_rules",
+          "audit_log_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "result",
+            "path": "result",
+            "label_en": "Result",
+            "label_zh": "检测结果",
+            "description": "检测结果：true-含有敏感内容被拦截，false-检测通过"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "检测结果描述"
+          },
+          {
+            "key": "matched_content",
+            "path": "matchedContent",
+            "label_en": "Matched Content",
+            "label_zh": "命中的敏感内容列表",
+            "description": "命中的敏感内容列表（检测通过时为空）"
+          },
+          {
+            "key": "matched_rules",
+            "path": "matchedRules",
+            "label_en": "Matched Rules",
+            "label_zh": "命中的规则列表",
+            "description": "命中的规则列表（检测通过时为空）"
+          },
+          {
+            "key": "audit_log_id",
+            "path": "auditLogId",
+            "label_en": "Audit Log ID",
+            "label_zh": "审计日志记录 ID",
+            "description": "审计日志记录ID"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    }
+  ]
+}

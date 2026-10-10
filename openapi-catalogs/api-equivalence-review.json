@@ -1,0 +1,3804 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-09-25",
+  "notes": [
+    "Equivalent coverage records shared product functionality and identical request contracts across two official catalogs. It does not assert identical response shapes or interchangeable endpoints.",
+    "The ELB source contains additional response fields and revised IP-listener forwarding shapes; the existing ELB bundle and its raw output retain that current contract. No duplicate commands or unverified VPC-hosted response variant is generated."
+  ],
+  "operations": [
+    {
+      "api_id": "15348",
+      "title": "gwlb查看target_group列表",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&data=94&vid=88&api=15348&isNormal=1",
+      "target_api_id": "18149",
+      "owner": {
+        "plugin": "elb",
+        "command": "ctyun elb gateway target-group list"
+      },
+      "target_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=24&api=18149&data=88&isNormal=1&vid=82",
+      "status": "covered_equivalent",
+      "reason": "The ELB product publishes the same method, URI, request field types and required inputs for this operation. Use the existing ELB command and its documented ctelb endpoint/response contract; the older VPC-hosted response shape is not claimed as a separately supported transport.",
+      "request_reference_note": null,
+      "response_schema_differences": [
+        {
+          "table": "表 results",
+          "field": "projectID",
+          "vpc_schema": null,
+          "elb_schema": [
+            "String",
+            null,
+            ""
+          ]
+        }
+      ],
+      "source_document": {
+        "data": [
+          {
+            "updatedTime": "2025-05-22 15:14:03",
+            "title": "接口功能介绍",
+            "type": "string",
+            "content": [
+              "查看target_group列表"
+            ]
+          },
+          {
+            "title": "接口约束",
+            "type": "string",
+            "content": [
+              "无约束"
+            ]
+          },
+          {
+            "title": "接口是否审批",
+            "type": "string",
+            "content": [
+              "否"
+            ]
+          },
+          {
+            "title": "URI",
+            "type": "string",
+            "content": [
+              "GET",
+              "/v4/gwlb/list-target-group"
+            ]
+          },
+          {
+            "title": "Content-Type",
+            "type": "string",
+            "content": [
+              "application/json"
+            ]
+          },
+          {
+            "title": "路径参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "Query参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"Query参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"example\":\"示例\"},{\"describe\":\"说明\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"example\":\"bb9fdb42056f11eda1610242ac110002\",\"describe\":\"资源池 ID\"},{\"support_auto_recovery\":\"targetGroupID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"example\":\"tg-xxx\",\"describe\":\"后端服务组 ID\"},{\"support_auto_recovery\":\"pageNumber\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"example\":\"1\",\"describe\":\"列表的页码，默认值为 1。\"},{\"support_auto_recovery\":\"pageSize\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"example\":\"10\",\"describe\":\"分页查询时每页的行数，最大值为 50，默认值为 10。\"}]}}]"
+            ]
+          },
+          {
+            "title": "请求头header参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "响应参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"results\",\"paramType\":\"Array of Objects\",\"describe\":\"接口业务数据\",\"lowerObject\":\"results\",\"example\":\"\"},{\"support_auto_recovery\":\"totalCount\",\"paramType\":\"Integer\",\"describe\":\"列表条目数\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"currentCount\",\"paramType\":\"Integer\",\"describe\":\"分页查询时每页的行数。\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"totalPage\",\"paramType\":\"Integer\",\"describe\":\"总页数\",\"lowerObject\":\"\",\"example\":\"1\"}]}},{\"table\":{\"title\":\"表 results\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"targetGroupID\",\"paramType\":\"String\",\"describe\":\"后端服务组ID\",\"lowerObject\":\"\",\"example\":\"tg-xxxx\"},{\"support_auto_recovery\":\"name\",\"paramType\":\"String\",\"describe\":\"名称\",\"lowerObject\":\"\",\"example\":\"test\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"描述\",\"lowerObject\":\"\",\"example\":\"test\"},{\"support_auto_recovery\":\"vpcID\",\"paramType\":\"String\",\"describe\":\"vpc id\",\"lowerObject\":\"\",\"example\":\"vpc-xxxx\"},{\"support_auto_recovery\":\"healthCheckID\",\"paramType\":\"String\",\"describe\":\"健康检查 ID\",\"lowerObject\":\"\",\"example\":\"hc-xxxx\"},{\"support_auto_recovery\":\"sessionStickyMode\",\"paramType\":\"Integer\",\"describe\":\"0:五元组, 4:二元组, 5:三元组, -1 未开启\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"bypassType\",\"paramType\":\"Integer\",\"describe\":\"旁路类型 1 表示关闭，2 表示自动\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"failoverType\",\"paramType\":\"Integer\",\"describe\":\"故障转移类型 1 表示关闭，2 表示再平衡\",\"lowerObject\":\"\",\"example\":\"1\"}]}}]"
+            ]
+          },
+          {
+            "title": "枚举参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "请求url示例",
+            "type": "json",
+            "content": [
+              "GET /openapi/v4/gwlb/list-target-group?regionID=xxx"
+            ]
+          },
+          {
+            "title": "请求体body示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "响应示例",
+            "type": "json",
+            "content": [
+              " \n#### 成功响应示例\n\n{\n    \"statusCode\":800,\n    \"errorCode\":\"SUCCESS\",\n    \"message\":\"success\",\n    \"descritption\": \"成功\",\n\t\"returnObj\":{\n        \"results\": [{\n            \"targetGroupID\": \"tg-xxx\",\n            \"name\": \"test\",\n            \"description\": \"test\",\n            \"vpcID\": \"vpc-xxx\",\n            \"healthCheckID\": \"hc-xxx\"\n        }],\n        \"currentCount\": 1,\n        \"totalCount\": 1,\n        \"totalPage\": 1\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+            ]
+          },
+          {
+            "title": "状态码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "错误码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "流控信息",
+            "type": "string",
+            "content": [
+              "300"
+            ]
+          }
+        ],
+        "capacityId": 15348,
+        "name": "gwlb查看target_group列表",
+        "serviceId": 94,
+        "isDocumenFinish": 1
+      }
+    },
+    {
+      "api_id": "15347",
+      "title": "gwlb查看target_group详情",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&data=94&vid=88&api=15347&isNormal=1",
+      "target_api_id": "18150",
+      "owner": {
+        "plugin": "elb",
+        "command": "ctyun elb gateway target-group show"
+      },
+      "target_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=24&api=18150&data=88&isNormal=1&vid=82",
+      "status": "covered_equivalent",
+      "reason": "The ELB product publishes the same method, URI, request field types and required inputs for this operation. Use the existing ELB command and its documented ctelb endpoint/response contract; the older VPC-hosted response shape is not claimed as a separately supported transport.",
+      "request_reference_note": null,
+      "response_schema_differences": [
+        {
+          "table": "表 returnObj",
+          "field": "projectID",
+          "vpc_schema": null,
+          "elb_schema": [
+            "String",
+            null,
+            ""
+          ]
+        }
+      ],
+      "source_document": {
+        "data": [
+          {
+            "updatedTime": "2025-05-22 15:14:29",
+            "title": "接口功能介绍",
+            "type": "string",
+            "content": [
+              "查看target_group详情"
+            ]
+          },
+          {
+            "title": "接口约束",
+            "type": "string",
+            "content": [
+              "无"
+            ]
+          },
+          {
+            "title": "接口是否审批",
+            "type": "string",
+            "content": [
+              "否"
+            ]
+          },
+          {
+            "title": "URI",
+            "type": "string",
+            "content": [
+              "GET",
+              "/v4/gwlb/show-target-group"
+            ]
+          },
+          {
+            "title": "Content-Type",
+            "type": "string",
+            "content": [
+              "application/json"
+            ]
+          },
+          {
+            "title": "路径参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "Query参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"Query参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"example\":\"示例\"},{\"describe\":\"说明\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"example\":\"bb9fdb42056f11eda1610242ac110002\",\"describe\":\"资源池 ID\"},{\"support_auto_recovery\":\"targetGroupID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"example\":\"tg-xxx\",\"describe\":\"后端服务组 ID\"}]}}]"
+            ]
+          },
+          {
+            "title": "请求头header参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "响应参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"targetGroupID\",\"paramType\":\"String\",\"describe\":\"后端服务组ID\",\"lowerObject\":\"\",\"example\":\"tg-xxxx\"},{\"support_auto_recovery\":\"name\",\"paramType\":\"String\",\"describe\":\"名称\",\"lowerObject\":\"\",\"example\":\"test\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"描述\",\"lowerObject\":\"\",\"example\":\"test\"},{\"support_auto_recovery\":\"vpcID\",\"paramType\":\"String\",\"describe\":\"vpc id\",\"lowerObject\":\"\",\"example\":\"vpc-xxxx\"},{\"support_auto_recovery\":\"healthCheckID\",\"paramType\":\"String\",\"describe\":\"健康检查 ID\",\"lowerObject\":\"\",\"example\":\"hc-xxxx\"},{\"support_auto_recovery\":\"sessionStickyMode\",\"paramType\":\"Integer\",\"describe\":\"0:五元组, 4:二元组, 5:三元组, -1 未开启\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"failoverType\",\"paramType\":\"Integer\",\"describe\":\"故障转移类型 1 表示关闭，2 表示再平衡\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"bypassType\",\"paramType\":\"Integer\",\"describe\":\"旁路类型 1 表示关闭，2 表示自动\",\"lowerObject\":\"\",\"example\":\"1\"}]}}]"
+            ]
+          },
+          {
+            "title": "枚举参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "请求url示例",
+            "type": "json",
+            "content": [
+              "GET /openapi/v4/gwlb/show-target-group?regionID=xxx&targetGroupID=xxxx"
+            ]
+          },
+          {
+            "title": "请求体body示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "响应示例",
+            "type": "json",
+            "content": [
+              " \n#### 成功响应示例\n\n{\n    \"statusCode\":800,\n    \"errorCode\":\"SUCCESS\",\n    \"message\":\"success\",\n    \"descritption\": \"成功\",\n\t\"returnObj\":{\n        \"targetGroupID\": \"tg-xxx\",\n        \"name\": \"test\",\n        \"description\": \"test\",\n        \"vpcID\": \"vpc-xxx\",\n        \"healthCheckID\": \"hc-xxx\"\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+            ]
+          },
+          {
+            "title": "状态码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "错误码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "流控信息",
+            "type": "string",
+            "content": [
+              "300"
+            ]
+          }
+        ],
+        "capacityId": 15347,
+        "name": "gwlb查看target_group详情",
+        "serviceId": 94,
+        "isDocumenFinish": 1
+      }
+    },
+    {
+      "api_id": "15317",
+      "title": "gwlb删除target_group",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&data=94&vid=88&api=15317&isNormal=1",
+      "target_api_id": "18151",
+      "owner": {
+        "plugin": "elb",
+        "command": "ctyun elb gateway target-group delete"
+      },
+      "target_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=24&api=18151&data=88&isNormal=1&vid=82",
+      "status": "covered_equivalent",
+      "reason": "The ELB product publishes the same method, URI, request field types and required inputs for this operation. Use the existing ELB command and its documented ctelb endpoint/response contract; the older VPC-hosted response shape is not claimed as a separately supported transport.",
+      "request_reference_note": null,
+      "response_schema_differences": [],
+      "source_document": {
+        "data": [
+          {
+            "updatedTime": "2025-05-22 15:14:47",
+            "title": "接口功能介绍",
+            "type": "string",
+            "content": [
+              "删除target_group"
+            ]
+          },
+          {
+            "title": "接口约束",
+            "type": "string",
+            "content": [
+              "无"
+            ]
+          },
+          {
+            "title": "接口是否审批",
+            "type": "string",
+            "content": [
+              "否"
+            ]
+          },
+          {
+            "title": "URI",
+            "type": "string",
+            "content": [
+              "POST",
+              "/v4/gwlb/delete-target-group"
+            ]
+          },
+          {
+            "title": "Content-Type",
+            "type": "string",
+            "content": [
+              "application/json"
+            ]
+          },
+          {
+            "title": "路径参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "Query参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"资源池 ID\",\"lowerObject\":\"\",\"example\":\"bb9fdb42056f11eda1610242ac110002\"},{\"support_auto_recovery\":\"targetGroupID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"后端服务组 ID\",\"lowerObject\":\"\",\"example\":\"tg-xxx\"}]}}]"
+            ]
+          },
+          {
+            "title": "响应参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"targetGroupID\",\"paramType\":\"String\",\"describe\":\"后端服务组ID\",\"lowerObject\":\"\",\"example\":\"tg-xxxx\"}]}}]"
+            ]
+          },
+          {
+            "title": "枚举参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "请求url示例",
+            "type": "json",
+            "content": [
+              "POST /openapi/v4/gwlb/delete-target-group"
+            ]
+          },
+          {
+            "title": "请求体body示例",
+            "type": "json",
+            "content": [
+              "{\n  \"regionID\" : \"xxxx\",\n  \"targetGroupID\" : \"tg-xxxx\"\n}"
+            ]
+          },
+          {
+            "title": "响应示例",
+            "type": "json",
+            "content": [
+              " \n#### 成功响应示例\n\n{\n    \"statusCode\":800,\n    \"errorCode\":\"SUCCESS\",\n    \"message\":\"success\",\n    \"descritption\": \"成功\",\n\t\"returnObj\":{\n        \"targetGroupID\": \"tg-xxx\"\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+            ]
+          },
+          {
+            "title": "状态码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "错误码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "流控信息",
+            "type": "string",
+            "content": [
+              "300"
+            ]
+          }
+        ],
+        "capacityId": 15317,
+        "name": "gwlb删除target_group",
+        "serviceId": 94,
+        "isDocumenFinish": 1
+      }
+    },
+    {
+      "api_id": "15315",
+      "title": "gwlb更新target_group",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&data=94&vid=88&api=15315&isNormal=1",
+      "target_api_id": "18153",
+      "owner": {
+        "plugin": "elb",
+        "command": "ctyun elb gateway target-group update"
+      },
+      "target_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=24&api=18153&data=88&isNormal=1&vid=82",
+      "status": "covered_equivalent",
+      "reason": "The ELB product publishes the same method, URI, request field types and required inputs for this operation. Use the existing ELB command and its documented ctelb endpoint/response contract; the older VPC-hosted response shape is not claimed as a separately supported transport.",
+      "request_reference_note": null,
+      "response_schema_differences": [],
+      "source_document": {
+        "data": [
+          {
+            "updatedTime": "2025-05-22 15:15:17",
+            "title": "接口功能介绍",
+            "type": "string",
+            "content": [
+              "更新target_group"
+            ]
+          },
+          {
+            "title": "接口约束",
+            "type": "string",
+            "content": [
+              "无"
+            ]
+          },
+          {
+            "title": "接口是否审批",
+            "type": "string",
+            "content": [
+              "否"
+            ]
+          },
+          {
+            "title": "URI",
+            "type": "string",
+            "content": [
+              "POST",
+              "/v4/gwlb/update-target-group"
+            ]
+          },
+          {
+            "title": "Content-Type",
+            "type": "string",
+            "content": [
+              "application/json"
+            ]
+          },
+          {
+            "title": "路径参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "Query参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"资源池 ID\",\"lowerObject\":\"\",\"example\":\"bb9fdb42056f11eda1610242ac110002\"},{\"support_auto_recovery\":\"targetGroupID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"后端服务组 ID\",\"lowerObject\":\"\",\"example\":\"tg-xxx\"},{\"support_auto_recovery\":\"name\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"支持拉丁字母、中文、数字，下划线，连字符，中文 / 英文字母开头，不能以 http: / https: 开头，长度 2 - 32\",\"lowerObject\":\"\",\"example\":\"test\"},{\"support_auto_recovery\":\"description\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"支持拉丁字母、中文、数字, 特殊字符：~!@#$%^&*()_-+= <>?:\\\"{},./;'[\\\\]·！@#￥%……&*（） —— -+={}\\\\《》？：“”【】、；‘'，。、，不能以 http: / https: 开头，长度 0 - 128\",\"lowerObject\":\"\",\"example\":\"desc\"},{\"support_auto_recovery\":\"healthCheckID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"健康检查 ID，传空字符串时表示后端服务关闭健康检查\",\"lowerObject\":\"\",\"example\":\"hc-xxxx\"},{\"support_auto_recovery\":\"sessionStickyMode\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"流保持类型，0:五元组, 4:二元组, 5:三元组\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"failoverType\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"故障转移类型 1 表示关闭，2 表示再平衡\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"bypassType\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"旁路类型 1 表示关闭，2 表示自动\",\"lowerObject\":\"\",\"example\":\"1\"}]}}]"
+            ]
+          },
+          {
+            "title": "响应参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"targetGroupID\",\"paramType\":\"String\",\"describe\":\"后端服务组ID\",\"lowerObject\":\"\",\"example\":\"tg-xxxx\"}]}}]"
+            ]
+          },
+          {
+            "title": "枚举参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "请求url示例",
+            "type": "json",
+            "content": [
+              "POST /openapi/v4/gwlb/update-target-group"
+            ]
+          },
+          {
+            "title": "请求体body示例",
+            "type": "json",
+            "content": [
+              "{\n  \"regionID\" : \"xxxx\",\n  \"targetGroupID\" : \"tg-xxxx\"\n}"
+            ]
+          },
+          {
+            "title": "响应示例",
+            "type": "json",
+            "content": [
+              " \n#### 成功响应示例\n\n{\n    \"statusCode\":800,\n    \"errorCode\":\"SUCCESS\",\n    \"message\":\"success\",\n    \"descritption\": \"成功\",\n\t\"returnObj\":{\n        \"targetGroupID\": \"tg-xxx\"\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+            ]
+          },
+          {
+            "title": "状态码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "错误码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "流控信息",
+            "type": "string",
+            "content": [
+              "300"
+            ]
+          }
+        ],
+        "capacityId": 15315,
+        "name": "gwlb更新target_group",
+        "serviceId": 94,
+        "isDocumenFinish": 1
+      }
+    },
+    {
+      "api_id": "15314",
+      "title": "gwlb创建target_group",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&data=94&vid=88&api=15314&isNormal=1",
+      "target_api_id": "18154",
+      "owner": {
+        "plugin": "elb",
+        "command": "ctyun elb gateway target-group create"
+      },
+      "target_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=24&api=18154&data=88&isNormal=1&vid=82",
+      "status": "covered_equivalent",
+      "reason": "The ELB product publishes the same method, URI, request field types and required inputs for this operation. Use the existing ELB command and its documented ctelb endpoint/response contract; the older VPC-hosted response shape is not claimed as a separately supported transport.",
+      "request_reference_note": null,
+      "response_schema_differences": [],
+      "source_document": {
+        "data": [
+          {
+            "updatedTime": "2025-05-22 15:15:40",
+            "title": "接口功能介绍",
+            "type": "string",
+            "content": [
+              "创建target_group"
+            ]
+          },
+          {
+            "title": "接口约束",
+            "type": "string",
+            "content": [
+              "无"
+            ]
+          },
+          {
+            "title": "接口是否审批",
+            "type": "string",
+            "content": [
+              "否"
+            ]
+          },
+          {
+            "title": "URI",
+            "type": "string",
+            "content": [
+              "POST",
+              "/v4/gwlb/create-target-group"
+            ]
+          },
+          {
+            "title": "Content-Type",
+            "type": "string",
+            "content": [
+              "application/json"
+            ]
+          },
+          {
+            "title": "路径参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "Query参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"资源池 ID\",\"lowerObject\":\"\",\"example\":\"bb9fdb42056f11eda1610242ac110002\"},{\"support_auto_recovery\":\"name\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"支持拉丁字母、中文、数字，下划线，连字符，中文 / 英文字母开头，不能以 http: / https: 开头，长度 2 - 32\",\"lowerObject\":\"\",\"example\":\"test\"},{\"support_auto_recovery\":\"description\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"支持拉丁字母、中文、数字, 特殊字符：~!@#$%^&*()_-+= <>?:\\\"{},./;'[\\\\]·！@#￥%……&*（） —— -+={}\\\\|《》？：“”【】、；‘'，。、，不能以 http: / https: 开头，长度 0 - 128\",\"lowerObject\":\"\",\"example\":\"desc\"},{\"support_auto_recovery\":\"vpcID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"虚拟私有云 ID\",\"lowerObject\":\"\",\"example\":\"vpc-xxxx\"},{\"support_auto_recovery\":\"healthCheckID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"健康检查 ID\",\"lowerObject\":\"\",\"example\":\"hc-xxxx\"},{\"support_auto_recovery\":\"sessionStickyMode\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"流保持类型，0:五元组, 4:二元组, 5:三元组\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"failoverType\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"故障转移类型 1 表示关闭，2 表示再平衡\",\"lowerObject\":\"\",\"example\":\"1\"}]}}]"
+            ]
+          },
+          {
+            "title": "响应参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"targetGroupID\",\"paramType\":\"String\",\"describe\":\"后端服务组ID\",\"lowerObject\":\"\",\"example\":\"tg-xxxx\"}]}}]"
+            ]
+          },
+          {
+            "title": "枚举参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "请求url示例",
+            "type": "json",
+            "content": [
+              "POST /openapi/v4/gwlb/create-target-group"
+            ]
+          },
+          {
+            "title": "请求体body示例",
+            "type": "json",
+            "content": [
+              "{\n  \"regionID\" : \"xxxx\",\n  \"vpcID\" : \"vpc-xxxx\",\n  \"name\" : \"test\"\n}"
+            ]
+          },
+          {
+            "title": "响应示例",
+            "type": "json",
+            "content": [
+              " \n#### 成功响应示例\n\n{\n    \"statusCode\":800,\n    \"errorCode\":\"SUCCESS\",\n    \"message\":\"success\",\n    \"descritption\": \"成功\",\n\t\"returnObj\":{\n        \"targetGroupID\": \"tg-xxx\"\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+            ]
+          },
+          {
+            "title": "状态码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "错误码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "流控信息",
+            "type": "string",
+            "content": [
+              "300"
+            ]
+          }
+        ],
+        "capacityId": 15314,
+        "name": "gwlb创建target_group",
+        "serviceId": 94,
+        "isDocumenFinish": 1
+      }
+    },
+    {
+      "api_id": "15313",
+      "title": "gwlb查看target列表",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&data=94&vid=88&api=15313&isNormal=1",
+      "target_api_id": "18155",
+      "owner": {
+        "plugin": "elb",
+        "command": "ctyun elb gateway target list"
+      },
+      "target_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=24&api=18155&data=88&isNormal=1&vid=82",
+      "status": "covered_equivalent",
+      "reason": "The ELB product publishes the same method, URI, request field types and required inputs for this operation. Use the existing ELB command and its documented ctelb endpoint/response contract; the older VPC-hosted response shape is not claimed as a separately supported transport.",
+      "request_reference_note": null,
+      "response_schema_differences": [],
+      "source_document": {
+        "data": [
+          {
+            "updatedTime": "2025-05-22 15:16:35",
+            "title": "接口功能介绍",
+            "type": "string",
+            "content": [
+              "查看target列表"
+            ]
+          },
+          {
+            "title": "接口约束",
+            "type": "string",
+            "content": [
+              "无"
+            ]
+          },
+          {
+            "title": "接口是否审批",
+            "type": "string",
+            "content": [
+              "否"
+            ]
+          },
+          {
+            "title": "URI",
+            "type": "string",
+            "content": [
+              "GET",
+              "/v4/gwlb/list-target"
+            ]
+          },
+          {
+            "title": "Content-Type",
+            "type": "string",
+            "content": [
+              "application/json"
+            ]
+          },
+          {
+            "title": "路径参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "Query参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"Query参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"example\":\"示例\"},{\"describe\":\"说明\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"example\":\"bb9fdb42056f11eda1610242ac110002\",\"describe\":\"资源池 ID\"},{\"support_auto_recovery\":\"targetGroupID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"example\":\"tr-xxx\",\"describe\":\"后端服务组 ID\"},{\"support_auto_recovery\":\"targetID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"example\":\"target-xxx\",\"describe\":\"后端服务 ID\"},{\"support_auto_recovery\":\"pageNumber\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"example\":\"1\",\"describe\":\"列表的页码，默认值为 1。\"},{\"support_auto_recovery\":\"pageSize\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"example\":\"10\",\"describe\":\"分页查询时每页的行数，最大值为 50，默认值为 10。\"}]}}]"
+            ]
+          },
+          {
+            "title": "请求头header参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "响应参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"results\",\"paramType\":\"Array of Objects\",\"describe\":\"接口业务数据\",\"lowerObject\":\"results\",\"example\":\"\"},{\"support_auto_recovery\":\"totalCount\",\"paramType\":\"Integer\",\"describe\":\"列表条目数\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"currentCount\",\"paramType\":\"Integer\",\"describe\":\"分页查询时每页的行数。\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"totalPage\",\"paramType\":\"Integer\",\"describe\":\"总页数\",\"lowerObject\":\"\",\"example\":\"1\"}]}},{\"table\":{\"title\":\"表 results\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"targetID\",\"paramType\":\"String\",\"describe\":\"后端服务ID\",\"lowerObject\":\"\",\"example\":\"target-xxxx\"},{\"support_auto_recovery\":\"targetGroupID\",\"paramType\":\"String\",\"describe\":\"后端服务组ID\",\"lowerObject\":\"\",\"example\":\"tg-xxxx\"},{\"support_auto_recovery\":\"instanceType\",\"paramType\":\"String\",\"describe\":\"实例类型，取值有: VM / BMS/ CBM\",\"lowerObject\":\"\",\"example\":\"VM\"},{\"support_auto_recovery\":\"instanceID\",\"paramType\":\"String\",\"describe\":\"实例 ID\",\"lowerObject\":\"\",\"example\":\"x-x-x-x-\"},{\"support_auto_recovery\":\"instanceVpc\",\"paramType\":\"String\",\"describe\":\"实例所在的 vpc\",\"lowerObject\":\"\",\"example\":\"vpc-xxxx\"},{\"support_auto_recovery\":\"weight\",\"paramType\":\"Integer\",\"describe\":\"权重\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"healthCheckStatus\",\"paramType\":\"String\",\"describe\":\"ipv4 健康检查状态，取值: unknown / online / offline\",\"lowerObject\":\"\",\"example\":\"online\"},{\"support_auto_recovery\":\"healthCheckStatusIpv6\",\"paramType\":\"String\",\"describe\":\"ipv6 健康检查状态，取值: unknown / online / offline\",\"lowerObject\":\"\",\"example\":\"online\"},{\"support_auto_recovery\":\"createdAt\",\"paramType\":\"String\",\"describe\":\"创建时间\",\"lowerObject\":\"\",\"example\":\"2024-01-08 11:00:00\"},{\"support_auto_recovery\":\"updatedAt\",\"paramType\":\"String\",\"describe\":\"更新时间\",\"lowerObject\":\"\",\"example\":\"2024-01-08 11:00:00\"}]}}]"
+            ]
+          },
+          {
+            "title": "枚举参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "请求url示例",
+            "type": "json",
+            "content": [
+              "GET /openapi/v4/gwlb/list-target?regionID=xxx&targetGroupID=xxxx"
+            ]
+          },
+          {
+            "title": "请求体body示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "响应示例",
+            "type": "json",
+            "content": [
+              " \n#### 成功响应示例\n\n{\n    \"statusCode\":800,\n    \"errorCode\":\"SUCCESS\",\n    \"message\":\"success\",\n    \"descritption\": \"成功\",\n\t\"returnObj\":{\n        \"results\": [{\n            \"targetID\": \"target-xxx\",\n            \"targetGroupID\": \"tg-xxx\",\n            \"instanceType\": \"VM\",\n            \"instanceID\": \"xxxxx-xxx-xxx-xx\",\n            \"instanceVpc\": \"vpc-xxx\",\n            \"weight\": 1,\n            \"healthCheckStatus\": \"online\",\n            \"healthCheckStatusIpv6\": \"online\",\n            \"createdAt\": \"2024-01-08 11:00:00\",\n            \"updatedAt\": \"2024-01-08 11:00:00\"\n        }],\n        \"currentCount\": 1,\n        \"totalCount\": 1,\n        \"totalPage\": 1\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+            ]
+          },
+          {
+            "title": "状态码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "错误码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "流控信息",
+            "type": "string",
+            "content": [
+              "300"
+            ]
+          }
+        ],
+        "capacityId": 15313,
+        "name": "gwlb查看target列表",
+        "serviceId": 94,
+        "isDocumenFinish": 1
+      }
+    },
+    {
+      "api_id": "15312",
+      "title": "gwlb查看target详情",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&data=94&vid=88&api=15312&isNormal=1",
+      "target_api_id": "18156",
+      "owner": {
+        "plugin": "elb",
+        "command": "ctyun elb gateway target show"
+      },
+      "target_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=24&api=18156&data=88&isNormal=1&vid=82",
+      "status": "covered_equivalent",
+      "reason": "The ELB product publishes the same method, URI, request field types and required inputs for this operation. Use the existing ELB command and its documented ctelb endpoint/response contract; the older VPC-hosted response shape is not claimed as a separately supported transport.",
+      "request_reference_note": null,
+      "response_schema_differences": [],
+      "source_document": {
+        "data": [
+          {
+            "updatedTime": "2025-05-22 15:17:09",
+            "title": "接口功能介绍",
+            "type": "string",
+            "content": [
+              "查看target详情"
+            ]
+          },
+          {
+            "title": "接口约束",
+            "type": "string",
+            "content": [
+              "无"
+            ]
+          },
+          {
+            "title": "接口是否审批",
+            "type": "string",
+            "content": [
+              "否"
+            ]
+          },
+          {
+            "title": "URI",
+            "type": "string",
+            "content": [
+              "GET",
+              "/v4/gwlb/show-target"
+            ]
+          },
+          {
+            "title": "Content-Type",
+            "type": "string",
+            "content": [
+              "application/json"
+            ]
+          },
+          {
+            "title": "路径参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "Query参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"Query参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"example\":\"示例\"},{\"describe\":\"说明\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"example\":\"bb9fdb42056f11eda1610242ac110002\",\"describe\":\"资源池 ID\"},{\"support_auto_recovery\":\"targetID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"example\":\"target-xxx\",\"describe\":\"后端服务 ID\"}]}}]"
+            ]
+          },
+          {
+            "title": "请求头header参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "响应参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"targetID\",\"paramType\":\"String\",\"describe\":\"后端服务ID\",\"lowerObject\":\"\",\"example\":\"target-xxxx\"},{\"support_auto_recovery\":\"targetGroupID\",\"paramType\":\"String\",\"describe\":\"后端服务组ID\",\"lowerObject\":\"\",\"example\":\"tg-xxxx\"},{\"support_auto_recovery\":\"instanceType\",\"paramType\":\"String\",\"describe\":\"实例类型，取值有: VM / BMS/ CBM\",\"lowerObject\":\"\",\"example\":\"VM\"},{\"support_auto_recovery\":\"instanceID\",\"paramType\":\"String\",\"describe\":\"实例 ID\",\"lowerObject\":\"\",\"example\":\"x-x-x-x-\"},{\"support_auto_recovery\":\"instanceVpc\",\"paramType\":\"String\",\"describe\":\"实例所在的 vpc\",\"lowerObject\":\"\",\"example\":\"vpc-xxxx\"},{\"support_auto_recovery\":\"weight\",\"paramType\":\"Integer\",\"describe\":\"权重\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"healthCheckStatus\",\"paramType\":\"String\",\"describe\":\"ipv4 健康检查状态，取值: unknown / online / offline\",\"lowerObject\":\"\",\"example\":\"online\"},{\"support_auto_recovery\":\"healthCheckStatusIpv6\",\"paramType\":\"String\",\"describe\":\"ipv6 健康检查状态，取值: unknown / online / offline\",\"lowerObject\":\"\",\"example\":\"online\"},{\"support_auto_recovery\":\"createdAt\",\"paramType\":\"String\",\"describe\":\"创建时间\",\"lowerObject\":\"\",\"example\":\"2024-01-08 11:00:00\"},{\"support_auto_recovery\":\"updatedAt\",\"paramType\":\"String\",\"describe\":\"更新时间\",\"lowerObject\":\"\",\"example\":\"2024-01-08 11:00:00\"}]}}]"
+            ]
+          },
+          {
+            "title": "枚举参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "请求url示例",
+            "type": "json",
+            "content": [
+              "GET /openapi/v4/gwlb/show-target?regionID=xxx&targetID=xxxx"
+            ]
+          },
+          {
+            "title": "请求体body示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "响应示例",
+            "type": "json",
+            "content": [
+              " \n#### 成功响应示例\n\n{\n    \"statusCode\":800,\n    \"errorCode\":\"SUCCESS\",\n    \"message\":\"success\",\n    \"descritption\": \"成功\",\n\t\"returnObj\":{\n        \"targetID\": \"target-xxx\",\n        \"targetGroupID\": \"tg-xxx\",\n        \"instanceType\": \"VM\",\n        \"instanceID\": \"xxxxx-xxx-xxx-xx\",\n        \"instanceVpc\": \"vpc-xxx\",\n        \"weight\": 1,\n        \"healthCheckStatus\": \"online\",\n        \"healthCheckStatusIpv6\": \"online\",\n        \"createdAt\": \"2024-01-08 11:00:00\",\n        \"updatedAt\": \"2024-01-08 11:00:00\"\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+            ]
+          },
+          {
+            "title": "状态码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "错误码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "流控信息",
+            "type": "string",
+            "content": [
+              "300"
+            ]
+          }
+        ],
+        "capacityId": 15312,
+        "name": "gwlb查看target详情",
+        "serviceId": 94,
+        "isDocumenFinish": 1
+      }
+    },
+    {
+      "api_id": "15311",
+      "title": "gwlb删除target",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&data=94&vid=88&api=15311&isNormal=1",
+      "target_api_id": "18157",
+      "owner": {
+        "plugin": "elb",
+        "command": "ctyun elb gateway target delete"
+      },
+      "target_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=24&api=18157&data=88&isNormal=1&vid=82",
+      "status": "covered_equivalent",
+      "reason": "The ELB product publishes the same method, URI, request field types and required inputs for this operation. Use the existing ELB command and its documented ctelb endpoint/response contract; the older VPC-hosted response shape is not claimed as a separately supported transport.",
+      "request_reference_note": null,
+      "response_schema_differences": [],
+      "source_document": {
+        "data": [
+          {
+            "updatedTime": "2025-05-22 15:17:31",
+            "title": "接口功能介绍",
+            "type": "string",
+            "content": [
+              "删除target"
+            ]
+          },
+          {
+            "title": "接口约束",
+            "type": "string",
+            "content": [
+              "无"
+            ]
+          },
+          {
+            "title": "接口是否审批",
+            "type": "string",
+            "content": [
+              "否"
+            ]
+          },
+          {
+            "title": "URI",
+            "type": "string",
+            "content": [
+              "POST",
+              "/v4/gwlb/delete-target"
+            ]
+          },
+          {
+            "title": "Content-Type",
+            "type": "string",
+            "content": [
+              "application/json"
+            ]
+          },
+          {
+            "title": "路径参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "Query参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"资源池 ID\",\"lowerObject\":\"\",\"example\":\"bb9fdb42056f11eda1610242ac110002\"},{\"support_auto_recovery\":\"targetID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"后端服务 ID\",\"lowerObject\":\"\",\"example\":\"target-xxx\"}]}}]"
+            ]
+          },
+          {
+            "title": "响应参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"targetID\",\"paramType\":\"String\",\"describe\":\"后端服务ID\",\"lowerObject\":\"\",\"example\":\"target-xxxx\"}]}}]"
+            ]
+          },
+          {
+            "title": "枚举参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "请求url示例",
+            "type": "json",
+            "content": [
+              "POST /openapi/v4/gwlb/delete-target"
+            ]
+          },
+          {
+            "title": "请求体body示例",
+            "type": "json",
+            "content": [
+              "{\n  \"regionID\" : \"xxxx\",\n  \"targetID\" : \"xxxx\"\n}"
+            ]
+          },
+          {
+            "title": "响应示例",
+            "type": "json",
+            "content": [
+              " \n#### 成功响应示例\n\n{\n    \"statusCode\":800,\n    \"errorCode\":\"SUCCESS\",\n    \"message\":\"success\",\n    \"descritption\": \"成功\",\n\t\"returnObj\":{\n        \"targetID\": \"target-xxx\"\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+            ]
+          },
+          {
+            "title": "状态码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "错误码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "流控信息",
+            "type": "string",
+            "content": [
+              "300"
+            ]
+          }
+        ],
+        "capacityId": 15311,
+        "name": "gwlb删除target",
+        "serviceId": 94,
+        "isDocumenFinish": 1
+      }
+    },
+    {
+      "api_id": "15310",
+      "title": "gwlb更新target",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&data=94&vid=88&api=15310&isNormal=1",
+      "target_api_id": "18158",
+      "owner": {
+        "plugin": "elb",
+        "command": "ctyun elb gateway target update"
+      },
+      "target_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=24&api=18158&data=88&isNormal=1&vid=82",
+      "status": "covered_equivalent",
+      "reason": "The ELB product publishes the same method, URI, request field types and required inputs for this operation. Use the existing ELB command and its documented ctelb endpoint/response contract; the older VPC-hosted response shape is not claimed as a separately supported transport.",
+      "request_reference_note": null,
+      "response_schema_differences": [],
+      "source_document": {
+        "data": [
+          {
+            "updatedTime": "2025-10-20 16:27:50",
+            "title": "接口功能介绍",
+            "type": "string",
+            "content": [
+              "更新target"
+            ]
+          },
+          {
+            "title": "接口约束",
+            "type": "string",
+            "content": [
+              "无"
+            ]
+          },
+          {
+            "title": "接口是否审批",
+            "type": "string",
+            "content": [
+              "否"
+            ]
+          },
+          {
+            "title": "URI",
+            "type": "string",
+            "content": [
+              "POST",
+              "/v4/gwlb/update-target"
+            ]
+          },
+          {
+            "title": "Content-Type",
+            "type": "string",
+            "content": [
+              "application/json"
+            ]
+          },
+          {
+            "title": "路径参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "Query参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"资源池 ID\",\"lowerObject\":\"\",\"example\":\"bb9fdb42056f11eda1610242ac110002\"},{\"support_auto_recovery\":\"targetID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"后端服务 ID\",\"lowerObject\":\"\",\"example\":\"target-xxx\"},{\"support_auto_recovery\":\"description\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"支持拉丁字母、中文、数字, 特殊字符：~!@#$%^&*()_-+= <>?:\\\"{},./;'[\\\\]·！@#￥%……&*（） —— -+={}《》？：“”【】、；‘'，。、，不能以 http: / https: 开头，长度 0 - 128\",\"lowerObject\":\"\",\"example\":\"desc\"},{\"support_auto_recovery\":\"weight\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"权重，仅支持填 100\",\"lowerObject\":\"\",\"example\":\"1\"}]}}]"
+            ]
+          },
+          {
+            "title": "响应参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"targetID\",\"paramType\":\"String\",\"describe\":\"后端服务ID\",\"lowerObject\":\"\",\"example\":\"target-xxxx\"}]}}]"
+            ]
+          },
+          {
+            "title": "枚举参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "请求url示例",
+            "type": "json",
+            "content": [
+              "POST /openapi/v4/gwlb/update-target"
+            ]
+          },
+          {
+            "title": "请求体body示例",
+            "type": "json",
+            "content": [
+              "{\n  \"regionID\" : \"xxxx\",\n  \"weight\" : 1,\n  \"targetID\" : \"xxxx\"\n}"
+            ]
+          },
+          {
+            "title": "响应示例",
+            "type": "json",
+            "content": [
+              " \n#### 成功响应示例\n\n{\n    \"statusCode\":800,\n    \"errorCode\":\"SUCCESS\",\n    \"message\":\"success\",\n    \"descritption\": \"成功\",\n\t\"returnObj\":{\n        \"targetID\": \"target-xxx\"\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+            ]
+          },
+          {
+            "title": "状态码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "错误码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "流控信息",
+            "type": "string",
+            "content": [
+              "300"
+            ]
+          }
+        ],
+        "capacityId": 15310,
+        "name": "gwlb更新target",
+        "serviceId": 94,
+        "isDocumenFinish": 1
+      }
+    },
+    {
+      "api_id": "15309",
+      "title": "gwlb创建target",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&data=94&vid=88&api=15309&isNormal=1",
+      "target_api_id": "18159",
+      "owner": {
+        "plugin": "elb",
+        "command": "ctyun elb gateway target create"
+      },
+      "target_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=24&api=18159&data=88&isNormal=1&vid=82",
+      "status": "covered_equivalent",
+      "reason": "The ELB product publishes the same method, URI, request field types and required inputs for this operation. Use the existing ELB command and its documented ctelb endpoint/response contract; the older VPC-hosted response shape is not claimed as a separately supported transport.",
+      "request_reference_note": null,
+      "response_schema_differences": [],
+      "source_document": {
+        "data": [
+          {
+            "updatedTime": "2025-05-22 15:18:22",
+            "title": "接口功能介绍",
+            "type": "string",
+            "content": [
+              "创建target"
+            ]
+          },
+          {
+            "title": "接口约束",
+            "type": "string",
+            "content": [
+              "无"
+            ]
+          },
+          {
+            "title": "接口是否审批",
+            "type": "string",
+            "content": [
+              "否"
+            ]
+          },
+          {
+            "title": "URI",
+            "type": "string",
+            "content": [
+              "POST",
+              "/v4/gwlb/create-target"
+            ]
+          },
+          {
+            "title": "Content-Type",
+            "type": "string",
+            "content": [
+              "application/json"
+            ]
+          },
+          {
+            "title": "路径参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "Query参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"资源池 ID\",\"lowerObject\":\"\",\"example\":\"bb9fdb42056f11eda1610242ac110002\"},{\"support_auto_recovery\":\"targetGroupID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"后端服务组 ID\",\"lowerObject\":\"\",\"example\":\"tg-xxxx\"},{\"support_auto_recovery\":\"description\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"支持拉丁字母、中文、数字, 特殊字符：~!@#$%^&*()_-+= <>?:\\\"{},./;'[\\\\]·！@#￥%……&*（） —— -+={}\\\\|《》？：“”【】、；‘'，。、，不能以 http: / https: 开头，长度 0 - 128\",\"lowerObject\":\"\",\"example\":\"desc\"},{\"support_auto_recovery\":\"instanceID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"实例 ID\",\"lowerObject\":\"\",\"example\":\"xxxxx\"},{\"support_auto_recovery\":\"instanceType\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"支持 VM / BM\",\"lowerObject\":\"\",\"example\":\"VM\"},{\"support_auto_recovery\":\"weight\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"权重，仅支持填写 100\",\"lowerObject\":\"\",\"example\":\"1\"}]}}]"
+            ]
+          },
+          {
+            "title": "响应参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"targetID\",\"paramType\":\"String\",\"describe\":\"后端服务ID\",\"lowerObject\":\"\",\"example\":\"target-xxxx\"}]}}]"
+            ]
+          },
+          {
+            "title": "枚举参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "请求url示例",
+            "type": "json",
+            "content": [
+              "POST /openapi/v4/gwlb/create-target"
+            ]
+          },
+          {
+            "title": "请求体body示例",
+            "type": "json",
+            "content": [
+              "{\n  \"regionID\" : \"xxxx\",\n  \"instanceID\" : \"eip-test-0001234\",\n  \"instanceType\" : \"VM\",\n  \"weight\" : 1,\n  \"targetGroupID\" : \"xxxx\"\n}"
+            ]
+          },
+          {
+            "title": "响应示例",
+            "type": "json",
+            "content": [
+              " \n#### 成功响应示例\n\n{\n    \"statusCode\":800,\n    \"errorCode\":\"SUCCESS\",\n    \"message\":\"success\",\n    \"descritption\": \"成功\",\n\t\"returnObj\":{\n        \"targetID\": \"target-xxx\"\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+            ]
+          },
+          {
+            "title": "状态码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "错误码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "流控信息",
+            "type": "string",
+            "content": [
+              "300"
+            ]
+          }
+        ],
+        "capacityId": 15309,
+        "name": "gwlb创建target",
+        "serviceId": 94,
+        "isDocumenFinish": 1
+      }
+    },
+    {
+      "api_id": "15303",
+      "title": "查看gwlb列表",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&data=94&vid=88&api=15303&isNormal=1",
+      "target_api_id": "18162",
+      "owner": {
+        "plugin": "elb",
+        "command": "ctyun elb gateway instance list"
+      },
+      "target_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=24&api=18162&data=88&isNormal=1&vid=82",
+      "status": "covered_equivalent",
+      "reason": "The ELB product publishes the same method, URI, request field types and required inputs for this operation. Use the existing ELB command and its documented ctelb endpoint/response contract; the older VPC-hosted response shape is not claimed as a separately supported transport.",
+      "request_reference_note": null,
+      "response_schema_differences": [
+        {
+          "table": "响应参数",
+          "field": "requestID",
+          "vpc_schema": null,
+          "elb_schema": [
+            "String",
+            null,
+            ""
+          ]
+        },
+        {
+          "table": "表 results",
+          "field": "natType",
+          "vpc_schema": null,
+          "elb_schema": [
+            "Integer",
+            null,
+            ""
+          ]
+        },
+        {
+          "table": "表 results",
+          "field": "projectID",
+          "vpc_schema": null,
+          "elb_schema": [
+            "String",
+            null,
+            ""
+          ]
+        }
+      ],
+      "source_document": {
+        "data": [
+          {
+            "updatedTime": "2025-05-22 15:34:42",
+            "title": "接口功能介绍",
+            "type": "string",
+            "content": [
+              "查看网关负载均衡列表"
+            ]
+          },
+          {
+            "title": "接口约束",
+            "type": "string",
+            "content": [
+              "无"
+            ]
+          },
+          {
+            "title": "接口是否审批",
+            "type": "string",
+            "content": [
+              "否"
+            ]
+          },
+          {
+            "title": "URI",
+            "type": "string",
+            "content": [
+              "GET",
+              "/v4/gwlb/list"
+            ]
+          },
+          {
+            "title": "Content-Type",
+            "type": "string",
+            "content": [
+              "application/json"
+            ]
+          },
+          {
+            "title": "路径参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "Query参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"Query参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"example\":\"示例\"},{\"describe\":\"说明\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"example\":\"bb9fdb42056f11eda1610242ac110002\",\"describe\":\"资源池 ID\"},{\"support_auto_recovery\":\"projectID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"example\":\"0\",\"describe\":\"企业项目ID，默认\\\"0\\\"\"},{\"support_auto_recovery\":\"gwLbID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"example\":\"gwlb-xxx\",\"describe\":\"网关负载均衡ID\"},{\"support_auto_recovery\":\"pageNumber\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"example\":\"1\",\"describe\":\"列表的页码，默认值为 1。\"},{\"support_auto_recovery\":\"pageSize\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"example\":\"10\",\"describe\":\"分页查询时每页的行数，最大值为 50，默认值为 10。\"}]}}]"
+            ]
+          },
+          {
+            "title": "请求头header参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "响应参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"results\",\"paramType\":\"Array of Objects\",\"describe\":\"接口业务数据\",\"lowerObject\":\"results\",\"example\":\"\"},{\"support_auto_recovery\":\"totalCount\",\"paramType\":\"Integer\",\"describe\":\"列表条目数\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"currentCount\",\"paramType\":\"Integer\",\"describe\":\"分页查询时每页的行数。\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"totalPage\",\"paramType\":\"Integer\",\"describe\":\"总页数\",\"lowerObject\":\"\",\"example\":\"1\"}]}},{\"table\":{\"title\":\"表 results\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"gwLbID\",\"paramType\":\"String\",\"describe\":\"网关负载均衡 ID\",\"lowerObject\":\"\",\"example\":\"gwlb-xxx\"},{\"support_auto_recovery\":\"name\",\"paramType\":\"String\",\"describe\":\"名字\",\"lowerObject\":\"\",\"example\":\"test\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"描述\",\"lowerObject\":\"\",\"example\":\"desc\"},{\"support_auto_recovery\":\"vpcID\",\"paramType\":\"String\",\"describe\":\"虚拟私有云 ID\",\"lowerObject\":\"\",\"example\":\"vpc-xxx\"},{\"support_auto_recovery\":\"subnetID\",\"paramType\":\"String\",\"describe\":\"子网 ID\",\"lowerObject\":\"\",\"example\":\"subnet-xxx\"},{\"support_auto_recovery\":\"portID\",\"paramType\":\"String\",\"describe\":\"网卡 ID\",\"lowerObject\":\"\",\"example\":\"port-xxx\"},{\"support_auto_recovery\":\"ipv6Enabled\",\"paramType\":\"Boolean\",\"describe\":\"是否开启 ipv6\",\"lowerObject\":\"\",\"example\":\"true\"},{\"support_auto_recovery\":\"privateIpAddress\",\"paramType\":\"String\",\"describe\":\"私有 IP 地址\",\"lowerObject\":\"\",\"example\":\"192.3.0.1\"},{\"support_auto_recovery\":\"ipv6Address\",\"paramType\":\"String\",\"describe\":\"ipv6 地址\",\"lowerObject\":\"\",\"example\":\"2001:db8:85a3::8a2e:370:7334\"},{\"support_auto_recovery\":\"slaName\",\"paramType\":\"String\",\"describe\":\"规格\",\"lowerObject\":\"\",\"example\":\"elb.default\"},{\"support_auto_recovery\":\"deleteProtection\",\"paramType\":\"Boolean\",\"describe\":\"是否开启删除保护\",\"lowerObject\":\"\",\"example\":\"true\"},{\"support_auto_recovery\":\"createdAt\",\"paramType\":\"String\",\"describe\":\"创建时间\",\"lowerObject\":\"\",\"example\":\"2023-12-18 10:00:00\"},{\"support_auto_recovery\":\"updatedAt\",\"paramType\":\"String\",\"describe\":\"更新时间\",\"lowerObject\":\"\",\"example\":\"2023-12-18 10:00:00\"}]}}]"
+            ]
+          },
+          {
+            "title": "枚举参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "请求url示例",
+            "type": "json",
+            "content": [
+              "GET /openapi/v4/gwlb/list?regionID=xxxx"
+            ]
+          },
+          {
+            "title": "请求体body示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "响应示例",
+            "type": "json",
+            "content": [
+              " \n#### 成功响应示例\n\n{\n    \"statusCode\":800,\n    \"errorCode\":\"SUCCESS\",\n    \"message\":\"success\",\n    \"descritption\": \"成功\",\n\t\"returnObj\":{\n        \"results\": [{\n            \"gwLbID\": \"xxxxxxx\",\n            \"name\": \"xxx\",\n            \"description\": \"xxx\",\n            \"vpcID\": \"vpc-xx\",\n            \"subnetID\": \"subnet-xx\",\n            \"portID\": \"port-xx\",\n            \"ipv6Enabled\": false,\n            \"ipv6Address\": \"\",\n            \"privateIpAddress\": \"192.168.0.1\",\n            \"deleteProtection\": false,\n            \"slaName\": \"elb.default\",\n            \"createdAt\": \"2023-12-18 10:00:00\",\n            \"updatedAt\": \"2023-12-18 11:00:00\"\n        }],\n        \"totalPage\": 1,\n        \"totalCount\": 1,\n        \"currentCount\": 1\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+            ]
+          },
+          {
+            "title": "状态码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "错误码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "流控信息",
+            "type": "string",
+            "content": [
+              "300"
+            ]
+          }
+        ],
+        "capacityId": 15303,
+        "name": "查看gwlb列表",
+        "serviceId": 94,
+        "isDocumenFinish": 1
+      }
+    },
+    {
+      "api_id": "15302",
+      "title": "查看gwlb详情",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&data=94&vid=88&api=15302&isNormal=1",
+      "target_api_id": "18163",
+      "owner": {
+        "plugin": "elb",
+        "command": "ctyun elb gateway instance show"
+      },
+      "target_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=24&api=18163&data=88&isNormal=1&vid=82",
+      "status": "covered_equivalent",
+      "reason": "The ELB product publishes the same method, URI, request field types and required inputs for this operation. Use the existing ELB command and its documented ctelb endpoint/response contract; the older VPC-hosted response shape is not claimed as a separately supported transport.",
+      "request_reference_note": null,
+      "response_schema_differences": [
+        {
+          "table": "表 returnObj",
+          "field": "natType",
+          "vpc_schema": null,
+          "elb_schema": [
+            "Integer",
+            null,
+            ""
+          ]
+        }
+      ],
+      "source_document": {
+        "data": [
+          {
+            "updatedTime": "2025-05-22 15:35:53",
+            "title": "接口功能介绍",
+            "type": "string",
+            "content": [
+              "查看网关负载均衡详情"
+            ]
+          },
+          {
+            "title": "接口约束",
+            "type": "string",
+            "content": [
+              "无"
+            ]
+          },
+          {
+            "title": "接口是否审批",
+            "type": "string",
+            "content": [
+              "否"
+            ]
+          },
+          {
+            "title": "URI",
+            "type": "string",
+            "content": [
+              "GET",
+              "/v4/gwlb/show"
+            ]
+          },
+          {
+            "title": "Content-Type",
+            "type": "string",
+            "content": [
+              "application/json"
+            ]
+          },
+          {
+            "title": "路径参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "Query参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"Query参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"example\":\"示例\"},{\"describe\":\"说明\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"example\":\"bb9fdb42056f11eda1610242ac110002\",\"describe\":\"资源池 ID\"},{\"support_auto_recovery\":\"projectID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"example\":\"0\",\"describe\":\"企业项目ID，默认\\\"0\\\"\"},{\"support_auto_recovery\":\"gwLbID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"example\":\"gwlb-xxx\",\"describe\":\"网关负载均衡ID\"}]}}]"
+            ]
+          },
+          {
+            "title": "请求头header参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "响应参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"gwLbID\",\"paramType\":\"String\",\"describe\":\"网关负载均衡 ID\",\"lowerObject\":\"\",\"example\":\"gwlb-xxx\"},{\"support_auto_recovery\":\"name\",\"paramType\":\"String\",\"describe\":\"名字\",\"lowerObject\":\"\",\"example\":\"test\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"描述\",\"lowerObject\":\"\",\"example\":\"desc\"},{\"support_auto_recovery\":\"vpcID\",\"paramType\":\"String\",\"describe\":\"虚拟私有云 ID\",\"lowerObject\":\"\",\"example\":\"vpc-xxx\"},{\"support_auto_recovery\":\"subnetID\",\"paramType\":\"String\",\"describe\":\"子网 ID\",\"lowerObject\":\"\",\"example\":\"subnet-xxx\"},{\"support_auto_recovery\":\"portID\",\"paramType\":\"String\",\"describe\":\"网卡 ID\",\"lowerObject\":\"\",\"example\":\"port-xxx\"},{\"support_auto_recovery\":\"ipv6Enabled\",\"paramType\":\"Boolean\",\"describe\":\"是否开启 ipv6\",\"lowerObject\":\"\",\"example\":\"true\"},{\"support_auto_recovery\":\"privateIpAddress\",\"paramType\":\"String\",\"describe\":\"私有 IP 地址\",\"lowerObject\":\"\",\"example\":\"192.168.3.3\"},{\"support_auto_recovery\":\"ipv6Address\",\"paramType\":\"String\",\"describe\":\"ipv6 地址\",\"lowerObject\":\"\",\"example\":\"2001:db8:85a3::8a2e:370:7334\"},{\"support_auto_recovery\":\"slaName\",\"paramType\":\"String\",\"describe\":\"规格\",\"lowerObject\":\"\",\"example\":\"elb.default\"},{\"support_auto_recovery\":\"deleteProtection\",\"paramType\":\"Boolean\",\"describe\":\"是否开启删除保护\",\"lowerObject\":\"\",\"example\":\"\"},{\"support_auto_recovery\":\"createdAt\",\"paramType\":\"String\",\"describe\":\"创建时间\",\"lowerObject\":\"\",\"example\":\"2023-12-18 10:00:00\"},{\"support_auto_recovery\":\"updatedAt\",\"paramType\":\"String\",\"describe\":\"更新时间\",\"lowerObject\":\"\",\"example\":\"2023-12-18 10:00:00\"}]}}]"
+            ]
+          },
+          {
+            "title": "枚举参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "请求url示例",
+            "type": "json",
+            "content": [
+              "GET /openapi/v4/gwlb/show?regionID=xxxx&gwLbID=xxxxx"
+            ]
+          },
+          {
+            "title": "请求体body示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "响应示例",
+            "type": "json",
+            "content": [
+              " \n#### 成功响应示例\n\n{\n    \"statusCode\":800,\n    \"errorCode\":\"SUCCESS\",\n    \"message\":\"success\",\n    \"descritption\": \"成功\",\n\t\"returnObj\":{\n        \"gwLbID\": \"xxxxxxx\",\n        \"name\": \"xxx\",\n        \"description\": \"xxx\",\n        \"vpcID\": \"vpc-xx\",\n        \"subnetID\": \"subnet-xx\",\n        \"portID\": \"port-xx\",\n        \"ipv6Enabled\": false,\n        \"ipv6Address\": \"\",\n        \"privateIpAddress\": \"192.168.0.1\",\n        \"deleteProtection\": false,\n        \"slaName\": \"elb.default\",\n        \"createdAt\": \"2023-12-18 10:00:00\",\n        \"updatedAt\": \"2023-12-18 11:00:00\"\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+            ]
+          },
+          {
+            "title": "状态码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "错误码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "流控信息",
+            "type": "string",
+            "content": [
+              "300"
+            ]
+          }
+        ],
+        "capacityId": 15302,
+        "name": "查看gwlb详情",
+        "serviceId": 94,
+        "isDocumenFinish": 1
+      }
+    },
+    {
+      "api_id": "15301",
+      "title": "gwlb开启删除保护",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&data=94&vid=88&api=15301&isNormal=1",
+      "target_api_id": "18164",
+      "owner": {
+        "plugin": "elb",
+        "command": "ctyun elb gateway instance enable-delete-protection"
+      },
+      "target_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=24&api=18164&data=88&isNormal=1&vid=82",
+      "status": "covered_equivalent",
+      "reason": "The ELB product publishes the same method, URI, request field types and required inputs for this operation. Use the existing ELB command and its documented ctelb endpoint/response contract; the older VPC-hosted response shape is not claimed as a separately supported transport.",
+      "request_reference_note": null,
+      "response_schema_differences": [
+        {
+          "table": "表 returnObj",
+          "field": "gwElbID",
+          "vpc_schema": null,
+          "elb_schema": [
+            "String",
+            null,
+            ""
+          ]
+        },
+        {
+          "table": "表 returnObj",
+          "field": "gwLbID",
+          "vpc_schema": [
+            "String",
+            null,
+            ""
+          ],
+          "elb_schema": null
+        }
+      ],
+      "source_document": {
+        "data": [
+          {
+            "updatedTime": "2025-05-22 15:37:36",
+            "title": "接口功能介绍",
+            "type": "string",
+            "content": [
+              "网关负载均衡开启删除保护"
+            ]
+          },
+          {
+            "title": "接口约束",
+            "type": "string",
+            "content": [
+              "无"
+            ]
+          },
+          {
+            "title": "接口是否审批",
+            "type": "string",
+            "content": [
+              "否"
+            ]
+          },
+          {
+            "title": "URI",
+            "type": "string",
+            "content": [
+              "POST",
+              "/v4/gwlb/enable-delete-protection"
+            ]
+          },
+          {
+            "title": "Content-Type",
+            "type": "string",
+            "content": [
+              "application/json"
+            ]
+          },
+          {
+            "title": "路径参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "Query参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"资源池 ID\",\"lowerObject\":\"\",\"example\":\"bb9fdb42056f11eda1610242ac110002\"},{\"support_auto_recovery\":\"gwLbID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"网关负载均衡ID\",\"lowerObject\":\"\",\"example\":\"gwlb-xxx\"}]}}]"
+            ]
+          },
+          {
+            "title": "响应参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"gwLbID\",\"paramType\":\"String\",\"describe\":\"网关负载均衡 ID\",\"lowerObject\":\"\",\"example\":\"gwlb-xxx\"}]}}]"
+            ]
+          },
+          {
+            "title": "枚举参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "请求url示例",
+            "type": "json",
+            "content": [
+              "POST /openapi/v4/gwlb/enable-delete-protection"
+            ]
+          },
+          {
+            "title": "请求体body示例",
+            "type": "json",
+            "content": [
+              "{\n  \"regionID\" : \"xxxx\",\n  \"gwLbID\" : \"xxxx\"\n}"
+            ]
+          },
+          {
+            "title": "响应示例",
+            "type": "json",
+            "content": [
+              " \n#### 成功响应示例\n\n{\n    \"statusCode\":800,\n    \"errorCode\":\"SUCCESS\",\n    \"message\":\"success\",\n    \"descritption\": \"成功\",\n\t\"returnObj\":{\n        \"gwLbID\": \"xxxxxx\"\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+            ]
+          },
+          {
+            "title": "状态码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "错误码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "流控信息",
+            "type": "string",
+            "content": [
+              "300"
+            ]
+          }
+        ],
+        "capacityId": 15301,
+        "name": "gwlb开启删除保护",
+        "serviceId": 94,
+        "isDocumenFinish": 1
+      }
+    },
+    {
+      "api_id": "15160",
+      "title": "gwlb开启ipv6",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&data=94&vid=88&api=15160&isNormal=1",
+      "target_api_id": "18165",
+      "owner": {
+        "plugin": "elb",
+        "command": "ctyun elb gateway instance enable-ipv6"
+      },
+      "target_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=24&api=18165&data=88&isNormal=1&vid=82",
+      "status": "covered_equivalent",
+      "reason": "The ELB product publishes the same method, URI, request field types and required inputs for this operation. Use the existing ELB command and its documented ctelb endpoint/response contract; the older VPC-hosted response shape is not claimed as a separately supported transport.",
+      "request_reference_note": null,
+      "response_schema_differences": [],
+      "source_document": {
+        "data": [
+          {
+            "updatedTime": "2025-05-22 15:37:09",
+            "title": "接口功能介绍",
+            "type": "string",
+            "content": [
+              "网关负载均衡开启ipv6"
+            ]
+          },
+          {
+            "title": "接口约束",
+            "type": "string",
+            "content": [
+              "无"
+            ]
+          },
+          {
+            "title": "接口是否审批",
+            "type": "string",
+            "content": [
+              "否"
+            ]
+          },
+          {
+            "title": "URI",
+            "type": "string",
+            "content": [
+              "POST",
+              "/v4/gwlb/enable-ipv6"
+            ]
+          },
+          {
+            "title": "Content-Type",
+            "type": "string",
+            "content": [
+              "application/json"
+            ]
+          },
+          {
+            "title": "路径参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "Query参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"资源池 ID\",\"lowerObject\":\"\",\"example\":\"bb9fdb42056f11eda1610242ac110002\"},{\"support_auto_recovery\":\"gwLbID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"网关负载均衡ID\",\"lowerObject\":\"\",\"example\":\"gwlb-xxx\"}]}}]"
+            ]
+          },
+          {
+            "title": "响应参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"gwLbID\",\"paramType\":\"String\",\"describe\":\"网关负载均衡 ID\",\"lowerObject\":\"\",\"example\":\"gwlb-xxx\"}]}}]"
+            ]
+          },
+          {
+            "title": "枚举参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "请求url示例",
+            "type": "json",
+            "content": [
+              "POST /openapi/v4/gwlb/enable-ipv6"
+            ]
+          },
+          {
+            "title": "请求体body示例",
+            "type": "json",
+            "content": [
+              "{\n  \"regionID\" : \"xxxx\",\n  \"gwLbID\" : \"xxxx\"\n}"
+            ]
+          },
+          {
+            "title": "响应示例",
+            "type": "json",
+            "content": [
+              " \n#### 成功响应示例\n\n{\n    \"statusCode\":800,\n    \"errorCode\":\"SUCCESS\",\n    \"message\":\"success\",\n    \"descritption\": \"成功\",\n\t\"returnObj\":{\n        \"gwLbID\": \"xxxxxx\"\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+            ]
+          },
+          {
+            "title": "状态码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "错误码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "流控信息",
+            "type": "string",
+            "content": [
+              "300"
+            ]
+          }
+        ],
+        "capacityId": 15160,
+        "name": "gwlb开启ipv6",
+        "serviceId": 94,
+        "isDocumenFinish": 1
+      }
+    },
+    {
+      "api_id": "15141",
+      "title": "gwlb关闭ipv6",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&data=94&vid=88&api=15141&isNormal=1",
+      "target_api_id": "18166",
+      "owner": {
+        "plugin": "elb",
+        "command": "ctyun elb gateway instance disable-ipv6"
+      },
+      "target_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=24&api=18166&data=88&isNormal=1&vid=82",
+      "status": "covered_equivalent",
+      "reason": "The ELB product publishes the same method, URI, request field types and required inputs for this operation. Use the existing ELB command and its documented ctelb endpoint/response contract; the older VPC-hosted response shape is not claimed as a separately supported transport.",
+      "request_reference_note": null,
+      "response_schema_differences": [],
+      "source_document": {
+        "data": [
+          {
+            "updatedTime": "2025-05-22 15:36:41",
+            "title": "接口功能介绍",
+            "type": "string",
+            "content": [
+              "gwlb关闭ipv6"
+            ]
+          },
+          {
+            "title": "接口约束",
+            "type": "string",
+            "content": [
+              "无"
+            ]
+          },
+          {
+            "title": "接口是否审批",
+            "type": "string",
+            "content": [
+              "否"
+            ]
+          },
+          {
+            "title": "URI",
+            "type": "string",
+            "content": [
+              "POST",
+              "/v4/gwlb/disable-ipv6"
+            ]
+          },
+          {
+            "title": "Content-Type",
+            "type": "string",
+            "content": [
+              "application/json"
+            ]
+          },
+          {
+            "title": "路径参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "Query参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"资源池 ID\",\"lowerObject\":\"\",\"example\":\"bb9fdb42056f11eda1610242ac110002\"},{\"support_auto_recovery\":\"gwLbID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"网关负载均衡ID\",\"lowerObject\":\"\",\"example\":\"gwlb-xxx\"}]}}]"
+            ]
+          },
+          {
+            "title": "响应参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"gwLbID\",\"paramType\":\"String\",\"describe\":\"网关负载均衡 ID\",\"lowerObject\":\"\",\"example\":\"gwlb-xxx\"}]}}]"
+            ]
+          },
+          {
+            "title": "枚举参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header示例",
+            "type": "json",
+            "content": [
+              "POST /openapi/v4/gwlb/disable-ipv6"
+            ]
+          },
+          {
+            "title": "请求url示例",
+            "type": "json",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body示例",
+            "type": "json",
+            "content": [
+              "{\n  \"regionID\" : \"xxxx\",\n  \"gwLbID\" : \"xxxx\"\n}"
+            ]
+          },
+          {
+            "title": "响应示例",
+            "type": "json",
+            "content": [
+              " \n#### 成功响应示例\n\n{\n    \"statusCode\":800,\n    \"errorCode\":\"SUCCESS\",\n    \"message\":\"success\",\n    \"descritption\": \"成功\",\n\t\"returnObj\":{\n        \"gwLbID\": \"xxxxxx\"\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+            ]
+          },
+          {
+            "title": "状态码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "错误码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "流控信息",
+            "type": "string",
+            "content": [
+              "300"
+            ]
+          }
+        ],
+        "capacityId": 15141,
+        "name": "gwlb关闭ipv6",
+        "serviceId": 94,
+        "isDocumenFinish": 1
+      }
+    },
+    {
+      "api_id": "15140",
+      "title": "gwlb关闭删除保护",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&data=94&vid=88&api=15140&isNormal=1",
+      "target_api_id": "18167",
+      "owner": {
+        "plugin": "elb",
+        "command": "ctyun elb gateway instance disable-delete-protection"
+      },
+      "target_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=24&api=18167&data=88&isNormal=1&vid=82",
+      "status": "covered_equivalent",
+      "reason": "The ELB product publishes the same method, URI, request field types and required inputs for this operation. Use the existing ELB command and its documented ctelb endpoint/response contract; the older VPC-hosted response shape is not claimed as a separately supported transport.",
+      "request_reference_note": null,
+      "response_schema_differences": [],
+      "source_document": {
+        "data": [
+          {
+            "updatedTime": "2025-05-22 15:38:22",
+            "title": "接口功能介绍",
+            "type": "string",
+            "content": [
+              "网关负载均衡关闭删除保护"
+            ]
+          },
+          {
+            "title": "接口约束",
+            "type": "string",
+            "content": [
+              "无"
+            ]
+          },
+          {
+            "title": "接口是否审批",
+            "type": "string",
+            "content": [
+              "否"
+            ]
+          },
+          {
+            "title": "URI",
+            "type": "string",
+            "content": [
+              "POST",
+              "/v4/gwlb/disable-delete-protection"
+            ]
+          },
+          {
+            "title": "Content-Type",
+            "type": "string",
+            "content": [
+              "application/json"
+            ]
+          },
+          {
+            "title": "路径参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "Query参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"资源池 ID\",\"lowerObject\":\"\",\"example\":\"bb9fdb42056f11eda1610242ac110002\"},{\"support_auto_recovery\":\"gwLbID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"网关负载均衡ID\",\"lowerObject\":\"\",\"example\":\"gwlb-xxx\"}]}}]"
+            ]
+          },
+          {
+            "title": "响应参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"gwLbID\",\"paramType\":\"String\",\"describe\":\"网关负载均衡 ID\",\"lowerObject\":\"\",\"example\":\"gwlb-xxx\"}]}}]"
+            ]
+          },
+          {
+            "title": "枚举参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "请求url示例",
+            "type": "json",
+            "content": [
+              "POST /openapi/v4/gwlb/disable-delete-protection"
+            ]
+          },
+          {
+            "title": "请求体body示例",
+            "type": "json",
+            "content": [
+              "{\n  \"regionID\" : \"xxxx\",\n  \"gwLbID\" : \"xxxx\"\n}"
+            ]
+          },
+          {
+            "title": "响应示例",
+            "type": "json",
+            "content": [
+              " \n#### 成功响应示例\n\n{\n    \"statusCode\":800,\n    \"errorCode\":\"SUCCESS\",\n    \"message\":\"success\",\n    \"descritption\": \"成功\",\n\t\"returnObj\":{\n        \"gwElb\": \"xxxxxx\"\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+            ]
+          },
+          {
+            "title": "状态码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "错误码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "流控信息",
+            "type": "string",
+            "content": [
+              "300"
+            ]
+          }
+        ],
+        "capacityId": 15140,
+        "name": "gwlb关闭删除保护",
+        "serviceId": 94,
+        "isDocumenFinish": 1
+      }
+    },
+    {
+      "api_id": "15139",
+      "title": "删除gwlb",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&data=94&vid=88&api=15139&isNormal=1",
+      "target_api_id": "18168",
+      "owner": {
+        "plugin": "elb",
+        "command": "ctyun elb gateway instance delete"
+      },
+      "target_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=24&api=18168&data=88&isNormal=1&vid=82",
+      "status": "covered_equivalent",
+      "reason": "The ELB product publishes the same method, URI, request field types and required inputs for this operation. Use the existing ELB command and its documented ctelb endpoint/response contract; the older VPC-hosted response shape is not claimed as a separately supported transport.",
+      "request_reference_note": null,
+      "response_schema_differences": [],
+      "source_document": {
+        "data": [
+          {
+            "updatedTime": "2025-05-22 15:38:56",
+            "title": "接口功能介绍",
+            "type": "string",
+            "content": [
+              "删除网关负载均衡"
+            ]
+          },
+          {
+            "title": "接口约束",
+            "type": "string",
+            "content": [
+              "无"
+            ]
+          },
+          {
+            "title": "接口是否审批",
+            "type": "string",
+            "content": [
+              "否"
+            ]
+          },
+          {
+            "title": "URI",
+            "type": "string",
+            "content": [
+              "POST",
+              "/v4/gwlb/delete"
+            ]
+          },
+          {
+            "title": "Content-Type",
+            "type": "string",
+            "content": [
+              "application/json"
+            ]
+          },
+          {
+            "title": "路径参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "Query参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"资源池 ID\",\"lowerObject\":\"\",\"example\":\"bb9fdb42056f11eda1610242ac110002\"},{\"support_auto_recovery\":\"clientToken\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"客户端存根，用于保证订单幂等性, 长度 1 - 64\",\"lowerObject\":\"\",\"example\":\"79fa97e3-c48b-xxxx-9f46-6a13d8163678\"},{\"support_auto_recovery\":\"projectID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"企业项目ID，默认\\\"0\\\"\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"gwLbID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"网关负载均衡ID\",\"lowerObject\":\"\",\"example\":\"gwlb-xxx\"}]}}]"
+            ]
+          },
+          {
+            "title": "响应参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"masterOrderID\",\"paramType\":\"String\",\"describe\":\"订单id。\",\"lowerObject\":\"\",\"example\":\"55d531d7bf2d47658897c42ffb918423\"},{\"support_auto_recovery\":\"masterOrderNO\",\"paramType\":\"String\",\"describe\":\"订单编号, 可以为 null。\",\"lowerObject\":\"\",\"example\":\"20221021191602644224\"},{\"support_auto_recovery\":\"regionID\",\"paramType\":\"String\",\"describe\":\"可用区id。\",\"lowerObject\":\"\",\"example\":\"81f7728662dd11ec810800155d307d5b\"},{\"support_auto_recovery\":\"masterResourceStatus\",\"paramType\":\"String\",\"describe\":\"资源状态: started（启用） / renewed（续订） / refunded（退订） / destroyed（销毁） / failed（失败） / starting（正在启用） / changed（变配）/ expired（过期）/ unknown（未知）\",\"lowerObject\":\"\",\"example\":\"refunded\"}]}}]"
+            ]
+          },
+          {
+            "title": "枚举参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "请求url示例",
+            "type": "json",
+            "content": [
+              "POST /openapi/v4/gwlb/delete"
+            ]
+          },
+          {
+            "title": "请求体body示例",
+            "type": "json",
+            "content": [
+              "{\n  \"regionID\" : \"xxxx\",\n  \"gwLbID\" : \"xxxxxxxx\",\n  \"clientToken\" : \"xxxxxxxx\"\n}"
+            ]
+          },
+          {
+            "title": "响应示例",
+            "type": "json",
+            "content": [
+              " \n#### 成功响应示例\n\n{\n    \"statusCode\":800,\n    \"errorCode\":\"SUCCESS\",\n    \"message\":\"success\",\n    \"descritption\": \"成功\",\n\t\"returnObj\":{\n        \"masterOrderID\": \"ee508bcc586211ed961bacde48001122\",\n        \"masterOrderNO\": null,\n        \"regionID\": \"81f7728662dd11ec810800155d307d5b\"\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+            ]
+          },
+          {
+            "title": "状态码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "错误码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "流控信息",
+            "type": "string",
+            "content": [
+              "300"
+            ]
+          }
+        ],
+        "capacityId": 15139,
+        "name": "删除gwlb",
+        "serviceId": 94,
+        "isDocumenFinish": 1
+      }
+    },
+    {
+      "api_id": "15138",
+      "title": "更新gwlb",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&data=94&vid=88&api=15138&isNormal=1",
+      "target_api_id": "18169",
+      "owner": {
+        "plugin": "elb",
+        "command": "ctyun elb gateway instance update"
+      },
+      "target_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=24&api=18169&data=88&isNormal=1&vid=82",
+      "status": "covered_equivalent",
+      "reason": "The ELB product publishes the same method, URI, request field types and required inputs for this operation. Use the existing ELB command and its documented ctelb endpoint/response contract; the older VPC-hosted response shape is not claimed as a separately supported transport.",
+      "request_reference_note": null,
+      "response_schema_differences": [],
+      "source_document": {
+        "data": [
+          {
+            "updatedTime": "2025-10-20 16:27:10",
+            "title": "接口功能介绍",
+            "type": "string",
+            "content": [
+              "更新网关负载均衡属性"
+            ]
+          },
+          {
+            "title": "接口约束",
+            "type": "string",
+            "content": [
+              "无"
+            ]
+          },
+          {
+            "title": "接口是否审批",
+            "type": "string",
+            "content": [
+              "否"
+            ]
+          },
+          {
+            "title": "URI",
+            "type": "string",
+            "content": [
+              "POST",
+              "/v4/gwlb/update"
+            ]
+          },
+          {
+            "title": "Content-Type",
+            "type": "string",
+            "content": [
+              "application/json"
+            ]
+          },
+          {
+            "title": "路径参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "Query参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"资源池 ID\",\"lowerObject\":\"\",\"example\":\"bb9fdb42056f11eda1610242ac110002\"},{\"support_auto_recovery\":\"projectID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"企业项目ID，默认\\\"0\\\"\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"gwLbID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"网关负载均衡ID\",\"lowerObject\":\"\",\"example\":\"gwlb-xxx\"},{\"support_auto_recovery\":\"name\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"支持拉丁字母、中文、数字，下划线，连字符，中文 / 英文字母开头，不能以 http: / https: 开头，长度 2 - 32\",\"lowerObject\":\"\",\"example\":\"test\"},{\"support_auto_recovery\":\"description\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"支持拉丁字母、中文、数字, 特殊字符：~!@#$%^&*()_-+= <>?:\\\"{},./;'[\\\\]·！@#￥%……&*（） —— -+={}《》？：“”【】、；‘'，。、，不能以 http: / https: 开头，长度 0 - 128\",\"lowerObject\":\"\",\"example\":\"\"}]}}]"
+            ]
+          },
+          {
+            "title": "响应参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"gwLbID\",\"paramType\":\"String\",\"describe\":\"网关负载均衡 ID\",\"lowerObject\":\"\",\"example\":\"gwlb-xxx\"}]}}]"
+            ]
+          },
+          {
+            "title": "枚举参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "请求url示例",
+            "type": "json",
+            "content": [
+              "POST /openapi/v4/gwlb/update"
+            ]
+          },
+          {
+            "title": "请求体body示例",
+            "type": "json",
+            "content": [
+              "{\n  \"regionID\" : \"xxxx\",\n  \"gwLbID\" : \"xxxxxxxx\",\n  \"name\" : \"xxxxxxxx\"\n}"
+            ]
+          },
+          {
+            "title": "响应示例",
+            "type": "json",
+            "content": [
+              " \n#### 成功响应示例\n\n{\n    \"statusCode\":800,\n    \"errorCode\":\"SUCCESS\",\n    \"message\":\"success\",\n    \"descritption\": \"成功\",\n\t\"returnObj\":{\n        \"gwLbID\": \"xxxxxxx\"\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+            ]
+          },
+          {
+            "title": "状态码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "错误码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "流控信息",
+            "type": "string",
+            "content": [
+              "300"
+            ]
+          }
+        ],
+        "capacityId": 15138,
+        "name": "更新gwlb",
+        "serviceId": 94,
+        "isDocumenFinish": 1
+      }
+    },
+    {
+      "api_id": "15102",
+      "title": "创建gwlb",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&data=94&vid=88&api=15102&isNormal=1",
+      "target_api_id": "18170",
+      "owner": {
+        "plugin": "elb",
+        "command": "ctyun elb gateway instance create"
+      },
+      "target_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=24&api=18170&data=88&isNormal=1&vid=82",
+      "status": "covered_equivalent",
+      "reason": "The ELB product publishes the same method, URI, request field types and required inputs for this operation. Use the existing ELB command and its documented ctelb endpoint/response contract; the older VPC-hosted response shape is not claimed as a separately supported transport.",
+      "request_reference_note": null,
+      "response_schema_differences": [],
+      "source_document": {
+        "data": [
+          {
+            "updatedTime": "2025-05-22 15:42:25",
+            "title": "接口功能介绍",
+            "type": "string",
+            "content": [
+              "创建网关负载均衡"
+            ]
+          },
+          {
+            "title": "接口约束",
+            "type": "string",
+            "content": [
+              "无"
+            ]
+          },
+          {
+            "title": "接口是否审批",
+            "type": "string",
+            "content": [
+              "否"
+            ]
+          },
+          {
+            "title": "URI",
+            "type": "string",
+            "content": [
+              "POST",
+              "/v4/gwlb/create"
+            ]
+          },
+          {
+            "title": "Content-Type",
+            "type": "string",
+            "content": [
+              "application/json"
+            ]
+          },
+          {
+            "title": "路径参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "Query参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"区域ID\",\"lowerObject\":\"\",\"example\":\"81f7728662dd11ec810800155d307d5b\"},{\"support_auto_recovery\":\"clientToken\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"客户端存根，用于保证订单幂等性。要求单个云平台账户内唯一\",\"lowerObject\":\"\",\"example\":\"fewfrf\"},{\"support_auto_recovery\":\"projectID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"企业项目ID，默认\\\"0\\\"\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"subnetID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"子网 ID\",\"lowerObject\":\"\",\"example\":\"subnet-xxx\"},{\"support_auto_recovery\":\"name\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"支持拉丁字母、中文、数字，下划线，连字符，中文 / 英文字母开头，不能以 http: / https: 开头，长度 2 - 32\",\"lowerObject\":\"\",\"example\":\"test\"},{\"support_auto_recovery\":\"description\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"支持拉丁字母、中文、数字, 特殊字符：~!@#$%^&*()_-+= <>?:\\\"{},./;'[\\\\]·！@#￥%……&*（） —— -+={}\\\\《》？：“”【】、；‘'，。、，不能以 http: / https: 开头，长度 0 - 128\",\"lowerObject\":\"\",\"example\":\"desc\"},{\"support_auto_recovery\":\"privateIpAddress\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"私有 ip 地址\",\"lowerObject\":\"\",\"example\":\"1.1.1.1\"},{\"support_auto_recovery\":\"ipv6Address\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"ipv6 地址\",\"lowerObject\":\"\",\"example\":\"2001:db8:85a3::8a2e:370:7334\"},{\"support_auto_recovery\":\"deleteProtection\",\"isRequir\":\"否\",\"paramType\":\"Boolean\",\"describe\":\"是否开启删除保护，默认为 False\",\"lowerObject\":\"\",\"example\":\"true\"},{\"support_auto_recovery\":\"ipv6Enabled\",\"isRequir\":\"否\",\"paramType\":\"Boolean\",\"describe\":\"是否开启 ipv6，默认为 False\",\"lowerObject\":\"\",\"example\":\"true\"},{\"support_auto_recovery\":\"cycleType\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"仅支持按需\",\"lowerObject\":\"\",\"example\":\"on_demand\"},{\"support_auto_recovery\":\"payVoucherPrice\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"代金券金额，支持到小数点后两位\",\"lowerObject\":\"\",\"example\":\"500\"}]}}]"
+            ]
+          },
+          {
+            "title": "响应参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"masterOrderID\",\"paramType\":\"String\",\"describe\":\"订单id。\",\"lowerObject\":\"\",\"example\":\"55d531d7bf2d47658897c42ffb918423\"},{\"support_auto_recovery\":\"masterOrderNO\",\"paramType\":\"String\",\"describe\":\"订单编号, 可以为 null。\",\"lowerObject\":\"\",\"example\":\"20221021191602644224\"},{\"support_auto_recovery\":\"masterResourceStatus\",\"paramType\":\"String\",\"describe\":\"资源状态: started（启用） / renewed（续订） / refunded（退订） / destroyed（销毁） / failed（失败） / starting（正在启用） / changed（变配）/ expired（过期）/ unknown（未知）\",\"lowerObject\":\"\",\"example\":\"started\"},{\"support_auto_recovery\":\"masterResourceID\",\"paramType\":\"String\",\"describe\":\"资源 ID 可以为 null。\",\"lowerObject\":\"\",\"example\":\"d48cace2da7b4c81b4c0444768a04608\"},{\"support_auto_recovery\":\"regionID\",\"paramType\":\"String\",\"describe\":\"可用区id。\",\"lowerObject\":\"\",\"example\":\"81f7728662dd11ec810800155d307d5b\"},{\"support_auto_recovery\":\"gwLbID\",\"paramType\":\"String\",\"describe\":\"网关负载均衡 ID\",\"lowerObject\":\"\",\"example\":\"\"}]}}]"
+            ]
+          },
+          {
+            "title": "枚举参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "请求url示例",
+            "type": "json",
+            "content": [
+              "POST /openapi/v4/gwlb/create"
+            ]
+          },
+          {
+            "title": "请求体body示例",
+            "type": "json",
+            "content": [
+              "{\n  \"regionID\" : \"xxxx\",\n  \"name\" : \"eip-test-0001234\",\n  \"subnetID\" : \"subnet-xxxx\",\n  \"clientToken\" : \"xxxxxxxx\",\n  \"cycleType\" : \"on_demand\"\n}"
+            ]
+          },
+          {
+            "title": "响应示例",
+            "type": "json",
+            "content": [
+              " \n#### 成功响应示例\n\n{\n    \"statusCode\":800,\n    \"errorCode\":\"SUCCESS\",\n    \"message\":\"success\",\n    \"descritption\": \"成功\",\n\t\"returnObj\":{\n        \"masterOrderID\": \"ee508bcc586211ed961bacde48001122\",\n        \"masterOrderNO\": null,\n        \"masterResourceID\": \"d48cace2da7b4c81b4c0444768a04608\",\n        \"masterResourceStatus\": \"started\",\n        \"regionID\": \"81f7728662dd11ec810800155d307d5b\",\n        \"gwLbID\": \"xxxxxx\"\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+            ]
+          },
+          {
+            "title": "状态码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "错误码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "流控信息",
+            "type": "string",
+            "content": [
+              "300"
+            ]
+          }
+        ],
+        "capacityId": 15102,
+        "name": "创建gwlb",
+        "serviceId": 94,
+        "isDocumenFinish": 1
+      }
+    },
+    {
+      "api_id": "15308",
+      "title": "查看ip_listener列表",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&data=94&vid=88&api=15308&isNormal=1",
+      "target_api_id": "18142",
+      "owner": {
+        "plugin": "elb",
+        "command": "ctyun elb gateway ip-listener list"
+      },
+      "target_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=24&api=18142&data=88&isNormal=1&vid=82",
+      "status": "covered_equivalent",
+      "reason": "The ELB product publishes the same method, URI, request field types and required inputs for this operation. Use the existing ELB command and its documented ctelb endpoint/response contract; the older VPC-hosted response shape is not claimed as a separately supported transport.",
+      "request_reference_note": null,
+      "response_schema_differences": [
+        {
+          "table": "响应参数",
+          "field": "requestID",
+          "vpc_schema": null,
+          "elb_schema": [
+            "String",
+            null,
+            ""
+          ]
+        },
+        {
+          "table": "表  targetGroups",
+          "field": "targetGroupID",
+          "vpc_schema": [
+            "String",
+            null,
+            ""
+          ],
+          "elb_schema": null
+        },
+        {
+          "table": "表  targetGroups",
+          "field": "weight",
+          "vpc_schema": [
+            "Integer",
+            null,
+            ""
+          ],
+          "elb_schema": null
+        },
+        {
+          "table": "表 action",
+          "field": "forwardConfig",
+          "vpc_schema": [
+            "Object",
+            null,
+            "forwardConfig"
+          ],
+          "elb_schema": [
+            "Array of Objects",
+            null,
+            "forwardConfig"
+          ]
+        },
+        {
+          "table": "表 forwardConfig",
+          "field": "targetGroupID",
+          "vpc_schema": null,
+          "elb_schema": [
+            "String",
+            null,
+            ""
+          ]
+        },
+        {
+          "table": "表 forwardConfig",
+          "field": "targetGroups",
+          "vpc_schema": [
+            "Array of Objects",
+            null,
+            " targetGroups"
+          ],
+          "elb_schema": null
+        },
+        {
+          "table": "表 forwardConfig",
+          "field": "weight",
+          "vpc_schema": null,
+          "elb_schema": [
+            "String",
+            null,
+            ""
+          ]
+        },
+        {
+          "table": "表 results",
+          "field": "tcpIdleTimeout",
+          "vpc_schema": null,
+          "elb_schema": [
+            "Integer",
+            null,
+            ""
+          ]
+        }
+      ],
+      "source_document": {
+        "data": [
+          {
+            "updatedTime": "2025-05-22 15:28:17",
+            "title": "接口功能介绍",
+            "type": "string",
+            "content": [
+              "查看ip_listener列表"
+            ]
+          },
+          {
+            "title": "接口约束",
+            "type": "string",
+            "content": [
+              "无"
+            ]
+          },
+          {
+            "title": "接口是否审批",
+            "type": "string",
+            "content": [
+              "否"
+            ]
+          },
+          {
+            "title": "URI",
+            "type": "string",
+            "content": [
+              "GET",
+              "/v4/iplistener/list"
+            ]
+          },
+          {
+            "title": "Content-Type",
+            "type": "string",
+            "content": [
+              "application/json"
+            ]
+          },
+          {
+            "title": "路径参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "Query参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"Query参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"example\":\"示例\"},{\"describe\":\"说明\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"example\":\"bb9fdb42056f11eda1610242ac110002\",\"describe\":\"资源池 ID\"},{\"support_auto_recovery\":\"ipListenerID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"example\":\"listener-xxx\",\"describe\":\"监听器 ID\"},{\"support_auto_recovery\":\"pageNumber\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"example\":\"1\",\"describe\":\"列表的页码，默认值为 1。\"},{\"support_auto_recovery\":\"pageSize\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"example\":\"10\",\"describe\":\"分页查询时每页的行数，最大值为 50，默认值为 10。\"}]}}]"
+            ]
+          },
+          {
+            "title": "请求头header参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "响应参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"results\",\"paramType\":\"Array of Objects\",\"describe\":\"接口业务数据\",\"lowerObject\":\"results\",\"example\":\"\"},{\"support_auto_recovery\":\"totalCount\",\"paramType\":\"Integer\",\"describe\":\"列表条目数\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"currentCount\",\"paramType\":\"Integer\",\"describe\":\"分页查询时每页的行数。\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"totalPage\",\"paramType\":\"Integer\",\"describe\":\"总页数\",\"lowerObject\":\"\",\"example\":\"1\"}]}},{\"table\":{\"title\":\"表 results\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"gwElbID\",\"paramType\":\"String\",\"describe\":\"网关负载均衡 ID\",\"lowerObject\":\"\",\"example\":\"gwlb-xxx\"},{\"support_auto_recovery\":\"name\",\"paramType\":\"String\",\"describe\":\"名字\",\"lowerObject\":\"\",\"example\":\"test\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"描述\",\"lowerObject\":\"\",\"example\":\"desc\"},{\"support_auto_recovery\":\"ipListenerID\",\"paramType\":\"String\",\"describe\":\"监听器 id\",\"lowerObject\":\"\",\"example\":\"listener-xxxx\"},{\"support_auto_recovery\":\"action\",\"paramType\":\"Object\",\"describe\":\"转发配置\",\"lowerObject\":\"action\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 action\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"type\",\"paramType\":\"String\",\"describe\":\"默认规则动作类型: forward / redirect\",\"lowerObject\":\"\",\"example\":\"forward\"},{\"support_auto_recovery\":\"forwardConfig\",\"paramType\":\"Object\",\"describe\":\"转发配置\",\"lowerObject\":\"forwardConfig\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 forwardConfig\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"targetGroups\",\"paramType\":\"Array of Objects\",\"describe\":\"后端服务组\",\"lowerObject\":\" targetGroups\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表  targetGroups\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"targetGroupID\",\"paramType\":\"String\",\"describe\":\"后端服务组ID\",\"lowerObject\":\"\",\"example\":\"tg-xxx\"},{\"support_auto_recovery\":\"weight\",\"paramType\":\"Integer\",\"describe\":\"权重\",\"lowerObject\":\"\",\"example\":\"100\"}]}}]"
+            ]
+          },
+          {
+            "title": "枚举参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "请求url示例",
+            "type": "json",
+            "content": [
+              "GET /openapi/v4/iplistener/list?regionID=xxxx"
+            ]
+          },
+          {
+            "title": "请求体body示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "响应示例",
+            "type": "json",
+            "content": [
+              " \n#### 成功响应示例\n\n{\n    \"statusCode\":800,\n    \"errorCode\":\"SUCCESS\",\n    \"message\":\"success\",\n    \"descritption\": \"成功\",\n\t\"returnObj\":{\n        \"results\": [{\n            \"gwElbID\": \"xxx\",\n            \"name\": \"xx\",\n            \"description\": \"xx\",\n            \"ipListenerID\": \"listener-xx\",\n            \"action\": {\n                \"type\": \"forward\",\n                \"targetGroups\": [{\n                    \"targetGroupID\": \"tg-xxx\",\n                    \"weight\": 100\n                }]\n            }\n        }],\n        \"totalCount\": 1,\n        \"currentCount\": 1,\n        \"totalPage\": 1\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+            ]
+          },
+          {
+            "title": "状态码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "错误码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "流控信息",
+            "type": "string",
+            "content": [
+              "1000"
+            ]
+          }
+        ],
+        "capacityId": 15308,
+        "name": "查看ip_listener列表",
+        "serviceId": 94,
+        "isDocumenFinish": 1
+      }
+    },
+    {
+      "api_id": "15307",
+      "title": "查看ip_listener详情",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&data=94&vid=88&api=15307&isNormal=1",
+      "target_api_id": "18145",
+      "owner": {
+        "plugin": "elb",
+        "command": "ctyun elb gateway ip-listener show"
+      },
+      "target_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=24&api=18145&data=88&isNormal=1&vid=82",
+      "status": "covered_equivalent",
+      "reason": "The ELB product publishes the same method, URI, request field types and required inputs for this operation. Use the existing ELB command and its documented ctelb endpoint/response contract; the older VPC-hosted response shape is not claimed as a separately supported transport.",
+      "request_reference_note": null,
+      "response_schema_differences": [
+        {
+          "table": "响应参数",
+          "field": "requestID",
+          "vpc_schema": null,
+          "elb_schema": [
+            "String",
+            null,
+            ""
+          ]
+        },
+        {
+          "table": "表 action",
+          "field": "forwardConfig",
+          "vpc_schema": [
+            "Object",
+            null,
+            "forwardConfig"
+          ],
+          "elb_schema": [
+            "Array of Objects",
+            null,
+            "forwardConfig"
+          ]
+        },
+        {
+          "table": "表 forwardConfig",
+          "field": "targetGroupID",
+          "vpc_schema": null,
+          "elb_schema": [
+            "String",
+            null,
+            ""
+          ]
+        },
+        {
+          "table": "表 forwardConfig",
+          "field": "targetGroups",
+          "vpc_schema": [
+            "Array of Objects",
+            null,
+            "targetGroups"
+          ],
+          "elb_schema": null
+        },
+        {
+          "table": "表 forwardConfig",
+          "field": "weight",
+          "vpc_schema": null,
+          "elb_schema": [
+            "String",
+            null,
+            ""
+          ]
+        },
+        {
+          "table": "表 returnObj",
+          "field": "tcpIdleTimeout",
+          "vpc_schema": null,
+          "elb_schema": [
+            "Integer",
+            null,
+            ""
+          ]
+        },
+        {
+          "table": "表 targetGroups",
+          "field": "targetGroupID",
+          "vpc_schema": [
+            "String",
+            null,
+            ""
+          ],
+          "elb_schema": null
+        },
+        {
+          "table": "表 targetGroups",
+          "field": "weight",
+          "vpc_schema": [
+            "Integer",
+            null,
+            ""
+          ],
+          "elb_schema": null
+        }
+      ],
+      "source_document": {
+        "data": [
+          {
+            "updatedTime": "2025-05-22 15:29:17",
+            "title": "接口功能介绍",
+            "type": "string",
+            "content": [
+              "查看ip_listener详情"
+            ]
+          },
+          {
+            "title": "接口约束",
+            "type": "string",
+            "content": [
+              "无"
+            ]
+          },
+          {
+            "title": "接口是否审批",
+            "type": "string",
+            "content": [
+              "否"
+            ]
+          },
+          {
+            "title": "URI",
+            "type": "string",
+            "content": [
+              "GET",
+              "/v4/iplistener/show"
+            ]
+          },
+          {
+            "title": "Content-Type",
+            "type": "string",
+            "content": [
+              "application/json"
+            ]
+          },
+          {
+            "title": "路径参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "Query参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"Query参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"example\":\"示例\"},{\"describe\":\"说明\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"example\":\"bb9fdb42056f11eda1610242ac110002\",\"describe\":\"资源池 ID\"},{\"support_auto_recovery\":\"ipListenerID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"example\":\"listener-xxx\",\"describe\":\"监听器 ID\"}]}}]"
+            ]
+          },
+          {
+            "title": "请求头header参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "响应参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"gwElbID\",\"paramType\":\"String\",\"describe\":\"网关负载均衡 ID\",\"lowerObject\":\"\",\"example\":\"gwlb-xxx\"},{\"support_auto_recovery\":\"name\",\"paramType\":\"String\",\"describe\":\"名字\",\"lowerObject\":\"\",\"example\":\"test\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"描述\",\"lowerObject\":\"\",\"example\":\"desc\"},{\"support_auto_recovery\":\"ipListenerID\",\"paramType\":\"String\",\"describe\":\"监听器 id\",\"lowerObject\":\"\",\"example\":\"listener-xxxx\"},{\"support_auto_recovery\":\"action\",\"paramType\":\"Object\",\"describe\":\"转发配置\",\"lowerObject\":\"action\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 action\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"type\",\"paramType\":\"String\",\"describe\":\"默认规则动作类型: forward / redirect\",\"lowerObject\":\"\",\"example\":\"forward\"},{\"support_auto_recovery\":\"forwardConfig\",\"paramType\":\"Object\",\"describe\":\"转发配置\",\"lowerObject\":\"forwardConfig\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 forwardConfig\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"targetGroups\",\"paramType\":\"Array of Objects\",\"describe\":\"后端服务组\",\"lowerObject\":\"targetGroups\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 targetGroups\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"targetGroupID\",\"paramType\":\"String\",\"describe\":\"后端服务组ID\",\"lowerObject\":\"\",\"example\":\"tg-xxx\"},{\"support_auto_recovery\":\"weight\",\"paramType\":\"Integer\",\"describe\":\"权重\",\"lowerObject\":\"\",\"example\":\"100\"}]}}]"
+            ]
+          },
+          {
+            "title": "枚举参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "请求url示例",
+            "type": "json",
+            "content": [
+              "GET /openapi/v4/iplistener/show?regionID=xxx&ipListenerID=listener-xxx"
+            ]
+          },
+          {
+            "title": "请求体body示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "响应示例",
+            "type": "json",
+            "content": [
+              " \n#### 成功响应示例\n\n{\n    \"statusCode\":800,\n    \"errorCode\":\"SUCCESS\",\n    \"message\":\"success\",\n    \"descritption\": \"成功\",\n\t\"returnObj\":{\n        \"gwElbID\": \"xxx\",\n        \"name\": \"xx\",\n        \"description\": \"xx\",\n        \"ipListenerID\": \"listener-xx\",\n        \"action\": {\n            \"type\": \"forward\",\n            \"targetGroups\": [{\n                \"targetGroupID\": \"tg-xxx\",\n                \"weight\": 100\n            }]\n        }\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+            ]
+          },
+          {
+            "title": "状态码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "错误码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "流控信息",
+            "type": "string",
+            "content": [
+              "1000"
+            ]
+          }
+        ],
+        "capacityId": 15307,
+        "name": "查看ip_listener详情",
+        "serviceId": 94,
+        "isDocumenFinish": 1
+      }
+    },
+    {
+      "api_id": "15306",
+      "title": "删除ip_listener",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&data=94&vid=88&api=15306&isNormal=1",
+      "target_api_id": "18146",
+      "owner": {
+        "plugin": "elb",
+        "command": "ctyun elb gateway ip-listener delete"
+      },
+      "target_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=24&api=18146&data=88&isNormal=1&vid=82",
+      "status": "covered_equivalent",
+      "reason": "The ELB product publishes the same method, URI, request field types and required inputs for this operation. Use the existing ELB command and its documented ctelb endpoint/response contract; the older VPC-hosted response shape is not claimed as a separately supported transport.",
+      "request_reference_note": null,
+      "response_schema_differences": [],
+      "source_document": {
+        "data": [
+          {
+            "updatedTime": "2025-05-22 15:31:07",
+            "title": "接口功能介绍",
+            "type": "string",
+            "content": [
+              "删除ip_listener"
+            ]
+          },
+          {
+            "title": "接口约束",
+            "type": "string",
+            "content": [
+              "无"
+            ]
+          },
+          {
+            "title": "接口是否审批",
+            "type": "string",
+            "content": [
+              "否"
+            ]
+          },
+          {
+            "title": "URI",
+            "type": "string",
+            "content": [
+              "POST",
+              "/v4/iplistener/delete"
+            ]
+          },
+          {
+            "title": "Content-Type",
+            "type": "string",
+            "content": [
+              "application/json"
+            ]
+          },
+          {
+            "title": "路径参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "Query参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"资源池 ID\",\"lowerObject\":\"\",\"example\":\"bb9fdb42056f11eda1610242ac110002\"},{\"support_auto_recovery\":\"ipListenerID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"监听器 ID\",\"lowerObject\":\"\",\"example\":\"listener-xxx\"}]}}]"
+            ]
+          },
+          {
+            "title": "响应参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"ipListenerID\",\"paramType\":\"String\",\"describe\":\"监听器 id\",\"lowerObject\":\"\",\"example\":\"listener-xxxx\"}]}}]"
+            ]
+          },
+          {
+            "title": "枚举参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "请求url示例",
+            "type": "json",
+            "content": [
+              "POST /openapi/v4/iplistener/delete"
+            ]
+          },
+          {
+            "title": "请求体body示例",
+            "type": "json",
+            "content": [
+              "{\n  \"regionID\" : \"xxxx\",\n  \"ipListenerID\" : \"listener-xxx\"\n}"
+            ]
+          },
+          {
+            "title": "响应示例",
+            "type": "json",
+            "content": [
+              " \n#### 成功响应示例\n\n{\n    \"statusCode\":800,\n    \"errorCode\":\"SUCCESS\",\n    \"message\":\"success\",\n    \"descritption\": \"成功\",\n\t\"returnObj\":{\n        \"ipListenerID\": \"listener-xxx\"\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+            ]
+          },
+          {
+            "title": "状态码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "错误码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "流控信息",
+            "type": "string",
+            "content": [
+              "1000"
+            ]
+          }
+        ],
+        "capacityId": 15306,
+        "name": "删除ip_listener",
+        "serviceId": 94,
+        "isDocumenFinish": 1
+      }
+    },
+    {
+      "api_id": "15305",
+      "title": "更新ip_listener",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&data=94&vid=88&api=15305&isNormal=1",
+      "target_api_id": "18147",
+      "owner": {
+        "plugin": "elb",
+        "command": "ctyun elb gateway ip-listener update"
+      },
+      "target_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=24&api=18147&data=88&isNormal=1&vid=82",
+      "status": "covered_equivalent",
+      "reason": "The ELB product publishes the same method, URI, request field types and required inputs for this operation. Use the existing ELB command and its documented ctelb endpoint/response contract; the older VPC-hosted response shape is not claimed as a separately supported transport.",
+      "request_reference_note": null,
+      "response_schema_differences": [
+        {
+          "table": "响应参数",
+          "field": "requestID",
+          "vpc_schema": null,
+          "elb_schema": [
+            "String",
+            null,
+            ""
+          ]
+        }
+      ],
+      "source_document": {
+        "data": [
+          {
+            "updatedTime": "2025-10-20 16:29:01",
+            "title": "接口功能介绍",
+            "type": "string",
+            "content": [
+              "更新ip_listener"
+            ]
+          },
+          {
+            "title": "接口约束",
+            "type": "string",
+            "content": [
+              "无"
+            ]
+          },
+          {
+            "title": "接口是否审批",
+            "type": "string",
+            "content": [
+              "否"
+            ]
+          },
+          {
+            "title": "URI",
+            "type": "string",
+            "content": [
+              "POST",
+              "/v4/iplistener/update"
+            ]
+          },
+          {
+            "title": "Content-Type",
+            "type": "string",
+            "content": [
+              "application/json"
+            ]
+          },
+          {
+            "title": "路径参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "Query参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"资源池 ID\",\"lowerObject\":\"\",\"example\":\"bb9fdb42056f11eda1610242ac110002\"},{\"support_auto_recovery\":\"ipListenerID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"监听器 ID\",\"lowerObject\":\"\",\"example\":\"listener-xxx\"},{\"support_auto_recovery\":\"name\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"支持拉丁字母、中文、数字，下划线，连字符，中文 / 英文字母开头，不能以 http: / https: 开头，长度 2 - 32\",\"lowerObject\":\"\",\"example\":\"test\"},{\"support_auto_recovery\":\"description\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"支持拉丁字母、中文、数字, 特殊字符：~!@#$%^&*()_-+= <>?:\\\"{},./;'[\\\\]·！@#￥%……&*（） —— -+={}《》？：“”【】、；‘'，。、，不能以 http: / https: 开头，长度 0 - 128\",\"lowerObject\":\"\",\"example\":\"desc\"},{\"support_auto_recovery\":\"targetGroupID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"后端组 ID\",\"lowerObject\":\"\",\"example\":\"tg-xxx\"},{\"support_auto_recovery\":\"weight\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"转发权重, 取值范围 0 - 256\",\"lowerObject\":\"\",\"example\":\"100\"}]}}]"
+            ]
+          },
+          {
+            "title": "响应参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"ipListenerID\",\"paramType\":\"String\",\"describe\":\"监听器 id\",\"lowerObject\":\"\",\"example\":\"listener-xxxx\"}]}}]"
+            ]
+          },
+          {
+            "title": "枚举参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "请求url示例",
+            "type": "json",
+            "content": [
+              "POST /openapi/v4/iplistener/update"
+            ]
+          },
+          {
+            "title": "请求体body示例",
+            "type": "json",
+            "content": [
+              "{\n  \"regionID\" : \"xxxx\",\n  \"ipListenerID\" : \"listener-xxx\",\n  \"name\" : \"xxx\"\n}"
+            ]
+          },
+          {
+            "title": "响应示例",
+            "type": "json",
+            "content": [
+              " \n#### 成功响应示例\n\n{\n    \"statusCode\":800,\n    \"errorCode\":\"SUCCESS\",\n    \"message\":\"success\",\n    \"descritption\": \"成功\",\n\t\"returnObj\":{\n        \"ipListenerID\": \"listener-xxx\"\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+            ]
+          },
+          {
+            "title": "状态码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "错误码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "流控信息",
+            "type": "string",
+            "content": [
+              "1000"
+            ]
+          }
+        ],
+        "capacityId": 15305,
+        "name": "更新ip_listener",
+        "serviceId": 94,
+        "isDocumenFinish": 1
+      }
+    },
+    {
+      "api_id": "15304",
+      "title": "创建ip_listener",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&data=94&vid=88&api=15304&isNormal=1",
+      "target_api_id": "18148",
+      "owner": {
+        "plugin": "elb",
+        "command": "ctyun elb gateway ip-listener create"
+      },
+      "target_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=24&api=18148&data=88&isNormal=1&vid=82",
+      "status": "covered_equivalent",
+      "reason": "The ELB product publishes the same method, URI, request field types and required inputs for this operation. Use the existing ELB command and its documented ctelb endpoint/response contract; the older VPC-hosted response shape is not claimed as a separately supported transport.",
+      "request_reference_note": "The VPC schema references targetGroups while ELB references targetGroup for the same target-group array.",
+      "response_schema_differences": [],
+      "source_document": {
+        "data": [
+          {
+            "updatedTime": "2025-05-22 15:32:30",
+            "title": "接口功能介绍",
+            "type": "string",
+            "content": [
+              "创建ip_listener"
+            ]
+          },
+          {
+            "title": "接口约束",
+            "type": "string",
+            "content": [
+              "无"
+            ]
+          },
+          {
+            "title": "接口是否审批",
+            "type": "string",
+            "content": [
+              "否"
+            ]
+          },
+          {
+            "title": "URI",
+            "type": "string",
+            "content": [
+              "POST",
+              "/v4/iplistener/create"
+            ]
+          },
+          {
+            "title": "Content-Type",
+            "type": "string",
+            "content": [
+              "application/json"
+            ]
+          },
+          {
+            "title": "路径参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "Query参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求体body参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"资源池 ID\",\"lowerObject\":\"\",\"example\":\"bb9fdb42056f11eda1610242ac110002\"},{\"support_auto_recovery\":\"gwLbID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"网关负载均衡 ID\",\"lowerObject\":\"\",\"example\":\"gwlb-xxx\"},{\"support_auto_recovery\":\"name\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"支持拉丁字母、中文、数字，下划线，连字符，中文 / 英文字母开头，不能以 http: / https: 开头，长度 2 - 32\",\"lowerObject\":\"\",\"example\":\"test\"},{\"support_auto_recovery\":\"description\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"支持拉丁字母、中文、数字, 特殊字符：~!@#$%^&*()_-+= <>?:\\\"{},./;'[\\\\]·！@#￥%……&*（） —— -+={}\\\\《》？：“”【】、；‘'，。、，不能以 http: / https: 开头，长度 0 - 128\",\"lowerObject\":\"\",\"example\":\"desc\"},{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"Object\",\"describe\":\"动作配置\",\"lowerObject\":\"action\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 action\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"type\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"默认规则动作类型。取值范围：forward\",\"lowerObject\":\"\",\"example\":\"forward\"},{\"support_auto_recovery\":\"forwardConfig\",\"isRequir\":\"是\",\"paramType\":\"Object\",\"describe\":\"转发配置，当type为forward时，此字段必填\",\"lowerObject\":\"fowardConfig\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 forwardConfig\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"targetGroups\",\"isRequir\":\"是\",\"paramType\":\"Array of Objects\",\"describe\":\"后端服务组\",\"lowerObject\":\"targetGroups\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 targetGroup\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"targetGroupID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"后端服务组ID\",\"lowerObject\":\"\",\"example\":\"tg-xxx\"},{\"support_auto_recovery\":\"weight\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"后端主机权重，取值范围：1-256。默认为100\",\"lowerObject\":\"\",\"example\":\"100\"}]}}]"
+            ]
+          },
+          {
+            "title": "响应参数",
+            "type": "table",
+            "content": [
+              "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"ipListenerID\",\"paramType\":\"String\",\"describe\":\"监听器 id\",\"lowerObject\":\"\",\"example\":\"listener-xxxx\"}]}}]"
+            ]
+          },
+          {
+            "title": "枚举参数",
+            "type": "table",
+            "content": [
+              null
+            ]
+          },
+          {
+            "title": "请求头header示例",
+            "type": "json",
+            "content": [
+              ""
+            ]
+          },
+          {
+            "title": "请求url示例",
+            "type": "json",
+            "content": [
+              "POST /openapi/v4/iplistener/create"
+            ]
+          },
+          {
+            "title": "请求体body示例",
+            "type": "json",
+            "content": [
+              "{\n  \"regionID\" : \"xxxx\",\n  \"name\" : \"eip-test-0001234\",\n  \"gwLbID\" : \"xxxx\"\n}"
+            ]
+          },
+          {
+            "title": "响应示例",
+            "type": "json",
+            "content": [
+              " \n#### 成功响应示例\n\n{\n    \"statusCode\":800,\n    \"errorCode\":\"SUCCESS\",\n    \"message\":\"success\",\n    \"descritption\": \"成功\",\n\t\"returnObj\":{\n        \"ipListenerID\": \"listener-xxx\"\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+            ]
+          },
+          {
+            "title": "状态码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "错误码",
+            "type": "table",
+            "content": ""
+          },
+          {
+            "title": "流控信息",
+            "type": "string",
+            "content": [
+              "1000"
+            ]
+          }
+        ],
+        "capacityId": 15304,
+        "name": "创建ip_listener",
+        "serviceId": 94,
+        "isDocumenFinish": 1
+      }
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "captured_at": "2026-09-25",
+  "service_id": 173,
+  "version_id": 166,
+  "published_api_count": 96,
+  "implemented_api_count": 96,
+  "blocked": [],
+  "fixtures_unavailable": [
+    {
+      "api_id": "11208",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "10857",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    }
+  ],
+  "example_normalisations": [
+    {
+      "api_id": "10844",
+      "section": "请求体body示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "11174",
+      "section": "响应示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "10927",
+      "section": "request example",
+      "normalisation": "Converted task_type to the documented integer type."
+    }
+  ],
+  "waiter_gaps": [],
+  "waiter_review": {
+    "waiter_count": 3,
+    "notes": [
+      "Domain status supports enabled and disabled waits.",
+      "Refresh and preload queries document terminal states but captured rows omit task_id, so an exact task selector cannot be verified. URL can recur across submissions and is not treated as a unique task identity.",
+      "Block and unblock queries accept only arrays of task IDs, URLs or submission IDs. They cannot provide one required scalar selector.",
+      "Compilation and staging results span multiple edge nodes, without an explicit node input or documented overall terminal state; no first-row or nonempty-list success is inferred.",
+      "Function metadata exposes the documented successful deployment state for a required function name. No failure state is invented and no specific version or global propagation is inferred."
+    ]
+  },
+  "response_notes": [
+    "Batch domain operations expose each domain code and message; their outer successful envelope does not guarantee all domain outcomes succeeded.",
+    "Download operations return JSON URLs rather than binary log data.",
+    "Report subscription update has an empty response example, and supported blocking regions has only a statusCode placeholder. Both commands retain explicit schema success checks without fabricated fixtures.",
+    "Code-copy examples capture modified_on while the schema calls it modifiedOn; the table keeps the captured field once."
+  ],
+  "request_notes": [
+    "Report subscription timestamps, task lookup selectors and unblock inputs follow documented conditional requirements and defaults.",
+    "Domain creation still accepts upstream action 2, whose modification behavior is scheduled for shutdown; help directs modification to whole-site-acceleration domain update. The still-supported creation action is not marked deprecated.",
+    "GET domain ownership verification is a state-changing operation and requires confirmation without retries.",
+    "API 11181 is titled upload but explicitly describes copying the current script; it accepts no code file. The command is function code copy, matching its documented function and request.",
+    "Condition maps contain arrays of condition objects, despite Map of String type labels; Object input preserves the published request shapes."
+  ]
+}

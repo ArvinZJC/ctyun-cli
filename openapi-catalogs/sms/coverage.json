@@ -1,0 +1,66 @@
+{
+  "captured_at": "2026-09-25",
+  "service_id": 2,
+  "version_id": 2,
+  "published_api_count": 13,
+  "implemented_api_count": 13,
+  "blocked": [],
+  "fixtures_unavailable": [],
+  "example_normalisations": [
+    {
+      "api_id": "11650",
+      "section": "请求体body示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "954",
+      "action": "QuerySendDetails",
+      "section": "request",
+      "normalisation": "Repaired missing/invalid commas and removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "954",
+      "action": "QuerySmsSignList",
+      "section": "request",
+      "normalisation": "Repaired missing/invalid commas and removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "954",
+      "action": "QuerySmsSignList",
+      "section": "response",
+      "normalisation": "Repaired missing/invalid commas and removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "954",
+      "action": "QuerySmsTemplateList",
+      "section": "request",
+      "normalisation": "Repaired missing/invalid commas and removed trailing commas; values unchanged."
+    }
+  ],
+  "waiter_gaps": [],
+  "command_count": 24,
+  "action_dispatch": {
+    "api_id": "954",
+    "actions": [
+      "SendSms",
+      "QuerySendDetails",
+      "QuerySmsSignList",
+      "AddSmsSign",
+      "DeleteSmsSign",
+      "ModifySmsSign",
+      "QuerySmsSign",
+      "QuerySmsTemplateList",
+      "AddSmsTemplate",
+      "DeleteSmsTemplate",
+      "ModifySmsTemplate",
+      "QuerySmsTemplate"
+    ],
+    "notes": "Legacy API multiplexes twelve actions. Each command fixes the action field and binds its own documented schema; callback schemas are not callable APIs."
+  },
+  "waiter_review": {
+    "waiter_count": 4,
+    "notes": [
+      "Current and legacy template/signature detail commands support approval waiters. Delivery record collections can contain multiple rows per request ID; no unique record identity input is exposed for polling."
+    ]
+  }
+}

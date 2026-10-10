@@ -7672,9 +7672,9 @@
       "api_id": "13411",
       "title": "设置云硬盘快照删除策略",
       "description": {
-        "en-GB": "Set a volume's snapshot deletion policy.",
-        "en-US": "Set a volume's snapshot deletion policy.",
-        "zh-CN": "设置云硬盘快照删除策略。"
+        "en-GB": "Set a volume's snapshot deletion policy. This API is scheduled for deprecation; use the volume update command to set snapshot deletion policy.",
+        "en-US": "Set a volume's snapshot deletion policy. This API is scheduled for deprecation; use the volume update command to set snapshot deletion policy.",
+        "zh-CN": "设置云硬盘快照删除策略。该接口即将废弃，建议使用修改云硬盘属性接口完成设置云硬盘快照删除策略操作。"
       },
       "category": "volume",
       "command_path": [
@@ -7805,6 +7805,22 @@
         "message": "SUCCESS",
         "description": "成功",
         "statusCode": 800
+      },
+      "recommendation": {
+        "notice": "该接口即将废弃，建议使用修改云硬盘属性接口完成设置云硬盘快照删除策略操作。",
+        "target_api": {
+          "method": "POST",
+          "path": "/v4/ebs/update-attr-ebs",
+          "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=7339&data=48&isNormal=1&vid=45"
+        },
+        "target_command": {
+          "plugin": "evs",
+          "path": [
+            "evs",
+            "volume",
+            "update"
+          ]
+        }
       }
     },
     {

@@ -1,0 +1,67 @@
+{
+  "captured_at": "2026-09-25",
+  "service_id": 256,
+  "version_id": 339,
+  "published_api_count": 188,
+  "implemented_api_count": 186,
+  "blocked": [
+    {
+      "api_id": "20783",
+      "title": "导出API定义",
+      "path": "/agw/v1/api/export",
+      "reason": "API definition export has no response schema, response example or declared successful response media type; neither a JSON result nor a file download contract can be established."
+    },
+    {
+      "api_id": "20703",
+      "title": "服务中上传证书文件",
+      "path": "/agw/v1/upstream/upload-file",
+      "reason": "Multipart upload publishes no file part name, request parameters or body example. Response certFileKey cannot establish the upload request field."
+    }
+  ],
+  "fixtures_unavailable": [],
+  "example_normalisations": [
+    {
+      "api_id": "20706",
+      "parameter": "relationCodeList",
+      "normalisation": "Normalized the captured example scalar representation to the explicit parameter type; values retained."
+    },
+    {
+      "api_id": "20779",
+      "parameter": "hostCodes",
+      "normalisation": "Normalized the captured example scalar representation to the explicit parameter type; values retained."
+    },
+    {
+      "api_id": "20779",
+      "parameter": "hostCodes",
+      "normalisation": "Normalized the captured example scalar representation to the explicit parameter type; values retained."
+    }
+  ],
+  "waiter_gaps": [],
+  "request_notes": [
+    "Certificate create/update tables incorrectly place multipart form fields in the path-parameter section. Their explicit Form Data examples and fixed request URLs establish body parts; file bytes are uploaded as named multipart parts.",
+    "Interface and route debugging can call a configured backend, so both commands remain confirmed and non-retryable. Definition prechecks and VPC compatibility checks are stateless retrievals."
+  ],
+  "waiter_assessment": {
+    "implemented": [
+      "cloud-native-api-gateway.task.completed",
+      "cloud-native-api-gateway.instance.running",
+      "cloud-native-api-gateway.service.ready",
+      "cloud-native-api-gateway.consumer.enabled",
+      "cloud-native-api-gateway.consumer.disabled",
+      "cloud-native-api-gateway.consumer.authentication.enabled",
+      "cloud-native-api-gateway.consumer.authentication.disabled",
+      "cloud-native-api-gateway.route.deployed",
+      "cloud-native-api-gateway.route.undeployed",
+      "cloud-native-api-gateway.agent-api.route.deployed",
+      "cloud-native-api-gateway.agent-api.route.undeployed",
+      "cloud-native-api-gateway.instance.tracing.enabled",
+      "cloud-native-api-gateway.instance.tracing.disabled"
+    ],
+    "notes": [
+      "No waiter for the latest load-balancer bind/unbind task: its query accepts instanceCode but cannot require and select an exact taskCode.",
+      "MCP publication, federation and service-source instance states lack documented terminal enums; examples alone do not establish outcomes.",
+      "Access-log processing success does not establish enabled state, and its main state enum is absent.",
+      "Route DeployedWithChanges remains pending when waiting for deployed; API versions/environment publication arrays are not treated as a single route."
+    ]
+  }
+}

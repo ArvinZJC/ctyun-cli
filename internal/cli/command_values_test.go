@@ -85,7 +85,7 @@ func TestPluginCommandTypedBodyValues(t *testing.T) {
 // typed input produces a localized visible-option error without network I/O.
 func TestPluginCommandInvalidTypedValueStopsBeforeRequest(t *testing.T) {
 	command := typedValueCommand()
-	if _, err := parseCommandParameters(command, []string{"--enabled", "yes"}, "en-US"); err == nil || !strings.Contains(err.Error(), `invalid value "yes" for option "--enabled": expected boolean`) {
+	if _, err := parseCommandParameters(command, []string{"--enabled", "yes"}, "en-US"); err == nil || !strings.Contains(err.Error(), `invalid value "yes" for option "--enabled": expected "boolean"`) {
 		t.Fatalf("parseCommandParameters error = %v", err)
 	}
 	called := false
@@ -101,7 +101,7 @@ func TestPluginCommandInvalidTypedValueStopsBeforeRequest(t *testing.T) {
 	}
 
 	_, err := executeAPICommand(bundle, command, nil, map[string]string{"enabled": "yes"}, typedValueProfile(), func(string) string { return "" }, transport, nil, nil, "en-US")
-	if err == nil || !strings.Contains(err.Error(), `invalid value "yes" for option "--enabled": expected boolean`) {
+	if err == nil || !strings.Contains(err.Error(), `invalid value "yes" for option "--enabled": expected "boolean"`) {
 		t.Fatalf("executeAPICommand error = %v", err)
 	}
 	if called {
@@ -115,7 +115,7 @@ func TestPluginCommandInvalidTypedValueStopsBeforeRequest(t *testing.T) {
 		Query:  map[string]string{"enabled": "$param.enabled"},
 	}
 	_, err = executeAPICommand(bundle, command, nil, map[string]string{"enabled": "yes"}, typedValueProfile(), func(string) string { return "" }, transport, nil, nil, "en-US")
-	if err == nil || !strings.Contains(err.Error(), `invalid value "yes" for option "--enabled": expected boolean`) {
+	if err == nil || !strings.Contains(err.Error(), `invalid value "yes" for option "--enabled": expected "boolean"`) {
 		t.Fatalf("query executeAPICommand error = %v", err)
 	}
 	if called {
@@ -169,7 +169,7 @@ func TestParameterValuePlaceholderUsesSharedSyntax(t *testing.T) {
 			t.Fatalf("parameterValuePlaceholder(%#v) = %q, want %q", tc.parameter, got, tc.want)
 		}
 	}
-	if got := localizedInvalidOptionValueType(plugin.Parameter{Flag: "name"}, "bad", "en-US").Error(); got != `invalid value "bad" for option "--name": expected string` {
+	if got := localizedInvalidOptionValueType(plugin.Parameter{Flag: "name"}, "bad", "en-US").Error(); got != `invalid value "bad" for option "--name": expected "string"` {
 		t.Fatalf("default string type error = %q", got)
 	}
 }

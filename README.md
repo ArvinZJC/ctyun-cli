@@ -30,7 +30,7 @@
 
 - 开通要管理的服务，并准备具有相应权限的 AK/SK 凭据。
 
-- 本工具支持自研池（一类节点）的客户侧（C 端）接口，不支持业务／运营侧（B 端）接口和合营池（二类节点）。
+- 本工具支持自研池（一类节点）的客户侧（C 端）接口，不支持业务／运营侧（B 端）接口和合营池（二类节点）。这里的节点分类不等同于 Redis 等产品文档中的Ⅰ／Ⅱ类资源池版本，不能仅凭编号判断接口是否属于本项目范围。
 
 - 服务的具体使用条件请参阅[天翼云 OpenAPI 文档](https://eop.ctyun.cn/ebp/ctapiDocument/index)。
 
@@ -150,50 +150,123 @@ ctyun plugin list
 <details>
 <summary>插件列表</summary>
 
-| 名称                     | 插件                     | 产品                     | 版本                                                                                                                                                         | 通道     | 质量        | 命令 | 操作 |
-|--------------------------|--------------------------|--------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|-------------|-----:|-----:|
-| 应用云主机 ACS           | `acs`                    | `acs`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Facs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   15 |   15 |
-| 弹性伸缩服务 AS          | `as`                     | `as`                     | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fas%2F*&label=release)](../../releases)                     | `beta`   | `generated` |   63 |   63 |
-| 云备份 CBR               | `cbr`                    | `cbr`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcbr%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   22 |   22 |
-| 云容灾 CDR               | `cdr`                    | `cdr`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcdr%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   31 |   31 |
-| 函数计算                 | `cf`                     | `cf`                     | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcf%2F*&label=release)](../../releases)                     | `beta`   | `generated` |   62 |   62 |
-| 云助手                   | `cloud-assistant`        | `cloud-assistant`        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcloud-assistant%2F*&label=release)](../../releases)        | `beta`   | `generated` |   11 |   11 |
-| 公共服务                 | `common`                 | `common`                 | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcommon%2F*&label=release)](../../releases)                 | `stable` | `curated`   |    1 |    1 |
-| 物理机 DPS               | `dps`                    | `dps`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fdps%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   59 |   59 |
-| 天翼云电脑（政企版）     | `ecpc`                   | `ecpc`                   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecpc%2F*&label=release)](../../releases)                   | `beta`   | `generated` |  303 |  303 |
-| 弹性云主机 ECS           | `ecs`                    | `ecs`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |  209 |  209 |
-| 弹性高性能计算 E-HPC     | `ehpc`                   | `ehpc`                   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fehpc%2F*&label=release)](../../releases)                   | `beta`   | `generated` |   24 |   24 |
-| 弹性IP EIP               | `eip`                    | `eip`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Feip%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   57 |   57 |
-| 弹性负载均衡 ELB         | `elb`                    | `elb`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Felb%2F*&label=release)](../../releases)                    | `beta`   | `generated` |  114 |  114 |
-| 云硬盘 EVS               | `evs`                    | `evs`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fevs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   36 |   36 |
-| 高性能并行文件服务 HPFS  | `hpfs`                   | `hpfs`                   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fhpfs%2F*&label=release)](../../releases)                   | `beta`   | `generated` |   40 |   40 |
-| 镜像服务 IMS             | `ims`                    | `ims`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fims%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   27 |   27 |
-| 任务                     | `job`                    | `job`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fjob%2F*&label=release)](../../releases)                    | `stable` | `curated`   |    1 |    1 |
-| NAT网关                  | `nat`                    | `nat`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fnat%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   22 |   22 |
-| 海量文件服务 OceanFS     | `oceanfs`                | `oceanfs`                | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Foceanfs%2F*&label=release)](../../releases)                | `beta`   | `generated` |   34 |   34 |
-| 对象存储（经典版）I型    | `classic-object-storage` | `classic-object-storage` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fclassic-object-storage%2F*&label=release)](../../releases) | `beta`   | `generated` |  219 |  219 |
-| 媒体存储                 | `media-storage`          | `media-storage`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fmedia-storage%2F*&label=release)](../../releases)          | `beta`   | `generated` |  124 |  124 |
-| 订单                     | `order`                  | `order`                  | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Forder%2F*&label=release)](../../releases)                  | `stable` | `curated`   |    7 |    7 |
-| 私网NAT网关              | `private-nat`            | `private-nat`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fprivate-nat%2F*&label=release)](../../releases)            | `beta`   | `generated` |   21 |   21 |
-| 关系数据库MySQL版        | `rds-mysql`              | `rds-mysql`              | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frds-mysql%2F*&label=release)](../../releases)              | `beta`   | `generated` |  224 |  224 |
-| 关系数据库 PostgreSQL 版 | `rds-postgresql`         | `rds-postgresql`         | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frds-postgresql%2F*&label=release)](../../releases)         | `beta`   | `generated` |  153 |  153 |
-| 关系型数据库 SQL Server  | `rds-sqlserver`          | `rds-sqlserver`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frds-sqlserver%2F*&label=release)](../../releases)          | `beta`   | `generated` |  114 |  114 |
-| 资源池                   | `region`                 | `region`                 | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases)                 | `stable` | `curated`   |    7 |    7 |
-| 弹性文件服务 SFS         | `sfs`                    | `sfs`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fsfs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   56 |   56 |
-| 云硬盘备份 VBS           | `vbs`                    | `vbs`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fvbs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   37 |   37 |
-| 虚拟私有云 VPC           | `vpc`                    | `vpc`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fvpc%2F*&label=release)](../../releases)                    | `beta`   | `generated` |  193 |  193 |
-| 对象存储 ZOS             | `zos`                    | `zos`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fzos%2F*&label=release)](../../releases)                    | `beta`   | `generated` |  106 |  106 |
+| 名称                       | 插件                         | 产品                         | 版本                                                                                                                                                             | 通道     | 质量        | 命令 | 操作 |
+|----------------------------|------------------------------|------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|-------------|-----:|-----:|
+| 应用云主机 ACS             | `acs`                        | `acs`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Facs%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   15 |   15 |
+| 智能体引擎                 | `agent-engine`               | `agent-engine`               | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fagent-engine%2F*&label=release)](../../releases)               | `beta`   | `generated` |   11 |   11 |
+| AI 能力开放平台            | `ai-capability`              | `ai-capability`              | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fai-capability%2F*&label=release)](../../releases)              | `beta`   | `generated` |   41 |   41 |
+| AI 安全                    | `ai-security`                | `ai-security`                | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fai-security%2F*&label=release)](../../releases)                | `beta`   | `generated` |    5 |    5 |
+| API 网关                   | `api-gateway`                | `api-gateway`                | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fapi-gateway%2F*&label=release)](../../releases)                | `beta`   | `generated` |  161 |  161 |
+| 应用性能监控 APM           | `apm`                        | `apm`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fapm%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   63 |   63 |
+| 应用加速                   | `application-acceleration`   | `application-acceleration`   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fapplication-acceleration%2F*&label=release)](../../releases)   | `beta`   | `generated` |   12 |   12 |
+| 应用高可用                 | `application-ha`             | `application-ha`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fapplication-ha%2F*&label=release)](../../releases)             | `beta`   | `generated` |   43 |   43 |
+| 弹性伸缩服务 AS            | `as`                         | `as`                         | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fas%2F*&label=release)](../../releases)                         | `beta`   | `generated` |   63 |   63 |
+| 账务                       | `billing`                    | `billing`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fbilling%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   16 |   16 |
+| 云应用引擎 CAE             | `cae`                        | `cae`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcae%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   44 |   44 |
+| 云备份 CBR                 | `cbr`                        | `cbr`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcbr%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   22 |   22 |
+| 云容器引擎 CCE             | `cce`                        | `cce`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcce%2F*&label=release)](../../releases)                        | `beta`   | `generated` |  306 |  306 |
+| 分布式容器云平台 CCE One   | `cce-one`                    | `cce-one`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcce-one%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   41 |   41 |
+| 云专线 CDA                 | `cda`                        | `cda`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcda%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   61 |   61 |
+| 内容分发网络加速 CDN       | `cdn`                        | `cdn`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcdn%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   92 |   92 |
+| 云容灾 CDR                 | `cdr`                        | `cdr`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcdr%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   31 |   31 |
+| 证书管理服务               | `certificate`                | `certificate`                | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcertificate%2F*&label=release)](../../releases)                | `beta`   | `generated` |   14 |   14 |
+| 函数计算                   | `cf`                         | `cf`                         | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcf%2F*&label=release)](../../releases)                         | `beta`   | `generated` |   62 |   62 |
+| 对象存储（经典版）I型      | `classic-object-storage`     | `classic-object-storage`     | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fclassic-object-storage%2F*&label=release)](../../releases)     | `beta`   | `generated` |  219 |  219 |
+| 云数据库 ClickHouse        | `clickhouse`                 | `clickhouse`                 | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fclickhouse%2F*&label=release)](../../releases)                 | `beta`   | `generated` |   54 |   54 |
+| 云助手                     | `cloud-assistant`            | `cloud-assistant`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcloud-assistant%2F*&label=release)](../../releases)            | `beta`   | `generated` |   11 |   11 |
+| 云审计                     | `cloud-audit`                | `cloud-audit`                | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcloud-audit%2F*&label=release)](../../releases)                | `beta`   | `generated` |   13 |   13 |
+| 云原生API网关              | `cloud-native-api-gateway`   | `cloud-native-api-gateway`   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcloud-native-api-gateway%2F*&label=release)](../../releases)   | `beta`   | `generated` |  186 |  186 |
+| 云搜索服务                 | `cloud-search`               | `cloud-search`               | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcloud-search%2F*&label=release)](../../releases)               | `beta`   | `generated` |    7 |    7 |
+| 云监控服务 CM              | `cm`                         | `cm`                         | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcm%2F*&label=release)](../../releases)                         | `beta`   | `generated` |  169 |  169 |
+| 公共服务                   | `common`                     | `common`                     | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcommon%2F*&label=release)](../../releases)                     | `stable` | `curated`   |    1 |    1 |
+| 容器镜像服务 CRS           | `crs`                        | `crs`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcrs%2F*&label=release)](../../releases)                        | `beta`   | `generated` |  269 |  269 |
+| 专属云（计算独享型）       | `dec`                        | `dec`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fdec%2F*&label=release)](../../releases)                        | `beta`   | `generated` |    9 |    9 |
+| 数据管理服务               | `dms`                        | `dms`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fdms%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   78 |   78 |
+| 物理机 DPS                 | `dps`                        | `dps`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fdps%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   60 |   60 |
+| 分布式关系型数据库         | `drds`                       | `drds`                       | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fdrds%2F*&label=release)](../../releases)                       | `beta`   | `generated` |  125 |  125 |
+| 数据传输服务 DTS           | `dts`                        | `dts`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fdts%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   72 |   72 |
+| 云间高速（标准版） EC      | `ec`                         | `ec`                         | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fec%2F*&label=release)](../../releases)                         | `beta`   | `generated` |   51 |   51 |
+| 弹性容器实例 ECI           | `eci`                        | `eci`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Feci%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   37 |   37 |
+| 天翼云电脑（政企版）       | `ecpc`                       | `ecpc`                       | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecpc%2F*&label=release)](../../releases)                       | `beta`   | `generated` |  303 |  303 |
+| 弹性云主机 ECS             | `ecs`                        | `ecs`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)                        | `beta`   | `generated` |  209 |  209 |
+| 智能边缘云                 | `ecx`                        | `ecx`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecx%2F*&label=release)](../../releases)                        | `beta`   | `generated` |  252 |  252 |
+| DDoS 高防（边缘云版）      | `edge-ddos`                  | `edge-ddos`                  | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fedge-ddos%2F*&label=release)](../../releases)                  | `beta`   | `generated` |   39 |   39 |
+| 边缘安全加速平台           | `edge-security-acceleration` | `edge-security-acceleration` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fedge-security-acceleration%2F*&label=release)](../../releases) | `beta`   | `generated` |   79 |   79 |
+| Web 应用防火墙（边缘云版） | `edge-waf`                   | `edge-waf`                   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fedge-waf%2F*&label=release)](../../releases)                   | `beta`   | `generated` |   68 |   68 |
+| 弹性高性能计算 E-HPC       | `ehpc`                       | `ehpc`                       | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fehpc%2F*&label=release)](../../releases)                       | `beta`   | `generated` |   40 |   40 |
+| 弹性IP EIP                 | `eip`                        | `eip`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Feip%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   57 |   57 |
+| 弹性负载均衡 ELB           | `elb`                        | `elb`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Felb%2F*&label=release)](../../releases)                        | `beta`   | `generated` |  114 |  114 |
+| 翼 MapReduce               | `emr`                        | `emr`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Femr%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   13 |   13 |
+| 云硬盘 EVS                 | `evs`                        | `evs`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fevs%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   36 |   36 |
+| 全局流量管理               | `gtm`                        | `gtm`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fgtm%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   21 |   21 |
+| 高性能并行文件服务 HPFS    | `hpfs`                       | `hpfs`                       | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fhpfs%2F*&label=release)](../../releases)                       | `beta`   | `generated` |   40 |   40 |
+| 分布式融合数据库 HTAP      | `htap`                       | `htap`                       | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fhtap%2F*&label=release)](../../releases)                       | `beta`   | `generated` |   47 |   47 |
+| 慧聚一站式智算服务平台     | `huiju`                      | `huiju`                      | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fhuiju%2F*&label=release)](../../releases)                      | `beta`   | `generated` |   86 |   86 |
+| 统一身份认证               | `iam`                        | `iam`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fiam%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   87 |   87 |
+| 镜像服务 IMS               | `ims`                        | `ims`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fims%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   27 |   27 |
+| 时序数据库 Influx          | `influxdb`                   | `influxdb`                   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Finfluxdb%2F*&label=release)](../../releases)                   | `beta`   | `generated` |   48 |   48 |
+| 任务                       | `job`                        | `job`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fjob%2F*&label=release)](../../releases)                        | `stable` | `curated`   |    1 |    1 |
+| 分布式消息服务 Kafka       | `kafka`                      | `kafka`                      | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fkafka%2F*&label=release)](../../releases)                      | `beta`   | `generated` |  124 |  124 |
+| 密钥管理                   | `kms`                        | `kms`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fkms%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   82 |   82 |
+| 视频直播                   | `live-streaming`             | `live-streaming`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Flive-streaming%2F*&label=release)](../../releases)             | `beta`   | `generated` |   90 |   90 |
+| 云日志服务 LTS             | `lts`                        | `lts`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Flts%2F*&label=release)](../../releases)                        | `beta`   | `generated` |  171 |  171 |
+| 媒体存储                   | `media-storage`              | `media-storage`              | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fmedia-storage%2F*&label=release)](../../releases)              | `beta`   | `generated` |  124 |  124 |
+| 模型训推                   | `model-training`             | `model-training`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fmodel-training%2F*&label=release)](../../releases)             | `beta`   | `generated` |   67 |   67 |
+| 文档数据库服务             | `mongodb`                    | `mongodb`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fmongodb%2F*&label=release)](../../releases)                    | `beta`   | `generated` |  180 |  180 |
+| 分布式消息服务 MQTT        | `mqtt`                       | `mqtt`                       | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fmqtt%2F*&label=release)](../../releases)                       | `beta`   | `generated` |   61 |   61 |
+| 微服务云应用平台 MSAP      | `msap`                       | `msap`                       | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fmsap%2F*&label=release)](../../releases)                       | `beta`   | `generated` |  157 |  157 |
+| 微服务引擎 MSE             | `mse`                        | `mse`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fmse%2F*&label=release)](../../releases)                        | `beta`   | `generated` |  243 |  243 |
+| NAT网关                    | `nat`                        | `nat`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fnat%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   22 |   22 |
+| 云防火墙（原生版）         | `native-firewall`            | `native-firewall`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fnative-firewall%2F*&label=release)](../../releases)            | `beta`   | `generated` |  104 |  104 |
+| 海量文件服务 OceanFS       | `oceanfs`                    | `oceanfs`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Foceanfs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   34 |   34 |
+| 订单                       | `order`                      | `order`                      | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Forder%2F*&label=release)](../../releases)                      | `stable` | `curated`   |    7 |    7 |
+| 内网DNS                    | `private-dns`                | `private-dns`                | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fprivate-dns%2F*&label=release)](../../releases)                | `beta`   | `generated` |   40 |   40 |
+| 私网NAT网关                | `private-nat`                | `private-nat`                | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fprivate-nat%2F*&label=release)](../../releases)                | `beta`   | `generated` |   21 |   21 |
+| 分布式消息服务 RabbitMQ    | `rabbitmq`                   | `rabbitmq`                   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frabbitmq%2F*&label=release)](../../releases)                   | `beta`   | `generated` |   39 |   39 |
+| 关系数据库MySQL版          | `rds-mysql`                  | `rds-mysql`                  | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frds-mysql%2F*&label=release)](../../releases)                  | `beta`   | `generated` |  224 |  224 |
+| 关系数据库 PostgreSQL 版   | `rds-postgresql`             | `rds-postgresql`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frds-postgresql%2F*&label=release)](../../releases)             | `beta`   | `generated` |  156 |  156 |
+| 关系型数据库 SQL Server    | `rds-sqlserver`              | `rds-sqlserver`              | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frds-sqlserver%2F*&label=release)](../../releases)              | `beta`   | `generated` |  116 |  116 |
+| 分布式缓存服务 Redis 版    | `redis`                      | `redis`                      | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fredis%2F*&label=release)](../../releases)                      | `beta`   | `generated` |  207 |  207 |
+| 资源池                     | `region`                     | `region`                     | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases)                     | `stable` | `curated`   |    7 |    7 |
+| 科研助手                   | `research-assistant`         | `research-assistant`         | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fresearch-assistant%2F*&label=release)](../../releases)         | `beta`   | `generated` |   47 |   47 |
+| 分布式消息服务 RocketMQ    | `rocketmq`                   | `rocketmq`                   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frocketmq%2F*&label=release)](../../releases)                   | `beta`   | `generated` |   46 |   46 |
+| 资源编排 ROS               | `ros`                        | `ros`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fros%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   40 |   40 |
+| 天翼云 SD-WAN              | `sdwan`                      | `sdwan`                      | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fsdwan%2F*&label=release)](../../releases)                      | `beta`   | `generated` |  138 |  138 |
+| 服务器安全卫士（原生版）   | `server-security`            | `server-security`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fserver-security%2F*&label=release)](../../releases)            | `beta`   | `generated` |  154 |  154 |
+| 应用服务网格               | `service-mesh`               | `service-mesh`               | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fservice-mesh%2F*&label=release)](../../releases)               | `beta`   | `generated` |   23 |   23 |
+| 弹性文件服务 SFS           | `sfs`                        | `sfs`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fsfs%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   56 |   56 |
+| 智能 DNS                   | `smart-dns`                  | `smart-dns`                  | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fsmart-dns%2F*&label=release)](../../releases)                  | `beta`   | `generated` |   19 |   19 |
+| 云通信-短信                | `sms`                        | `sms`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fsms%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   24 |   24 |
+| 星辰TokenHub运营服务平台   | `tokenhub`                   | `tokenhub`                   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Ftokenhub%2F*&label=release)](../../releases)                   | `beta`   | `generated` |   19 |   19 |
+| 共享流量包                 | `traffic-package`            | `traffic-package`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Ftraffic-package%2F*&label=release)](../../releases)            | `beta`   | `generated` |    6 |    6 |
+| 云硬盘备份 VBS             | `vbs`                        | `vbs`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fvbs%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   37 |   37 |
+| 智能视图服务               | `visual-service`             | `visual-service`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fvisual-service%2F*&label=release)](../../releases)             | `beta`   | `generated` |   46 |   46 |
+| 云点播                     | `vod`                        | `vod`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fvod%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   38 |   38 |
+| 虚拟私有云 VPC             | `vpc`                        | `vpc`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fvpc%2F*&label=release)](../../releases)                        | `beta`   | `generated` |  207 |  207 |
+| VPC终端节点                | `vpce`                       | `vpce`                       | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fvpce%2F*&label=release)](../../releases)                       | `beta`   | `generated` |   47 |   47 |
+| Web 应用防火墙（原生版）   | `waf`                        | `waf`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fwaf%2F*&label=release)](../../releases)                        | `beta`   | `generated` |   94 |   94 |
+| 全站加速                   | `whole-site-acceleration`    | `whole-site-acceleration`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fwhole-site-acceleration%2F*&label=release)](../../releases)    | `beta`   | `generated` |   96 |   96 |
+| 云骁智算平台               | `yunxiao`                    | `yunxiao`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fyunxiao%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   88 |   88 |
+| 对象存储 ZOS               | `zos`                        | `zos`                        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fzos%2F*&label=release)](../../releases)                        | `beta`   | `generated` |  106 |  106 |
 
 质量字段表示插件元数据的整理程度：`generated` 表示工具生成的初稿，`reviewed` 表示已完成基础复核，`curated` 表示作为维护版本持续更新。
 
 </details>
 
+当前提供 96 个插件、7,638 条命令，覆盖自营资源池的客户侧 API。部分产品或接口因缺少可核实的公开服务地址、请求或响应说明而暂不支持；合营池和其他范围外接口不纳入支持。覆盖情况以已核实的官方文档为依据，不代表所有接口均已通过真实云环境验证。
+
+本阶段里程碑以核心 `0.5.1` 为目标版本，可支持上表所有插件；其中 45 个插件要求核心版本至少为 `0.5.1`。插件版本和发布通道仍独立于核心版本维护。
+
 使用以下插件时，请留意各自的适用范围、配置要求和功能限制：
 
-- 网络：`nat` 管理公网 NAT 网关，`private-nat` 管理私网 NAT 网关。暂不支持旧版 EIP 网络查询，详见[覆盖清单](openapi-catalogs/eip/coverage.json)。
-- RDS：暂不支持 6 个 PostgreSQL 下载或导出接口，详见 [覆盖清单](openapi-catalogs/rds-postgresql/coverage.json)。已下线的 MySQL 跨地域备份目标地域查询命令仍保留弃用警告，但无法在线调用。
+- 网关：`api-gateway` 对应资源与订单代理接口目录，仅支持其中的自营客户侧用法；`cloud-native-api-gateway` 管理独立的云原生 API 网关实例，`mse` 中的网关命令属于微服务引擎。三者的服务地址和接口契约不同。
+
+- 网络：`nat` 管理公网 NAT 网关，`private-nat` 管理私网 NAT 网关。暂不支持旧版 EIP 网络查询。
+- RDS：暂不支持 6 个 PostgreSQL 下载或导出接口。已下线的 MySQL 跨地域备份目标地域查询命令仍保留弃用警告，但无法在线调用。
+- Redis：`redis` 基于官方标为“2023-10-18 II类资源池”的 API 目录（`vid=270`）；该标签是 Redis 产品的目录分类，不代表本项目所排除的合营池（二类节点）。历史接口位于 `ctyun redis legacy`；要求核心版本 `>=0.5.1 <1.0.0`。所有命令均提供离线响应夹具，部分生命周期操作暂不支持等待完成。
+- MongoDB：`mongodb` 的旧版接口位于 `ctyun mongodb v1`；要求核心版本 `>=0.5.1 <1.0.0`。三个导出 API 因二进制响应契约不明确暂未提供；所有已支持命令均提供离线响应夹具。
 - 存储：`media-storage` 和 `classic-object-storage` 的 `native` 命令使用独立的存储凭证，详见[存储鉴权与文件传输](#存储鉴权与文件传输)。媒体存储 OpenAPI 网关适用于西藏资源池 1 区。
-- 云助手：上游 API 暂时下线，`ctyun cloud-assistant command run` 目前无法在线调用。命令仍予以保留，此次暂停不代表永久弃用。
+- 云助手：`ctyun cloud-assistant command run` 对应的 API 可用，但公开 API 文档目前不可用。
 
 插件管理命令共享这些行为：
 
@@ -375,9 +448,9 @@ go run ./cmd/ctyun plugin update <name> --bundled
 git ls-files -co --exclude-standard '*.go' | sort -u | xargs gofmt -w
 go vet ./...
 go test ./internal/cli -run '^TestGoFilesStayUnderLineLimit$'
-go test ./...
+go test -timeout=30m ./...
 go test ./internal/cli -run Completion -v
-go test ./tools/plugincheck
+go test -timeout=30m ./tools/plugincheck
 go run ./tools/coverage
 ```
 
@@ -387,7 +460,7 @@ go run ./tools/coverage
 go run ./cmd/ctyun plugin lint ./plugins/<name>
 go run ./cmd/ctyun <插件命令> --offline
 
-go test ./tools/plugincheck
+go test -timeout=30m ./tools/plugincheck
 go test ./internal/cli ./internal/plugin ./internal/output
 ```
 
@@ -403,18 +476,77 @@ go run ./tools/openapi generate <name>
 go run ./tools/openapi review <name>
 ```
 
-对通过该流水线维护的插件：
+以下机器可读记录供开发者和 AI 维护插件时使用。[产品覆盖清单](openapi-catalogs/product-coverage.json) 将已纳入插件的命令与官方产品目录对照，记录跨产品引用、经过核对的等价接口、范围外接口及已确认的文档障碍。等价覆盖采用目标产品的服务地址和响应契约，不表示旧目录中的响应格式也受到支持。[官方 API 复核记录](openapi-catalogs/official-review.json)汇总了最近一次全插件检查、有证据支持的更新、保留的文档缺口和终端节点阻塞项。
 
-- 跟踪对应的 `source.json` 作为上游证据，并跟踪提升后更新的 `baseline.json` 作为最近一次接受的快照。上游证据更新后，在完成复核和提升前，`source.json` 与已提升插件或 `baseline.json` 存在差异是预期状态；已提升插件的来源指纹和 API 范围仍以 `baseline.json` 为准。
-- 每次插件评审都应检查生命周期等待器。目录中的 `waiters` 将等待器 ID 映射到 `commands`（精确命令 ID）、状态 `path`（JSON）或 `xml_path`（XML 命名空间与元素名组成的绝对路径，精确匹配一个标量元素，不能与集合选择器混用）、单值 `success`/`failure`、可选的额外 `success_values`/`failure_values`、正数 `max_attempts`/`interval_seconds`，以及注明文档状态语义的 `evidence`。空的单值失败条件表示上游未提供失败状态。显式绑定必须指向非危险且可重试的查询操作。评审拒绝草稿等待器漂移；提升会保留定义并推进基线。增加离线插件检查，覆盖响应结构、终止状态和命令级帮助/补全；对于集合响应，添加 `selector`，其中 `path` 指向集合、`key` 指向行内标识、`value` 引用现有的 `$arg.<name>` 或字符串/整数 `$param.<name>`；状态路径相对于匹配行。检查每条已采集记录的结构，精确保留数值标识，空值或未知状态保持等待。状态证据或唯一标识输入不足时记录缺口。
-- 已发布的接口若有明确的响应契约，但没有可用的成功响应示例，使用 `fixture_unavailable` 记录原因。下载接口若明确规定成功响应的媒体类型，应在响应分支中声明 `media_type`，避免将 HTTP 200 错误响应保存为文件。保留命令和响应校验，不生成成功响应样例，并在目录中保留原始响应依据。此类命令不能使用 `--offline` 或 `--fixture`，也不能提供等待器所需的响应证据。
-- 用 `product.api_scope` 记录该插件覆盖的上游 API URI 范围；生成、复核和提升时不要把范围外的 API 静默纳入插件。
-- 对只有推荐、没有弃用或下线说明的上游内容，在 `source.json` 中保留目标 API 证据；如果尚不能解析到已跟踪且已提升的可见命令，就保持未解析状态，不生成命令帮助元数据。插件加载时，跨插件命令引用保持软依赖；引用一旦进入仓库中已提升的插件元数据，发布检查必须确认它精确解析到未弃用的目标命令，并拒绝推荐循环。
-- 在 `source.json` 中保留可执行示例所需的上游证据：完整请求使用 `request_example`，单个参数值使用 `example`；上游确实没有可用值时，复核后明确记录 `example_unavailable`。只重复 Usage 已展示命令路径的示例（包括未解析的路径占位符形式）不会生成，仓库发布检查也会拒绝这类冗余示例；示例应提供具体参数、有意义的选项、结构化值或其他额外行为。复核还会拒绝机械拼接的英文描述、缺少必填命令选项的示例、未声明的选项以及与参数类型不匹配的值。
-- `normalize-labels` 只对 `source.json` 执行共享技术词大小写和已审核短语的保守修复；无法可靠修复的标签保持原样，并继续阻止复核通过。
-- `draft/`、`changes.md` 和 `review.md` 是可复现的本地复核输出，默认忽略；需要复核时重新运行 `diff`、`generate` 和 `review`。
-- 生成草稿会从 `source.json` 写入 `source_fingerprint`；已有插件的版本、通道、质量和核心兼容范围沿用已提升清单；目录声明等待器时，将核心最低版本提升到 0.5.0，避免重新生成时降级发布身份。草稿通过复核、且 `generated`/`reviewed`/`curated` 质量值准确反映当前整理程度时，运行提升命令会更新插件元数据并推进 `baseline.json`。
-- 普通历史由 git 保存。
+产品级记录补充了 [EIP](openapi-catalogs/eip/coverage.json)、[PostgreSQL](openapi-catalogs/rds-postgresql/coverage.json)、[Redis](openapi-catalogs/redis/coverage.json) 和 [MongoDB](openapi-catalogs/mongodb/coverage.json) 的接口缺口、源示例修复或等待器限制。
+
+更新插件时，依次完成四步：补充来源证据、生成并复核草稿、检查生命周期等待器、将通过复核的草稿纳入插件。
+
+#### 1. 更新来源证据
+
+在 `openapi-catalogs/<name>/` 中维护以下文件：
+
+| 文件                                | 用途                                         | Git 管理方式         |
+|-------------------------------------|----------------------------------------------|----------------------|
+| `source.json`                       | 当前上游证据、API 范围及用于生成插件的元数据 | 跟踪                 |
+| `baseline.json`                     | 最近一次接受的快照，用于校验已纳入插件的内容 | 跟踪；由提升操作更新 |
+| `draft/`、`changes.md`、`review.md` | 生成的插件草稿、变更报告及复核结果           | 忽略；需要时重新生成 |
+
+变更尚待复核时，较新的 `source.json` 可以与 `baseline.json` 不同。在提升前，现有插件的来源指纹和 API 范围仍以 `baseline.json` 为准。日常变更历史由 Git 保存。
+
+更新 `source.json` 时：
+
+- 用 `product.api_scope` 声明支持的 API URI 范围。生成、复核和提升都必须遵守该范围。
+- 用 `request_example` 保存完整请求示例，用 `example` 保存单个参数值。上游未提供可用示例时，在复核中确认缺口，并记录 `example_unavailable`。
+- 保留推荐替代 API 的上游证据。只有推荐、没有弃用或下线说明的内容，不能转成弃用警告。
+
+#### 2. 生成并复核草稿
+
+使用 `diff`、`generate` 和 `review` 重新生成本地输出。`normalize-labels` 可修复 `source.json` 中的共享技术词大小写和已审核短语；无法可靠修复的标签保持原样，必须处理后才能通过复核。
+
+复核对象是可运行的插件草稿，而不只是来源目录。检查 API 契约、命令绑定、帮助、示例和响应夹具：
+
+- 普通 JSON 夹具和 HTTP 响应夹具必须与已采集的来源证据一致。数据缺失或被改动会阻止复核通过。
+- 示例必须比 Usage 行提供更多信息，例如具体参数、有意义的选项、结构化值或其他行为。只重复命令路径的示例，包括未解析的路径占位符形式，都会被拒绝。
+- 修正机械拼接的英文描述、缺少必填选项的示例、未声明的选项，以及不符合参数类型的值。
+- 只有推荐目标能解析到已跟踪且已纳入插件的 CLI 命令时，才生成推荐帮助；否则在 `source.json` 中保留未解析的证据。插件加载时，跨插件引用是软依赖；发布检查则要求目标精确匹配、未被弃用，并且不存在推荐循环。
+
+如果 API 的响应契约明确，但没有可用的成功响应示例，用 `fixture_unavailable` 记录原因。保留命令、响应校验和原始证据，不编造成功夹具。该命令不能使用 `--offline` 或 `--fixture`，缺失的示例也不能作为等待器证据。下载接口应在响应分支声明文档规定的成功 `media_type`，避免把 HTTP 200 错误响应保存为文件。
+
+#### 3. 检查生命周期等待器
+
+每次复核时，检查异步操作是否有安全的查询命令和明确记载的终止状态。等待器只能绑定到非危险且明确允许重试的查询操作。状态证据或资源标识参数不足时记录缺口，不要猜测操作何时完成。
+
+等待器定义及上游证据保存在目录的 `waiters` 映射中。草稿中的等待器定义必须与来源目录一致，提升会保留已接受的定义。修改定义后，应重新生成并复核草稿，再执行提升。使用真实插件包进行离线测试，检查响应结构、终止结果以及命令级帮助和补全。
+
+<details>
+<summary>等待器元数据参考</summary>
+
+| 字段                               | 要求                                                                                     |
+|------------------------------------|------------------------------------------------------------------------------------------|
+| `commands`                         | 显式绑定到精确命令 ID                                                                    |
+| `path` 或 `xml_path`               | JSON 状态路径，或精确选择一个标量元素的绝对 XML 命名空间路径；XML 路径不能使用集合选择器 |
+| `success`、`failure`               | 文档规定的终止值；失败值为空表示未记录失败条件                                           |
+| `success_values`、`failure_values` | 需要时补充其他有文档依据的终止值                                                         |
+| `max_attempts`、`interval_seconds` | 正数尝试次数上限和轮询间隔（秒）                                                         |
+| `evidence`                         | 状态定义的来源和含义                                                                     |
+
+对于集合响应，添加 `selector`：`path` 定位集合，`key` 标识各行，`value` 引用现有的 `$arg.<name>` 或标量字符串/整数 `$param.<name>`。状态路径相对于选中的行。检查每条已采集记录，精确保留数值标识，并让空值或未知状态继续等待。没有可用的唯一资源标识参数时，记录阻塞原因。
+
+</details>
+
+#### 4. 将通过复核的草稿纳入插件
+
+提升前，确认草稿已通过复核，且声明的质量（`generated`、`reviewed` 或 `curated`）准确反映插件的整理程度。
+
+生成过程根据 `source.json` 计算 `source_fingerprint`。对于已有插件，保留已提升清单中的版本、通道、质量和核心兼容范围，并在需要时提高核心最低版本：
+
+| 元数据功能                         | 核心最低版本 |
+|------------------------------------|--------------|
+| 等待器                             | `0.5.0`      |
+| 独立的请求头、查询参数和请求体绑定 | `0.5.1`      |
+
+重新生成不能降低已有的兼容要求，也不能重置插件版本、通道或质量。提升操作会更新插件元数据，并将 `baseline.json` 推进到已接受的来源快照：
 
 ```sh
 go run ./tools/openapi promote <name>
@@ -448,7 +580,7 @@ go run ./tools/openapi promote <name>
 go run ./tools/release --generate-key
 export CTYUN_RELEASE_PRIVATE_KEY="<上一步输出的私钥>"
 export CTYUN_RELEASE_PUBLIC_KEY="<上一步输出的公钥>"
-go run ./tools/release --version 0.5.0 --channel stable --out ./dist/releases --gitee-plugin-download-root "https://gitee.com/ArvinZJC/ctyun-cli/releases/download" --platform "$(go env GOOS)/$(go env GOARCH)"
+go run ./tools/release --version 0.5.1 --channel stable --out ./dist/releases --gitee-plugin-download-root "https://gitee.com/ArvinZJC/ctyun-cli/releases/download" --platform "$(go env GOOS)/$(go env GOARCH)"
 ```
 
 正式发布时，GitHub 仍是源码和 CI 产物的权威来源，Gitee 作为同步镜像提供更稳的国内访问路径。已安装的 `ctyun` 使用签名公钥验证托管的核心及插件索引，并检查归档 SHA-256；引导安装脚本采用前文安装章节说明的信任方式。

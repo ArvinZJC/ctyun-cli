@@ -1,0 +1,205 @@
+{
+  "waiters": {
+    "redis.backup.complete": {
+      "selector": {
+        "path": "returnObj.rows",
+        "key": "restoreName",
+        "value": "$param.restore_name"
+      },
+      "commands": [
+        "redis.backup.list"
+      ],
+      "failure_values": [
+        "fail"
+      ],
+      "path": "status",
+      "success": "success",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "redis.backup.restored": {
+      "selector": {
+        "path": "returnObj.rows",
+        "key": "restoreName",
+        "value": "$param.restore_name"
+      },
+      "commands": [
+        "redis.backup.list"
+      ],
+      "failure_values": [
+        "fail"
+      ],
+      "path": "recoveryStatus",
+      "success": "success",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "redis.flashback.complete": {
+      "commands": [
+        "redis.flashback.show"
+      ],
+      "failure_values": [
+        "3"
+      ],
+      "path": "returnObj.status",
+      "success": "2",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "redis.instance.list.running": {
+      "selector": {
+        "path": "returnObj.rows",
+        "key": "prodInstId",
+        "value": "$param.prod_inst_id"
+      },
+      "commands": [
+        "redis.instance.list"
+      ],
+      "failure_values": [
+        "4",
+        "8",
+        "10"
+      ],
+      "path": "status",
+      "success": "0",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "redis.instance.running": {
+      "commands": [
+        "redis.instance.show"
+      ],
+      "failure_values": [
+        "4",
+        "8",
+        "10"
+      ],
+      "path": "returnObj.prodInstInfo.status",
+      "success": "0",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "redis.legacy.dedicated-cluster.instance.running": {
+      "selector": {
+        "path": "returnObj.rows",
+        "key": "prodInstId",
+        "value": "$param.prod_inst_id"
+      },
+      "commands": [
+        "redis.legacy.dedicated-cluster.instance.list"
+      ],
+      "failure_values": [
+        "4",
+        "8",
+        "10"
+      ],
+      "path": "status",
+      "success": "0",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "redis.legacy.instance.list.running": {
+      "selector": {
+        "path": "returnObj.rows",
+        "key": "prodInstId",
+        "value": "$param.prod_inst_id"
+      },
+      "commands": [
+        "redis.legacy.instance.list"
+      ],
+      "failure_values": [
+        "4",
+        "8",
+        "10"
+      ],
+      "path": "status",
+      "success": "0",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "redis.legacy.instance.running": {
+      "commands": [
+        "redis.legacy.instance.show"
+      ],
+      "failure_values": [
+        "4",
+        "8",
+        "10"
+      ],
+      "path": "returnObj.userInfo.status",
+      "success": "0",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "redis.legacy.node.running": {
+      "commands": [
+        "redis.legacy.node.status.show"
+      ],
+      "path": "returnObj.status",
+      "success": "0",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "redis.migration.complete": {
+      "commands": [
+        "redis.migration.show"
+      ],
+      "path": "returnObj.status",
+      "success": "2",
+      "failure": "3",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "redis.node.running": {
+      "commands": [
+        "redis.node.status.show"
+      ],
+      "path": "returnObj.status",
+      "success": "0",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "redis.parameter.history.complete": {
+      "selector": {
+        "path": "returnObj.rows",
+        "key": "history.historyId",
+        "value": "$param.history_id"
+      },
+      "commands": [
+        "redis.parameter.history.list"
+      ],
+      "failure_values": [
+        "FAILED"
+      ],
+      "path": "history.status",
+      "success": "SUCCESS",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "redis.task.complete": {
+      "commands": [
+        "redis.task.show"
+      ],
+      "failure_values": [
+        "3",
+        "4"
+      ],
+      "path": "returnObj.status",
+      "success": "2",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
+}

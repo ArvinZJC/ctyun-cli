@@ -1,0 +1,767 @@
+{
+  "commands": [
+    {
+      "id": "dec.instance.create-batch",
+      "path": [
+        "dec",
+        "instance",
+        "create-batch"
+      ],
+      "operation": "dec.instance.create-batch",
+      "table": "dec.instance.create-batch",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Client Token"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": true,
+          "description": "Availability Zone Name"
+        },
+        {
+          "name": "instance_name",
+          "flag": "instance-name",
+          "target": "instanceName",
+          "required": true,
+          "description": "Instance Name"
+        },
+        {
+          "name": "display_name",
+          "flag": "display-name",
+          "target": "displayName",
+          "required": true,
+          "description": "Display Name"
+        },
+        {
+          "name": "flavor_id",
+          "flag": "flavor-id",
+          "target": "flavorID",
+          "required": true,
+          "description": "Flavor ID"
+        },
+        {
+          "name": "dec_type_id",
+          "flag": "dec-type-id",
+          "target": "decTypeID",
+          "required": false,
+          "description": "Dec Type ID"
+        },
+        {
+          "name": "image_type",
+          "flag": "image-type",
+          "target": "imageType",
+          "required": true,
+          "value_type": "integer",
+          "description": "Image Type"
+        },
+        {
+          "name": "image_id",
+          "flag": "image-id",
+          "target": "imageID",
+          "required": true,
+          "description": "Image ID"
+        },
+        {
+          "name": "boot_disk_type",
+          "flag": "boot-disk-type",
+          "target": "bootDiskType",
+          "required": true,
+          "description": "Boot Disk Type"
+        },
+        {
+          "name": "boot_disk_size",
+          "flag": "boot-disk-size",
+          "target": "bootDiskSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Boot Disk Size"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcID",
+          "required": true,
+          "description": "VPC ID"
+        },
+        {
+          "name": "network_card_list",
+          "flag": "network-card-list",
+          "target": "networkCardList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Network Card List as a JSON array"
+        },
+        {
+          "name": "ext_ip",
+          "flag": "ext-ip",
+          "target": "extIP",
+          "required": true,
+          "description": "Ext IP"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "description": "Project ID"
+        },
+        {
+          "name": "sec_group_list",
+          "flag": "sec-group-list",
+          "target": "secGroupList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Sec Group List as a JSON array"
+        },
+        {
+          "name": "data_disk_list",
+          "flag": "data-disk-list",
+          "target": "dataDiskList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Data Disk List as a JSON array"
+        },
+        {
+          "name": "ip_version",
+          "flag": "ip-version",
+          "target": "ipVersion",
+          "required": false,
+          "description": "IP Version"
+        },
+        {
+          "name": "bandwidth",
+          "flag": "bandwidth",
+          "target": "bandwidth",
+          "required": false,
+          "value_type": "integer",
+          "description": "Bandwidth"
+        },
+        {
+          "name": "ipv6_address_id",
+          "flag": "ipv6-address-id",
+          "target": "ipv6AddressID",
+          "required": false,
+          "description": "Ipv6 Address ID"
+        },
+        {
+          "name": "eip_id",
+          "flag": "eip-id",
+          "target": "eipID",
+          "required": false,
+          "description": "Elastic IP ID"
+        },
+        {
+          "name": "affinity_group_id",
+          "flag": "affinity-group-id",
+          "target": "affinityGroupID",
+          "required": false,
+          "description": "Affinity Group ID"
+        },
+        {
+          "name": "key_pair_id",
+          "flag": "key-pair-id",
+          "target": "keyPairID",
+          "required": false,
+          "description": "Key Pair ID"
+        },
+        {
+          "name": "user_password",
+          "flag": "user-password",
+          "target": "userPassword",
+          "required": false,
+          "description": "User Password"
+        },
+        {
+          "name": "monitor_service",
+          "flag": "monitor-service",
+          "target": "monitorService",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Monitor Service"
+        },
+        {
+          "name": "order_count",
+          "flag": "order-count",
+          "target": "orderCount",
+          "required": false,
+          "value_type": "integer",
+          "description": "Order Count"
+        }
+      ],
+      "fixture_response": "fixtures/dec-instance-create-batch.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&vid=106&data=113&api=18998&isNormal=1",
+      "examples": [
+        "ctyun dec instance create-batch --client-token 9fc6fa0de-ebe7-4168-9ea2-802sdware18101644 --az-name az1 --instance-name test1605 --display-name test11605 --flavor-id 5622ce59-da34-cb43-ca0d-eef2a51475b3 --image-type 1 --image-id 0a50ee7b-a91a-4b8f-afe5-1508ce53578c --boot-disk-type SSD --boot-disk-size 40 --vpc-id vpc-umcq94wcc2 --network-card-list '[{\"subnetID\":\"subnet-con3h8n36g\",\"isMaster\":true,\"fixedIP\":\"10.0.0.123\"}]' --ext-ip 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create-batch"
+      }
+    },
+    {
+      "id": "dec.instance.create",
+      "path": [
+        "dec",
+        "instance",
+        "create"
+      ],
+      "operation": "dec.instance.create",
+      "table": "dec.instance.create",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Client Token"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": true,
+          "description": "Availability Zone Name"
+        },
+        {
+          "name": "instance_name",
+          "flag": "instance-name",
+          "target": "instanceName",
+          "required": true,
+          "description": "Instance Name"
+        },
+        {
+          "name": "display_name",
+          "flag": "display-name",
+          "target": "displayName",
+          "required": true,
+          "description": "Display Name"
+        },
+        {
+          "name": "flavor_id",
+          "flag": "flavor-id",
+          "target": "flavorID",
+          "required": true,
+          "description": "Flavor ID"
+        },
+        {
+          "name": "dec_host_id",
+          "flag": "dec-host-id",
+          "target": "decHostID",
+          "required": false,
+          "description": "Dec Host ID"
+        },
+        {
+          "name": "dec_type_id",
+          "flag": "dec-type-id",
+          "target": "decTypeID",
+          "required": false,
+          "description": "Dec Type ID"
+        },
+        {
+          "name": "image_type",
+          "flag": "image-type",
+          "target": "imageType",
+          "required": true,
+          "value_type": "integer",
+          "description": "Image Type"
+        },
+        {
+          "name": "image_id",
+          "flag": "image-id",
+          "target": "imageID",
+          "required": true,
+          "description": "Image ID"
+        },
+        {
+          "name": "boot_disk_type",
+          "flag": "boot-disk-type",
+          "target": "bootDiskType",
+          "required": true,
+          "description": "Boot Disk Type"
+        },
+        {
+          "name": "boot_disk_size",
+          "flag": "boot-disk-size",
+          "target": "bootDiskSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Boot Disk Size"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcID",
+          "required": true,
+          "description": "VPC ID"
+        },
+        {
+          "name": "network_card_list",
+          "flag": "network-card-list",
+          "target": "networkCardList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Network Card List as a JSON array"
+        },
+        {
+          "name": "ext_ip",
+          "flag": "ext-ip",
+          "target": "extIP",
+          "required": true,
+          "description": "Ext IP"
+        },
+        {
+          "name": "sec_group_list",
+          "flag": "sec-group-list",
+          "target": "secGroupList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Sec Group List as a JSON array"
+        },
+        {
+          "name": "data_disk_list",
+          "flag": "data-disk-list",
+          "target": "dataDiskList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Data Disk List as a JSON array"
+        },
+        {
+          "name": "ip_version",
+          "flag": "ip-version",
+          "target": "ipVersion",
+          "required": false,
+          "description": "IP Version"
+        },
+        {
+          "name": "bandwidth",
+          "flag": "bandwidth",
+          "target": "bandwidth",
+          "required": false,
+          "value_type": "integer",
+          "description": "Bandwidth"
+        },
+        {
+          "name": "ipv6_address_id",
+          "flag": "ipv6-address-id",
+          "target": "ipv6AddressID",
+          "required": false,
+          "description": "Ipv6 Address ID"
+        },
+        {
+          "name": "eip_id",
+          "flag": "eip-id",
+          "target": "eipID",
+          "required": false,
+          "description": "Elastic IP ID"
+        },
+        {
+          "name": "affinity_group_id",
+          "flag": "affinity-group-id",
+          "target": "affinityGroupID",
+          "required": false,
+          "description": "Affinity Group ID"
+        },
+        {
+          "name": "key_pair_id",
+          "flag": "key-pair-id",
+          "target": "keyPairID",
+          "required": false,
+          "description": "Key Pair ID"
+        },
+        {
+          "name": "user_password",
+          "flag": "user-password",
+          "target": "userPassword",
+          "required": false,
+          "description": "User Password"
+        },
+        {
+          "name": "monitor_service",
+          "flag": "monitor-service",
+          "target": "monitorService",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Monitor Service"
+        }
+      ],
+      "fixture_response": "fixtures/dec-instance-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&vid=106&data=113&api=8338&isNormal=1",
+      "examples": [
+        "ctyun dec instance create --client-token please_create_your_own_clientToken_not_use_dec_create_example_01 --az-name cn-huadong1-jsnj3A-public-ctcloud --instance-name api-test01 --display-name create-01 --flavor-id 0457fe14-6ffe-e739-87ad-93e43fc6dbfa --image-type 1 --image-id d39aba04-2470-4eea-acdc-10cb4f962588 --boot-disk-type SATA --boot-disk-size 40 --vpc-id vpc-gg2ov4ryo5 --network-card-list '[{\"subnetID\":\"subnet-5zt2og2t3h\",\"isMaster\":true},{\"subnetID\":\"subnet-975wansb47\",\"isMaster\":false,\"nicName\":\"api-test1031\",\"fixedIP\":\"192.168.1.8\"}]' --ext-ip 0"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "dec.host.update",
+      "path": [
+        "dec",
+        "host",
+        "update"
+      ],
+      "operation": "dec.host.update",
+      "table": "dec.host.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dec_host_id",
+          "flag": "dec-host-id",
+          "target": "decHostID",
+          "required": true,
+          "description": "Dec Host ID"
+        },
+        {
+          "name": "dec_host_name",
+          "flag": "dec-host-name",
+          "target": "decHostName",
+          "required": true,
+          "description": "Dec Host Name"
+        }
+      ],
+      "fixture_response": "fixtures/dec-host-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&vid=106&data=113&api=8337&isNormal=1",
+      "examples": [
+        "ctyun dec host update --dec-host-id 5da27c6c-0076-3955-bd2e-9c11162b62fb --dec-host-name dec-test"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "dec.instance.list",
+      "path": [
+        "dec",
+        "instance",
+        "list"
+      ],
+      "operation": "dec.instance.list",
+      "table": "dec.instance.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability Zone Name"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "description": "Project ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "state",
+          "flag": "state",
+          "target": "state",
+          "required": false,
+          "description": "State"
+        },
+        {
+          "name": "keyword",
+          "flag": "keyword",
+          "target": "keyword",
+          "required": false,
+          "description": "Keyword"
+        },
+        {
+          "name": "instance_name",
+          "flag": "instance-name",
+          "target": "instanceName",
+          "required": false,
+          "description": "Instance Name"
+        },
+        {
+          "name": "instance_id_list",
+          "flag": "instance-id-list",
+          "target": "instanceIDList",
+          "required": false,
+          "description": "Instance ID List"
+        },
+        {
+          "name": "security_group_id",
+          "flag": "security-group-id",
+          "target": "securityGroupID",
+          "required": false,
+          "description": "Security Group ID"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcID",
+          "required": false,
+          "description": "VPC ID"
+        },
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceID",
+          "required": false,
+          "description": "Resource ID"
+        }
+      ],
+      "fixture_response": "fixtures/dec-instance-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&vid=106&data=113&api=8335&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dec.instance.show",
+      "path": [
+        "dec",
+        "instance",
+        "show"
+      ],
+      "operation": "dec.instance.show",
+      "table": "dec.instance.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "instanceID",
+          "required": true,
+          "description": "Instance ID"
+        }
+      ],
+      "fixture_response": "fixtures/dec-instance-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&vid=106&data=113&api=8334&isNormal=1",
+      "examples": [
+        "ctyun dec instance show --instance-id 2ae75564-c38a-aec3-1191-0b680a9811c1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dec.statistics.show",
+      "path": [
+        "dec",
+        "statistics",
+        "show"
+      ],
+      "operation": "dec.statistics.show",
+      "table": "dec.statistics.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability Zone Name"
+        }
+      ],
+      "fixture_response": "fixtures/dec-statistics-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&vid=106&data=113&api=8333&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dec.host.list",
+      "path": [
+        "dec",
+        "host",
+        "list"
+      ],
+      "operation": "dec.host.list",
+      "table": "dec.host.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability Zone Name"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "keyword",
+          "flag": "keyword",
+          "target": "keyword",
+          "required": false,
+          "description": "Keyword"
+        }
+      ],
+      "fixture_response": "fixtures/dec-host-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&vid=106&data=113&api=8331&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dec.host.flavor.show",
+      "path": [
+        "dec",
+        "host",
+        "flavor",
+        "show"
+      ],
+      "operation": "dec.host.flavor.show",
+      "table": "dec.host.flavor.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability Zone Name"
+        },
+        {
+          "name": "host_id",
+          "flag": "host-id",
+          "target": "hostID",
+          "required": true,
+          "description": "Host ID"
+        }
+      ],
+      "fixture_response": "fixtures/dec-host-flavor-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&vid=106&data=113&api=6629&isNormal=1",
+      "examples": [
+        "ctyun dec host flavor show --host-id 417cdb4b-de54-e5e5-62da-b78533a45b38"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dec.storage-pool.show",
+      "path": [
+        "dec",
+        "storage-pool",
+        "show"
+      ],
+      "operation": "dec.storage-pool.show",
+      "table": "dec.storage-pool.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability Zone Name"
+        }
+      ],
+      "fixture_response": "fixtures/dec-storage-pool-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&vid=106&data=113&api=12772&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "waiters": {
+    "sdwan.task.completed": {
+      "selector": {
+        "path": "returnObj.result",
+        "key": "operationID",
+        "value": "$param.operation_id"
+      },
+      "commands": [
+        "sdwan.task.status.list"
+      ],
+      "failure_values": [
+        "failed"
+      ],
+      "path": "status",
+      "success": "done",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    }
+  }
+}

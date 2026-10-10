@@ -1,0 +1,1153 @@
+{
+  "operations": {
+    "eci.commit-task.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/eci/api/v1/containers/createCommitContainerTask",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "containerGroupId": "$param.container_group_id",
+        "containerName": "$param.container_name",
+        "image": "$param.image",
+        "regionId": "$profile.region",
+        "registry": "$param.registry",
+        "tenantId": "$param.tenant_id"
+      },
+      "retryable": false
+    },
+    "eci.commit-task.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/eci/api/v1/containers/describeCommitContainerTask/{task_id}",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "eci.container-group.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/eci/api/v1/containers/createContainerGroup",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "alsInstanceId": "$param.als_instance_id",
+        "autoMatchImageCache": "$param.auto_match_image_cache",
+        "azInfo": "$param.az_info",
+        "containerGroupName": "$param.container_group_name",
+        "containers": "$param.containers",
+        "cpu": "$param.cpu",
+        "cpuArchitecture": "$param.cpu_architecture",
+        "dataCacheBucket": "$param.data_cache_bucket",
+        "dnsConfig": "$param.dns_config",
+        "eip": "$param.eip",
+        "epId": "$param.ep_id",
+        "ephemeralVolume": "$param.ephemeral_volume",
+        "flavorName": "$param.flavor_name",
+        "gpu": "$param.gpu",
+        "hostAliases": "$param.host_aliases",
+        "hostName": "$param.host_name",
+        "iamRoleName": "$param.iam_role_name",
+        "imageCacheId": "$param.image_cache_id",
+        "imageRegistryCredential": "$param.image_registry_credential",
+        "initContainers": "$param.init_containers",
+        "memory": "$param.memory",
+        "restartPolicy": "$param.restart_policy",
+        "securityContext": "$param.security_context",
+        "securityGroupId": "$param.security_group_id",
+        "tags": "$param.tags",
+        "vSwitchId": "$param.v_switch_id",
+        "volumes": "$param.volumes",
+        "vpcId": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "eci.container-group.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "DELETE",
+      "path": "/eci/api/v1/containers/deleteContainerGroup/{container_group_id}",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "eci.container-group.event.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/eci/api/v1/containers/describeContainerGroupEvent",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "containerGroupIds": "$param.container_group_ids",
+        "eventSource": "$param.event_source",
+        "limit": "$param.limit",
+        "tags": "$param.tags",
+        "vSwitchId": "$param.v_switch_id"
+      },
+      "retryable": true
+    },
+    "eci.container-group.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/eci/api/v1/containers/describeContainerGroups",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "containerGroupIds": "$param.container_group_ids",
+        "containerGroupName": "$param.container_group_name",
+        "limit": "$param.limit",
+        "nextToken": "$param.next_token",
+        "status": "$param.status",
+        "tags": "$param.tags",
+        "vSwitchId": "$param.v_switch_id"
+      },
+      "retryable": true
+    },
+    "eci.container-group.metric.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/eci/api/v1/monitors/describeMultiConsoleContainerGroupMetric",
+      "content_type": "application/json",
+      "query": {
+        "containerGroupIds": "$param.container_group_ids",
+        "endTime": "$param.end_time",
+        "period": "$param.period",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "eci.container-group.metric.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/eci/api/v1/monitors/describeConsoleContainerGroupMetric/{container_group_id}",
+      "content_type": "application/json",
+      "query": {
+        "endTime": "$param.end_time",
+        "period": "$param.period",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "eci.container-group.price.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/eci/api/v1/containers/describeContainerGroupPrice",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "azName": "$param.az_name",
+        "cpu": "$param.cpu",
+        "ephemeralStorage": "$param.ephemeral_storage",
+        "flavorName": "$param.flavor_name",
+        "memory": "$param.memory",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "eci.container-group.restart": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "PUT",
+      "path": "/eci/api/v1/containers/restartContainerGroup/{container_group_id}",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "eci.container-group.status.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/eci/api/v1/containers/describeContainerGroupStatus",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "containerGroupIds": "$param.container_group_ids",
+        "epId": "$param.ep_id",
+        "limit": "$param.limit",
+        "nextToken": "$param.next_token",
+        "tags": "$param.tags",
+        "vSwitchId": "$param.v_switch_id"
+      },
+      "retryable": true
+    },
+    "eci.container-group.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "PUT",
+      "path": "/eci/api/v1/containers/updateContainerGroup/{container_group_id}",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "containers": "$param.containers",
+        "dnsConfig": "$param.dns_config",
+        "eip": "$param.eip",
+        "imageRegistryCredentials": "$param.image_registry_credentials",
+        "restartPolicy": "$param.restart_policy",
+        "tags": "$param.tags",
+        "volumes": "$param.volumes"
+      },
+      "retryable": false
+    },
+    "eci.container-group.volume.resize": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/eci/api/v1/containers/resizeContainerGroupVolume",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "containerGroupId": "$param.container_group_id",
+        "newSize": "$param.new_size",
+        "volumeName": "$param.volume_name"
+      },
+      "retryable": false
+    },
+    "eci.container.exec": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/eci/api/v1/containers/execContainerCommand",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "command": "$param.command",
+        "containerGroupId": "$param.container_group_id",
+        "containerName": "$param.container_name",
+        "stdin": "$param.stdin",
+        "sync": "$param.sync",
+        "tty": "$param.tty"
+      },
+      "retryable": false
+    },
+    "eci.container.log.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/eci/api/v1/logs/describeContainerLog/{container_group_id}",
+      "content_type": "application/json",
+      "query": {
+        "containerName": "$param.container_name",
+        "limitBytes": "$param.limit_bytes",
+        "previous": "$param.previous",
+        "sinceSeconds": "$param.since_seconds",
+        "startTime": "$param.start_time",
+        "tail": "$param.tail",
+        "timestamps": "$param.timestamps"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "eci.data-cache.copy": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/eci/api/v1/dataCache/copyDataCache",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "azName": "$param.az_name",
+        "dataCacheId": "$param.data_cache_id",
+        "dataCacheName": "$param.data_cache_name"
+      },
+      "retryable": false
+    },
+    "eci.data-cache.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/eci/api/v1/dataCache/createDataCache",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "azName": "$param.az_name",
+        "bucket": "$param.bucket",
+        "dataCacheName": "$param.data_cache_name",
+        "dataSource": "$param.data_source",
+        "eip": "$param.eip",
+        "path": "$param.path",
+        "securityGroupId": "$param.security_group_id",
+        "size": "$param.size",
+        "subnetId": "$param.subnet_id",
+        "tags": "$param.tags",
+        "vpcId": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "eci.data-cache.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "DELETE",
+      "path": "/eci/api/v1/dataCache/deleteDataCache/{data_cache_id}",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "eci.data-cache.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/eci/api/v1/dataCache/describeDataCaches",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "azName": "$param.az_name",
+        "bucket": "$param.bucket",
+        "dataCacheIds": "$param.data_cache_ids",
+        "limit": "$param.limit",
+        "nextToken": "$param.next_token",
+        "path": "$param.path",
+        "tags": "$param.tags"
+      },
+      "retryable": true
+    },
+    "eci.data-cache.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "PUT",
+      "path": "/eci/api/v1/dataCache/updateDataCache",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "dataCacheId": "$param.data_cache_id",
+        "tags": "$param.tags"
+      },
+      "retryable": false
+    },
+    "eci.image-cache.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/eci/api/v1/imageCache/createImageCache",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "azInfo": "$param.az_info",
+        "eip": "$param.eip",
+        "imageCacheName": "$param.image_cache_name",
+        "imageCacheSize": "$param.image_cache_size",
+        "imageRegistryCredentials": "$param.image_registry_credentials",
+        "images": "$param.images",
+        "retentionDays": "$param.retention_days",
+        "securityGroupId": "$param.security_group_id",
+        "tags": "$param.tags",
+        "vSwitchId": "$param.v_switch_id",
+        "vpcId": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "eci.image-cache.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "DELETE",
+      "path": "/eci/api/v1/imageCache/deleteImageCache/{image_cache_id}",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "eci.image-cache.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/eci/api/v1/imageCache/describeImageCaches",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "imageCacheId": "$param.image_cache_id",
+        "imageCacheName": "$param.image_cache_name",
+        "images": "$param.images",
+        "limit": "$param.limit",
+        "nextToken": "$param.next_token",
+        "tags": "$param.tags"
+      },
+      "retryable": true
+    },
+    "eci.image-cache.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/eci/api/v1/imageCache/describeImageCache/{image_cache_id}",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "eci.image-cache.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "PUT",
+      "path": "/eci/api/v1/imageCache/updateImageCache",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "imageCacheId": "$param.image_cache_id",
+        "tags": "$param.tags"
+      },
+      "retryable": false
+    },
+    "eci.operation-task.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/eci/api/v1/containers/createOpsTask",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "containerGroupId": "$param.container_group_id",
+        "opsType": "$param.ops_type",
+        "opsValue": "$param.ops_value"
+      },
+      "retryable": false
+    },
+    "eci.operation-task.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/eci/api/v1/containers/describeOpsTask",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "containerGroupId": "$param.container_group_id",
+        "opsType": "$param.ops_type"
+      },
+      "retryable": true
+    },
+    "eci.quota.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/eci/api/v1/resources/listUsage",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "eci.specification.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/eci/api/v1/containers/describeAvailableResource",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "azName": "$param.az_name",
+        "cpu": "$param.cpu",
+        "cpuArchitecture": "$param.cpu_architecture",
+        "flavorName": "$param.flavor_name",
+        "flavorSeries": "$param.flavor_series",
+        "memory": "$param.memory"
+      },
+      "retryable": true
+    },
+    "eci.tag.bind": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/eci/api/v1/tag/bindTag",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "resourceId": "$param.resource_id",
+        "resourceType": "$param.resource_type",
+        "tags": "$param.tags"
+      },
+      "retryable": false
+    },
+    "eci.tag.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/eci/api/v1/tag/listTag",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "limit": "$param.limit",
+        "nextToken": "$param.next_token",
+        "resourceIds": "$param.resource_ids",
+        "resourceType": "$param.resource_type",
+        "tags": "$param.tags"
+      },
+      "retryable": true
+    },
+    "eci.tag.unbind": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/eci/api/v1/tag/unbindTag",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "all": "$param.all",
+        "resourceId": "$param.resource_id",
+        "resourceType": "$param.resource_type",
+        "tagKeys": "$param.tag_keys"
+      },
+      "retryable": false
+    },
+    "eci.virtual-node.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/eci/api/v1/virtualNode/createVirtualNode",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "azInfo": "$param.az_info",
+        "kubeConfig": "$param.kube_config",
+        "securityGroupId": "$param.security_group_id",
+        "tags": "$param.tags",
+        "taints": "$param.taints",
+        "vSwitchId": "$param.v_switch_id",
+        "virtualNodeName": "$param.virtual_node_name",
+        "vpcId": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "eci.virtual-node.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "DELETE",
+      "path": "/eci/api/v1/virtualNode/deleteVirtualNode/{virtual_node_id}",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "eci.virtual-node.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/eci/api/v1/virtualNode/describeVirtualNodes",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "limit": "$param.limit",
+        "nextToken": "$param.next_token",
+        "tags": "$param.tags",
+        "virtualNodeIds": "$param.virtual_node_ids",
+        "virtualNodeName": "$param.virtual_node_name"
+      },
+      "retryable": true
+    },
+    "eci.virtual-node.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/eci/api/v1/virtualNode/updateVirtualNode",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "tags": "$param.tags",
+        "virtualNodeId": "$param.virtual_node_id"
+      },
+      "retryable": false
+    },
+    "eci.zone.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/eci/api/v1/region",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    }
+  }
+}

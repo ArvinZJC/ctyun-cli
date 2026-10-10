@@ -1,0 +1,2760 @@
+{
+  "schema_version": 1,
+  "product": {
+    "plugin_name": "smart-dns",
+    "api_product": "smart-dns",
+    "ctyun_product_id": 122,
+    "source_revision": "259",
+    "display_name": {
+      "en-US": "Smart Domain Name System",
+      "en-GB": "Smart Domain Name System",
+      "zh-CN": "智能 DNS"
+    },
+    "display_name_policy": {
+      "kind": "abbreviation",
+      "token": "DNS"
+    },
+    "endpoint_url": "https://smartdns-global.ctapi.ctyun.cn",
+    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181",
+    "api_scope": {
+      "include_uri_prefixes": [
+        "/v2/"
+      ],
+      "notes": "Published customer-side APIs for the self-operated service; product resource-pool labels are not node classifications. See coverage.json for reviewed evidence gaps."
+    }
+  },
+  "operations": [
+    {
+      "id": "smart-dns.record.show",
+      "api_id": "11266",
+      "title": "查询解析记录",
+      "description": {
+        "en-US": "Show a DNS record",
+        "en-GB": "Show a DNS record",
+        "zh-CN": "查询解析记录"
+      },
+      "category": "record",
+      "command_path": [
+        "record",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v2/queryRecord",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11266&isNormal=1",
+      "retryable": true,
+      "dangerous": false,
+      "parameters": [
+        {
+          "name": "recordId",
+          "location": "query",
+          "required": true,
+          "type": "Integer",
+          "description": "解析记录标识",
+          "descriptions": {
+            "en-US": "Record ID",
+            "en-GB": "Record ID",
+            "zh-CN": "解析记录标识"
+          },
+          "help_descriptions": {
+            "en-US": "Record ID",
+            "en-GB": "Record ID",
+            "zh-CN": "解析记录标识"
+          },
+          "cli_name": "record_id",
+          "cli_flag": "record-id",
+          "example": 1
+        }
+      ],
+      "examples": [],
+      "request_example": {},
+      "response": {
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "columns": [
+          {
+            "key": "host",
+            "path": "host",
+            "label_en": "Host",
+            "label_zh": "主机记录",
+            "description": "主机记录"
+          },
+          {
+            "key": "type",
+            "path": "type",
+            "label_en": "Type",
+            "label_zh": "记录类型",
+            "description": "记录类型，如：A,AAAA,CNAME,TXT"
+          },
+          {
+            "key": "line_code",
+            "path": "lineCode",
+            "label_en": "Line Code",
+            "label_zh": "线路编码",
+            "description": "线路编码"
+          },
+          {
+            "key": "value",
+            "path": "value",
+            "label_en": "Value",
+            "label_zh": "记录值",
+            "description": "记录值"
+          },
+          {
+            "key": "ttl",
+            "path": "ttl",
+            "label_en": "TTL",
+            "label_zh": "解析生效时间",
+            "description": "解析生效时间，单位秒，默认为600"
+          },
+          {
+            "key": "state",
+            "path": "state",
+            "label_en": "State",
+            "label_zh": "状态",
+            "description": "启停状态，1暂停0启用默认为0"
+          },
+          {
+            "key": "remark",
+            "path": "remark",
+            "label_en": "Remark",
+            "label_zh": "备注",
+            "description": "备注"
+          }
+        ],
+        "default_columns": [
+          "host",
+          "type",
+          "line_code",
+          "value",
+          "ttl",
+          "state"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "layout": "vertical"
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMCwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXR1cm5PYmoiOiB7Imhvc3QiOiAid3d3IiwgInR5cGUiOiAiQSIsICJsaW5lQ29kZSI6ICJEZWZhdWx0IiwgInZhbHVlIjogIjEuMS4xLjEiLCAidHRsIjogNjAwLCAic3RhdGUiOiAwLCAicmVtYXJrIjogIjEifX0="
+      }
+    },
+    {
+      "id": "smart-dns.operation-log.list",
+      "api_id": "11490",
+      "title": "查询操作日志",
+      "description": {
+        "en-US": "List DNS operation logs",
+        "en-GB": "List DNS operation logs",
+        "zh-CN": "查询操作日志"
+      },
+      "category": "operation-log",
+      "command_path": [
+        "operation-log",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v2/queryOperateLogs",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11490&isNormal=1",
+      "retryable": true,
+      "dangerous": false,
+      "parameters": [
+        {
+          "name": "operate_type",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "description": "操作类型，取值有ADD、DEL、UPDATE，默认为所有类型",
+          "descriptions": {
+            "en-US": "Operate Type",
+            "en-GB": "Operate Type",
+            "zh-CN": "操作类型，取值有ADD、DEL、UPDATE，默认为所有类型"
+          },
+          "help_descriptions": {
+            "en-US": "Operate Type",
+            "en-GB": "Operate Type",
+            "zh-CN": "操作类型，取值有ADD、DEL、UPDATE，默认为所有类型"
+          },
+          "cli_name": "operate_type",
+          "cli_flag": "operate-type",
+          "example": "ADD"
+        },
+        {
+          "name": "start_time",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "description": "指定开始时间，默认当前时间往前1小时",
+          "descriptions": {
+            "en-US": "Start Time",
+            "en-GB": "Start Time",
+            "zh-CN": "指定开始时间，默认当前时间往前1小时"
+          },
+          "help_descriptions": {
+            "en-US": "Start Time",
+            "en-GB": "Start Time",
+            "zh-CN": "指定开始时间，默认当前时间往前1小时"
+          },
+          "cli_name": "start_time",
+          "cli_flag": "start-time",
+          "example": 1690102234
+        },
+        {
+          "name": "end_time",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "description": "指定结束时间，默认当前时间",
+          "descriptions": {
+            "en-US": "End Time",
+            "en-GB": "End Time",
+            "zh-CN": "指定结束时间，默认当前时间"
+          },
+          "help_descriptions": {
+            "en-US": "End Time",
+            "en-GB": "End Time",
+            "zh-CN": "指定结束时间，默认当前时间"
+          },
+          "cli_name": "end_time",
+          "cli_flag": "end-time",
+          "example": 1692780634
+        }
+      ],
+      "examples": [],
+      "request_example": {},
+      "response": {
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "columns": [
+          {
+            "key": "logs",
+            "path": "logs",
+            "label_en": "Logs",
+            "label_zh": "日志列表",
+            "description": "日志列表"
+          }
+        ],
+        "default_columns": [
+          "logs"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "layout": "vertical"
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMCwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXR1cm5PYmoiOiB7ImxvZ3MiOiBbeyJvcGVyYXRlX2lkIjogMTIzLCAib3BlcmF0b3IiOiAi5byg5LiJIiwgIm9wZXJhdGVfb2JqZWN0IjogIuS4u+acuuiusOW9lemFjee9riIsICJvcGVyYXRlX3R5cGUiOiAiQUREIiwgIm9wZXJhdGVfY29udGVudCI6ICLln5/lkI06dGVzdDFfc21hcnRkbnMuY29tLCDkuLvmnLrorrDlvZU6d3d3LCDorrDlvZXnsbvlnos6VFhULCDop6PmnpDnur/ot6866buY6K6kLCDorrDlvZXlgLw6W2F1dG90ZXN0X3JlY29yZF0sIHR0bDo2MDAiLCAib3BlcmF0ZV90aW1lIjogMTY5MTM3ODM1M30sIHsib3BlcmF0ZV9pZCI6IDEyNCwgIm9wZXJhdG9yIjogIuadjuWbmyIsICJvcGVyYXRlX29iamVjdCI6ICLkuLvmnLrorrDlvZXphY3nva4iLCAib3BlcmF0ZV90eXBlIjogIkFERCIsICJvcGVyYXRlX2NvbnRlbnQiOiAi5Z+f5ZCNOnRlc3QyX3NtYXJ0ZG5zLmNvbSwg5Li75py66K6w5b2VOnd3dywg6K6w5b2V57G75Z6LOlRYVCwg6Kej5p6Q57q/6LevOum7mOiupCwg6K6w5b2V5YC8OlthdXRvdGVzdF9yZWNvcmRdLCB0dGw6NjAwIiwgIm9wZXJhdGVfdGltZSI6IDE2OTEzNzgzNTV9XX19"
+      }
+    },
+    {
+      "id": "smart-dns.line.list",
+      "api_id": "11280",
+      "title": "查询线路",
+      "description": {
+        "en-US": "List DNS resolution lines",
+        "en-GB": "List DNS resolution lines",
+        "zh-CN": "查询线路"
+      },
+      "category": "line",
+      "command_path": [
+        "line",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v2/queryLines",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11280&isNormal=1",
+      "retryable": true,
+      "dangerous": false,
+      "parameters": [
+        {
+          "name": "resourceId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "订单号",
+          "descriptions": {
+            "en-US": "Resource ID",
+            "en-GB": "Resource ID",
+            "zh-CN": "订单号"
+          },
+          "help_descriptions": {
+            "en-US": "Resource ID",
+            "en-GB": "Resource ID",
+            "zh-CN": "订单号"
+          },
+          "cli_name": "resource_id",
+          "cli_flag": "resource-id",
+          "example": "123456789"
+        }
+      ],
+      "examples": [],
+      "request_example": {
+        "resourceId": "123456789"
+      },
+      "response": {
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "columns": [
+          {
+            "key": "lines",
+            "path": "lines",
+            "label_en": "Lines",
+            "label_zh": "线路列表",
+            "description": "线路列表"
+          }
+        ],
+        "default_columns": [
+          "lines"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "layout": "vertical"
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMCwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXR1cm5PYmoiOiB7ImxpbmVzIjogW3sibmFtZSI6ICJkZWYiLCAibGluZUNvZGUiOiAiRGVmYXVsdCJ9LCB7Im5hbWUiOiAiYmoiLCAibGluZUNvZGUiOiAiY3RfYmVpamluZyJ9XX19"
+      }
+    },
+    {
+      "id": "smart-dns.domain.request.detail",
+      "api_id": "11278",
+      "title": "查询域名详细请求数",
+      "description": {
+        "en-US": "Show detailed domain request counts",
+        "en-GB": "Show detailed domain request counts",
+        "zh-CN": "查询域名详细请求数"
+      },
+      "category": "domain",
+      "command_path": [
+        "domain",
+        "request",
+        "detail"
+      ],
+      "method": "GET",
+      "path": "/v2/queryDomainRequestDetail",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11278&isNormal=1",
+      "retryable": true,
+      "dangerous": false,
+      "parameters": [
+        {
+          "name": "domain",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "域名",
+          "descriptions": {
+            "en-US": "Domain",
+            "en-GB": "Domain",
+            "zh-CN": "域名"
+          },
+          "help_descriptions": {
+            "en-US": "Domain",
+            "en-GB": "Domain",
+            "zh-CN": "域名"
+          },
+          "cli_name": "domain",
+          "cli_flag": "domain",
+          "example": "example.com"
+        },
+        {
+          "name": "host",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "主机记录",
+          "descriptions": {
+            "en-US": "Host",
+            "en-GB": "Host",
+            "zh-CN": "主机记录"
+          },
+          "help_descriptions": {
+            "en-US": "Host",
+            "en-GB": "Host",
+            "zh-CN": "主机记录"
+          },
+          "cli_name": "host",
+          "cli_flag": "host",
+          "example": "www"
+        },
+        {
+          "name": "startDate",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "开始时间，格式：YYYYMMDD。只能查询最近90天的记录",
+          "descriptions": {
+            "en-US": "Start Date",
+            "en-GB": "Start Date",
+            "zh-CN": "开始时间，格式：YYYYMMDD。只能查询最近90天的记录"
+          },
+          "help_descriptions": {
+            "en-US": "Start Date",
+            "en-GB": "Start Date",
+            "zh-CN": "开始时间，格式：YYYYMMDD"
+          },
+          "cli_name": "start_date",
+          "cli_flag": "start-date",
+          "example": "20230101"
+        },
+        {
+          "name": "endDate",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "description": "结束时间，格式：YYYYMMDD。默认为查询当前时间",
+          "descriptions": {
+            "en-US": "End Date",
+            "en-GB": "End Date",
+            "zh-CN": "结束时间，格式：YYYYMMDD。默认为查询当前时间"
+          },
+          "help_descriptions": {
+            "en-US": "End Date",
+            "en-GB": "End Date",
+            "zh-CN": "结束时间，格式：YYYYMMDD"
+          },
+          "cli_name": "end_date",
+          "cli_flag": "end-date",
+          "example": "20230102"
+        }
+      ],
+      "examples": [],
+      "request_example": {
+        "domain": "example.com",
+        "host": "www",
+        "startDate": "20230101",
+        "endDate": "20230102"
+      },
+      "response": {
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "columns": [
+          {
+            "key": "count",
+            "path": "count",
+            "label_en": "Count",
+            "label_zh": "请求数",
+            "description": "请求数"
+          }
+        ],
+        "default_columns": [
+          "count"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "layout": "vertical"
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMCwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXR1cm5PYmoiOiB7ImNvdW50IjogMTB9fQ=="
+      }
+    },
+    {
+      "id": "smart-dns.domain.request.show",
+      "api_id": "11276",
+      "title": "查询域名请求数",
+      "description": {
+        "en-US": "Show domain request counts",
+        "en-GB": "Show domain request counts",
+        "zh-CN": "查询域名请求数"
+      },
+      "category": "domain",
+      "command_path": [
+        "domain",
+        "request",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v2/queryDomainRequest",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11276&isNormal=1",
+      "retryable": true,
+      "dangerous": false,
+      "parameters": [
+        {
+          "name": "domain",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "description": "域名，默认查询所有域名",
+          "descriptions": {
+            "en-US": "Domain",
+            "en-GB": "Domain",
+            "zh-CN": "域名，默认查询所有域名"
+          },
+          "help_descriptions": {
+            "en-US": "Domain",
+            "en-GB": "Domain",
+            "zh-CN": "域名，默认查询所有域名"
+          },
+          "cli_name": "domain",
+          "cli_flag": "domain",
+          "example_unavailable": true
+        },
+        {
+          "name": "startDate",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "开始时间，格式：YYYYMMDD。只能查询最近90天的 记录",
+          "descriptions": {
+            "en-US": "Start Date",
+            "en-GB": "Start Date",
+            "zh-CN": "开始时间，格式：YYYYMMDD。只能查询最近90天的 记录"
+          },
+          "help_descriptions": {
+            "en-US": "Start Date",
+            "en-GB": "Start Date",
+            "zh-CN": "开始时间，格式：YYYYMMDD"
+          },
+          "cli_name": "start_date",
+          "cli_flag": "start-date",
+          "example": "20230101"
+        },
+        {
+          "name": "endDate",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "description": "结束时间，格式：YYYYMMDD。默认为查询当前时间",
+          "descriptions": {
+            "en-US": "End Date",
+            "en-GB": "End Date",
+            "zh-CN": "结束时间，格式：YYYYMMDD。默认为查询当前时间"
+          },
+          "help_descriptions": {
+            "en-US": "End Date",
+            "en-GB": "End Date",
+            "zh-CN": "结束时间，格式：YYYYMMDD"
+          },
+          "cli_name": "end_date",
+          "cli_flag": "end-date",
+          "example": "20230102"
+        }
+      ],
+      "examples": [],
+      "request_example": {
+        "startDate": "20230101",
+        "endDate": "20230102"
+      },
+      "response": {
+        "success_code": "0",
+        "result_path": "returnObj.data",
+        "row_path": "returnObj.data",
+        "columns": [
+          {
+            "key": "count",
+            "path": "count",
+            "label_en": "Count",
+            "label_zh": "请求数",
+            "description": "请求数"
+          },
+          {
+            "key": "domain",
+            "path": "domain",
+            "label_en": "Domain",
+            "label_zh": "域名",
+            "description": "域名"
+          }
+        ],
+        "default_columns": [
+          "count",
+          "domain"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        }
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMCwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXR1cm5PYmoiOiB7ImRhdGEiOiBbeyJjb3VudCI6IDEwLCAiZG9tYWluIjogImV4YW1wbGUuY29tIn0sIHsiY291bnQiOiAyMCwgImRvbWFpbiI6ICJleGFtcGxlMi5jb20ifV19fQ=="
+      }
+    },
+    {
+      "id": "smart-dns.balance.set-status",
+      "api_id": "11274",
+      "title": "启停负载均衡",
+      "description": {
+        "en-US": "Enable or disable DNS load balancing",
+        "en-GB": "Enable or disable DNS load balancing",
+        "zh-CN": "启停负载均衡"
+      },
+      "category": "balance",
+      "command_path": [
+        "balance",
+        "set-status"
+      ],
+      "method": "POST",
+      "path": "/v2/manageBalance",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11274&isNormal=1",
+      "retryable": false,
+      "dangerous": true,
+      "parameters": [
+        {
+          "name": "domain",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "地址池标识",
+          "descriptions": {
+            "en-US": "Domain",
+            "en-GB": "Domain",
+            "zh-CN": "地址池标识"
+          },
+          "help_descriptions": {
+            "en-US": "Domain",
+            "en-GB": "Domain",
+            "zh-CN": "地址池标识"
+          },
+          "cli_name": "domain",
+          "cli_flag": "domain",
+          "example": "example.com"
+        },
+        {
+          "name": "host",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "主机记录",
+          "descriptions": {
+            "en-US": "Host",
+            "en-GB": "Host",
+            "zh-CN": "主机记录"
+          },
+          "help_descriptions": {
+            "en-US": "Host",
+            "en-GB": "Host",
+            "zh-CN": "主机记录"
+          },
+          "cli_name": "host",
+          "cli_flag": "host",
+          "example": "www"
+        },
+        {
+          "name": "type",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "记录类型，如：A,AAAA,CNAME,TXT",
+          "descriptions": {
+            "en-US": "Type",
+            "en-GB": "Type",
+            "zh-CN": "记录类型，如：A,AAAA,CNAME,TXT"
+          },
+          "help_descriptions": {
+            "en-US": "Type",
+            "en-GB": "Type",
+            "zh-CN": "记录类型，如：A,AAAA,CNAME,TXT"
+          },
+          "cli_name": "type",
+          "cli_flag": "type",
+          "example": "A"
+        },
+        {
+          "name": "lineCode",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "线路编码，默认线路为Default，其他线路见线路列表",
+          "descriptions": {
+            "en-US": "Line Code",
+            "en-GB": "Line Code",
+            "zh-CN": "线路编码，默认线路为Default，其他线路见线路列表"
+          },
+          "help_descriptions": {
+            "en-US": "Line Code",
+            "en-GB": "Line Code",
+            "zh-CN": "线路编码，默认线路为Default，其他线路见线路列表"
+          },
+          "cli_name": "line_code",
+          "cli_flag": "line-code",
+          "example": "Default"
+        },
+        {
+          "name": "state",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "description": "负载均衡开启状态0关闭1开启",
+          "descriptions": {
+            "en-US": "State",
+            "en-GB": "State",
+            "zh-CN": "负载均衡开启状态0关闭1开启"
+          },
+          "help_descriptions": {
+            "en-US": "State",
+            "en-GB": "State",
+            "zh-CN": "负载均衡开启状态0关闭1开启"
+          },
+          "cli_name": "state",
+          "cli_flag": "state",
+          "example": 1
+        }
+      ],
+      "examples": [],
+      "request_example": {
+        "domain": "example.com",
+        "host": "www",
+        "type": "A",
+        "lineCode": "Default",
+        "state": 1
+      },
+      "response": {
+        "success_code": "0",
+        "result_path": "$",
+        "row_path": "$",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "返回码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "成功或失败信息"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果",
+            "description": "返回对象"
+          }
+        ],
+        "default_columns": [
+          "status_code",
+          "message",
+          "return_obj"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "layout": "vertical"
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMCwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXR1cm5PYmoiOiB7fX0="
+      }
+    },
+    {
+      "id": "smart-dns.balance.weight.update",
+      "api_id": "11272",
+      "title": "修改负载均衡权重",
+      "description": {
+        "en-US": "Update DNS load balancing weights",
+        "en-GB": "Update DNS load balancing weights",
+        "zh-CN": "修改负载均衡权重"
+      },
+      "category": "balance",
+      "command_path": [
+        "balance",
+        "weight",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v2/updateBalanceWeight",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11272&isNormal=1",
+      "retryable": false,
+      "dangerous": true,
+      "parameters": [
+        {
+          "name": "recordId",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "description": "解析记录标识",
+          "descriptions": {
+            "en-US": "Record ID",
+            "en-GB": "Record ID",
+            "zh-CN": "解析记录标识"
+          },
+          "help_descriptions": {
+            "en-US": "Record ID",
+            "en-GB": "Record ID",
+            "zh-CN": "解析记录标识"
+          },
+          "cli_name": "record_id",
+          "cli_flag": "record-id",
+          "example": 1
+        },
+        {
+          "name": "weight",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "description": "权重值[1-100]",
+          "descriptions": {
+            "en-US": "Weight",
+            "en-GB": "Weight",
+            "zh-CN": "权重值[1-100]"
+          },
+          "help_descriptions": {
+            "en-US": "Weight",
+            "en-GB": "Weight",
+            "zh-CN": "权重值[1-100]"
+          },
+          "cli_name": "weight",
+          "cli_flag": "weight",
+          "example": 2
+        }
+      ],
+      "examples": [],
+      "request_example": {
+        "recordId": 1,
+        "weight": 2
+      },
+      "response": {
+        "success_code": "0",
+        "result_path": "$",
+        "row_path": "$",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "返回码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "成功或失败信息"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果",
+            "description": "返回对象"
+          }
+        ],
+        "default_columns": [
+          "status_code",
+          "message",
+          "return_obj"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "layout": "vertical"
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMCwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXR1cm5PYmoiOiB7fX0="
+      }
+    },
+    {
+      "id": "smart-dns.balance.show",
+      "api_id": "11271",
+      "title": "查询负载均衡明细",
+      "description": {
+        "en-US": "Show DNS load balancing details",
+        "en-GB": "Show DNS load balancing details",
+        "zh-CN": "查询负载均衡明细"
+      },
+      "category": "balance",
+      "command_path": [
+        "balance",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v2/queryBalanceDetail",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11271&isNormal=1",
+      "retryable": true,
+      "dangerous": false,
+      "parameters": [
+        {
+          "name": "domain",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "域名",
+          "descriptions": {
+            "en-US": "Domain",
+            "en-GB": "Domain",
+            "zh-CN": "域名"
+          },
+          "help_descriptions": {
+            "en-US": "Domain",
+            "en-GB": "Domain",
+            "zh-CN": "域名"
+          },
+          "cli_name": "domain",
+          "cli_flag": "domain",
+          "example": "example.com"
+        },
+        {
+          "name": "host",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "主机记录",
+          "descriptions": {
+            "en-US": "Host",
+            "en-GB": "Host",
+            "zh-CN": "主机记录"
+          },
+          "help_descriptions": {
+            "en-US": "Host",
+            "en-GB": "Host",
+            "zh-CN": "主机记录"
+          },
+          "cli_name": "host",
+          "cli_flag": "host",
+          "example": "www"
+        },
+        {
+          "name": "type",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "记录类型，如：A,AAAA,CNAME,TXT",
+          "descriptions": {
+            "en-US": "Type",
+            "en-GB": "Type",
+            "zh-CN": "记录类型，如：A,AAAA,CNAME,TXT"
+          },
+          "help_descriptions": {
+            "en-US": "Type",
+            "en-GB": "Type",
+            "zh-CN": "记录类型，如：A,AAAA,CNAME,TXT"
+          },
+          "cli_name": "type",
+          "cli_flag": "type",
+          "example": "A"
+        },
+        {
+          "name": "lineCode",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "线路编码，默认线路为Default，其他线路见线路列表",
+          "descriptions": {
+            "en-US": "Line Code",
+            "en-GB": "Line Code",
+            "zh-CN": "线路编码，默认线路为Default，其他线路见线路列表"
+          },
+          "help_descriptions": {
+            "en-US": "Line Code",
+            "en-GB": "Line Code",
+            "zh-CN": "线路编码，默认线路为Default，其他线路见线路列表"
+          },
+          "cli_name": "line_code",
+          "cli_flag": "line-code",
+          "example": "Default"
+        }
+      ],
+      "examples": [],
+      "request_example": {
+        "domain": "example.com",
+        "host": "www",
+        "type": "A",
+        "lineCode": "Default"
+      },
+      "response": {
+        "success_code": "0",
+        "result_path": "returnObj.records",
+        "row_path": "returnObj.records",
+        "columns": [
+          {
+            "key": "record_id",
+            "path": "recordId",
+            "label_en": "Record ID",
+            "label_zh": "记录标识",
+            "description": "记录标识"
+          },
+          {
+            "key": "host",
+            "path": "host",
+            "label_en": "Host",
+            "label_zh": "主机记录",
+            "description": "主机记录"
+          },
+          {
+            "key": "type",
+            "path": "type",
+            "label_en": "Type",
+            "label_zh": "记录类型",
+            "description": "记录类型，如：A,AAAA,CNAME,TXT"
+          },
+          {
+            "key": "line_code",
+            "path": "lineCode",
+            "label_en": "Line Code",
+            "label_zh": "线路编码",
+            "description": "线路编码"
+          },
+          {
+            "key": "value",
+            "path": "value",
+            "label_en": "Value",
+            "label_zh": "记录值",
+            "description": "记录值"
+          },
+          {
+            "key": "weight",
+            "path": "weight",
+            "label_en": "Weight",
+            "label_zh": "权重值",
+            "description": "权重值"
+          }
+        ],
+        "default_columns": [
+          "record_id",
+          "host",
+          "type",
+          "line_code",
+          "value",
+          "weight"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        }
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMCwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXR1cm5PYmoiOiB7InJlY29yZHMiOiBbeyJyZWNvcmRJZCI6IDEsICJob3N0IjogInd3dyIsICJ0eXBlIjogIkEiLCAibGluZUNvZGUiOiAiRGVmYXVsdCIsICJ2YWx1ZSI6ICIxLjEuMS4xIiwgIndlaWdodCI6IDF9LCB7InJlY29yZElkIjogMiwgImhvc3QiOiAid3d3IiwgInR5cGUiOiAiQSIsICJsaW5lQ29kZSI6ICJEZWZhdWx0IiwgInZhbHVlIjogIjIuMi4yLjIiLCAid2VpZ2h0IjogMX1dfX0="
+      }
+    },
+    {
+      "id": "smart-dns.balance.list",
+      "api_id": "11270",
+      "title": "负载均衡列表查询",
+      "description": {
+        "en-US": "List DNS load balancing configurations",
+        "en-GB": "List DNS load balancing configurations",
+        "zh-CN": "负载均衡列表查询"
+      },
+      "category": "balance",
+      "command_path": [
+        "balance",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v2/queryBalanceList",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11270&isNormal=1",
+      "retryable": true,
+      "dangerous": false,
+      "parameters": [
+        {
+          "name": "domain",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "域名",
+          "descriptions": {
+            "en-US": "Domain",
+            "en-GB": "Domain",
+            "zh-CN": "域名"
+          },
+          "help_descriptions": {
+            "en-US": "Domain",
+            "en-GB": "Domain",
+            "zh-CN": "域名"
+          },
+          "cli_name": "domain",
+          "cli_flag": "domain",
+          "example": "example.com"
+        },
+        {
+          "name": "host",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "description": "主机记录",
+          "descriptions": {
+            "en-US": "Host",
+            "en-GB": "Host",
+            "zh-CN": "主机记录"
+          },
+          "help_descriptions": {
+            "en-US": "Host",
+            "en-GB": "Host",
+            "zh-CN": "主机记录"
+          },
+          "cli_name": "host",
+          "cli_flag": "host",
+          "example": "www"
+        }
+      ],
+      "examples": [],
+      "request_example": {
+        "domain": "example.com",
+        "host": "www"
+      },
+      "response": {
+        "success_code": "0",
+        "result_path": "returnObj.records",
+        "row_path": "returnObj.records",
+        "columns": [
+          {
+            "key": "host",
+            "path": "host",
+            "label_en": "Host",
+            "label_zh": "主机记录",
+            "description": "主机记录"
+          },
+          {
+            "key": "type",
+            "path": "type",
+            "label_en": "Type",
+            "label_zh": "记录类型",
+            "description": "记录类型，如：A,AAAA,CNAME,TXT"
+          },
+          {
+            "key": "line_code",
+            "path": "lineCode",
+            "label_en": "Line Code",
+            "label_zh": "线路编码",
+            "description": "线路编码"
+          },
+          {
+            "key": "count",
+            "path": "count",
+            "label_en": "Count",
+            "label_zh": "解析记录数量",
+            "description": "解析记录数量"
+          },
+          {
+            "key": "state",
+            "path": "state",
+            "label_en": "State",
+            "label_zh": "状态",
+            "description": "负载均衡开启状态0关闭1开启"
+          }
+        ],
+        "default_columns": [
+          "host",
+          "type",
+          "line_code",
+          "count",
+          "state"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        }
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMCwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXR1cm5PYmoiOiB7InJlY29yZHMiOiBbeyJob3N0IjogInd3dyIsICJ0eXBlIjogIkEiLCAibGluZUNvZGUiOiAiRGVmYXVsdCIsICJjb3VudCI6IDMsICJzdGF0ZSI6IDF9LCB7Imhvc3QiOiAid3d3IiwgInR5cGUiOiAiQSIsICJsaW5lQ29kZSI6ICJjdF9iZWlqaW5nIiwgImNvdW50IjogNSwgInN0YXRlIjogMX1dfX0="
+      }
+    },
+    {
+      "id": "smart-dns.record.set-status",
+      "api_id": "11268",
+      "title": "启停解析记录",
+      "description": {
+        "en-US": "Enable or disable a DNS record",
+        "en-GB": "Enable or disable a DNS record",
+        "zh-CN": "启停解析记录"
+      },
+      "category": "record",
+      "command_path": [
+        "record",
+        "set-status"
+      ],
+      "method": "POST",
+      "path": "/v2/manageRecord",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11268&isNormal=1",
+      "retryable": false,
+      "dangerous": true,
+      "parameters": [
+        {
+          "name": "recordId",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "description": "解析记录标识",
+          "descriptions": {
+            "en-US": "Record ID",
+            "en-GB": "Record ID",
+            "zh-CN": "解析记录标识"
+          },
+          "help_descriptions": {
+            "en-US": "Record ID",
+            "en-GB": "Record ID",
+            "zh-CN": "解析记录标识"
+          },
+          "cli_name": "record_id",
+          "cli_flag": "record-id",
+          "example": 1
+        },
+        {
+          "name": "state",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "description": "启停状态，1暂停0启用",
+          "descriptions": {
+            "en-US": "State",
+            "en-GB": "State",
+            "zh-CN": "启停状态，1暂停0启用"
+          },
+          "help_descriptions": {
+            "en-US": "State",
+            "en-GB": "State",
+            "zh-CN": "启停状态，1暂停0启用"
+          },
+          "cli_name": "state",
+          "cli_flag": "state",
+          "example": 0
+        }
+      ],
+      "examples": [],
+      "request_example": {
+        "recordId": 1,
+        "state": 0
+      },
+      "response": {
+        "success_code": "0",
+        "result_path": "$",
+        "row_path": "$",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "返回码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "成功或失败信息"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果",
+            "description": "返回对象"
+          }
+        ],
+        "default_columns": [
+          "status_code",
+          "message",
+          "return_obj"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "layout": "vertical"
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMCwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXR1cm5PYmoiOiB7fX0="
+      }
+    },
+    {
+      "id": "smart-dns.order.show",
+      "api_id": "11244",
+      "title": "订单查询",
+      "description": {
+        "en-US": "Query a DNS service order",
+        "en-GB": "Query a DNS service order",
+        "zh-CN": "订单查询"
+      },
+      "category": "order",
+      "command_path": [
+        "order",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v2/queryResource",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11244&isNormal=1",
+      "retryable": true,
+      "dangerous": false,
+      "parameters": [],
+      "examples": [],
+      "request_example": {},
+      "response": {
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "columns": [
+          {
+            "key": "resources",
+            "path": "resources",
+            "label_en": "Resources",
+            "label_zh": "订单列表",
+            "description": "订单列表"
+          }
+        ],
+        "default_columns": [
+          "resources"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "layout": "vertical"
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMCwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXR1cm5PYmoiOiB7InJlc291cmNlcyI6IFt7InJlc291cmNlSWQiOiAiMTIzNDU2Nzg5IiwgInZlcnNpb25OYW1lIjogIi0iLCAiZG9tYWluIjogImV4YW1wbGUuY29tIiwgImVmZkRhdGUiOiAyMDIzMDEwMTAwMDAwMCwgImV4cERhdGUiOiAyMDI0MDEwMTIzNTk1OX0sIHsicmVzb3VyY2VJZCI6ICIxMjM0NTY3ODkiLCAidmVyc2lvbk5hbWUiOiAiLSIsICJkb21haW4iOiAiZXhhbXBsZTIuY29tIiwgImVmZkRhdGUiOiAyMDIzMDEwMTAwMDAwMCwgImV4cERhdGUiOiAyMDI0MDEwMTIzNTk1OX1dfX0="
+      }
+    },
+    {
+      "id": "smart-dns.record.list",
+      "api_id": "11264",
+      "title": "查询解析记录列表",
+      "description": {
+        "en-US": "List DNS records",
+        "en-GB": "List DNS records",
+        "zh-CN": "查询解析记录列表"
+      },
+      "category": "record",
+      "command_path": [
+        "record",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v2/queryRecordList",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11264&isNormal=1",
+      "retryable": true,
+      "dangerous": false,
+      "parameters": [
+        {
+          "name": "domain",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "域名",
+          "descriptions": {
+            "en-US": "Domain",
+            "en-GB": "Domain",
+            "zh-CN": "域名"
+          },
+          "help_descriptions": {
+            "en-US": "Domain",
+            "en-GB": "Domain",
+            "zh-CN": "域名"
+          },
+          "cli_name": "domain",
+          "cli_flag": "domain",
+          "example": "example.com"
+        },
+        {
+          "name": "host",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "description": "主机记录",
+          "descriptions": {
+            "en-US": "Host",
+            "en-GB": "Host",
+            "zh-CN": "主机记录"
+          },
+          "help_descriptions": {
+            "en-US": "Host",
+            "en-GB": "Host",
+            "zh-CN": "主机记录"
+          },
+          "cli_name": "host",
+          "cli_flag": "host",
+          "example": "www"
+        },
+        {
+          "name": "type",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "description": "记录类型，如：A,AAAA,CNAME,TXT",
+          "descriptions": {
+            "en-US": "Type",
+            "en-GB": "Type",
+            "zh-CN": "记录类型，如：A,AAAA,CNAME,TXT"
+          },
+          "help_descriptions": {
+            "en-US": "Type",
+            "en-GB": "Type",
+            "zh-CN": "记录类型，如：A,AAAA,CNAME,TXT"
+          },
+          "cli_name": "type",
+          "cli_flag": "type",
+          "example": "A"
+        },
+        {
+          "name": "lineCode",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "description": "线路编码，默认线路为Default，其他线路见线路列表",
+          "descriptions": {
+            "en-US": "Line Code",
+            "en-GB": "Line Code",
+            "zh-CN": "线路编码，默认线路为Default，其他线路见线路列表"
+          },
+          "help_descriptions": {
+            "en-US": "Line Code",
+            "en-GB": "Line Code",
+            "zh-CN": "线路编码，默认线路为Default，其他线路见线路列表"
+          },
+          "cli_name": "line_code",
+          "cli_flag": "line-code",
+          "example": "Default"
+        },
+        {
+          "name": "value",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "description": "记录值",
+          "descriptions": {
+            "en-US": "Value",
+            "en-GB": "Value",
+            "zh-CN": "记录值"
+          },
+          "help_descriptions": {
+            "en-US": "Value",
+            "en-GB": "Value",
+            "zh-CN": "记录值"
+          },
+          "cli_name": "value",
+          "cli_flag": "value",
+          "example": "1.1.1.1"
+        },
+        {
+          "name": "state",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "description": "启停状态，1暂停0启用默认为0",
+          "descriptions": {
+            "en-US": "State",
+            "en-GB": "State",
+            "zh-CN": "启停状态，1暂停0启用默认为0"
+          },
+          "help_descriptions": {
+            "en-US": "State",
+            "en-GB": "State",
+            "zh-CN": "启停状态，1暂停0启用默认为0"
+          },
+          "cli_name": "state",
+          "cli_flag": "state",
+          "example": "0"
+        }
+      ],
+      "examples": [],
+      "request_example": {
+        "domain": "example.com",
+        "host": "www",
+        "type": "A",
+        "lineCode": "Default",
+        "state": "0"
+      },
+      "response": {
+        "success_code": "0",
+        "result_path": "returnObj.records",
+        "row_path": "returnObj.records",
+        "columns": [
+          {
+            "key": "record_id",
+            "path": "recordId",
+            "label_en": "Record ID",
+            "label_zh": "解析记录标识",
+            "description": "解析记录标识"
+          },
+          {
+            "key": "host",
+            "path": "host",
+            "label_en": "Host",
+            "label_zh": "主机记录",
+            "description": "主机记录"
+          },
+          {
+            "key": "type",
+            "path": "type",
+            "label_en": "Type",
+            "label_zh": "记录类型",
+            "description": "记录类型，如：A,AAAA,CNAME,TXT"
+          },
+          {
+            "key": "line_code",
+            "path": "lineCode",
+            "label_en": "Line Code",
+            "label_zh": "线路编码",
+            "description": "线路编码，默认线路为Default，其他线路见线路列表"
+          },
+          {
+            "key": "value",
+            "path": "value",
+            "label_en": "Value",
+            "label_zh": "记录值",
+            "description": "记录值"
+          },
+          {
+            "key": "ttl",
+            "path": "ttl",
+            "label_en": "TTL",
+            "label_zh": "解析生效时间",
+            "description": "解析生效时间，单位秒，默认为600"
+          },
+          {
+            "key": "state",
+            "path": "state",
+            "label_en": "State",
+            "label_zh": "状态",
+            "description": "启停状态，1暂停0启用默认为0"
+          },
+          {
+            "key": "remark",
+            "path": "remark",
+            "label_en": "Remark",
+            "label_zh": "备注",
+            "description": "备注"
+          }
+        ],
+        "default_columns": [
+          "record_id",
+          "host",
+          "type",
+          "line_code",
+          "value",
+          "ttl"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        }
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMCwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXR1cm5PYmoiOiB7InJlY29yZHMiOiBbeyJyZWNvcmRJZCI6IDEsICJob3N0IjogInd3dyIsICJ0eXBlIjogIkEiLCAibGluZUNvZGUiOiAiRGVmYXVsdCIsICJ2YWx1ZSI6ICIxLjEuMS4xIiwgInR0bCI6IDYwMCwgInN0YXRlIjogMCwgInJlbWFyayI6ICIxIn0sIHsicmVjb3JkSWQiOiAyLCAiaG9zdCI6ICJ3d3ciLCAidHlwZSI6ICJBIiwgImxpbmVDb2RlIjogIkRlZmF1bHQiLCAidmFsdWUiOiAiMi4yLjIuMiIsICJ0dGwiOiA2MDAsICJzdGF0ZSI6IDAsICJyZW1hcmsiOiAiMiJ9XX19"
+      }
+    },
+    {
+      "id": "smart-dns.record.delete",
+      "api_id": "11262",
+      "title": "删除解析记录",
+      "description": {
+        "en-US": "Delete a DNS record",
+        "en-GB": "Delete a DNS record",
+        "zh-CN": "删除解析记录"
+      },
+      "category": "record",
+      "command_path": [
+        "record",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/v2/deleteRecord",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11262&isNormal=1",
+      "retryable": false,
+      "dangerous": true,
+      "parameters": [
+        {
+          "name": "recordId",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "description": "解析记录标识",
+          "descriptions": {
+            "en-US": "Record ID",
+            "en-GB": "Record ID",
+            "zh-CN": "解析记录标识"
+          },
+          "help_descriptions": {
+            "en-US": "Record ID",
+            "en-GB": "Record ID",
+            "zh-CN": "解析记录标识"
+          },
+          "cli_name": "record_id",
+          "cli_flag": "record-id",
+          "example": 1
+        }
+      ],
+      "examples": [],
+      "request_example": {
+        "recordId": 1
+      },
+      "response": {
+        "success_code": "0",
+        "result_path": "$",
+        "row_path": "$",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "返回码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "成功或失败信息"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果",
+            "description": "返回对象"
+          }
+        ],
+        "default_columns": [
+          "status_code",
+          "message",
+          "return_obj"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "layout": "vertical"
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMCwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXR1cm5PYmoiOiB7fX0="
+      }
+    },
+    {
+      "id": "smart-dns.record.update",
+      "api_id": "11261",
+      "title": "修改解析记录",
+      "description": {
+        "en-US": "Update a DNS record",
+        "en-GB": "Update a DNS record",
+        "zh-CN": "修改解析记录"
+      },
+      "category": "record",
+      "command_path": [
+        "record",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v2/updateRecord",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11261&isNormal=1",
+      "retryable": false,
+      "dangerous": true,
+      "parameters": [
+        {
+          "name": "recordId",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "description": "解析记录标识",
+          "descriptions": {
+            "en-US": "Record ID",
+            "en-GB": "Record ID",
+            "zh-CN": "解析记录标识"
+          },
+          "help_descriptions": {
+            "en-US": "Record ID",
+            "en-GB": "Record ID",
+            "zh-CN": "解析记录标识"
+          },
+          "cli_name": "record_id",
+          "cli_flag": "record-id",
+          "example": 1
+        },
+        {
+          "name": "host",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "主机记录",
+          "descriptions": {
+            "en-US": "Host",
+            "en-GB": "Host",
+            "zh-CN": "主机记录"
+          },
+          "help_descriptions": {
+            "en-US": "Host",
+            "en-GB": "Host",
+            "zh-CN": "主机记录"
+          },
+          "cli_name": "host",
+          "cli_flag": "host",
+          "example": "www"
+        },
+        {
+          "name": "type",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "记录类型，如：A,AAAA,CNAME,TXT",
+          "descriptions": {
+            "en-US": "Type",
+            "en-GB": "Type",
+            "zh-CN": "记录类型，如：A,AAAA,CNAME,TXT"
+          },
+          "help_descriptions": {
+            "en-US": "Type",
+            "en-GB": "Type",
+            "zh-CN": "记录类型，如：A,AAAA,CNAME,TXT"
+          },
+          "cli_name": "type",
+          "cli_flag": "type",
+          "example": "A"
+        },
+        {
+          "name": "lineCode",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "description": "线路编码，默认为Default，其他线路见线路列表",
+          "descriptions": {
+            "en-US": "Line Code",
+            "en-GB": "Line Code",
+            "zh-CN": "线路编码，默认为Default，其他线路见线路列表"
+          },
+          "help_descriptions": {
+            "en-US": "Line Code",
+            "en-GB": "Line Code",
+            "zh-CN": "线路编码，默认为Default，其他线路见线路列表"
+          },
+          "cli_name": "line_code",
+          "cli_flag": "line-code",
+          "example": "Default"
+        },
+        {
+          "name": "value",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "记录值",
+          "descriptions": {
+            "en-US": "Value",
+            "en-GB": "Value",
+            "zh-CN": "记录值"
+          },
+          "help_descriptions": {
+            "en-US": "Value",
+            "en-GB": "Value",
+            "zh-CN": "记录值"
+          },
+          "cli_name": "value",
+          "cli_flag": "value",
+          "example": "1.1.1.1"
+        },
+        {
+          "name": "ttl",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "description": "解析生效时间，单位秒，默认为600",
+          "descriptions": {
+            "en-US": "TTL",
+            "en-GB": "TTL",
+            "zh-CN": "解析生效时间，单位秒，默认为600"
+          },
+          "help_descriptions": {
+            "en-US": "TTL",
+            "en-GB": "TTL",
+            "zh-CN": "解析生效时间，单位秒，默认为600"
+          },
+          "cli_name": "ttl",
+          "cli_flag": "ttl",
+          "example": 600
+        },
+        {
+          "name": "state",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "description": "启停状态，1暂停0启用默认为0",
+          "descriptions": {
+            "en-US": "State",
+            "en-GB": "State",
+            "zh-CN": "启停状态，1暂停0启用默认为0"
+          },
+          "help_descriptions": {
+            "en-US": "State",
+            "en-GB": "State",
+            "zh-CN": "启停状态，1暂停0启用默认为0"
+          },
+          "cli_name": "state",
+          "cli_flag": "state",
+          "example": 0
+        },
+        {
+          "name": "remark",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "description": "备注",
+          "descriptions": {
+            "en-US": "Remark",
+            "en-GB": "Remark",
+            "zh-CN": "备注"
+          },
+          "help_descriptions": {
+            "en-US": "Remark",
+            "en-GB": "Remark",
+            "zh-CN": "备注"
+          },
+          "cli_name": "remark",
+          "cli_flag": "remark",
+          "example": "1"
+        }
+      ],
+      "examples": [],
+      "request_example": {
+        "recordId": 1,
+        "host": "www",
+        "type": "A",
+        "lineCode": "Default",
+        "value": "1.1.1.1",
+        "ttl": 600,
+        "state": 0,
+        "remark": "1"
+      },
+      "response": {
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "columns": [
+          {
+            "key": "record_id",
+            "path": "recordId",
+            "label_en": "Record ID",
+            "label_zh": "记录标识",
+            "description": "记录标识"
+          }
+        ],
+        "default_columns": [
+          "record_id"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "layout": "vertical"
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMCwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXR1cm5PYmoiOiB7InJlY29yZElkIjogMX19"
+      }
+    },
+    {
+      "id": "smart-dns.record.create",
+      "api_id": "11259",
+      "title": "新增解析记录",
+      "description": {
+        "en-US": "Create a DNS record",
+        "en-GB": "Create a DNS record",
+        "zh-CN": "新增解析记录"
+      },
+      "category": "record",
+      "command_path": [
+        "record",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v2/addRecord",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11259&isNormal=1",
+      "retryable": false,
+      "dangerous": true,
+      "parameters": [
+        {
+          "name": "domain",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "域名",
+          "descriptions": {
+            "en-US": "Domain",
+            "en-GB": "Domain",
+            "zh-CN": "域名"
+          },
+          "help_descriptions": {
+            "en-US": "Domain",
+            "en-GB": "Domain",
+            "zh-CN": "域名"
+          },
+          "cli_name": "domain",
+          "cli_flag": "domain",
+          "example": "example.com"
+        },
+        {
+          "name": "host",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "主机记录",
+          "descriptions": {
+            "en-US": "Host",
+            "en-GB": "Host",
+            "zh-CN": "主机记录"
+          },
+          "help_descriptions": {
+            "en-US": "Host",
+            "en-GB": "Host",
+            "zh-CN": "主机记录"
+          },
+          "cli_name": "host",
+          "cli_flag": "host",
+          "example": "www"
+        },
+        {
+          "name": "type",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "记录类型，如：A,AAAA,CNAME,TXT",
+          "descriptions": {
+            "en-US": "Type",
+            "en-GB": "Type",
+            "zh-CN": "记录类型，如：A,AAAA,CNAME,TXT"
+          },
+          "help_descriptions": {
+            "en-US": "Type",
+            "en-GB": "Type",
+            "zh-CN": "记录类型，如：A,AAAA,CNAME,TXT"
+          },
+          "cli_name": "type",
+          "cli_flag": "type",
+          "example": "A"
+        },
+        {
+          "name": "lineCode",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "description": "线路编码，默认为Default，其他线路见线路列表",
+          "descriptions": {
+            "en-US": "Line Code",
+            "en-GB": "Line Code",
+            "zh-CN": "线路编码，默认为Default，其他线路见线路列表"
+          },
+          "help_descriptions": {
+            "en-US": "Line Code",
+            "en-GB": "Line Code",
+            "zh-CN": "线路编码，默认为Default，其他线路见线路列表"
+          },
+          "cli_name": "line_code",
+          "cli_flag": "line-code",
+          "example": "Default"
+        },
+        {
+          "name": "value",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "记录值",
+          "descriptions": {
+            "en-US": "Value",
+            "en-GB": "Value",
+            "zh-CN": "记录值"
+          },
+          "help_descriptions": {
+            "en-US": "Value",
+            "en-GB": "Value",
+            "zh-CN": "记录值"
+          },
+          "cli_name": "value",
+          "cli_flag": "value",
+          "example": "1.1.1.1"
+        },
+        {
+          "name": "ttl",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "description": "解析生效时间，单位秒，默认为600",
+          "descriptions": {
+            "en-US": "TTL",
+            "en-GB": "TTL",
+            "zh-CN": "解析生效时间，单位秒，默认为600"
+          },
+          "help_descriptions": {
+            "en-US": "TTL",
+            "en-GB": "TTL",
+            "zh-CN": "解析生效时间，单位秒，默认为600"
+          },
+          "cli_name": "ttl",
+          "cli_flag": "ttl",
+          "example": 600
+        },
+        {
+          "name": "state",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "description": "启停状态，1暂停0启用默认为0",
+          "descriptions": {
+            "en-US": "State",
+            "en-GB": "State",
+            "zh-CN": "启停状态，1暂停0启用默认为0"
+          },
+          "help_descriptions": {
+            "en-US": "State",
+            "en-GB": "State",
+            "zh-CN": "启停状态，1暂停0启用默认为0"
+          },
+          "cli_name": "state",
+          "cli_flag": "state",
+          "example": 0
+        },
+        {
+          "name": "remark",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "description": "备注",
+          "descriptions": {
+            "en-US": "Remark",
+            "en-GB": "Remark",
+            "zh-CN": "备注"
+          },
+          "help_descriptions": {
+            "en-US": "Remark",
+            "en-GB": "Remark",
+            "zh-CN": "备注"
+          },
+          "cli_name": "remark",
+          "cli_flag": "remark",
+          "example": "1"
+        }
+      ],
+      "examples": [],
+      "request_example": {
+        "domain": "example.com",
+        "host": "www",
+        "type": "A",
+        "lineCode": "Default",
+        "value": "1.1.1.1",
+        "ttl": 600,
+        "state": 0,
+        "remark": "1"
+      },
+      "response": {
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "columns": [
+          {
+            "key": "record_id",
+            "path": "recordId",
+            "label_en": "Record ID",
+            "label_zh": "记录标识",
+            "description": "记录标识"
+          }
+        ],
+        "default_columns": [
+          "record_id"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "layout": "vertical"
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMCwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXR1cm5PYmoiOiB7InJlY29yZElkIjogMX19"
+      }
+    },
+    {
+      "id": "smart-dns.domain.delete",
+      "api_id": "11256",
+      "title": "删除域名",
+      "description": {
+        "en-US": "Delete a DNS domain",
+        "en-GB": "Delete a DNS domain",
+        "zh-CN": "删除域名"
+      },
+      "category": "domain",
+      "command_path": [
+        "domain",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/v2/deleteDomain",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11256&isNormal=1",
+      "retryable": false,
+      "dangerous": true,
+      "parameters": [
+        {
+          "name": "domain",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "域名",
+          "descriptions": {
+            "en-US": "Domain",
+            "en-GB": "Domain",
+            "zh-CN": "域名"
+          },
+          "help_descriptions": {
+            "en-US": "Domain",
+            "en-GB": "Domain",
+            "zh-CN": "域名"
+          },
+          "cli_name": "domain",
+          "cli_flag": "domain",
+          "example": "example.com"
+        }
+      ],
+      "examples": [],
+      "request_example": {
+        "domain": "example.com"
+      },
+      "response": {
+        "success_code": "0",
+        "result_path": "$",
+        "row_path": "$",
+        "columns": [
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "成功或失败信息"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "返回码"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果",
+            "description": "返回对象"
+          }
+        ],
+        "default_columns": [
+          "message",
+          "status_code",
+          "return_obj"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "layout": "vertical"
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJtZXNzYWdlIjogInN1Y2Nlc3MiLCAic3RhdHVzQ29kZSI6IDAsICJyZXR1cm5PYmoiOiB7fX0="
+      }
+    },
+    {
+      "id": "smart-dns.domain.show",
+      "api_id": "11255",
+      "title": "查询域名",
+      "description": {
+        "en-US": "Show a DNS domain",
+        "en-GB": "Show a DNS domain",
+        "zh-CN": "查询域名"
+      },
+      "category": "domain",
+      "command_path": [
+        "domain",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v2/queryDomain",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11255&isNormal=1",
+      "retryable": true,
+      "dangerous": false,
+      "parameters": [
+        {
+          "name": "domain",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "域名",
+          "descriptions": {
+            "en-US": "Domain",
+            "en-GB": "Domain",
+            "zh-CN": "域名"
+          },
+          "help_descriptions": {
+            "en-US": "Domain",
+            "en-GB": "Domain",
+            "zh-CN": "域名"
+          },
+          "cli_name": "domain",
+          "cli_flag": "domain",
+          "example": "example.com"
+        }
+      ],
+      "examples": [],
+      "request_example": {
+        "domain": "example.com"
+      },
+      "response": {
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "columns": [
+          {
+            "key": "domain",
+            "path": "domain",
+            "label_en": "Domain",
+            "label_zh": "域名",
+            "description": "域名"
+          },
+          {
+            "key": "domain_id",
+            "path": "domainId",
+            "label_en": "Domain ID",
+            "label_zh": "域名标识",
+            "description": "域名标识"
+          },
+          {
+            "key": "version_name",
+            "path": "versionName",
+            "label_en": "Version Name",
+            "label_zh": "套餐版本",
+            "description": "套餐版本"
+          },
+          {
+            "key": "record_num",
+            "path": "recordNum",
+            "label_en": "Record Number",
+            "label_zh": "解析记录数",
+            "description": "解析记录数"
+          },
+          {
+            "key": "access_state",
+            "path": "accessState",
+            "label_en": "Domain Access State",
+            "label_zh": "域名接入状态",
+            "description": "域名接入状态0未接入1接入正常"
+          },
+          {
+            "key": "remark",
+            "path": "remark",
+            "label_en": "Remark",
+            "label_zh": "备注信息",
+            "description": "备注信息"
+          }
+        ],
+        "default_columns": [
+          "domain",
+          "domain_id",
+          "version_name",
+          "record_num",
+          "access_state",
+          "remark"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "layout": "vertical"
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMCwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXR1cm5PYmoiOiB7ImRvbWFpbiI6ICJleGFtcGxlLmNvbSIsICJkb21haW5JZCI6IDEyMzQ1Njc4OSwgInZlcnNpb25OYW1lIjogIi0iLCAicmVjb3JkTnVtIjogMTAwLCAiYWNjZXNzU3RhdGUiOiAxLCAicmVtYXJrIjogIjEifX0="
+      }
+    },
+    {
+      "id": "smart-dns.domain.list",
+      "api_id": "11248",
+      "title": "获取域名列表",
+      "description": {
+        "en-US": "List DNS domains",
+        "en-GB": "List DNS domains",
+        "zh-CN": "获取域名列表"
+      },
+      "category": "domain",
+      "command_path": [
+        "domain",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v2/queryDomainList",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11248&isNormal=1",
+      "retryable": true,
+      "dangerous": false,
+      "parameters": [
+        {
+          "name": "resourceId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "客户标识",
+          "descriptions": {
+            "en-US": "Resource ID",
+            "en-GB": "Resource ID",
+            "zh-CN": "客户标识"
+          },
+          "help_descriptions": {
+            "en-US": "Resource ID",
+            "en-GB": "Resource ID",
+            "zh-CN": "客户标识"
+          },
+          "cli_name": "resource_id",
+          "cli_flag": "resource-id",
+          "example": "auto_12345"
+        }
+      ],
+      "examples": [],
+      "request_example": {
+        "resourceId": "auto_12345"
+      },
+      "response": {
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "columns": [
+          {
+            "key": "domains",
+            "path": "domains",
+            "label_en": "Domains",
+            "label_zh": "域名列表",
+            "description": "域名列表"
+          }
+        ],
+        "default_columns": [
+          "domains"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "layout": "vertical"
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMCwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXR1cm5PYmoiOiB7ImRvbWFpbnMiOiBbeyJkb21haW5JZCI6IDEsICJkb21haW4iOiAiZXhhbXBsZS5jb20ifSwgeyJkb21haW5JZCI6IDIsICJkb21haW4iOiAiZXhhbXBsZTIuY29tIn1dfX0="
+      }
+    },
+    {
+      "id": "smart-dns.domain.create",
+      "api_id": "11246",
+      "title": "新增域名",
+      "description": {
+        "en-US": "Create a DNS domain",
+        "en-GB": "Create a DNS domain",
+        "zh-CN": "新增域名"
+      },
+      "category": "domain",
+      "command_path": [
+        "domain",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v2/addDomain",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11246&isNormal=1",
+      "retryable": false,
+      "dangerous": true,
+      "parameters": [
+        {
+          "name": "domain",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "域名",
+          "descriptions": {
+            "en-US": "Domain",
+            "en-GB": "Domain",
+            "zh-CN": "域名"
+          },
+          "help_descriptions": {
+            "en-US": "Domain",
+            "en-GB": "Domain",
+            "zh-CN": "域名"
+          },
+          "cli_name": "domain",
+          "cli_flag": "domain",
+          "example": "example.com"
+        },
+        {
+          "name": "resourceId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "订单号",
+          "descriptions": {
+            "en-US": "Resource ID",
+            "en-GB": "Resource ID",
+            "zh-CN": "订单号"
+          },
+          "help_descriptions": {
+            "en-US": "Resource ID",
+            "en-GB": "Resource ID",
+            "zh-CN": "订单号"
+          },
+          "cli_name": "resource_id",
+          "cli_flag": "resource-id",
+          "example": "123"
+        },
+        {
+          "name": "remark",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "description": "备注",
+          "descriptions": {
+            "en-US": "Remark",
+            "en-GB": "Remark",
+            "zh-CN": "备注"
+          },
+          "help_descriptions": {
+            "en-US": "Remark",
+            "en-GB": "Remark",
+            "zh-CN": "备注"
+          },
+          "cli_name": "remark",
+          "cli_flag": "remark",
+          "example": "1"
+        }
+      ],
+      "examples": [],
+      "request_example": {
+        "domain": "example.com",
+        "resourceId": "123",
+        "remark": "1"
+      },
+      "response": {
+        "success_code": "0",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "columns": [
+          {
+            "key": "domain_id",
+            "path": "domainId",
+            "label_en": "Domain ID",
+            "label_zh": "域名标识",
+            "description": "域名标识"
+          }
+        ],
+        "default_columns": [
+          "domain_id"
+        ],
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        },
+        "layout": "vertical"
+      },
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMCwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJyZXR1cm5PYmoiOiB7ImRvbWFpbklkIjogMTIzNDU2Nzg5fX0="
+      }
+    }
+  ],
+  "waiters": {
+    "smart-dns.domain.connected": {
+      "commands": [
+        "smart-dns.domain.show"
+      ],
+      "path": "returnObj.accessState",
+      "success": "1",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "API 11255 documents accessState 0 not connected and 1 connected normally. No failure state is documented; 0 remains pending."
+    }
+  }
+}

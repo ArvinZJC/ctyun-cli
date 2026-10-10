@@ -1,0 +1,4943 @@
+{
+  "commands": [
+    {
+      "id": "yunxiao.dataset.show",
+      "path": [
+        "yunxiao",
+        "dataset",
+        "show"
+      ],
+      "operation": "yunxiao.dataset.show",
+      "table": "yunxiao.dataset.show",
+      "parameters": [
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "description": "ID"
+        },
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18021&isNormal=1",
+      "examples": [
+        "ctyun yunxiao dataset show --id 81f7728662dd11ec810800155d307d5b --workspace-id 1810e490-3c45-42a2-8428-08c50797e817"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.queue.show",
+      "path": [
+        "yunxiao",
+        "queue",
+        "show"
+      ],
+      "operation": "yunxiao.queue.show",
+      "table": "yunxiao.queue.show",
+      "parameters": [
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "description": "ID"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18086&isNormal=1",
+      "examples": [
+        "ctyun yunxiao queue show --id 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.queue.create",
+      "path": [
+        "yunxiao",
+        "queue",
+        "create"
+      ],
+      "operation": "yunxiao.queue.create",
+      "table": "yunxiao.queue.create",
+      "parameters": [
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability Zone Name"
+        },
+        {
+          "name": "creator",
+          "flag": "creator",
+          "target": "creator",
+          "required": false,
+          "description": "Creator"
+        },
+        {
+          "name": "resource_group_id",
+          "flag": "resource-group-id",
+          "target": "resourceGroupID",
+          "required": true,
+          "description": "Resource Group ID"
+        },
+        {
+          "name": "resource_group_name",
+          "flag": "resource-group-name",
+          "target": "resourceGroupName",
+          "required": true,
+          "description": "Resource Group Name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "remark",
+          "flag": "remark",
+          "target": "remark",
+          "required": false,
+          "description": "Remark"
+        },
+        {
+          "name": "node_labels",
+          "flag": "node-labels",
+          "target": "nodeLabels",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Node Labels as a JSON array"
+        },
+        {
+          "name": "queue_devices",
+          "flag": "queue-devices",
+          "target": "queueDevices",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Queue Devices as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-queue-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=14143&isNormal=1",
+      "examples": [
+        "ctyun yunxiao queue create --name queue-demo --resource-group-id asdfdd44-3a45-11ee-b1cf-525400c96778 --resource-group-name cluster-demo --queue-devices '[{\"value\":\"{queue_devices}\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "yunxiao.queue.workspace.bind",
+      "path": [
+        "yunxiao",
+        "queue",
+        "workspace",
+        "bind"
+      ],
+      "operation": "yunxiao.queue.workspace.bind",
+      "table": "yunxiao.queue.workspace.bind",
+      "parameters": [
+        {
+          "name": "enable_bind",
+          "flag": "enable-bind",
+          "target": "enableBind",
+          "required": false,
+          "description": "Enable Bind"
+        },
+        {
+          "name": "queue_i_ds",
+          "flag": "queue-i-ds",
+          "target": "queueIDs",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Queue I Ds as a JSON array"
+        },
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18084&isNormal=1",
+      "examples": [
+        "ctyun yunxiao queue workspace bind --queue-i-ds '[\"1\"]' --workspace-id 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "bind"
+      }
+    },
+    {
+      "id": "yunxiao.mount.list",
+      "path": [
+        "yunxiao",
+        "mount",
+        "list"
+      ],
+      "operation": "yunxiao.mount.list",
+      "table": "yunxiao.mount.list",
+      "parameters": [
+        {
+          "name": "is_desc",
+          "flag": "is-desc",
+          "target": "isDesc",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Is Description"
+        },
+        {
+          "name": "mount_name",
+          "flag": "mount-name",
+          "target": "mountName",
+          "required": false,
+          "description": "Mount Name"
+        },
+        {
+          "name": "node_i_ds",
+          "flag": "node-i-ds",
+          "target": "nodeIDs",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Node I Ds as a JSON array"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "storage_mount_id",
+          "flag": "storage-mount-id",
+          "target": "storageMountID",
+          "required": false,
+          "description": "Storage Mount ID"
+        },
+        {
+          "name": "storage_type",
+          "flag": "storage-type",
+          "target": "storageType",
+          "required": true,
+          "description": "Storage Type"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18065&isNormal=1",
+      "examples": [
+        "ctyun yunxiao mount list --storage-type string"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.mount.node.list",
+      "path": [
+        "yunxiao",
+        "mount",
+        "node",
+        "list"
+      ],
+      "operation": "yunxiao.mount.node.list",
+      "table": "yunxiao.mount.node.list",
+      "parameters": [
+        {
+          "name": "is_desc",
+          "flag": "is-desc",
+          "target": "isDesc",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Is Description"
+        },
+        {
+          "name": "mount_name",
+          "flag": "mount-name",
+          "target": "mountName",
+          "required": false,
+          "description": "Mount Name"
+        },
+        {
+          "name": "node_i_ds",
+          "flag": "node-i-ds",
+          "target": "nodeIDs",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Node I Ds as a JSON array"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "storage_mount_id",
+          "flag": "storage-mount-id",
+          "target": "storageMountID",
+          "required": false,
+          "description": "Storage Mount ID"
+        },
+        {
+          "name": "storage_type",
+          "flag": "storage-type",
+          "target": "storageType",
+          "required": false,
+          "description": "Storage Type"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18064&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.mount.show",
+      "path": [
+        "yunxiao",
+        "mount",
+        "show"
+      ],
+      "operation": "yunxiao.mount.show",
+      "table": "yunxiao.mount.show",
+      "parameters": [
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "description": "ID"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18063&isNormal=1",
+      "examples": [
+        "ctyun yunxiao mount show --id {id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.diagnosis.report.show",
+      "path": [
+        "yunxiao",
+        "diagnosis",
+        "report",
+        "show"
+      ],
+      "operation": "yunxiao.diagnosis.report.show",
+      "table": "yunxiao.diagnosis.report.show",
+      "parameters": [
+        {
+          "name": "diagnosis_id",
+          "flag": "diagnosis-id",
+          "target": "diagnosisID",
+          "required": true,
+          "description": "Diagnosis ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-diagnosis-report-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=15623&isNormal=1",
+      "examples": [
+        "ctyun yunxiao diagnosis report show --diagnosis-id 79e53235-e3a2-4ba7-8377-c8b36b04270b"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.diagnosis.check.show",
+      "path": [
+        "yunxiao",
+        "diagnosis",
+        "check",
+        "show"
+      ],
+      "operation": "yunxiao.diagnosis.check.show",
+      "table": "yunxiao.diagnosis.check.show",
+      "parameters": [
+        {
+          "name": "check_item_name",
+          "flag": "check-item-name",
+          "target": "checkItemName",
+          "required": true,
+          "description": "Check Item Name"
+        },
+        {
+          "name": "diagnosis_id",
+          "flag": "diagnosis-id",
+          "target": "diagnosisID",
+          "required": true,
+          "description": "Diagnosis ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-diagnosis-check-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=15622&isNormal=1",
+      "examples": [
+        "ctyun yunxiao diagnosis check show --check-item-name GPUDriver --diagnosis-id 00ebcf91-d5eb-4ac9-a717-abc96302ab35"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.diagnosis.node.list",
+      "path": [
+        "yunxiao",
+        "diagnosis",
+        "node",
+        "list"
+      ],
+      "operation": "yunxiao.diagnosis.node.list",
+      "table": "yunxiao.diagnosis.node.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "resource_group_id",
+          "flag": "resource-group-id",
+          "target": "resourceGroupID",
+          "required": true,
+          "description": "Resource Group ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-diagnosis-node-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=15619&isNormal=1",
+      "examples": [
+        "ctyun yunxiao diagnosis node list --resource-group-id 0083c65f-14e7-4e28-9292-4f5ab24cd153"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.diagnosis.check.list",
+      "path": [
+        "yunxiao",
+        "diagnosis",
+        "check",
+        "list"
+      ],
+      "operation": "yunxiao.diagnosis.check.list",
+      "table": "yunxiao.diagnosis.check.list",
+      "parameters": [
+        {
+          "name": "node_type",
+          "flag": "node-type",
+          "target": "nodeType",
+          "required": true,
+          "description": "Node Type"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-diagnosis-check-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=15618&isNormal=1",
+      "examples": [
+        "ctyun yunxiao diagnosis check list --node-type Huawei"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.dataset.list",
+      "path": [
+        "yunxiao",
+        "dataset",
+        "list"
+      ],
+      "operation": "yunxiao.dataset.list",
+      "table": "yunxiao.dataset.list",
+      "parameters": [
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        },
+        {
+          "name": "is_desc",
+          "flag": "is-desc",
+          "target": "isDesc",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Is Description"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Name"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "resource_group_id",
+          "flag": "resource-group-id",
+          "target": "resourceGroupID",
+          "required": true,
+          "description": "Resource Group ID"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=12232&isNormal=1",
+      "examples": [
+        "ctyun yunxiao dataset list --workspace-id c59496bc-51f3-4926-8e85-e3e719b91471 --page-size 0 --resource-group-id string"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.queue.quota.show",
+      "path": [
+        "yunxiao",
+        "queue",
+        "quota",
+        "show"
+      ],
+      "operation": "yunxiao.queue.quota.show",
+      "table": "yunxiao.queue.quota.show",
+      "parameters": [
+        {
+          "name": "resource_group_id",
+          "flag": "resource-group-id",
+          "target": "resourceGroupID",
+          "required": true,
+          "description": "Resource Group ID"
+        },
+        {
+          "name": "queue_id",
+          "flag": "queue-id",
+          "target": "queueID",
+          "required": false,
+          "description": "Queue ID"
+        },
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": false,
+          "description": "ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18089&isNormal=1",
+      "examples": [
+        "ctyun yunxiao queue quota show --resource-group-id 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.script.update",
+      "path": [
+        "yunxiao",
+        "script",
+        "update"
+      ],
+      "operation": "yunxiao.script.update",
+      "table": "yunxiao.script.update",
+      "parameters": [
+        {
+          "name": "command_content",
+          "flag": "command-content",
+          "target": "commandContent",
+          "required": true,
+          "description": "Encoded shell script content, at most 512 KB, prepared using the selected encoding"
+        },
+        {
+          "name": "command_encoding",
+          "flag": "command-encoding",
+          "target": "commandEncoding",
+          "required": true,
+          "allowed_values": [
+            "TenantID"
+          ],
+          "description": "Encoding of supplied content; TenantID uses SM4 with the first 16 characters of the main account user ID as its key"
+        },
+        {
+          "name": "command_id",
+          "flag": "command-id",
+          "target": "commandID",
+          "required": true,
+          "description": "Command ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "server_timeout",
+          "flag": "server-timeout",
+          "target": "timeout",
+          "required": false,
+          "value_type": "integer",
+          "description": "Timeout"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-script-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18011&isNormal=1",
+      "examples": [
+        "ctyun yunxiao script update --command-content RI2L7BEZ1Uod6ESsvTf9LA== --command-encoding TenantID --command-id 4c94df8c-14d7-4331-9d8f-6b2bcfeed6d4 --name demo"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "yunxiao.script.result.list",
+      "path": [
+        "yunxiao",
+        "script",
+        "result",
+        "list"
+      ],
+      "operation": "yunxiao.script.result.list",
+      "table": "yunxiao.script.result.list",
+      "parameters": [
+        {
+          "name": "invoke_command_id",
+          "flag": "invoke-command-id",
+          "target": "invokeCommandID",
+          "required": true,
+          "description": "Invoke Command ID"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-script-result-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18009&isNormal=1",
+      "examples": [
+        "ctyun yunxiao script result list --invoke-command-id df98fa6e-6863-4759-839e-506a51c921c3"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.script.execution.list",
+      "path": [
+        "yunxiao",
+        "script",
+        "execution",
+        "list"
+      ],
+      "operation": "yunxiao.script.execution.list",
+      "table": "yunxiao.script.execution.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "node_id",
+          "flag": "node-id",
+          "target": "nodeID",
+          "required": false,
+          "description": "Node ID"
+        },
+        {
+          "name": "command_id",
+          "flag": "command-id",
+          "target": "commandID",
+          "required": false,
+          "description": "Command ID"
+        },
+        {
+          "name": "invoke_command_id",
+          "flag": "invoke-command-id",
+          "target": "invokeCommandID",
+          "required": false,
+          "description": "Invoke Command ID"
+        },
+        {
+          "name": "name_like",
+          "flag": "name-like",
+          "target": "nameLike",
+          "required": false,
+          "description": "Name Like"
+        },
+        {
+          "name": "sort_key",
+          "flag": "sort-key",
+          "target": "sortKey",
+          "required": false,
+          "description": "Sort Key"
+        },
+        {
+          "name": "sort_type",
+          "flag": "sort-type",
+          "target": "sortType",
+          "required": true,
+          "description": "Sort Type"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-script-execution-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18006&isNormal=1",
+      "examples": [
+        "ctyun yunxiao script execution list --sort-type default"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.script.list",
+      "path": [
+        "yunxiao",
+        "script",
+        "list"
+      ],
+      "operation": "yunxiao.script.list",
+      "table": "yunxiao.script.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "name_like",
+          "flag": "name-like",
+          "target": "nameLike",
+          "required": false,
+          "description": "Name Like"
+        },
+        {
+          "name": "command_id",
+          "flag": "command-id",
+          "target": "commandID",
+          "required": false,
+          "description": "Command ID"
+        },
+        {
+          "name": "sort_key",
+          "flag": "sort-key",
+          "target": "sortKey",
+          "required": false,
+          "description": "Sort Key"
+        },
+        {
+          "name": "sort_type",
+          "flag": "sort-type",
+          "target": "sortType",
+          "required": false,
+          "description": "Sort Type"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page No"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-script-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18003&isNormal=1",
+      "examples": [
+        "ctyun yunxiao script list --page-no 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.script.delete",
+      "path": [
+        "yunxiao",
+        "script",
+        "delete"
+      ],
+      "operation": "yunxiao.script.delete",
+      "table": "yunxiao.script.delete",
+      "parameters": [
+        {
+          "name": "command_id",
+          "flag": "command-id",
+          "target": "commandID",
+          "required": true,
+          "description": "Command ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-script-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18000&isNormal=1",
+      "examples": [
+        "ctyun yunxiao script delete --command-id 4c94df8c-14d7-4331-9d8f-6b2bcfeed6d4"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "yunxiao.script.run",
+      "path": [
+        "yunxiao",
+        "script",
+        "run"
+      ],
+      "operation": "yunxiao.script.run",
+      "table": "yunxiao.script.run",
+      "parameters": [
+        {
+          "name": "command_id",
+          "flag": "command-id",
+          "target": "commandID",
+          "required": true,
+          "description": "Command ID"
+        },
+        {
+          "name": "node_i_ds",
+          "flag": "node-i-ds",
+          "target": "nodeIDs",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Node I Ds as a JSON array"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-script-run.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=17999&isNormal=1",
+      "examples": [
+        "ctyun yunxiao script run --command-id 4c94df8c-14d7-4331-9d8f-6b2bcfeed6d4 --node-i-ds '[\"ss-gz4itk5y3lvtm3hqocvqgm5jkttk\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "run"
+      }
+    },
+    {
+      "id": "yunxiao.script.create",
+      "path": [
+        "yunxiao",
+        "script",
+        "create"
+      ],
+      "operation": "yunxiao.script.create",
+      "table": "yunxiao.script.create",
+      "parameters": [
+        {
+          "name": "command_content",
+          "flag": "command-content",
+          "target": "commandContent",
+          "required": true,
+          "description": "Encoded shell script content, at most 512 KB, prepared using the selected encoding"
+        },
+        {
+          "name": "command_encoding",
+          "flag": "command-encoding",
+          "target": "commandEncoding",
+          "required": false,
+          "allowed_values": [
+            "TenantID"
+          ],
+          "description": "Encoding of supplied content; TenantID uses SM4 with the first 16 characters of the main account user ID as its key"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "server_timeout",
+          "flag": "server-timeout",
+          "target": "timeout",
+          "required": false,
+          "value_type": "integer",
+          "description": "Timeout"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-script-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=17998&isNormal=1",
+      "examples": [
+        "ctyun yunxiao script create --command-content RI2L7BEZ1Uod6ESsvTf9LA== --name command_demo"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "yunxiao.node.stop",
+      "path": [
+        "yunxiao",
+        "node",
+        "stop"
+      ],
+      "operation": "yunxiao.node.stop",
+      "table": "yunxiao.node.stop",
+      "parameters": [
+        {
+          "name": "node_i_ds",
+          "flag": "node-i-ds",
+          "target": "nodeIDs",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Node I Ds as a JSON array"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18177&isNormal=1",
+      "examples": [
+        "ctyun yunxiao node stop --node-i-ds '[\"{node_i_ds}\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "stop"
+      }
+    },
+    {
+      "id": "yunxiao.node.start",
+      "path": [
+        "yunxiao",
+        "node",
+        "start"
+      ],
+      "operation": "yunxiao.node.start",
+      "table": "yunxiao.node.start",
+      "parameters": [
+        {
+          "name": "node_i_ds",
+          "flag": "node-i-ds",
+          "target": "nodeIDs",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Node I Ds as a JSON array"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18176&isNormal=1",
+      "examples": [
+        "ctyun yunxiao node start --node-i-ds '[\"{node_i_ds}\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "start"
+      }
+    },
+    {
+      "id": "yunxiao.node.reboot",
+      "path": [
+        "yunxiao",
+        "node",
+        "reboot"
+      ],
+      "operation": "yunxiao.node.reboot",
+      "table": "yunxiao.node.reboot",
+      "parameters": [
+        {
+          "name": "node_i_ds",
+          "flag": "node-i-ds",
+          "target": "nodeIDs",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Node I Ds as a JSON array"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18172&isNormal=1",
+      "examples": [
+        "ctyun yunxiao node reboot --node-i-ds '[\"{node_i_ds}\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "reboot"
+      }
+    },
+    {
+      "id": "yunxiao.workspace.list",
+      "path": [
+        "yunxiao",
+        "workspace",
+        "list"
+      ],
+      "operation": "yunxiao.workspace.list",
+      "table": "yunxiao.workspace.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "sort_type",
+          "flag": "sort-type",
+          "target": "sortType",
+          "required": false,
+          "description": "Sort Type"
+        },
+        {
+          "name": "name_like",
+          "flag": "name-like",
+          "target": "nameLike",
+          "required": false,
+          "description": "Name Like"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-workspace-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18034&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.storage.directory.list",
+      "path": [
+        "yunxiao",
+        "storage",
+        "directory",
+        "list"
+      ],
+      "operation": "yunxiao.storage.directory.list",
+      "table": "yunxiao.storage.directory.list",
+      "parameters": [
+        {
+          "name": "datasource_id",
+          "flag": "datasource-id",
+          "target": "datasourceID",
+          "required": true,
+          "description": "Datasource ID"
+        },
+        {
+          "name": "is_desc",
+          "flag": "is-desc",
+          "target": "isDesc",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Is Description"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "sort_key",
+          "flag": "sort-key",
+          "target": "sortKey",
+          "required": false,
+          "description": "Sort Key"
+        },
+        {
+          "name": "sub_path",
+          "flag": "sub-path",
+          "target": "subPath",
+          "required": false,
+          "description": "Sub Path"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-storage-directory-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18186&isNormal=1",
+      "examples": [
+        "ctyun yunxiao storage directory list --datasource-id 8e7e9629-5fc9-497c-b377-9dab2a02a0f9"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.storage.list",
+      "path": [
+        "yunxiao",
+        "storage",
+        "list"
+      ],
+      "operation": "yunxiao.storage.list",
+      "table": "yunxiao.storage.list",
+      "parameters": [
+        {
+          "name": "is_desc",
+          "flag": "is-desc",
+          "target": "isDesc",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Is Description"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Name"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "resource_group_id",
+          "flag": "resource-group-id",
+          "target": "resourceGroupID",
+          "required": false,
+          "description": "Resource Group ID"
+        },
+        {
+          "name": "data_type",
+          "flag": "data-type",
+          "target": "dataType",
+          "required": false,
+          "description": "Data Type"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-storage-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18184&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.storage.show",
+      "path": [
+        "yunxiao",
+        "storage",
+        "show"
+      ],
+      "operation": "yunxiao.storage.show",
+      "table": "yunxiao.storage.show",
+      "parameters": [
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "description": "ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-storage-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18183&isNormal=1",
+      "examples": [
+        "ctyun yunxiao storage show --id {id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.image.tag.delete",
+      "path": [
+        "yunxiao",
+        "image",
+        "tag",
+        "delete"
+      ],
+      "operation": "yunxiao.image.tag.delete",
+      "table": "yunxiao.image.tag.delete",
+      "parameters": [
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        },
+        {
+          "name": "digest",
+          "flag": "digest",
+          "target": "digest",
+          "required": true,
+          "description": "Digest"
+        },
+        {
+          "name": "project_name",
+          "flag": "project-name",
+          "target": "projectName",
+          "required": true,
+          "description": "Project Name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "repo_name",
+          "flag": "repo-name",
+          "target": "repoName",
+          "required": true,
+          "description": "Repo Name"
+        },
+        {
+          "name": "tag_name",
+          "flag": "tag-name",
+          "target": "tagName",
+          "required": true,
+          "description": "Tag Name"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18190&isNormal=1",
+      "examples": [
+        "ctyun yunxiao image tag delete --workspace-id {workspace_id} --digest {digest} --project-name {project_name} --repo-name {repo_name} --tag-name {tag_name}"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "yunxiao.image.repository.delete",
+      "path": [
+        "yunxiao",
+        "image",
+        "repository",
+        "delete"
+      ],
+      "operation": "yunxiao.image.repository.delete",
+      "table": "yunxiao.image.repository.delete",
+      "parameters": [
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        },
+        {
+          "name": "project_name",
+          "flag": "project-name",
+          "target": "projectName",
+          "required": true,
+          "description": "Project Name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "repo_name",
+          "flag": "repo-name",
+          "target": "repoName",
+          "required": true,
+          "description": "Repo Name"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18191&isNormal=1",
+      "examples": [
+        "ctyun yunxiao image repository delete --workspace-id {workspace_id} --project-name {project_name} --repo-name {repo_name}"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "yunxiao.image.registry.login.show",
+      "path": [
+        "yunxiao",
+        "image",
+        "registry",
+        "login",
+        "show"
+      ],
+      "operation": "yunxiao.image.registry.login.show",
+      "table": "yunxiao.image.registry.login.show",
+      "parameters": [
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18198&isNormal=1",
+      "examples": [
+        "ctyun yunxiao image registry login show --workspace-id {workspace_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.image.registry.certificate.show",
+      "path": [
+        "yunxiao",
+        "image",
+        "registry",
+        "certificate",
+        "show"
+      ],
+      "operation": "yunxiao.image.registry.certificate.show",
+      "table": "yunxiao.image.registry.certificate.show",
+      "parameters": [
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18196&isNormal=1",
+      "examples": [
+        "ctyun yunxiao image registry certificate show --workspace-id {workspace_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.workspace.user.list",
+      "path": [
+        "yunxiao",
+        "workspace",
+        "user",
+        "list"
+      ],
+      "operation": "yunxiao.workspace.user.list",
+      "table": "yunxiao.workspace.user.list",
+      "parameters": [
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "name_like",
+          "flag": "name-like",
+          "target": "nameLike",
+          "required": false,
+          "description": "Name Like"
+        },
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": false,
+          "description": "Workspace ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-workspace-user-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18042&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.workspace.update",
+      "path": [
+        "yunxiao",
+        "workspace",
+        "update"
+      ],
+      "operation": "yunxiao.workspace.update",
+      "table": "yunxiao.workspace.update",
+      "parameters": [
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        },
+        {
+          "name": "comment",
+          "flag": "comment",
+          "target": "comment",
+          "required": true,
+          "description": "Comment"
+        },
+        {
+          "name": "workspace_name",
+          "flag": "workspace-name",
+          "target": "workspaceName",
+          "required": true,
+          "description": "Workspace Name"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-workspace-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18040&isNormal=1",
+      "examples": [
+        "ctyun yunxiao workspace update --workspace-id 1810e490-3c45-42a2-8428-08c50797e817 --comment 本工作空间为演示专用 --workspace-name 演示工作空间"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "yunxiao.workspace.unassigned-user.list",
+      "path": [
+        "yunxiao",
+        "workspace",
+        "unassigned-user",
+        "list"
+      ],
+      "operation": "yunxiao.workspace.unassigned-user.list",
+      "table": "yunxiao.workspace.unassigned-user.list",
+      "parameters": [
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "name_like",
+          "flag": "name-like",
+          "target": "nameLike",
+          "required": false,
+          "description": "Name Like"
+        },
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-workspace-unassigned-user-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18037&isNormal=1",
+      "examples": [
+        "ctyun yunxiao workspace unassigned-user list --workspace-id 1810e490-3c45-42a2-8428-08c50797e817"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.node.pod.list",
+      "path": [
+        "yunxiao",
+        "node",
+        "pod",
+        "list"
+      ],
+      "operation": "yunxiao.node.pod.list",
+      "table": "yunxiao.node.pod.list",
+      "parameters": [
+        {
+          "name": "node_id",
+          "flag": "node-id",
+          "target": "nodeID",
+          "required": true,
+          "description": "Node ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "description": "Page Size"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18171&isNormal=1",
+      "examples": [
+        "ctyun yunxiao node pod list --node-id {node_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.workspace.show",
+      "path": [
+        "yunxiao",
+        "workspace",
+        "show"
+      ],
+      "operation": "yunxiao.workspace.show",
+      "table": "yunxiao.workspace.show",
+      "parameters": [
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-workspace-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18033&isNormal=1",
+      "examples": [
+        "ctyun yunxiao workspace show --workspace-id 1810e490-3c45-42a2-8428-08c50797e817"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.workspace.user.remove",
+      "path": [
+        "yunxiao",
+        "workspace",
+        "user",
+        "remove"
+      ],
+      "operation": "yunxiao.workspace.user.remove",
+      "table": "yunxiao.workspace.user.remove",
+      "parameters": [
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        },
+        {
+          "name": "user_list",
+          "flag": "user-list",
+          "target": "userList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "User List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-workspace-user-remove.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18031&isNormal=1",
+      "examples": [
+        "ctyun yunxiao workspace user remove --workspace-id 21221099-e5b7-4e21-a369-9c80544a7475 --user-list '[\"f04e0b6999cb481088f7fce788d843c4\",\"35d18168d83f4b04b194a9cf8801331f\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "remove"
+      }
+    },
+    {
+      "id": "yunxiao.workspace.delete",
+      "path": [
+        "yunxiao",
+        "workspace",
+        "delete"
+      ],
+      "operation": "yunxiao.workspace.delete",
+      "table": "yunxiao.workspace.delete",
+      "parameters": [
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-workspace-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18030&isNormal=1",
+      "examples": [
+        "ctyun yunxiao workspace delete --workspace-id 21221099-e5b7-4e21-a369-9c80544a7475"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "yunxiao.workspace.create",
+      "path": [
+        "yunxiao",
+        "workspace",
+        "create"
+      ],
+      "operation": "yunxiao.workspace.create",
+      "table": "yunxiao.workspace.create",
+      "parameters": [
+        {
+          "name": "comment",
+          "flag": "comment",
+          "target": "comment",
+          "required": false,
+          "description": "Comment"
+        },
+        {
+          "name": "queue_i_ds",
+          "flag": "queue-i-ds",
+          "target": "queueIDs",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Queue I Ds as a JSON array"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "user_list",
+          "flag": "user-list",
+          "target": "userList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "User List as a JSON array"
+        },
+        {
+          "name": "workspace_name",
+          "flag": "workspace-name",
+          "target": "workspaceName",
+          "required": true,
+          "description": "Workspace Name"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-workspace-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18027&isNormal=1",
+      "examples": [
+        "ctyun yunxiao workspace create --queue-i-ds '[\"955fcbeb-b7fe-420c-b001-22113c83eff4\"]' --workspace-name 演示工作空间"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "yunxiao.workspace.user.add",
+      "path": [
+        "yunxiao",
+        "workspace",
+        "user",
+        "add"
+      ],
+      "operation": "yunxiao.workspace.user.add",
+      "table": "yunxiao.workspace.user.add",
+      "parameters": [
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        },
+        {
+          "name": "user_list",
+          "flag": "user-list",
+          "target": "userList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "User List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-workspace-user-add.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18025&isNormal=1",
+      "examples": [
+        "ctyun yunxiao workspace user add --workspace-id 21221099-e5b7-4e21-a369-9c80544a7475 --user-list '[{\"value\":\"{user_list}\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "add"
+      }
+    },
+    {
+      "id": "yunxiao.queue.user.list",
+      "path": [
+        "yunxiao",
+        "queue",
+        "user",
+        "list"
+      ],
+      "operation": "yunxiao.queue.user.list",
+      "table": "yunxiao.queue.user.list",
+      "parameters": [
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "description": "ID"
+        },
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18107&isNormal=1",
+      "examples": [
+        "ctyun yunxiao queue user list --id {id} --workspace-id {workspace_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.queue.user.update",
+      "path": [
+        "yunxiao",
+        "queue",
+        "user",
+        "update"
+      ],
+      "operation": "yunxiao.queue.user.update",
+      "table": "yunxiao.queue.user.update",
+      "parameters": [
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        },
+        {
+          "name": "queue_id",
+          "flag": "queue-id",
+          "target": "queueID",
+          "required": true,
+          "description": "Queue ID"
+        },
+        {
+          "name": "users",
+          "flag": "users",
+          "target": "users",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Users as a JSON array"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18104&isNormal=1",
+      "examples": [
+        "ctyun yunxiao queue user update --workspace-id {workspace_id} --queue-id {queue_id}"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "yunxiao.queue.update",
+      "path": [
+        "yunxiao",
+        "queue",
+        "update"
+      ],
+      "operation": "yunxiao.queue.update",
+      "table": "yunxiao.queue.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "node_labels",
+          "flag": "node-labels",
+          "target": "nodeLabels",
+          "required": false,
+          "value_type": "json",
+          "description": "Node Labels as a JSON object"
+        },
+        {
+          "name": "queue_devices",
+          "flag": "queue-devices",
+          "target": "queueDevices",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Queue Devices as a JSON array"
+        },
+        {
+          "name": "queue_id",
+          "flag": "queue-id",
+          "target": "queueID",
+          "required": false,
+          "description": "Queue ID"
+        },
+        {
+          "name": "remark",
+          "flag": "remark",
+          "target": "remark",
+          "required": false,
+          "description": "Remark"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18099&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "yunxiao.queue.workspace.unbind",
+      "path": [
+        "yunxiao",
+        "queue",
+        "workspace",
+        "unbind"
+      ],
+      "operation": "yunxiao.queue.workspace.unbind",
+      "table": "yunxiao.queue.workspace.unbind",
+      "parameters": [
+        {
+          "name": "enable_bind",
+          "flag": "enable-bind",
+          "target": "enableBind",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Enable Bind"
+        },
+        {
+          "name": "queue_i_ds",
+          "flag": "queue-i-ds",
+          "target": "queueIDs",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Queue I Ds as a JSON array"
+        },
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18096&isNormal=1",
+      "examples": [
+        "ctyun yunxiao queue workspace unbind --queue-i-ds '[\"{queue_i_ds}\"]' --workspace-id {workspace_id}"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unbind"
+      }
+    },
+    {
+      "id": "yunxiao.resource-group.inventory.list",
+      "path": [
+        "yunxiao",
+        "resource-group",
+        "inventory",
+        "list"
+      ],
+      "operation": "yunxiao.resource-group.inventory.list",
+      "table": "yunxiao.resource-group.inventory.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-resource-group-inventory-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=16299&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.task.execution.run",
+      "path": [
+        "yunxiao",
+        "task",
+        "execution",
+        "run"
+      ],
+      "operation": "yunxiao.task.execution.run",
+      "table": "yunxiao.task.execution.run",
+      "parameters": [
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "task_id",
+          "flag": "task-id",
+          "target": "taskID",
+          "required": true,
+          "description": "Task ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-task-execution-run.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=16273&isNormal=1",
+      "examples": [
+        "ctyun yunxiao task execution run --workspace-id 1810e490-3c45-42a2-8428-08c50797e817 --task-id d357b934-7d8f-49be-8eab-d09c0886f72e"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "run"
+      }
+    },
+    {
+      "id": "yunxiao.task.execution.event.list",
+      "path": [
+        "yunxiao",
+        "task",
+        "execution",
+        "event",
+        "list"
+      ],
+      "operation": "yunxiao.task.execution.event.list",
+      "table": "yunxiao.task.execution.event.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "description": "ID"
+        },
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-task-execution-event-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=16294&isNormal=1",
+      "examples": [
+        "ctyun yunxiao task execution event list --id job-d6beced7-c0f5-4baa-8399-18ded297add8 --workspace-id 1810e490-3c45-42a2-8428-08c50797e817"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.task.execution.instance.list",
+      "path": [
+        "yunxiao",
+        "task",
+        "execution",
+        "instance",
+        "list"
+      ],
+      "operation": "yunxiao.task.execution.instance.list",
+      "table": "yunxiao.task.execution.instance.list",
+      "parameters": [
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "description": "ID"
+        },
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-task-execution-instance-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=17975&isNormal=1",
+      "examples": [
+        "ctyun yunxiao task execution instance list --id task-py-5175f537-2390-45c8-aef9-7d85e3c05f15 --workspace-id 1810e490-3c45-42a2-8428-08c50797e817"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.task.create-and-run",
+      "path": [
+        "yunxiao",
+        "task",
+        "create-and-run"
+      ],
+      "operation": "yunxiao.task.create-and-run",
+      "table": "yunxiao.task.create-and-run",
+      "parameters": [
+        {
+          "name": "header_workspace_id",
+          "flag": "header-workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID sent in the request header"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "remark",
+          "flag": "remark",
+          "target": "remark",
+          "required": false,
+          "description": "Remark"
+        },
+        {
+          "name": "train_frame",
+          "flag": "train-frame",
+          "target": "trainFrame",
+          "required": false,
+          "description": "Train Frame"
+        },
+        {
+          "name": "train_mode",
+          "flag": "train-mode",
+          "target": "trainMode",
+          "required": false,
+          "description": "Train Mode"
+        },
+        {
+          "name": "queue_id",
+          "flag": "queue-id",
+          "target": "queueID",
+          "required": true,
+          "description": "Queue ID"
+        },
+        {
+          "name": "storages",
+          "flag": "storages",
+          "target": "storages",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Storages as a JSON array"
+        },
+        {
+          "name": "image_name",
+          "flag": "image-name",
+          "target": "imageName",
+          "required": true,
+          "description": "Image Name"
+        },
+        {
+          "name": "commands",
+          "flag": "commands",
+          "target": "commands",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Encrypted startup commands as a JSON array, prepared before submission"
+        },
+        {
+          "name": "envs",
+          "flag": "envs",
+          "target": "envs",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Envs as a JSON array"
+        },
+        {
+          "name": "resources",
+          "flag": "resources",
+          "target": "resources",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Resources as a JSON array"
+        },
+        {
+          "name": "enable_stdout",
+          "flag": "enable-stdout",
+          "target": "enableStdout",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Enable Stdout"
+        },
+        {
+          "name": "enable_tensorboard",
+          "flag": "enable-tensorboard",
+          "target": "enableTensorboard",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Enable Tensorboard"
+        },
+        {
+          "name": "if_failed_restart",
+          "flag": "if-failed-restart",
+          "target": "ifFailedRestart",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "If Failed Restart"
+        },
+        {
+          "name": "image_type",
+          "flag": "image-type",
+          "target": "imageType",
+          "required": false,
+          "value_type": "integer",
+          "description": "Image Type"
+        },
+        {
+          "name": "is_not_run_directly",
+          "flag": "is-not-run-directly",
+          "target": "isNotRunDirectly",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Is Not Run Directly"
+        },
+        {
+          "name": "priority_type",
+          "flag": "priority-type",
+          "target": "priorityType",
+          "required": false,
+          "value_type": "integer",
+          "description": "Priority Type"
+        },
+        {
+          "name": "priority_weight",
+          "flag": "priority-weight",
+          "target": "priorityWeight",
+          "required": false,
+          "value_type": "integer",
+          "description": "Priority Weight"
+        },
+        {
+          "name": "queue_name",
+          "flag": "queue-name",
+          "target": "queueName",
+          "required": false,
+          "description": "Queue Name"
+        },
+        {
+          "name": "scope",
+          "flag": "scope",
+          "target": "scope",
+          "required": false,
+          "value_type": "integer",
+          "description": "Scope"
+        },
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": false,
+          "description": "Workspace ID"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": false,
+          "value_type": "integer",
+          "description": "Type"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-task-create-and-run.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=15918&isNormal=1",
+      "examples": [
+        "ctyun yunxiao task create-and-run --header-workspace-id 21221099-e5b7-4e21-a369-9c80544a7475 --queue-id e5c9f29c-06a6-4985-8a0d-c7c97efd6c7c --image-name cbi.ccr.ctyun.cn:15000/project-cwpublic/llama2-training-v3:ctccl0.3.0-cuda12.1-pytorch2.2.1-megatron0.2.0-deepspeed0.14.1-ubuntu20.04-amd64 --commands '[\"jp1YmXDFfafCHwCUMekTQQ==\",\"ecyD7LDN0rd1RpID+p8lpQ==\"]' --resources '[{\"replicas\":1,\"gpu\":2,\"cpu\":25,\"memory\":230,\"roleName\":\"Worker\",\"queueNodeDeviceID\":\"5aefbdbb-b52c-458b-8a82-3a006b351a07\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create-and-run"
+      }
+    },
+    {
+      "id": "yunxiao.queue.lock",
+      "path": [
+        "yunxiao",
+        "queue",
+        "lock"
+      ],
+      "operation": "yunxiao.queue.lock",
+      "table": "yunxiao.queue.lock",
+      "parameters": [
+        {
+          "name": "enable_lock",
+          "flag": "enable-lock",
+          "target": "enableLock",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Enable Lock"
+        },
+        {
+          "name": "queue_id",
+          "flag": "queue-id",
+          "target": "queueID",
+          "required": true,
+          "description": "Queue ID"
+        },
+        {
+          "name": "queue_device_i_ds",
+          "flag": "queue-device-i-ds",
+          "target": "queueDeviceIDs",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Queue Device I Ds as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-queue-lock.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=17974&isNormal=1",
+      "examples": [
+        "ctyun yunxiao queue lock --queue-id c59496bc-51f3-4926-8e85-e3e719b91471"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "lock"
+      }
+    },
+    {
+      "id": "yunxiao.node.list",
+      "path": [
+        "yunxiao",
+        "node",
+        "list"
+      ],
+      "operation": "yunxiao.node.list",
+      "table": "yunxiao.node.list",
+      "parameters": [
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "name_like",
+          "flag": "name-like",
+          "target": "nameLike",
+          "required": false,
+          "description": "Name Like"
+        },
+        {
+          "name": "resource_group_id",
+          "flag": "resource-group-id",
+          "target": "resourceGroupID",
+          "required": false,
+          "description": "Resource Group ID"
+        },
+        {
+          "name": "sort_type",
+          "flag": "sort-type",
+          "target": "sortType",
+          "required": false,
+          "description": "Sort Type"
+        },
+        {
+          "name": "sort_key",
+          "flag": "sort-key",
+          "target": "sortKey",
+          "required": false,
+          "description": "Sort Key"
+        },
+        {
+          "name": "group_type",
+          "flag": "group-type",
+          "target": "groupType",
+          "required": false,
+          "description": "Group Type"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "description": "Status"
+        },
+        {
+          "name": "k8s_status",
+          "flag": "k8s-status",
+          "target": "k8sStatus",
+          "required": false,
+          "value_type": "string_array",
+          "description": "K8S Status as a JSON array"
+        },
+        {
+          "name": "node_type",
+          "flag": "node-type",
+          "target": "nodeType",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Node Type as a JSON array"
+        },
+        {
+          "name": "gpu_type",
+          "flag": "gpu-type",
+          "target": "gpuType",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Gpu Type as a JSON array"
+        },
+        {
+          "name": "create_user_id",
+          "flag": "create-user-id",
+          "target": "createUserID",
+          "required": false,
+          "description": "Create User ID"
+        },
+        {
+          "name": "is_locked",
+          "flag": "is-locked",
+          "target": "isLocked",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Is Locked"
+        },
+        {
+          "name": "is_unbound",
+          "flag": "is-unbound",
+          "target": "isUnbound",
+          "required": false,
+          "description": "Is Unbound"
+        },
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": false,
+          "description": "ID"
+        },
+        {
+          "name": "host_name",
+          "flag": "host-name",
+          "target": "hostName",
+          "required": false,
+          "description": "Host Name"
+        },
+        {
+          "name": "need_check_subnet",
+          "flag": "need-check-subnet",
+          "target": "needCheckSubnet",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Need Check Subnet"
+        },
+        {
+          "name": "node_labels",
+          "flag": "node-labels",
+          "target": "nodeLabels",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Node Labels as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-node-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=14139&isNormal=1",
+      "examples": [
+        "ctyun yunxiao node list --node-labels '[{\"value\":\"{node_labels}\"}]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.region.list",
+      "path": [
+        "yunxiao",
+        "region",
+        "list"
+      ],
+      "operation": "yunxiao.region.list",
+      "table": "yunxiao.region.list",
+      "fixture_response": "fixtures/yunxiao-region-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=16254&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.monitor.history.list",
+      "path": [
+        "yunxiao",
+        "monitor",
+        "history",
+        "list"
+      ],
+      "operation": "yunxiao.monitor.history.list",
+      "table": "yunxiao.monitor.history.list",
+      "parameters": [
+        {
+          "name": "dimension",
+          "flag": "dimension",
+          "target": "dimension",
+          "required": true,
+          "description": "Dimension"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "step",
+          "flag": "step",
+          "target": "step",
+          "required": true,
+          "description": "Step"
+        },
+        {
+          "name": "start",
+          "flag": "start",
+          "target": "start",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start"
+        },
+        {
+          "name": "end",
+          "flag": "end",
+          "target": "end",
+          "required": true,
+          "value_type": "integer",
+          "description": "End"
+        },
+        {
+          "name": "resource_group_i_ds",
+          "flag": "resource-group-i-ds",
+          "target": "resourceGroupIDs",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Resource Group I Ds as a JSON array"
+        },
+        {
+          "name": "item_name_list",
+          "flag": "item-name-list",
+          "target": "itemNameList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Item Name List as a JSON array"
+        },
+        {
+          "name": "instance_i_ds",
+          "flag": "instance-i-ds",
+          "target": "instanceIDs",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Instance IDs as a JSON array; required except for cluster and pod dimensions"
+        },
+        {
+          "name": "pods",
+          "flag": "pods",
+          "target": "pods",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Pods as a JSON array"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "dimension",
+            "equals": "pod"
+          },
+          "required": [
+            "pods"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-monitor-history-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=16255&isNormal=1",
+      "examples": [
+        "ctyun yunxiao monitor history list --dimension node --step 60 --start 1728276206 --end 1728277106 --resource-group-i-ds '[\"49f62db9-810c-4a11-a731-702dc29c9790\"]' --item-name-list '[\"ctyun_node_cpu_used_util\"]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.monitor.sum.show",
+      "path": [
+        "yunxiao",
+        "monitor",
+        "sum",
+        "show"
+      ],
+      "operation": "yunxiao.monitor.sum.show",
+      "table": "yunxiao.monitor.sum.show",
+      "parameters": [
+        {
+          "name": "query",
+          "flag": "query",
+          "target": "query",
+          "required": true,
+          "description": "Query"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-monitor-sum-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=14133&isNormal=1",
+      "examples": [
+        "ctyun yunxiao monitor sum show --query 支持查询指标见下"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.monitor.average.show",
+      "path": [
+        "yunxiao",
+        "monitor",
+        "average",
+        "show"
+      ],
+      "operation": "yunxiao.monitor.average.show",
+      "table": "yunxiao.monitor.average.show",
+      "parameters": [
+        {
+          "name": "query",
+          "flag": "query",
+          "target": "query",
+          "required": true,
+          "description": "Query"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-monitor-average-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=14132&isNormal=1",
+      "examples": [
+        "ctyun yunxiao monitor average show --query 支持查询指标见下"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.task.execution.list",
+      "path": [
+        "yunxiao",
+        "task",
+        "execution",
+        "list"
+      ],
+      "operation": "yunxiao.task.execution.list",
+      "table": "yunxiao.task.execution.list",
+      "parameters": [
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Name"
+        },
+        {
+          "name": "is_desc",
+          "flag": "is-desc",
+          "target": "isDesc",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Is Description"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "task_id",
+          "flag": "task-id",
+          "target": "taskID",
+          "required": false,
+          "description": "Task ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "types",
+          "flag": "types",
+          "target": "types",
+          "required": false,
+          "value_type": "integer_array",
+          "description": "Types as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-task-execution-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=15943&isNormal=1",
+      "examples": [
+        "ctyun yunxiao task execution list --workspace-id 1810e490-3c45-42a2-8428-08c50797e817"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.node.add",
+      "path": [
+        "yunxiao",
+        "node",
+        "add"
+      ],
+      "operation": "yunxiao.node.add",
+      "table": "yunxiao.node.add",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "resource_group_id",
+          "flag": "resource-group-id",
+          "target": "resourceGroupID",
+          "required": true,
+          "description": "Resource Group ID"
+        },
+        {
+          "name": "nodes",
+          "flag": "nodes",
+          "target": "nodes",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Nodes as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-node-add.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=16295&isNormal=1",
+      "examples": [
+        "ctyun yunxiao node add --resource-group-id 49f62db9-810c-4a11-a731-702dc29c9790"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "add"
+      }
+    },
+    {
+      "id": "yunxiao.node.resource-group.unbind",
+      "path": [
+        "yunxiao",
+        "node",
+        "resource-group",
+        "unbind"
+      ],
+      "operation": "yunxiao.node.resource-group.unbind",
+      "table": "yunxiao.node.resource-group.unbind",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "node_i_ds",
+          "flag": "node-i-ds",
+          "target": "nodeIDs",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Node I Ds as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-node-resource-group-unbind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=16296&isNormal=1",
+      "examples": [
+        "ctyun yunxiao node resource-group unbind --node-i-ds '[\"{node_i_ds}\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unbind"
+      }
+    },
+    {
+      "id": "yunxiao.node.label.set",
+      "path": [
+        "yunxiao",
+        "node",
+        "label",
+        "set"
+      ],
+      "operation": "yunxiao.node.label.set",
+      "table": "yunxiao.node.label.set",
+      "parameters": [
+        {
+          "name": "node_labels",
+          "flag": "node-labels",
+          "target": "nodeLabels",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Node Labels as a JSON array"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-node-label-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=16252&isNormal=1",
+      "examples": [
+        "ctyun yunxiao node label set --node-labels '[{\"value\":\"{node_labels}\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "yunxiao.node.label.list",
+      "path": [
+        "yunxiao",
+        "node",
+        "label",
+        "list"
+      ],
+      "operation": "yunxiao.node.label.list",
+      "table": "yunxiao.node.label.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "resource_group_i_ds",
+          "flag": "resource-group-i-ds",
+          "target": "resourceGroupIDs",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Resource Group I Ds as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-node-label-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=16250&isNormal=1",
+      "examples": [
+        "ctyun yunxiao node label list --resource-group-i-ds '[\"49f62db9-810c-4a11-a731-702dc29c9790\"]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.node.label.delete",
+      "path": [
+        "yunxiao",
+        "node",
+        "label",
+        "delete"
+      ],
+      "operation": "yunxiao.node.label.delete",
+      "table": "yunxiao.node.label.delete",
+      "parameters": [
+        {
+          "name": "label",
+          "flag": "label",
+          "target": "label",
+          "required": false,
+          "description": "Label"
+        },
+        {
+          "name": "node_list",
+          "flag": "node-list",
+          "target": "nodeList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Node List as a JSON array"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-node-label-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=16253&isNormal=1",
+      "examples": [
+        "ctyun yunxiao node label delete --node-list '[\"ss-cyiyytraouyr73gwq36fymoqxuls\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "yunxiao.queue.list",
+      "path": [
+        "yunxiao",
+        "queue",
+        "list"
+      ],
+      "operation": "yunxiao.queue.list",
+      "table": "yunxiao.queue.list",
+      "parameters": [
+        {
+          "name": "is_desc",
+          "flag": "is-desc",
+          "target": "isDesc",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Is Description"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Name"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "resource_group_id",
+          "flag": "resource-group-id",
+          "target": "resourceGroupID",
+          "required": false,
+          "description": "Resource Group ID"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "description": "Status"
+        },
+        {
+          "name": "workspace_i_ds",
+          "flag": "workspace-i-ds",
+          "target": "workspaceIDs",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Workspace I Ds as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-queue-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=15891&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.resource-group.usage.show",
+      "path": [
+        "yunxiao",
+        "resource-group",
+        "usage",
+        "show"
+      ],
+      "operation": "yunxiao.resource-group.usage.show",
+      "table": "yunxiao.resource-group.usage.show",
+      "parameters": [
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "description": "ID"
+        },
+        {
+          "name": "resource_group_id",
+          "flag": "resource-group-id",
+          "target": "resourceGroupID",
+          "required": false,
+          "description": "Resource Group ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-resource-group-usage-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=15917&isNormal=1",
+      "examples": [
+        "ctyun yunxiao resource-group usage show --id 81f7728662dd11ec810800155d307d5b"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.image.show",
+      "path": [
+        "yunxiao",
+        "image",
+        "show"
+      ],
+      "operation": "yunxiao.image.show",
+      "table": "yunxiao.image.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "project_name",
+          "flag": "project-name",
+          "target": "projectName",
+          "required": true,
+          "description": "Project Name"
+        },
+        {
+          "name": "repo_name",
+          "flag": "repo-name",
+          "target": "repoName",
+          "required": true,
+          "description": "Repo Name"
+        },
+        {
+          "name": "tag_name",
+          "flag": "tag-name",
+          "target": "tagName",
+          "required": true,
+          "description": "Tag Name"
+        },
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-image-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=15921&isNormal=1",
+      "examples": [
+        "ctyun yunxiao image show --project-name admin --repo-name chinese-llama2-7b --tag-name v1 --workspace-id 1810e490-3c45-42a2-8428-08c50797e817"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.image.list",
+      "path": [
+        "yunxiao",
+        "image",
+        "list"
+      ],
+      "operation": "yunxiao.image.list",
+      "table": "yunxiao.image.list",
+      "parameters": [
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "project_name",
+          "flag": "project-name",
+          "target": "projectName",
+          "required": true,
+          "description": "Project Name"
+        },
+        {
+          "name": "repo_name",
+          "flag": "repo-name",
+          "target": "repoName",
+          "required": true,
+          "description": "Repo Name"
+        },
+        {
+          "name": "name_fuzzy_query",
+          "flag": "name-fuzzy-query",
+          "target": "nameFuzzyQuery",
+          "required": false,
+          "description": "Name Fuzzy Query"
+        },
+        {
+          "name": "push_time_sort_rule",
+          "flag": "push-time-sort-rule",
+          "target": "pushTimeSortRule",
+          "required": false,
+          "description": "Push Time Sort Rule"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-image-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=15941&isNormal=1",
+      "examples": [
+        "ctyun yunxiao image list --workspace-id 1810e490-3c45-42a2-8428-08c50797e817 --project-name admin --repo-name chinese-llama2-7b --page-no 1 --page-size 10"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.image.repository.list",
+      "path": [
+        "yunxiao",
+        "image",
+        "repository",
+        "list"
+      ],
+      "operation": "yunxiao.image.repository.list",
+      "table": "yunxiao.image.repository.list",
+      "parameters": [
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "project_type",
+          "flag": "project-type",
+          "target": "projectType",
+          "required": true,
+          "description": "Project Type"
+        },
+        {
+          "name": "name_fuzzy_query",
+          "flag": "name-fuzzy-query",
+          "target": "nameFuzzyQuery",
+          "required": false,
+          "description": "Name Fuzzy Query"
+        },
+        {
+          "name": "creation_time_sort_rule",
+          "flag": "creation-time-sort-rule",
+          "target": "creationTimeSortRule",
+          "required": false,
+          "description": "Creation Time Sort Rule"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-image-repository-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=15942&isNormal=1",
+      "examples": [
+        "ctyun yunxiao image repository list --workspace-id 1810e490-3c45-42a2-8428-08c50797e817 --project-type public --page-no 1 --page-size 10"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.node.label.single.set",
+      "path": [
+        "yunxiao",
+        "node",
+        "label",
+        "single",
+        "set"
+      ],
+      "operation": "yunxiao.node.label.single.set",
+      "table": "yunxiao.node.label.single.set",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "node_id",
+          "flag": "node-id",
+          "target": "nodeID",
+          "required": false,
+          "description": "Node ID"
+        },
+        {
+          "name": "node_labels",
+          "flag": "node-labels",
+          "target": "nodeLabels",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Node Labels as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-node-label-single-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18070&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "yunxiao.node.machine.list",
+      "path": [
+        "yunxiao",
+        "node",
+        "machine",
+        "list"
+      ],
+      "operation": "yunxiao.node.machine.list",
+      "table": "yunxiao.node.machine.list",
+      "parameters": [
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": true,
+          "description": "Availability Zone Name"
+        },
+        {
+          "name": "gpu_manufacturer",
+          "flag": "gpu-manufacturer",
+          "target": "gpuManufacturer",
+          "required": true,
+          "description": "Gpu Manufacturer"
+        },
+        {
+          "name": "instance_uuid",
+          "flag": "instance-uuid",
+          "target": "instanceUUID",
+          "required": false,
+          "description": "Instance UUID"
+        },
+        {
+          "name": "on_demand",
+          "flag": "on-demand",
+          "target": "onDemand",
+          "required": true,
+          "description": "On Demand"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcID",
+          "required": true,
+          "description": "VPC ID"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18140&isNormal=1",
+      "examples": [
+        "ctyun yunxiao node machine list --az-name string --gpu-manufacturer string --on-demand string --vpc-id string"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.node.lock",
+      "path": [
+        "yunxiao",
+        "node",
+        "lock"
+      ],
+      "operation": "yunxiao.node.lock",
+      "table": "yunxiao.node.lock",
+      "parameters": [
+        {
+          "name": "enable_lock",
+          "flag": "enable-lock",
+          "target": "enableLock",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Enable Lock"
+        },
+        {
+          "name": "node_id",
+          "flag": "node-id",
+          "target": "nodeID",
+          "required": true,
+          "description": "Node ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18139&isNormal=1",
+      "examples": [
+        "ctyun yunxiao node lock --node-id {node_id}"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "lock"
+      }
+    },
+    {
+      "id": "yunxiao.node.show",
+      "path": [
+        "yunxiao",
+        "node",
+        "show"
+      ],
+      "operation": "yunxiao.node.show",
+      "table": "yunxiao.node.show",
+      "parameters": [
+        {
+          "name": "node_id",
+          "flag": "node-id",
+          "target": "nodeID",
+          "required": true,
+          "description": "Node ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18085&isNormal=1",
+      "examples": [
+        "ctyun yunxiao node show --node-id {node_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.resource-group.list",
+      "path": [
+        "yunxiao",
+        "resource-group",
+        "list"
+      ],
+      "operation": "yunxiao.resource-group.list",
+      "table": "yunxiao.resource-group.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability Zone Name"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "description": "Status"
+        },
+        {
+          "name": "name_like",
+          "flag": "name-like",
+          "target": "nameLike",
+          "required": false,
+          "description": "Name Like"
+        },
+        {
+          "name": "group_id_like",
+          "flag": "group-id-like",
+          "target": "groupIDLike",
+          "required": false,
+          "description": "Group ID Like"
+        },
+        {
+          "name": "group_type",
+          "flag": "group-type",
+          "target": "groupType",
+          "required": false,
+          "description": "Group Type"
+        },
+        {
+          "name": "gpu_manufacturer",
+          "flag": "gpu-manufacturer",
+          "target": "gpuManufacturer",
+          "required": false,
+          "description": "Gpu Manufacturer"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-resource-group-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=12228&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.resource-group.show",
+      "path": [
+        "yunxiao",
+        "resource-group",
+        "show"
+      ],
+      "operation": "yunxiao.resource-group.show",
+      "table": "yunxiao.resource-group.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "resource_group_id",
+          "flag": "resource-group-id",
+          "target": "resourceGroupID",
+          "required": true,
+          "description": "Resource Group ID"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18079&isNormal=1",
+      "examples": [
+        "ctyun yunxiao resource-group show --resource-group-id d259bbd8-1c21-4f8f-8993-4997717c7b98"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.task.update",
+      "path": [
+        "yunxiao",
+        "task",
+        "update"
+      ],
+      "operation": "yunxiao.task.update",
+      "table": "yunxiao.task.update",
+      "parameters": [
+        {
+          "name": "header_workspace_id",
+          "flag": "header-workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID sent in the request header"
+        },
+        {
+          "name": "commands",
+          "flag": "commands",
+          "target": "commands",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Commands as a JSON array"
+        },
+        {
+          "name": "enable_stdout",
+          "flag": "enable-stdout",
+          "target": "enableStdout",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Enable Stdout"
+        },
+        {
+          "name": "enable_tensorboard",
+          "flag": "enable-tensorboard",
+          "target": "enableTensorboard",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Enable Tensorboard"
+        },
+        {
+          "name": "envs",
+          "flag": "envs",
+          "target": "envs",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Envs as a JSON array"
+        },
+        {
+          "name": "if_failed_restart",
+          "flag": "if-failed-restart",
+          "target": "ifFailedRestart",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "If Failed Restart"
+        },
+        {
+          "name": "image_name",
+          "flag": "image-name",
+          "target": "imageName",
+          "required": true,
+          "description": "Image Name"
+        },
+        {
+          "name": "image_type",
+          "flag": "image-type",
+          "target": "imageType",
+          "required": false,
+          "value_type": "integer",
+          "description": "Image Type"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Name"
+        },
+        {
+          "name": "priority_type",
+          "flag": "priority-type",
+          "target": "priorityType",
+          "required": false,
+          "value_type": "integer",
+          "description": "Priority Type"
+        },
+        {
+          "name": "priority_weight",
+          "flag": "priority-weight",
+          "target": "priorityWeight",
+          "required": false,
+          "value_type": "integer",
+          "description": "Priority Weight"
+        },
+        {
+          "name": "queue_id",
+          "flag": "queue-id",
+          "target": "queueID",
+          "required": true,
+          "description": "Queue ID"
+        },
+        {
+          "name": "queue_name",
+          "flag": "queue-name",
+          "target": "queueName",
+          "required": false,
+          "description": "Queue Name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "remark",
+          "flag": "remark",
+          "target": "remark",
+          "required": false,
+          "description": "Remark"
+        },
+        {
+          "name": "resources",
+          "flag": "resources",
+          "target": "resources",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Resources as a JSON array"
+        },
+        {
+          "name": "scope",
+          "flag": "scope",
+          "target": "scope",
+          "required": false,
+          "value_type": "integer",
+          "description": "Scope"
+        },
+        {
+          "name": "storages",
+          "flag": "storages",
+          "target": "storages",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Storages as a JSON array"
+        },
+        {
+          "name": "task_id",
+          "flag": "task-id",
+          "target": "taskID",
+          "required": false,
+          "description": "Task ID"
+        },
+        {
+          "name": "train_frame",
+          "flag": "train-frame",
+          "target": "trainFrame",
+          "required": false,
+          "description": "Train Frame"
+        },
+        {
+          "name": "train_mode",
+          "flag": "train-mode",
+          "target": "trainMode",
+          "required": false,
+          "description": "Train Mode"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": false,
+          "value_type": "integer",
+          "description": "Type"
+        },
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": false,
+          "description": "Workspace ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-task-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18094&isNormal=1",
+      "examples": [
+        "ctyun yunxiao task update --header-workspace-id 21221099-e5b7-4e21-a369-9c80544a7475 --commands '[\"WMvHCrWZM9OsJ/Ncaudua0c/SeIDH3Jur4yONC699uw=\"]' --image-name cbi.ccr.ctyun.cn:15000/project-cwpublic/llama2-training-new:ctccl0.3.0-cuda12.1-pytorch2.2.1-megatron0.2.0-deepspeed0.14.1-ubuntu20.04-amd64 --queue-id e5c9f29c-06a6-4985-8a0d-c7c97efd6c7c --resources '[{\"replicas\":1,\"gpu\":1,\"cpu\":10,\"memory\":50,\"roleName\":\"Worker\",\"queueNodeDeviceID\":\"5aefbdbb-b52c-458b-8a82-3a006b351a07\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "yunxiao.task.list",
+      "path": [
+        "yunxiao",
+        "task",
+        "list"
+      ],
+      "operation": "yunxiao.task.list",
+      "table": "yunxiao.task.list",
+      "parameters": [
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        },
+        {
+          "name": "is_desc",
+          "flag": "is-desc",
+          "target": "isDesc",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Is Description"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Name"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "task_id",
+          "flag": "task-id",
+          "target": "taskID",
+          "required": false,
+          "description": "Task ID"
+        },
+        {
+          "name": "types",
+          "flag": "types",
+          "target": "types",
+          "required": false,
+          "value_type": "integer_array",
+          "description": "Types as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-task-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18091&isNormal=1",
+      "examples": [
+        "ctyun yunxiao task list --workspace-id 1810e490-3c45-42a2-8428-08c50797e817"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.task.show",
+      "path": [
+        "yunxiao",
+        "task",
+        "show"
+      ],
+      "operation": "yunxiao.task.show",
+      "table": "yunxiao.task.show",
+      "parameters": [
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "description": "ID"
+        },
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-task-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18087&isNormal=1",
+      "examples": [
+        "ctyun yunxiao task show --id 7206ed7e-6e9b-4258-b665-ae192ddff65f --workspace-id 1810e490-3c45-42a2-8428-08c50797e817"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.task.delete",
+      "path": [
+        "yunxiao",
+        "task",
+        "delete"
+      ],
+      "operation": "yunxiao.task.delete",
+      "table": "yunxiao.task.delete",
+      "parameters": [
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        },
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "description": "ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-task-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18083&isNormal=1",
+      "examples": [
+        "ctyun yunxiao task delete --workspace-id 1810e490-3c45-42a2-8428-08c50797e817 --id 2a959ee8-cb20-4937-9442-a31c3d70b795"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "yunxiao.task.create",
+      "path": [
+        "yunxiao",
+        "task",
+        "create"
+      ],
+      "operation": "yunxiao.task.create",
+      "table": "yunxiao.task.create",
+      "parameters": [
+        {
+          "name": "header_workspace_id",
+          "flag": "header-workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID sent in the request header"
+        },
+        {
+          "name": "commands",
+          "flag": "commands",
+          "target": "commands",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Encrypted startup commands as a JSON array, prepared before submission"
+        },
+        {
+          "name": "enable_stdout",
+          "flag": "enable-stdout",
+          "target": "enableStdout",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Enable Stdout"
+        },
+        {
+          "name": "enable_tensorboard",
+          "flag": "enable-tensorboard",
+          "target": "enableTensorboard",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Enable Tensorboard"
+        },
+        {
+          "name": "envs",
+          "flag": "envs",
+          "target": "envs",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Envs as a JSON array"
+        },
+        {
+          "name": "if_failed_restart",
+          "flag": "if-failed-restart",
+          "target": "ifFailedRestart",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "If Failed Restart"
+        },
+        {
+          "name": "image_name",
+          "flag": "image-name",
+          "target": "imageName",
+          "required": true,
+          "description": "Image Name"
+        },
+        {
+          "name": "image_type",
+          "flag": "image-type",
+          "target": "imageType",
+          "required": false,
+          "value_type": "integer",
+          "description": "Image Type"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Name"
+        },
+        {
+          "name": "priority_type",
+          "flag": "priority-type",
+          "target": "priorityType",
+          "required": false,
+          "value_type": "integer",
+          "description": "Priority Type"
+        },
+        {
+          "name": "priority_weight",
+          "flag": "priority-weight",
+          "target": "priorityWeight",
+          "required": false,
+          "value_type": "integer",
+          "description": "Priority Weight"
+        },
+        {
+          "name": "queue_id",
+          "flag": "queue-id",
+          "target": "queueID",
+          "required": true,
+          "description": "Queue ID"
+        },
+        {
+          "name": "queue_name",
+          "flag": "queue-name",
+          "target": "queueName",
+          "required": false,
+          "description": "Queue Name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "remark",
+          "flag": "remark",
+          "target": "remark",
+          "required": false,
+          "description": "Remark"
+        },
+        {
+          "name": "resources",
+          "flag": "resources",
+          "target": "resources",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Resources as a JSON array"
+        },
+        {
+          "name": "scope",
+          "flag": "scope",
+          "target": "scope",
+          "required": false,
+          "value_type": "integer",
+          "description": "Scope"
+        },
+        {
+          "name": "storages",
+          "flag": "storages",
+          "target": "storages",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Storages as a JSON array"
+        },
+        {
+          "name": "train_frame",
+          "flag": "train-frame",
+          "target": "trainFrame",
+          "required": false,
+          "description": "Train Frame"
+        },
+        {
+          "name": "train_mode",
+          "flag": "train-mode",
+          "target": "trainMode",
+          "required": false,
+          "description": "Train Mode"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": false,
+          "value_type": "integer",
+          "description": "Type"
+        },
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": false,
+          "description": "Workspace ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-task-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18081&isNormal=1",
+      "examples": [
+        "ctyun yunxiao task create --header-workspace-id 46354931-37c9-4a14-a283-770809a4aedb --commands '[\"jp1YmXDFfafCHwCUMekTQQ==\",\"ecyD7LDN0rd1RpID+p8lpQ==\",\"9FChx6QD27gw66AaQBLBCg==\"]' --image-name cbi.ccr.ctyun.cn:15000/project-cwpublic/llama2-training:ctccl0.2.0-cuda12.1-pytorch2.2.1-megatron0.2.0-deepspeed0.14.1-ubuntu20.04-amd64 --queue-id 03544dab-b213-4447-8531-b0f13a156da5 --resources '[{\"queueNodeDeviceID\":\"5aefbdbb-b52c-458b-8a82-3a006b351a07\",\"roleName\":\"Worker\",\"replicas\":1,\"cpu\":12,\"memory\":115,\"gpu\":1}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "yunxiao.monitor.range.list",
+      "path": [
+        "yunxiao",
+        "monitor",
+        "range",
+        "list"
+      ],
+      "operation": "yunxiao.monitor.range.list",
+      "table": "yunxiao.monitor.range.list",
+      "parameters": [
+        {
+          "name": "query",
+          "flag": "query",
+          "target": "query",
+          "required": true,
+          "description": "Query"
+        },
+        {
+          "name": "start",
+          "flag": "start",
+          "target": "start",
+          "required": true,
+          "description": "Start"
+        },
+        {
+          "name": "end",
+          "flag": "end",
+          "target": "end",
+          "required": true,
+          "description": "End"
+        },
+        {
+          "name": "resource_group_id",
+          "flag": "resource-group-id",
+          "target": "resourceGroupID",
+          "required": true,
+          "description": "Resource Group ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-monitor-range-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=14134&isNormal=1",
+      "examples": [
+        "ctyun yunxiao monitor range list --query 支持查询指标见下 --start 1712738540 --end 1712739440 --resource-group-id xxx-xxx-yyyzzz"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.node.label.batch.set",
+      "path": [
+        "yunxiao",
+        "node",
+        "label",
+        "batch",
+        "set"
+      ],
+      "operation": "yunxiao.node.label.batch.set",
+      "table": "yunxiao.node.label.batch.set",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "bulk_operation",
+          "flag": "bulk-operation",
+          "target": "bulkOperation",
+          "required": false,
+          "value_type": "json",
+          "description": "Bulk Operation as a JSON object"
+        },
+        {
+          "name": "single_operations",
+          "flag": "single-operations",
+          "target": "singleOperations",
+          "required": false,
+          "value_type": "json",
+          "description": "Single Operations as a JSON object"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-node-label-batch-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=18069&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "yunxiao.usage.show",
+      "path": [
+        "yunxiao",
+        "usage",
+        "show"
+      ],
+      "operation": "yunxiao.usage.show",
+      "table": "yunxiao.usage.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-usage-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=17872&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.diagnosis.stop",
+      "path": [
+        "yunxiao",
+        "diagnosis",
+        "stop"
+      ],
+      "operation": "yunxiao.diagnosis.stop",
+      "table": "yunxiao.diagnosis.stop",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "diagnosis_id",
+          "flag": "diagnosis-id",
+          "target": "diagnosisID",
+          "required": true,
+          "description": "Diagnosis ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-diagnosis-stop.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=15625&isNormal=1",
+      "examples": [
+        "ctyun yunxiao diagnosis stop --diagnosis-id 79e53235-e3a2-4ba7-8377-c8b36b04270b"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "stop"
+      }
+    },
+    {
+      "id": "yunxiao.diagnosis.list",
+      "path": [
+        "yunxiao",
+        "diagnosis",
+        "list"
+      ],
+      "operation": "yunxiao.diagnosis.list",
+      "table": "yunxiao.diagnosis.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "diagnosis_id",
+          "flag": "diagnosis-id",
+          "target": "diagnosisID",
+          "required": false,
+          "description": "Diagnosis ID"
+        },
+        {
+          "name": "node_id",
+          "flag": "node-id",
+          "target": "nodeID",
+          "required": false,
+          "description": "Node ID"
+        },
+        {
+          "name": "resource_group_name",
+          "flag": "resource-group-name",
+          "target": "resourceGroupName",
+          "required": false,
+          "description": "Resource Group Name"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Status as a JSON array"
+        },
+        {
+          "name": "network_type",
+          "flag": "network-type",
+          "target": "networkType",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Network Type as a JSON array"
+        },
+        {
+          "name": "node_type",
+          "flag": "node-type",
+          "target": "nodeType",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Node Type as a JSON array"
+        },
+        {
+          "name": "test_type",
+          "flag": "test-type",
+          "target": "testType",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Test Type as a JSON array"
+        },
+        {
+          "name": "ccl_type",
+          "flag": "ccl-type",
+          "target": "cclType",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Ccl Type as a JSON array"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Type as a JSON array"
+        },
+        {
+          "name": "sort_name",
+          "flag": "sort-name",
+          "target": "sortName",
+          "required": false,
+          "description": "Sort Name"
+        },
+        {
+          "name": "sort_type",
+          "flag": "sort-type",
+          "target": "sortType",
+          "required": false,
+          "description": "Sort Type"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page No"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-diagnosis-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=15624&isNormal=1",
+      "examples": [
+        "ctyun yunxiao diagnosis list --page-no 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.diagnosis.show",
+      "path": [
+        "yunxiao",
+        "diagnosis",
+        "show"
+      ],
+      "operation": "yunxiao.diagnosis.show",
+      "table": "yunxiao.diagnosis.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "diagnosis_id",
+          "flag": "diagnosis-id",
+          "target": "diagnosisID",
+          "required": true,
+          "description": "Diagnosis ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-diagnosis-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=15621&isNormal=1",
+      "examples": [
+        "ctyun yunxiao diagnosis show --diagnosis-id 79e53235-e3a2-4ba7-8377-c8b36b04270b"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "yunxiao.diagnosis.create",
+      "path": [
+        "yunxiao",
+        "diagnosis",
+        "create"
+      ],
+      "operation": "yunxiao.diagnosis.create",
+      "table": "yunxiao.diagnosis.create",
+      "parameters": [
+        {
+          "name": "tenant_id",
+          "flag": "tenant-id",
+          "target": "tenantID",
+          "required": false,
+          "description": "Tenant ID"
+        },
+        {
+          "name": "check_item_list",
+          "flag": "check-item-list",
+          "target": "checkItemList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Check Item List as a JSON array"
+        },
+        {
+          "name": "create_user_id",
+          "flag": "create-user-id",
+          "target": "createUserID",
+          "required": false,
+          "description": "Create User ID"
+        },
+        {
+          "name": "create_user_name",
+          "flag": "create-user-name",
+          "target": "createUserName",
+          "required": false,
+          "description": "Create User Name"
+        },
+        {
+          "name": "diagnosis_id",
+          "flag": "diagnosis-id",
+          "target": "diagnosisID",
+          "required": false,
+          "description": "Diagnosis ID"
+        },
+        {
+          "name": "node_type",
+          "flag": "node-type",
+          "target": "nodeType",
+          "required": true,
+          "description": "Node Type"
+        },
+        {
+          "name": "nodes",
+          "flag": "nodes",
+          "target": "nodes",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Nodes as a JSON array"
+        },
+        {
+          "name": "properties",
+          "flag": "properties",
+          "target": "properties",
+          "required": false,
+          "value_type": "json",
+          "description": "Properties as a JSON object"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "resource_group_id",
+          "flag": "resource-group-id",
+          "target": "resourceGroupID",
+          "required": true,
+          "description": "Resource Group ID"
+        },
+        {
+          "name": "resource_group_name",
+          "flag": "resource-group-name",
+          "target": "resourceGroupName",
+          "required": false,
+          "description": "Resource Group Name"
+        },
+        {
+          "name": "status_msg",
+          "flag": "status-msg",
+          "target": "statusMsg",
+          "required": false,
+          "description": "Status Msg"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "type",
+            "in": [
+              "rdma",
+              "ccl"
+            ]
+          },
+          "required": [
+            "properties"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-diagnosis-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=15620&isNormal=1",
+      "examples": [
+        "ctyun yunxiao diagnosis create --node-type Nvidia --nodes '[{\"nodeID\":\"ss-qvdudb123456797nczwpzfur5sqe\",\"nodeName\":\"mf-01\",\"RDMAID\":\"\",\"baseline\":false}]' --resource-group-id 12345678-4cfe-418e-87d7-9047dcbbc6f6 --type server"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "yunxiao.diagnosis.delete",
+      "path": [
+        "yunxiao",
+        "diagnosis",
+        "delete"
+      ],
+      "operation": "yunxiao.diagnosis.delete",
+      "table": "yunxiao.diagnosis.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "diagnosis_id",
+          "flag": "diagnosis-id",
+          "target": "diagnosisID",
+          "required": true,
+          "description": "Diagnosis ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-diagnosis-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=15617&isNormal=1",
+      "examples": [
+        "ctyun yunxiao diagnosis delete --diagnosis-id 123"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "yunxiao.task.execution.delete",
+      "path": [
+        "yunxiao",
+        "task",
+        "execution",
+        "delete"
+      ],
+      "operation": "yunxiao.task.execution.delete",
+      "table": "yunxiao.task.execution.delete",
+      "parameters": [
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "description": "ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-task-execution-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=15919&isNormal=1",
+      "examples": [
+        "ctyun yunxiao task execution delete --workspace-id 1810e490-3c45-42a2-8428-08c50797e817 --id task-py-5456850f-4033-4eae-9d9c-ae3687941f0c"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "yunxiao.task.execution.stop",
+      "path": [
+        "yunxiao",
+        "task",
+        "execution",
+        "stop"
+      ],
+      "operation": "yunxiao.task.execution.stop",
+      "table": "yunxiao.task.execution.stop",
+      "parameters": [
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "description": "ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-task-execution-stop.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=15920&isNormal=1",
+      "examples": [
+        "ctyun yunxiao task execution stop --workspace-id 1810e490-3c45-42a2-8428-08c50797e817 --id task-py-5456850f-4033-4eae-9d9c-ae3687941f0c"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "stop"
+      }
+    },
+    {
+      "id": "yunxiao.task.execution.show",
+      "path": [
+        "yunxiao",
+        "task",
+        "execution",
+        "show"
+      ],
+      "operation": "yunxiao.task.execution.show",
+      "table": "yunxiao.task.execution.show",
+      "parameters": [
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "description": "ID"
+        },
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceID",
+          "required": true,
+          "description": "Workspace ID"
+        }
+      ],
+      "fixture_response": "fixtures/yunxiao-task-execution-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=128&vid=163&data=170&api=15922&isNormal=1",
+      "examples": [
+        "ctyun yunxiao task execution show --id job-d6beced7-c0f5-4baa-8399-18ded297add8 --workspace-id 1810e490-3c45-42a2-8428-08c50797e817"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    }
+  ]
+}

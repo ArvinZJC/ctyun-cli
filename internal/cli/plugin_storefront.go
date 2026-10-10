@@ -235,13 +235,13 @@ func localizedPluginStorefrontRows(rows []map[string]string, language string) []
 // output.
 func availablePluginColumns(language string) []output.Column {
 	return []output.Column{
-		{Key: "name", Label: helpText("plugin.column.name", language)},
-		{Key: "plugin", Label: helpText("plugin.column.plugin", language)},
-		{Key: "product", Label: helpText("plugin.column.product", language)},
-		{Key: "version", Label: helpText("plugin.column.version", language)},
-		{Key: "channel", Label: helpText("plugin.column.channel", language)},
-		{Key: "quality", Label: helpText("plugin.column.quality", language)},
-		{Key: "status", Label: helpText("plugin.column.status", language)},
-		{Key: "installed_version", Label: helpText("plugin.column.installed_version", language)},
+		{Key: "name", Label: messageText("plugin.column.name", language)},
+		{Key: "plugin", Label: messageText("plugin.column.plugin", language)},
+		{Key: "product", Label: messageText("plugin.column.product", language)},
+		{Key: "version", Label: messageText("plugin.column.version", language)},
+		{Key: "channel", Label: messageText("plugin.column.channel", language)},
+		{Key: "quality", Label: messageText("plugin.column.quality", language)},
+		{Key: "status", Label: messageText("plugin.column.status", language)},
+		{Key: "installed_version", Label: messageText("plugin.column.installed_version", language)},
 	}
 }
