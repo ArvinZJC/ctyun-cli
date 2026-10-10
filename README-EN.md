@@ -478,18 +478,73 @@ The following machine-readable records support plugin maintenance by developers 
 
 Product-level records detail API gaps, source corrections or waiter limitations for [EIP](openapi-catalogs/eip/coverage.json), [PostgreSQL](openapi-catalogs/rds-postgresql/coverage.json), [Redis](openapi-catalogs/redis/coverage.json) and [MongoDB](openapi-catalogs/mongodb/coverage.json).
 
-For plugins maintained through this pipeline:
+Update plugins in four stages: prepare the evidence, review the generated draft, check lifecycle waiters, then promote the accepted result.
 
-- Track the corresponding `source.json` as upstream evidence and the promoted `baseline.json` as the latest accepted snapshot. After upstream evidence changes, drift between `source.json` and the promoted plugin or `baseline.json` is expected until review and promotion; the promoted plugin's source fingerprint and API scope continue to match `baseline.json`. Draft review compares both ordinary JSON fixtures and HTTP response fixtures with captured source evidence and rejects missing or changed fixture data.
-- Assess lifecycle waiters during each plugin review. Catalog `waiters` maps waiter IDs to `commands` (exact command IDs), a state `path` (JSON) or `xml_path` (an absolute namespace-aware XML path selecting exactly one scalar element, without a collection selector), scalar `success`/`failure`, optional additional `success_values`/`failure_values`, positive `max_attempts`/`interval_seconds`, and an `evidence` note identifying the documented state semantics. Empty scalar failure means no documented failure condition. Explicit bindings must reference non-dangerous retryable retrieval operations. Review rejects draft waiter drift; promotion preserves the definitions and advances the baseline. Add offline bundle checks for response shape, terminal outcomes, and command-specific help/completion. For collection responses, add `selector` with the collection `path`, row identity `key`, and `value` referencing an existing `$arg.<name>` or string/integer `$param.<name>`; the state path is relative to the matched row. Check every captured row, preserve exact numeric identities, and keep null or unknown states pending. Record gaps when state evidence or a unique identity input is missing.
-- When a published API has an explicit response contract but no usable successful response example, record the reason in `fixture_unavailable`. For downloads with a documented success media type, declare `media_type` on the response variant so HTTP-200 error envelopes cannot be saved as files. Retain the command and response validation without generating a success fixture, and keep the original response evidence in the catalog. Such commands cannot run with `--offline` or `--fixture` and cannot supply response evidence for waiters.
-- Use `product.api_scope` to record the upstream API URI range covered by the plugin; generate, review, and promote flows should not silently include APIs outside that scope.
-- For upstream guidance that recommends another API without deprecation or shutdown wording, preserve the target API evidence in `source.json`; if it cannot yet resolve to a tracked, promoted visible command, leave it unresolved and do not generate command-help metadata. Cross-plugin command references remain soft dependencies during plugin loading; once a reference enters promoted repository plugin metadata, release checks must resolve it to the exact non-deprecated target command and reject recommendation cycles.
-- Preserve the upstream evidence needed for executable examples in `source.json`: use `request_example` for complete requests and `example` for individual parameter values; after review, record `example_unavailable` explicitly when upstream provides no usable value. Examples that only repeat the command path already shown by Usage, including unresolved path-placeholder forms, are not generated and are rejected by repository release checks; examples should add concrete arguments, meaningful options, structured values, or other behaviour. Review also rejects mechanically assembled English descriptions, examples missing required command options, undeclared options, and values that do not match their parameter type.
-- `normalize-labels` applies only conservative shared technical-casing and reviewed-phrase repairs to `source.json`; labels that cannot be repaired reliably remain unchanged and continue to block review.
-- Treat `draft/`, `changes.md`, and `review.md` as reproducible local review outputs that are ignored by default; regenerate them with `diff`, `generate`, and `review` when reviewing a product.
-- Generated drafts write `source_fingerprint` from `source.json`; existing plugins retain the version, channel, quality, and core compatibility range from their promoted manifests, raising the minimum to 0.5.0 for waiters or 0.5.1 for request bindings that require independent header, query and body resolution so regeneration cannot downgrade release identity. When the draft passes review and the `generated`/`reviewed`/`curated` quality value truthfully reflects the current curation level, the promote command updates plugin metadata and advances `baseline.json`.
-- Keep routine history in git.
+#### 1. Update the source evidence
+
+Keep these files under `openapi-catalogs/<name>/`:
+
+| File | Purpose | Git policy |
+|------|---------|------------|
+| `source.json` | Current upstream evidence, API scope and metadata to generate | Track |
+| `baseline.json` | Last accepted snapshot used to validate the promoted plugin | Track; updated by promotion |
+| `draft/`, `changes.md`, `review.md` | Generated bundle, change report and review results | Ignore; regenerate when needed |
+
+A newer `source.json` may differ from `baseline.json` while changes await review. Until promotion, validate the existing plugin's source fingerprint and API scope against `baseline.json`. Keep routine history in git.
+
+When updating `source.json`:
+
+- Declare the supported API URI ranges in `product.api_scope`. Generation, review and promotion must stay within those ranges.
+- Capture complete request examples in `request_example` and individual parameter values in `example`. If upstream provides no usable example, confirm that gap during review and record `example_unavailable`.
+- Preserve the evidence for recommended alternative APIs. A recommendation without deprecation or shutdown wording must not become a deprecation warning.
+
+#### 2. Generate and review the draft
+
+Use `diff`, `generate` and `review` to rebuild the local outputs. `normalize-labels` can repair shared technical casing and reviewed phrases in `source.json`; uncertain labels stay unchanged and must be resolved before review can pass.
+
+Review the runnable draft, not just the source catalog. Check the API contract, command bindings, help, examples and fixtures:
+
+- Ordinary JSON fixtures and HTTP response fixtures must match captured source evidence. Missing or changed fixture data blocks review.
+- Examples must add something beyond the Usage line: concrete arguments, meaningful options, structured values or other behaviour. Examples that only repeat the command path, including unresolved path placeholders, are rejected.
+- Fix mechanically assembled English descriptions, missing required options, undeclared options and values that do not match their parameter types.
+- Generate recommendation help only when the target resolves to a tracked, promoted CLI command. Otherwise retain the unresolved evidence in `source.json`. Cross-plugin references are soft dependencies at load time, but release checks require an exact, non-deprecated target and reject recommendation cycles.
+
+If an API has a clear response contract but no usable successful response example, set `fixture_unavailable` with the reason. Keep the command, response validation and original evidence; do not invent a success fixture. The command cannot use `--offline` or `--fixture`, and the missing example cannot serve as waiter evidence. For downloads, declare the documented success `media_type` on the response variant so an HTTP-200 error envelope is not saved as a file.
+
+#### 3. Check lifecycle waiters
+
+At each review, assess whether asynchronous operations have a safe retrieval command with documented terminal states. Bind a waiter only to a non-dangerous, explicitly retryable retrieval operation. Record missing state evidence or resource-identifying inputs as gaps instead of guessing when an operation is complete.
+
+Keep waiter definitions and their upstream evidence in the catalog's `waiters` map. Review rejects waiter definitions that differ from the source catalog; promotion preserves accepted definitions. If you change the definitions, regenerate and review the draft before promotion. Test the real bundle offline for response shape, terminal outcomes, and command-specific help and completion.
+
+<details>
+<summary>Waiter metadata reference</summary>
+
+| Field | Requirement |
+|-------|-------------|
+| `commands` | Explicit bindings to exact command IDs |
+| `path` or `xml_path` | JSON state path, or an absolute namespace-aware XML path selecting exactly one scalar element; XML paths cannot use collection selectors |
+| `success`, `failure` | Documented terminal values; an empty failure value means no failure condition is documented |
+| `success_values`, `failure_values` | Additional documented terminal values when needed |
+| `max_attempts`, `interval_seconds` | Positive attempt limit and polling interval in seconds |
+| `evidence` | Source and meaning of the documented states |
+
+For collection responses, add a `selector`: `path` locates the collection, `key` identifies each row, and `value` references an existing `$arg.<name>` or scalar string/integer `$param.<name>`. The state path is relative to the selected row. Check every captured row, preserve exact numeric identities, and keep null or unknown states pending. If a unique identity input is unavailable, record the blocker.
+
+</details>
+
+#### 4. Promote the accepted draft
+
+Before promotion, confirm that review passes and the declared quality (`generated`, `reviewed` or `curated`) accurately describes the plugin.
+
+Generation derives `source_fingerprint` from `source.json`. For existing plugins, it preserves the promoted version, channel, quality and core compatibility range, raising the minimum core version when required:
+
+| Metadata feature | Minimum core version |
+|------------------|----------------------|
+| Waiters | `0.5.0` |
+| Independent request-header, query and body bindings | `0.5.1` |
+
+Regeneration must not lower an existing compatibility requirement or reset the plugin version, channel or quality. Promotion updates plugin metadata and advances `baseline.json` to the accepted source:
 
 ```sh
 go run ./tools/openapi promote <name>
