@@ -18,7 +18,7 @@ import (
 func TestComputePhaseThreePluginMatchesCatalog(t *testing.T) {
 	assertOpenAPIPluginMatchesCatalog(t, openAPIPluginExpectation{
 		name:      "ecpc",
-		version:   "0.1.0-beta.3",
+		version:   "0.1.0-beta.4",
 		productID: 50,
 		revision:  "58",
 		endpoint:  "https://ecpc-global.ctapi.ctyun.cn",

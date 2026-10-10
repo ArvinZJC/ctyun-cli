@@ -19,7 +19,7 @@ import (
 func TestECSPluginMatchesCurrentCatalog(t *testing.T) {
 	assertOpenAPIPluginMatchesCatalog(t, openAPIPluginExpectation{
 		name:      "ecs",
-		version:   "0.1.0-beta.5",
+		version:   "0.1.0-beta.6",
 		productID: 25,
 		revision:  "81",
 		endpoint:  "https://ctecs-global.ctapi.ctyun.cn",

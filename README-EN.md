@@ -255,6 +255,8 @@ The quality field describes plugin metadata maturity: `generated` is a tool-gene
 
 The CLI provides 96 plugins and 7,638 commands for customer-side APIs in self-operated resource pools. Some products or APIs remain unsupported because their public endpoints or request and response contracts cannot be verified. Joint-operation pools and other out-of-scope APIs are excluded. Coverage is based on verified official documentation and does not imply that every API has been tested against a live cloud environment.
 
+The milestone targets core `0.5.1`, which supports all plugins listed above; 45 plugins require at least this version. Plugin versions and release channels remain independent of the core version.
+
 When using the following plugins, note their scope, configuration requirements, and limitations:
 
 - Gateways: `api-gateway` covers the resource and order proxy catalog for self-operated customer-side usage. `cloud-native-api-gateway` manages standalone cloud-native API gateway instances; gateway commands in `mse` belong to Microservice Engine. These use different endpoints and API contracts.
