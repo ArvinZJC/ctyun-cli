@@ -7,11 +7,12 @@ package plugincheck
 
 import (
 	"bytes"
-	"github.com/ArvinZJC/ctyun-cli/internal/cli"
 	"io"
 	"net/http"
 	"strings"
 	"testing"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/cli"
 )
 
 // TestProductCommandOutputControlsAcceptLocalizedColumnLabels verifies the promoted bundle through the public CLI.
