@@ -484,11 +484,11 @@ Update plugins in four stages: prepare the evidence, review the generated draft,
 
 Keep these files under `openapi-catalogs/<name>/`:
 
-| File | Purpose | Git policy |
-|------|---------|------------|
-| `source.json` | Current upstream evidence, API scope and metadata to generate | Track |
-| `baseline.json` | Last accepted snapshot used to validate the promoted plugin | Track; updated by promotion |
-| `draft/`, `changes.md`, `review.md` | Generated bundle, change report and review results | Ignore; regenerate when needed |
+| File                                | Purpose                                                       | Git policy                     |
+|-------------------------------------|---------------------------------------------------------------|--------------------------------|
+| `source.json`                       | Current upstream evidence, API scope and metadata to generate | Track                          |
+| `baseline.json`                     | Last accepted snapshot used to validate the promoted plugin   | Track; updated by promotion    |
+| `draft/`, `changes.md`, `review.md` | Generated bundle, change report and review results            | Ignore; regenerate when needed |
 
 A newer `source.json` may differ from `baseline.json` while changes await review. Until promotion, validate the existing plugin's source fingerprint and API scope against `baseline.json`. Keep routine history in git.
 
@@ -520,14 +520,14 @@ Keep waiter definitions and their upstream evidence in the catalog's `waiters` m
 <details>
 <summary>Waiter metadata reference</summary>
 
-| Field | Requirement |
-|-------|-------------|
-| `commands` | Explicit bindings to exact command IDs |
-| `path` or `xml_path` | JSON state path, or an absolute namespace-aware XML path selecting exactly one scalar element; XML paths cannot use collection selectors |
-| `success`, `failure` | Documented terminal values; an empty failure value means no failure condition is documented |
-| `success_values`, `failure_values` | Additional documented terminal values when needed |
-| `max_attempts`, `interval_seconds` | Positive attempt limit and polling interval in seconds |
-| `evidence` | Source and meaning of the documented states |
+| Field                              | Requirement                                                                                                                              |
+|------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
+| `commands`                         | Explicit bindings to exact command IDs                                                                                                   |
+| `path` or `xml_path`               | JSON state path, or an absolute namespace-aware XML path selecting exactly one scalar element; XML paths cannot use collection selectors |
+| `success`, `failure`               | Documented terminal values; an empty failure value means no failure condition is documented                                              |
+| `success_values`, `failure_values` | Additional documented terminal values when needed                                                                                        |
+| `max_attempts`, `interval_seconds` | Positive attempt limit and polling interval in seconds                                                                                   |
+| `evidence`                         | Source and meaning of the documented states                                                                                              |
 
 For collection responses, add a `selector`: `path` locates the collection, `key` identifies each row, and `value` references an existing `$arg.<name>` or scalar string/integer `$param.<name>`. The state path is relative to the selected row. Check every captured row, preserve exact numeric identities, and keep null or unknown states pending. If a unique identity input is unavailable, record the blocker.
 
@@ -539,10 +539,10 @@ Before promotion, confirm that review passes and the declared quality (`generate
 
 Generation derives `source_fingerprint` from `source.json`. For existing plugins, it preserves the promoted version, channel, quality and core compatibility range, raising the minimum core version when required:
 
-| Metadata feature | Minimum core version |
-|------------------|----------------------|
-| Waiters | `0.5.0` |
-| Independent request-header, query and body bindings | `0.5.1` |
+| Metadata feature                                    | Minimum core version |
+|-----------------------------------------------------|----------------------|
+| Waiters                                             | `0.5.0`              |
+| Independent request-header, query and body bindings | `0.5.1`              |
 
 Regeneration must not lower an existing compatibility requirement or reset the plugin version, channel or quality. Promotion updates plugin metadata and advances `baseline.json` to the accepted source:
 
