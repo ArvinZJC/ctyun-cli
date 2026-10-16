@@ -14,7 +14,6 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/hex"
-	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
@@ -59,11 +58,33 @@ type multiFlag []string
 // buildBinary permits packaging tests to replace compilation with a fixture.
 var buildBinary = defaultBuildBinary
 
+// exitProcess is the process boundary used to verify main without terminating tests.
+var exitProcess = os.Exit
+
+// createSigningKey keeps key-provider failures observable independently of the
+// operating system entropy source.
+var createSigningKey = ed25519.GenerateKey
+
+// encodeReleaseJSON is the serialization boundary for signed publication bytes.
+var encodeReleaseJSON = indentedJSON
+
+// checksumArchive binds completed archives to their index entries, with an I/O
+// seam for failures occurring between archive creation and checksum reading.
+var checksumArchive = checksumAndSize
+
+// loadArchivePayload verifies published and candidate archive payloads before
+// replacement; the seam permits deterministic candidate-read failure tests.
+var loadArchivePayload = readArchivePayload
+
+// workingDirectory exposes failures resolving the process directory before
+// project-file discovery, independently of platform-specific Getwd caching.
+var workingDirectory = os.Getwd
+
 // main runs release packaging and reports failures to stderr.
 func main() {
 	if err := run(os.Args[1:], os.Getenv, os.Stdout); err != nil {
 		_, _ = fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		exitProcess(1)
 	}
 }
 
@@ -128,7 +149,7 @@ func validateReleaseOptions(opts releaseOptions) error {
 
 // generateKey writes a new base64 Ed25519 signing key pair.
 func generateKey(stdout io.Writer) error {
-	publicKey, privateKey, err := ed25519.GenerateKey(rand.Reader)
+	publicKey, privateKey, err := createSigningKey(rand.Reader)
 	if err != nil {
 		return err
 	}
@@ -188,11 +209,10 @@ func writeRelease(opts releaseOptions, privateKey ed25519.PrivateKey) error {
 	if err != nil {
 		return err
 	}
-	indexBytes, err := json.MarshalIndent(coreIndexDocument(index), "", "  ")
+	indexBytes, err := encodeReleaseJSON(coreIndexDocument(index))
 	if err != nil {
 		return err
 	}
-	indexBytes = append(indexBytes, '\n')
 	indexPath := filepath.Join(opts.OutDir, "core-index.json")
 	if err := os.WriteFile(indexPath, indexBytes, 0o644); err != nil {
 		return err
@@ -233,7 +253,7 @@ func buildCoreArtifact(opts releaseOptions, publicKeyBase64, platform string) (c
 	if err := writeArchive(archivePath, binaryPath, binaryName); err != nil {
 		return corerelease.Artifact{}, err
 	}
-	sum, size, err := checksumAndSize(archivePath)
+	sum, size, err := checksumArchive(archivePath)
 	if err != nil {
 		return corerelease.Artifact{}, err
 	}
@@ -400,7 +420,7 @@ func writePluginRegistry(opts releaseOptions, privateKey ed25519.PrivateKey) err
 		if err := writeDirectoryArchive(archivePath, bundlePath, bundle.Manifest.Name); err != nil {
 			return err
 		}
-		sum, _, err := checksumAndSize(archivePath)
+		sum, _, err := checksumArchive(archivePath)
 		if err != nil {
 			return err
 		}
@@ -419,11 +439,10 @@ func writePluginRegistry(opts releaseOptions, privateKey ed25519.PrivateKey) err
 	if err != nil {
 		return err
 	}
-	indexBytes, err := json.MarshalIndent(registryIndexDocument(index), "", "  ")
+	indexBytes, err := encodeReleaseJSON(registryIndexDocument(index))
 	if err != nil {
 		return err
 	}
-	indexBytes = append(indexBytes, '\n')
 	if err := os.WriteFile(filepath.Join(opts.OutDir, "index.json"), indexBytes, 0o644); err != nil {
 		return err
 	}
@@ -490,12 +509,12 @@ func writeDirectoryArchive(archivePath, rootPath, rootName string) (err error) {
 	if err := writeDirectoryArchiveFile(candidate, rootPath, rootName); err != nil {
 		return err
 	}
-	previous, err := readArchivePayload(archivePath)
+	previous, err := loadArchivePayload(archivePath)
 	if err != nil && !os.IsNotExist(err) {
 		return err
 	}
 	if err == nil {
-		generated, err := readArchivePayload(candidate)
+		generated, err := loadArchivePayload(candidate)
 		if err != nil {
 			return err
 		}
@@ -530,10 +549,9 @@ func writeDirectoryArchiveFile(archivePath, rootPath, rootName string) error {
 			if err != nil {
 				return err
 			}
-			rel, err := filepath.Rel(rootPath, path)
-			if err != nil {
-				return err
-			}
+			// WalkDir supplies rootPath itself or its lexical descendants, so
+			// Rel cannot cross volumes or mix absolute and relative paths.
+			rel, _ := filepath.Rel(rootPath, path)
 			name := rootName
 			if rel != "." {
 				name = filepath.ToSlash(filepath.Join(rootName, rel))
@@ -588,7 +606,7 @@ func copyInstallerScripts(outDir string) error {
 
 // projectFilePath finds a repository file from the current directory or a parent.
 func projectFilePath(name string) (string, error) {
-	dir, err := os.Getwd()
+	dir, err := workingDirectory()
 	if err != nil {
 		return "", err
 	}

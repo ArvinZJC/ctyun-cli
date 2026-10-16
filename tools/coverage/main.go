@@ -6,8 +6,6 @@
 package main
 
 import (
-	"bytes"
-	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -18,16 +16,26 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/coverprofile"
 )
 
+// exitProcess is the process boundary used to verify command failure status.
+var exitProcess = os.Exit
+
+// executeGo is the command boundary used to test the gate without recursively
+// starting the repository test suite.
+var executeGo = runGo
+
+// workingDirectory allows repository discovery failures to be reported and tested.
+var workingDirectory = os.Getwd
+
 // main runs the repository coverage gate.
 func main() {
 	if err := run(); err != nil {
 		_, _ = fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		exitProcess(1)
 	}
 }
 
-// run executes tests with time for the complete plugin fixture catalog, filters
-// the coverage profile, and enforces 100% coverage.
+// run tests the complete repository and requires every statement in the raw
+// coverage profile to execute, without exclusions or percentage rounding.
 func run() error {
 	root, err := repoRoot()
 	if err != nil {
@@ -38,29 +46,22 @@ func run() error {
 		return err
 	}
 	rawProfile := filepath.Join(coverDir, "raw.out")
-	filteredProfile := filepath.Join(coverDir, "coverage.out")
-
-	if err := runGo(root, os.Stdout, os.Stderr, "test", "-timeout=30m", "-coverprofile="+rawProfile, "./..."); err != nil {
+	if err := executeGo(root, os.Stdout, os.Stderr, "test", "-timeout=30m", "-coverprofile="+rawProfile, "./..."); err != nil {
 		return err
 	}
-	if err := filter(rawProfile, filteredProfile); err != nil {
+	if err := executeGo(root, os.Stdout, os.Stderr, "tool", "cover", "-func="+rawProfile); err != nil {
 		return err
 	}
-
-	var report bytes.Buffer
-	if err := runGo(root, &report, os.Stderr, "tool", "cover", "-func="+filteredProfile); err != nil {
+	data, err := os.ReadFile(rawProfile)
+	if err != nil {
 		return err
 	}
-	fmt.Print(report.String())
-	if total := coverprofile.TotalPercent(report.String()); total != "100.0%" {
-		return fmt.Errorf("coverage gate failed: got %s, want 100.0%%", total)
-	}
-	return nil
+	return coverprofile.CheckFullCoverage(strings.NewReader(string(data)))
 }
 
 // repoRoot walks upward from the current directory until it finds go.mod.
 func repoRoot() (string, error) {
-	dir, err := os.Getwd()
+	dir, err := workingDirectory()
 	if err != nil {
 		return "", err
 	}
@@ -84,37 +85,6 @@ func runGo(root string, stdout, stderr io.Writer, args ...string) error {
 	cmd.Stderr = stderr
 	cmd.Env = goEnv(root)
 	return cmd.Run()
-}
-
-// filter writes the filtered coverage profile used by the gate.
-func filter(rawProfile, filteredProfile string) (err error) {
-	in, err := os.Open(rawProfile)
-	if err != nil {
-		return err
-	}
-	defer func() {
-		err = closeWithError(err, in.Close)
-	}()
-
-	out, err := os.Create(filteredProfile)
-	if err != nil {
-		return err
-	}
-	if err := coverprofile.Filter(in, out, coverprofile.DefaultExclusions()); err != nil {
-		return closeWithError(err, out.Close)
-	}
-	return out.Close()
-}
-
-// closeWithError reports close failures without discarding the primary error.
-func closeWithError(err error, close func() error) error {
-	if closeErr := close(); closeErr != nil {
-		if err != nil {
-			return errors.Join(err, closeErr)
-		}
-		return closeErr
-	}
-	return err
 }
 
 // goEnv ensures Go commands have a writable repository-local build cache.

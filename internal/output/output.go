@@ -109,21 +109,9 @@ func FilterRows(rows []map[string]string, expression string) ([]map[string]strin
 		return rows, nil
 	}
 
-	operator := "="
-	parts := strings.SplitN(expression, "!=", 2)
-	if len(parts) == 2 {
-		operator = "!="
-	} else {
-		parts = strings.SplitN(expression, "=", 2)
-	}
-	if len(parts) != 2 {
-		return nil, diagnostic.New("error.invalid_filter_syntax", expression)
-	}
-
-	key := strings.TrimSpace(parts[0])
-	want := strings.TrimSpace(parts[1])
-	if key == "" {
-		return nil, diagnostic.New("error.invalid_filter_missing_key", expression)
+	key, operator, want, err := parseFilterExpression(expression)
+	if err != nil {
+		return nil, err
 	}
 
 	filtered := make([]map[string]string, 0, len(rows))
@@ -186,25 +174,35 @@ func ResolveFilterExpression(columns []Column, expression string) (string, error
 	if expression == "" {
 		return "", nil
 	}
-	operator := "="
-	parts := strings.SplitN(expression, "!=", 2)
-	if len(parts) == 2 {
-		operator = "!="
-	} else {
-		parts = strings.SplitN(expression, "=", 2)
+	key, operator, value, err := parseFilterExpression(expression)
+	if err != nil {
+		return "", err
 	}
-	if len(parts) != 2 {
-		return "", diagnostic.New("error.invalid_filter_syntax", expression)
-	}
-	key := strings.TrimSpace(parts[0])
-	if key == "" {
-		return "", diagnostic.New("error.invalid_filter_missing_key", expression)
-	}
+
 	resolved, ok := resolveColumnSelector(columns, key)
 	if !ok {
 		return "", diagnostic.New("error.unknown_filter_key", key)
 	}
-	return resolved + operator + strings.TrimSpace(parts[1]), nil
+	return resolved + operator + value, nil
+}
+
+// parseFilterExpression separates the first comparison operator from its value,
+// preserving any additional equals signs or inequality syntax in the value.
+func parseFilterExpression(expression string) (key, operator, value string, err error) {
+	key, value, found := strings.Cut(expression, "=")
+	if !found {
+		return "", "", "", diagnostic.New("error.invalid_filter_syntax", expression)
+	}
+	operator = "="
+	if before, inequality := strings.CutSuffix(key, "!"); inequality {
+		key = before
+		operator = "!="
+	}
+	key = strings.TrimSpace(key)
+	if key == "" {
+		return "", "", "", diagnostic.New("error.invalid_filter_missing_key", expression)
+	}
+	return key, operator, strings.TrimSpace(value), nil
 }
 
 // ResolveSortExpression maps a sort key or visible column label to a stable

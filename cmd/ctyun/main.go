@@ -11,7 +11,10 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/cli"
 )
 
+// exitProcess is the process termination boundary, replaceable for entrypoint tests.
+var exitProcess = os.Exit
+
 // main runs the ctyun command with process arguments and exits with its status.
 func main() {
-	os.Exit(cli.Execute(cli.Config{Args: os.Args[1:]}))
+	exitProcess(cli.Execute(cli.Config{Args: os.Args[1:]}))
 }

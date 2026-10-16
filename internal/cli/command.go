@@ -110,7 +110,9 @@ func renderCommandPayload(stdout, stderr io.Writer, bundle plugin.Bundle, comman
 		}
 		// Fixture output is filtered with the same stable table keys that live
 		// requests use for parameterized API calls.
-		rows = filterRowsByParameters(rows, table, command.Parameters, parameterValues)
+		if opts.Fixture {
+			rows = filterRowsByParameters(rows, table, command.Parameters, parameterValues)
+		}
 		columns := tableColumns(table, opts.Language)
 		opts.Filter, err = output.ResolveFilterExpression(columns, opts.Filter)
 		if err != nil {

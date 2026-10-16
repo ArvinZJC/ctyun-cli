@@ -13,6 +13,7 @@ import (
 	"testing"
 )
 
+// TestRunHarvestRequiresInput rejects harvest without an explicit input file.
 func TestRunHarvestRequiresInput(t *testing.T) {
 	var stdout bytes.Buffer
 	err := run([]string{"harvest", "ecs"}, t.TempDir(), &stdout)
@@ -24,6 +25,7 @@ func TestRunHarvestRequiresInput(t *testing.T) {
 	}
 }
 
+// TestRunHarvestAndDiff persists the normalized source and initial drift report.
 func TestRunHarvestAndDiff(t *testing.T) {
 	root := t.TempDir()
 	input := filepath.Join(root, "input.json")
@@ -78,6 +80,7 @@ func TestRunNormalizeLabelsRepairsTrustedSourceEvidence(t *testing.T) {
 	}
 }
 
+// toolCatalogFixtureJSON is independent source evidence for CLI maintenance tests.
 const toolCatalogFixtureJSON = `{
   "schema_version": 1,
   "product": {

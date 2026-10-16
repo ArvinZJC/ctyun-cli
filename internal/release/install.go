@@ -19,6 +19,14 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 )
 
+// openArchiveOutput isolates archive destination writes for deterministic storage-failure tests.
+var openArchiveOutput = func(path string, flag int, mode os.FileMode) (io.WriteCloser, error) {
+	return os.OpenFile(path, flag, mode)
+}
+
+// chmodInstalledBinary isolates executable permission changes for installation-failure tests.
+var chmodInstalledBinary = os.Chmod
+
 // InstallOptions controls replacement of the current ctyun executable.
 type InstallOptions struct {
 	CurrentExecutable string
@@ -71,7 +79,7 @@ func ExtractBinary(archivePath, destDir, binaryName string) (binaryPath string, 
 				return "", err
 			}
 			if err := func() (err error) {
-				out, err := os.OpenFile(target, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, os.FileMode(header.Mode))
+				out, err := openArchiveOutput(target, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, os.FileMode(header.Mode))
 				if err != nil {
 					return err
 				}
@@ -126,7 +134,7 @@ func InstallArtifact(opts InstallOptions) error {
 	if err != nil {
 		return err
 	}
-	if err := os.Chmod(newBinary, 0o755); err != nil {
+	if err := chmodInstalledBinary(newBinary, 0o755); err != nil {
 		return err
 	}
 

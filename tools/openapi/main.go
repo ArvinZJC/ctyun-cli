@@ -15,11 +15,14 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/openapipipeline"
 )
 
+// exitProcess is the process termination boundary, replaceable for entrypoint tests.
+var exitProcess = os.Exit
+
 // main runs the repository-local OpenAPI maintenance tool.
 func main() {
 	if err := run(os.Args[1:], ".", os.Stdout); err != nil {
 		_, _ = fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		exitProcess(1)
 	}
 }
 

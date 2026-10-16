@@ -19,6 +19,11 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 )
 
+// openArchiveOutput isolates archive destination writes for deterministic storage-failure tests.
+var openArchiveOutput = func(path string, flag int, mode os.FileMode) (io.WriteCloser, error) {
+	return os.OpenFile(path, flag, mode)
+}
+
 // InstallLocalBundle installs a local plugin directory or archive after basic
 // manifest name validation.
 func InstallLocalBundle(srcDir, destRoot string) (string, error) {
@@ -212,7 +217,7 @@ func extractTarGz(archivePath, destDir string) (err error) {
 			if err := os.MkdirAll(filepath.Dir(target), 0o755); err != nil {
 				return err
 			}
-			out, err := os.OpenFile(target, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, os.FileMode(header.Mode))
+			out, err := openArchiveOutput(target, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, os.FileMode(header.Mode))
 			if err != nil {
 				return err
 			}

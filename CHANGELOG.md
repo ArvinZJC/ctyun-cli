@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- Bound hosted index, signature, and artifact requests to five minutes so stalled sources cannot block updates or mirror fallback indefinitely.
+- Preserve service-filtered live table results, including fuzzy matches, instead of applying fixture-only exact parameter filters to them.
+- Preserve equals and inequality characters inside table-filter values when parsing equality and inequality expressions.
+
 ## 0.5.1 - 2026-10-10
 
 ### Fixed

@@ -173,7 +173,7 @@
 - Keep development, debug, test, coverage, plugin-lint, and line-limit commands in the developer workflow in `README.md`/`README-EN.md`; do not duplicate those command lists here.
 - After every source or test change, run the formatting, `go vet`, source-file line-limit, and coverage checks from the README workflow before handoff. Treat all four as required source-change verification steps.
 - For docs-only or config-only changes, run lightweight checks such as `git diff --check` unless the change affects runtime behaviour or developer commands.
-- Keep partial coverage exclusions aligned with current source blocks; remove obsolete exclusions instead of moving them to hide newly uncovered code.
+- Require 100% statement coverage from the unfiltered Go coverage profile for the current platform. Do not add file or line exclusions or accept rounded percentages that conceal uncovered statements. Exercise meaningful success, failure, cleanup, and process-status behaviour through tests.
 - Cross-compilation checks must pass `-o` with an artifact path under a temporary directory created with `mktemp -d`, then clean that directory after the check.
 - Do not let `go build` leave `ctyun`, `ctyun.exe`, or other build artifacts in the repository root.
 

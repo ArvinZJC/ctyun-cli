@@ -454,6 +454,8 @@ go test -timeout=30m ./tools/plugincheck
 go run ./tools/coverage
 ```
 
+The coverage gate requires 100% statement coverage of the unfiltered profile at `.cache/coverage/raw.out` for the current Go platform. It checks execution counts directly, with no file or line exclusions and no rounding allowance. Tests include the command entry points, maintenance tools, archive helpers, and filesystem failure paths.
+
 After plugin changes, verify according to the affected area. Lint the changed plugin first, then run the matching offline command. If the change affects generic plugin loading, command parsing, or table rendering, add the related Go tests.
 
 ```sh

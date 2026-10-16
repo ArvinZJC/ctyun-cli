@@ -19,9 +19,14 @@ import (
 	stdpath "path"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 )
+
+// hostedFetchTimeout bounds each hosted index, signature, or artifact request,
+// allowing time for archives while preventing stalled sources from blocking fallback.
+const hostedFetchTimeout = 5 * time.Minute
 
 // ErrUnsafeRedirect reports an unsafe or excessive HTTP redirect chain.
 var ErrUnsafeRedirect = &diagnostic.Error{Key: "error.unsafe_redirect"}
@@ -99,13 +104,24 @@ func PrepareArtifact(source string, artifact Artifact, transport http.RoundTripp
 	return DownloadArtifact(artifactURL, transport)
 }
 
+// artifactFile is the writable temporary artifact whose name is needed for cleanup.
+type artifactFile interface {
+	io.WriteCloser
+	Name() string
+}
+
+// createArtifactFile isolates temporary-file creation so storage failures can be tested.
+var createArtifactFile = func() (artifactFile, error) {
+	return os.CreateTemp("", "ctyun-artifact-*.tar.gz")
+}
+
 // DownloadArtifact downloads a hosted artifact into a temporary file.
 func DownloadArtifact(rawURL string, transport http.RoundTripper) (string, func(), error) {
 	data, err := HTTPGetBytes(rawURL, transport)
 	if err != nil {
 		return "", func() {}, err
 	}
-	file, err := os.CreateTemp("", "ctyun-artifact-*.tar.gz")
+	file, err := createArtifactFile()
 	if err != nil {
 		return "", func() {}, err
 	}
@@ -183,9 +199,12 @@ func HTTPGetBytesContext(ctx context.Context, rawURL string, transport http.Roun
 	return data, err
 }
 
-// HTTPGetBytes reads one HTTP(S) URL and requires a 2xx response.
+// HTTPGetBytes reads one HTTP(S) URL within the hosted fetch timeout and requires
+// a 2xx response. Explicit-context callers retain their own deadline policy.
 func HTTPGetBytes(rawURL string, transport http.RoundTripper) ([]byte, error) {
-	return HTTPGetBytesContext(context.Background(), rawURL, transport, 0)
+	ctx, cancel := context.WithTimeout(context.Background(), hostedFetchTimeout)
+	defer cancel()
+	return HTTPGetBytesContext(ctx, rawURL, transport, 0)
 }
 
 // JoinURL appends name to the path portion of a hosted source URL.
