@@ -83,12 +83,7 @@ func (workspace Workspace) buildDraftManifest(catalog Catalog) (plugin.Manifest,
 	manifest.Channel = promoted.Channel
 	manifest.Quality = promoted.Quality
 	manifest.Requires = promoted.Requires
-	if len(catalog.Waiters) > 0 || catalogUsesTransport(catalog) {
-		manifest.Requires.Ctyun = minimumCoreRequirement(manifest.Requires.Ctyun, "0.5.0")
-	}
-	if catalogNeedsBindingIsolation(catalog) {
-		manifest.Requires.Ctyun = minimumCoreRequirement(manifest.Requires.Ctyun, "0.5.1")
-	}
+	manifest.Requires.Ctyun = minimumCoreRequirement(manifest.Requires.Ctyun, generatedCoreMinimum(catalog))
 	return manifest, nil
 }
 
@@ -132,11 +127,17 @@ func buildManifest(catalog Catalog) plugin.Manifest {
 // generatedCoreRequirement selects the earliest core that preserves every
 // generated request value shape and waiter feature used by the catalog.
 func generatedCoreRequirement(catalog Catalog) string {
+	return ">=" + generatedCoreMinimum(catalog) + " <1.0.0"
+}
+
+// generatedCoreMinimum selects the shared compatibility floor used by new
+// manifests, regenerated promoted manifests, and draft review.
+func generatedCoreMinimum(catalog Catalog) string {
 	if catalogNeedsBindingIsolation(catalog) {
-		return ">=0.5.1 <1.0.0"
+		return "0.5.1"
 	}
 	if len(catalog.Waiters) > 0 || catalogUsesTransport(catalog) {
-		return ">=0.5.0 <1.0.0"
+		return "0.5.0"
 	}
 	for _, operation := range catalog.Operations {
 		for _, parameter := range operation.Parameters {
@@ -145,11 +146,11 @@ func generatedCoreRequirement(catalog Catalog) string {
 			}
 			valueType, err := parameterValueType(parameter.Type)
 			if err == nil && valueType != plugin.ParameterValueString {
-				return ">=0.4.0 <1.0.0"
+				return "0.4.0"
 			}
 		}
 	}
-	return ">=0.3.1 <1.0.0"
+	return "0.3.1"
 }
 
 // buildAPIs converts catalog operations into apis.json.

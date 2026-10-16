@@ -7,6 +7,7 @@ package openapipipeline
 
 import (
 	"fmt"
+	"os"
 	"reflect"
 	"sort"
 	"strings"
@@ -56,6 +57,9 @@ func (workspace Workspace) WriteDiff(product string) (DiffReport, error) {
 	}
 	baseline, err := workspace.ReadBaseline(product)
 	if err != nil {
+		if !os.IsNotExist(err) {
+			return DiffReport{}, err
+		}
 		report := DiffReport{Product: product, Changes: []string{"No baseline exists. The next reviewed promotion will establish the first baseline."}}
 		return report, writeText(workspace.ProductPath(product, "changes.md"), report.Markdown())
 	}

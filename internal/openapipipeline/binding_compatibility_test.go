@@ -85,7 +85,7 @@ func TestReviewRejectsObsoleteBindingCompatibility(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if report.Ready || !slices.Contains(report.Findings, "independent request bindings require core >=0.5.1") {
+	if report.Ready || !slices.Contains(report.Findings, "catalog metadata requires core >=0.5.1") {
 		t.Fatalf("obsolete compatibility not rejected: %#v", report)
 	}
 }
