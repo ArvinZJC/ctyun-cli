@@ -21,6 +21,7 @@ import (
 	corerelease "github.com/ArvinZJC/ctyun-cli/internal/release"
 )
 
+// TestGenerateKeyPrintsBase64Keys checks the environment assignments emitted for a new signing key.
 func TestGenerateKeyPrintsBase64Keys(t *testing.T) {
 	var stdout bytes.Buffer
 	if err := run([]string{"--generate-key"}, func(string) string { return "" }, &stdout); err != nil {
@@ -34,6 +35,7 @@ func TestGenerateKeyPrintsBase64Keys(t *testing.T) {
 	}
 }
 
+// TestReleaseToolWritesSignedIndexAndArchive checks signed artifacts and additive badge maps.
 func TestReleaseToolWritesSignedIndexAndArchive(t *testing.T) {
 	publicKey, privateKey, err := ed25519.GenerateKey(nil)
 	if err != nil {
@@ -73,6 +75,7 @@ func TestReleaseToolWritesSignedIndexAndArchive(t *testing.T) {
 	if err := distribution.VerifyIndexSignature(indexBytes, signature, base64.StdEncoding.EncodeToString(publicKey), "release"); err != nil {
 		t.Fatalf("index signature invalid: %v", err)
 	}
+	assertPublishedVersion(t, indexBytes, []string{"stable"}, "0.5.1")
 	index, err := corerelease.LoadIndex(indexBytes)
 	if err != nil {
 		t.Fatal(err)
@@ -121,12 +124,14 @@ func TestReleaseToolWritesSignedIndexAndArchive(t *testing.T) {
 		if err := distribution.VerifySHA256(filepath.Join(outDir, artifact.URL), artifact.SHA256); err != nil {
 			t.Fatalf("%s artifact checksum invalid: %v", bundledPlugin.name, err)
 		}
+		assertPublishedVersion(t, registryIndexBytes, []string{artifact.Name, artifact.Channel}, artifact.Version)
 		if artifact.Product == "" || artifact.DisplayName == "" {
 			t.Fatalf("%s artifact missing storefront metadata: %#v", bundledPlugin.name, artifact)
 		}
 	}
 }
 
+// TestReleaseToolMergesExistingIndexes checks retained channels and updated artifact pointers.
 func TestReleaseToolMergesExistingIndexes(t *testing.T) {
 	publicKey, privateKey, err := ed25519.GenerateKey(nil)
 	if err != nil {
@@ -232,6 +237,7 @@ func TestReleaseToolMergesExistingIndexes(t *testing.T) {
 	}
 }
 
+// TestInstallScriptPrefersStableByDefault checks installer channel selection with a local download fixture.
 func TestInstallScriptPrefersStableByDefault(t *testing.T) {
 	if runtime.GOOS != "darwin" && runtime.GOOS != "linux" {
 		t.Skipf("install.sh does not support %s", runtime.GOOS)
@@ -335,6 +341,7 @@ esac
 	}
 }
 
+// TestRunRejectsInvalidInputs checks required arguments and signing key validation.
 func TestRunRejectsInvalidInputs(t *testing.T) {
 	_, privateKey, err := ed25519.GenerateKey(nil)
 	if err != nil {
@@ -367,6 +374,7 @@ func TestRunRejectsInvalidInputs(t *testing.T) {
 	}
 }
 
+// TestValidateReleaseOptionsRequiresSemanticVersion checks release version syntax.
 func TestValidateReleaseOptionsRequiresSemanticVersion(t *testing.T) {
 	valid := releaseOptions{
 		Version:   "0.2.0-beta.1",
@@ -385,6 +393,7 @@ func TestValidateReleaseOptionsRequiresSemanticVersion(t *testing.T) {
 	}
 }
 
+// TestDefaultBuildBinaryUsesTrimpath checks reproducible build arguments.
 func TestDefaultBuildBinaryUsesTrimpath(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("fake PATH executable uses a shell script")
@@ -418,6 +427,7 @@ func TestDefaultBuildBinaryUsesTrimpath(t *testing.T) {
 	}
 }
 
+// TestReleaseToolWritesWindowsArtifactAndPropagatesBuildError checks Windows archive naming and build failures.
 func TestReleaseToolWritesWindowsArtifactAndPropagatesBuildError(t *testing.T) {
 	_, privateKey, err := ed25519.GenerateKey(nil)
 	if err != nil {
@@ -452,6 +462,7 @@ func TestReleaseToolWritesWindowsArtifactAndPropagatesBuildError(t *testing.T) {
 	}
 }
 
+// TestReleaseHelpersCoverUtilityBranches checks flag and filesystem helpers.
 func TestReleaseHelpersCoverUtilityBranches(t *testing.T) {
 	if got := (*multiFlag)(nil).String(); got != "" {
 		t.Fatalf("nil multiFlag String = %q", got)
@@ -471,6 +482,7 @@ func TestReleaseHelpersCoverUtilityBranches(t *testing.T) {
 	}
 }
 
+// writeTestArchive writes a minimal archive fixture.
 func writeTestArchive(t *testing.T, archivePath, content string) {
 	t.Helper()
 	binaryPath := filepath.Join(t.TempDir(), "ctyun")
@@ -482,6 +494,7 @@ func writeTestArchive(t *testing.T, archivePath, content string) {
 	}
 }
 
+// patchBuildBinary replaces compilation for a test and returns its restoration function.
 func patchBuildBinary(fn func(buildOptions) error) func() {
 	original := buildBinary
 	buildBinary = fn

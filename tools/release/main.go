@@ -42,6 +42,7 @@ type buildOptions struct {
 	Output           string
 }
 
+// releaseOptions holds packaging, signing, and mirror settings.
 type releaseOptions struct {
 	Version                 string
 	Channel                 string
@@ -52,10 +53,13 @@ type releaseOptions struct {
 	Platforms               []string
 }
 
+// multiFlag collects repeated platform options.
 type multiFlag []string
 
+// buildBinary permits packaging tests to replace compilation with a fixture.
 var buildBinary = defaultBuildBinary
 
+// main runs release packaging and reports failures to stderr.
 func main() {
 	if err := run(os.Args[1:], os.Getenv, os.Stdout); err != nil {
 		_, _ = fmt.Fprintln(os.Stderr, err)
@@ -184,7 +188,7 @@ func writeRelease(opts releaseOptions, privateKey ed25519.PrivateKey) error {
 	if err != nil {
 		return err
 	}
-	indexBytes, err := json.MarshalIndent(index, "", "  ")
+	indexBytes, err := json.MarshalIndent(coreIndexDocument(index), "", "  ")
 	if err != nil {
 		return err
 	}
@@ -415,7 +419,7 @@ func writePluginRegistry(opts releaseOptions, privateKey ed25519.PrivateKey) err
 	if err != nil {
 		return err
 	}
-	indexBytes, err := json.MarshalIndent(index, "", "  ")
+	indexBytes, err := json.MarshalIndent(registryIndexDocument(index), "", "  ")
 	if err != nil {
 		return err
 	}

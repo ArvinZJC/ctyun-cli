@@ -20,6 +20,7 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/registry"
 )
 
+// defaultGiteePluginDownloadRoot locates immutable mirrored plugin archives.
 const defaultGiteePluginDownloadRoot = "https://gitee.com/ArvinZJC/ctyun-cli/releases/download"
 
 // encodeGiteeJSON is the JSON encoding seam used to verify publication error
@@ -80,7 +81,7 @@ func writeGiteePluginRegistry(outDir, downloadRoot string, privateKey ed25519.Pr
 	if err := os.MkdirAll(giteeDir, 0o755); err != nil {
 		return err
 	}
-	indexBytes, err := encodeGiteeJSON(index)
+	indexBytes, err := encodeGiteeJSON(registryIndexDocument(index))
 	if err != nil {
 		return err
 	}

@@ -55,6 +55,7 @@ func TestWriteGiteePluginRegistryUsesImmutableVersionReleases(t *testing.T) {
 	if err := distribution.VerifyIndexSignature(indexBytes, signature, base64.StdEncoding.EncodeToString(publicKey), "Gitee registry"); err != nil {
 		t.Fatalf("Gitee index signature: %v", err)
 	}
+	assertPublishedVersion(t, indexBytes, []string{"zos", "beta"}, "0.1.0-beta.2")
 	index, err := registry.LoadIndex(indexBytes)
 	if err != nil {
 		t.Fatal(err)
