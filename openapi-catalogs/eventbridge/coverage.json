@@ -1,0 +1,27 @@
+{
+  "captured_at": "2026-11-23",
+  "service_id": 219,
+  "version_id": 298,
+  "published_api_count": 19,
+  "implemented_api_count": 19,
+  "blocked": [],
+  "request_notes": [
+    {
+      "api_id": "18574",
+      "source": "https://www.ctyun.cn/document/10912002/11068826",
+      "finding": "The operation table marks eventSourceParams required. Its simple source example omits the field. The provider reference specifies parameter objects for Kafka, RocketMQ, RabbitMQ, MQTT and schedule. Require the array for those providers."
+    }
+  ],
+  "waiter_review": {
+    "implemented": [
+      "eventbridge.official-source.running",
+      "eventbridge.rule.running",
+      "eventbridge.source.running",
+      "eventbridge.stream.running"
+    ],
+    "notes": [
+      "The rule and custom-source detail queries identify one resource inside an explicit bus. Official sources and streams expose running status through list queries with a scalar name filter and an exact row selector. The string 201 means running; no terminal failure value is documented.",
+      "Bus responses contain no lifecycle status. The rule disable operation does not document a terminal disabled value."
+    ]
+  }
+}

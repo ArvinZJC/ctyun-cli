@@ -1,5 +1,80 @@
 {
   "operations": {
+    "cf.workflow.schedule.create": {
+      "method": "POST",
+      "path": "/openapi/v1/workflow/scheduler/create",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "enable": "$param.enable",
+        "qualifier": "$param.qualifier",
+        "triggerConfig": "$param.trigger_config",
+        "triggerName": "$param.trigger_name",
+        "triggerType": "$param.trigger_type",
+        "workflowId": "$param.workflow_id"
+      },
+      "retryable": false
+    },
+    "cf.workflow.schedule.delete": {
+      "method": "DELETE",
+      "path": "/openapi/v1/workflow/scheduler/delete",
+      "content_type": "application/json",
+      "query": {
+        "triggerName": "$param.trigger_name",
+        "workflowId": "$param.workflow_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "cf.workflow.schedule.list": {
+      "method": "GET",
+      "path": "/openapi/v1/workflow/scheduler/list",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "triggerName": "$param.trigger_name",
+        "workflowId": "$param.workflow_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "cf.workflow.schedule.show": {
+      "method": "GET",
+      "path": "/openapi/v1/workflow/scheduler/get",
+      "content_type": "application/json",
+      "query": {
+        "triggerName": "$param.trigger_name",
+        "workflowId": "$param.workflow_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "cf.workflow.schedule.update": {
+      "method": "PUT",
+      "path": "/openapi/v1/workflow/scheduler/update",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "enable": "$param.enable",
+        "qualifier": "$param.qualifier",
+        "triggerConfig": "$param.trigger_config",
+        "triggerName": "$param.trigger_name",
+        "triggerType": "$param.trigger_type",
+        "workflowId": "$param.workflow_id"
+      },
+      "retryable": false
+    },
     "v4.cf.alias.create": {
       "method": "POST",
       "path": "/openapi/v1/functions/{function_name}/aliases",
@@ -299,6 +374,7 @@
       "body": {
         "executionName": "$param.execution_name",
         "input": "$param.input",
+        "qualifier": "$param.qualifier",
         "workflowId": "$param.workflow_id"
       },
       "retryable": false
@@ -313,6 +389,7 @@
       "body": {
         "executionName": "$param.execution_name",
         "input": "$param.input",
+        "qualifier": "$param.qualifier",
         "workflowId": "$param.workflow_id"
       },
       "retryable": false
@@ -780,6 +857,8 @@
         "executionMode": "$param.execution_mode",
         "executionTimeout": "$param.execution_timeout",
         "name": "$param.name",
+        "projectId": "$param.project_id",
+        "projectName": "$param.project_name",
         "region": "$param.resource_region",
         "role": "$param.role"
       },
@@ -803,8 +882,10 @@
       "content_type": "application/json",
       "query": {
         "keyWord": "$param.key_word",
+        "labelIds": "$param.label_ids",
         "pageNum": "$param.page_num",
-        "pageSize": "$param.page_size"
+        "pageSize": "$param.page_size",
+        "projectIds": "$param.project_ids"
       },
       "headers": {
         "regionId": "$profile.region"

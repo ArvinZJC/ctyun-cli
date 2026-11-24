@@ -1400,6 +1400,14 @@
           "target": "projectId",
           "required": false,
           "description": "Project ID"
+        },
+        {
+          "name": "ssh_config",
+          "flag": "ssh-config",
+          "target": "sshConfig",
+          "required": false,
+          "value_type": "json",
+          "description": "Ssh config"
         }
       ],
       "fixture_response": "fixtures/research-assistant-job-create.json",
@@ -1921,6 +1929,60 @@
       ],
       "dangerous": {
         "confirm": ""
+      }
+    },
+    {
+      "id": "research-assistant.development-machine.storage.update",
+      "path": [
+        "research-assistant",
+        "development-machine",
+        "storage",
+        "update"
+      ],
+      "operation": "research-assistant.development-machine.storage.update",
+      "table": "research-assistant.development-machine.storage.update",
+      "parameters": [
+        {
+          "name": "ide_id",
+          "flag": "ide-id",
+          "target": "ideId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Ide ID"
+        },
+        {
+          "name": "research_storage_info",
+          "flag": "research-storage-info",
+          "target": "researchStorageInfo",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Research storage info"
+        },
+        {
+          "name": "local_storage_info",
+          "flag": "local-storage-info",
+          "target": "localStorageInfo",
+          "required": false,
+          "value_type": "json",
+          "description": "Local storage info"
+        },
+        {
+          "name": "local_storage_confirm_delete",
+          "flag": "local-storage-confirm-delete",
+          "target": "localStorageConfirmDelete",
+          "required": false,
+          "value_type": "boolean",
+          "description": "Confirm local disk removal or replacement, including its data"
+        }
+      ],
+      "fixture_response": "fixtures/research-assistant-development-machine-storage-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=131&api=24381&data=187&isNormal=1&vid=265",
+      "examples": [
+        "ctyun research-assistant development-machine storage update --ide-id 676"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
       }
     }
   ]

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.5 - 2026-11-24
+
+- Add desktop, time and power policy commands, resource-pack price queries and desktop firewall group, policy and ACL management.
+
 ## 0.1.0-beta.4 - 2026-10-10
 
 ### Added

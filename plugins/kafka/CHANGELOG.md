@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.0-beta.2 - 2026-11-24
+
+- Add a read-only instance capacity check that reports sold-out resources and the reason for insufficient capacity.
+- Explain the missing upstream documentation for four historical fault-drill commands in their help pages.
+
 ## 0.1.0-beta.1 - 2026-10-10
 
 ### Added

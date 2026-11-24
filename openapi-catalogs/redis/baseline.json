@@ -9872,13 +9872,6 @@
             "label_en": "Memory Usage",
             "label_zh": "内存使用率",
             "description": "Redis节点实际内存使用率。仅nodeType=redis且节点运行中时返回"
-          },
-          {
-            "key": "vips",
-            "path": "vips",
-            "label_en": "Virtual IP Addresses",
-            "label_zh": "已绑定虚拟 IP 地址",
-            "description": "Keepalived节点已绑定的VIP列表。仅nodeType=keepalived时返回"
           }
         ]
       },
@@ -11328,7 +11321,7 @@
         {
           "name": "restoreName",
           "location": "query",
-          "required": false,
+          "required": true,
           "type": "String",
           "enum": null,
           "default": "",
@@ -15338,58 +15331,6 @@
           "example": "873894303586321408"
         },
         {
-          "name": "ip",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "Redis节点IP",
-          "descriptions": {
-            "en-GB": "IP",
-            "en-US": "IP",
-            "zh-CN": "Redis节点IP"
-          },
-          "help_descriptions": {
-            "en-GB": "IP",
-            "en-US": "IP",
-            "zh-CN": "Redis节点IP"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "ip",
-          "cli_flag": "ip",
-          "table_target": "",
-          "example": "10.50.208.7"
-        },
-        {
-          "name": "port",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "Redis节点端口",
-          "descriptions": {
-            "en-GB": "Port",
-            "en-US": "Port",
-            "zh-CN": "Redis节点端口"
-          },
-          "help_descriptions": {
-            "en-GB": "Port",
-            "en-US": "Port",
-            "zh-CN": "Redis节点端口"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "port",
-          "cli_flag": "port",
-          "table_target": "",
-          "example": "25436"
-        },
-        {
           "name": "regionId",
           "location": "header",
           "required": true,
@@ -15414,6 +15355,27 @@
           "cli_flag": "",
           "table_target": "",
           "example": "bb9fdb42056f11eda1610242ac110002"
+        },
+        {
+          "name": "nodeName",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "节点名称，可调用 获取Redis节点名列表 接口，使用node表nodeName字段。",
+          "descriptions": {
+            "en-GB": "Node name",
+            "en-US": "Node name",
+            "zh-CN": "节点名称，可调用 获取Redis节点名列表 接口，使用node表nodeName字段。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "node_name",
+          "cli_flag": "node-name",
+          "table_target": "",
+          "example": "redis_6379_59889"
         }
       ],
       "response": {
@@ -18092,7 +18054,7 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "页码，从1开始，默认1",
+          "description": "页码，取值范围1-10000，默认1。",
           "descriptions": {
             "en-GB": "Page number",
             "en-US": "Page number",
@@ -18118,7 +18080,7 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "每页数量，默认20，取值范围1-5000",
+          "description": "每页数量，取值范围1-5000，默认20。",
           "descriptions": {
             "en-GB": "Number of results per page",
             "en-US": "Number of results per page",
@@ -22716,7 +22678,7 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "主机类型，详细信息请参见 产品规格参数说明 。 X86取值： S：通用型 C：计算增强型 HS：海光-通用型 HC：海光-计算增强型 ARM取值： KS：鲲鹏-通用型 KC：鲲鹏-计算增强型 FS：飞腾-通用型 FC：飞腾-计算增强型 说明：当标准部署模式时，本参数才生效且必填",
+          "description": "主机类型，详细信息请参见 产品规格参数说明 。 X86取值： S：通用型 C：计算增强型 HS：海光-通用型 HC：海光-计算增强型 ARM取值： KS：鲲鹏-通用型 KC：鲲鹏-计算增强型 FS：飞腾-通用型 FC：飞腾-计算增强型 说明：调用此接口需至少传递 hostType 或 cpuType 中的一个参数。",
           "descriptions": {
             "en-GB": "Host Type",
             "en-US": "Host Type",
@@ -22742,7 +22704,7 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "CPU类型，详细信息请参见 产品规格参数说明 。 取值： Intel：Intel Hygon：海光 Kunpeng：鲲鹏 Phytium：飞腾 说明：当云原生部署模式时，本参数才生效且必填",
+          "description": "CPU类型，详细信息请参见 产品规格参数说明 。 取值： Intel：Intel Hygon：海光 Kunpeng：鲲鹏 Phytium：飞腾 说明：调用此接口需至少传递 hostType 或 cpuType 中的一个参数。",
           "descriptions": {
             "en-GB": "CPU Type",
             "en-US": "CPU Type",
@@ -22890,20 +22852,6 @@
             "path": "dataDiskList",
             "label_en": "Data Disks",
             "label_zh": "数据盘列表"
-          },
-          {
-            "key": "zone_name",
-            "path": "zoneName",
-            "label_en": "Zone Name",
-            "label_zh": "可用区名称",
-            "description": "可用区名称"
-          },
-          {
-            "key": "support_host_flavor_type_list",
-            "path": "supportHostFlavorTypeList",
-            "label_en": "Support Host Flavor Type List",
-            "label_zh": "支持的规格簇列表",
-            "description": "支持的规格簇列表"
           }
         ]
       },
@@ -24612,7 +24560,7 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "副本数，取值范围1~10。 说明：规格编码属于读写分离规格时，本参数必传",
+          "description": "副本数，取值范围：1~10，详细信息请参见 产品规格参数说明 。 说明：规格编码属于读写分离规格时，本参数必传。",
           "descriptions": {
             "en-GB": "Copies Count",
             "en-US": "Copies Count",
@@ -26655,7 +26603,7 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "每页数量，默认10，取值范围1-100",
+          "description": "每页数量，取值范围1-50，默认10。",
           "descriptions": {
             "en-GB": "Number of results per page",
             "en-US": "Number of results per page",
@@ -26681,7 +26629,7 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "页码，默认1，从1开始",
+          "description": "页码，从1开始，取值范围1-10000，默认1。",
           "descriptions": {
             "en-GB": "Page number",
             "en-US": "Page number",
@@ -29300,11 +29248,11 @@
       },
       "id": "redis.audit.export.download-url.show",
       "api_id": "23764",
-      "title": "查询指定下载任务的下载链接",
+      "title": "获取审计日志下载链接",
       "description": {
         "en-GB": "Show audit export download links",
         "en-US": "Show audit export download links",
-        "zh-CN": "查询指定下载任务的下载链接"
+        "zh-CN": "获取审计日志下载链接"
       },
       "category": "audit",
       "command_path": [
@@ -30209,7 +30157,7 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "计费模式，取值： PrePaid：包年包月（需配合period使用）。 PostPaid（默认）：按需计费。 说明：orderType取值为 BUY 时，本参数才生效且必须传参",
+          "description": "计费模式，取值： PrePaid：包年包月（需配合period使用）。 PostPaid（默认）：按需计费。 说明：orderType取值为 BUY 时，本参数才生效。",
           "descriptions": {
             "en-GB": "Charge Type",
             "en-US": "Charge Type",
@@ -30287,7 +30235,7 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "购买数量（默认1），取值范围：1~100。 说明：orderType取值为 BUY 时，本参数才生效且必须传参",
+          "description": "购买数量（默认1），取值范围：1~100。 说明：orderType取值为 BUY 时，本参数才生效。",
           "descriptions": {
             "en-GB": "Goods Count",
             "en-US": "Goods Count",
@@ -33498,7 +33446,7 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "迭代扫描key数量，默认值：10。输入值必须在10到100,000之间",
+          "description": "迭代扫描key数量，默认值：10。输入值必须在10到1000之间。",
           "descriptions": {
             "en-GB": "Scan Keys Count",
             "en-US": "Scan Keys Count",
@@ -36496,7 +36444,7 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "任务ID",
+          "description": "任务ID，参数来源于 异步导出实例资源 接口返回的taskId字段。",
           "descriptions": {
             "en-GB": "Task ID",
             "en-US": "Task ID",
@@ -37958,7 +37906,7 @@
         "schema_version": 1,
         "status": 200,
         "headers": null,
-        "body_base64": "eyJyZXF1ZXN0SWQiOiAiNTE3ZTE2Y2QwOTRjNWEzN2UzYjZmNmY0YjQ3ODY2YWYiLCAiY29kZSI6ICJjb3JlLm9rIiwgInJldHVybk9iaiI6IHsicmVkaXNOb2RlcyI6IFt7InZwY1VybCI6ICIxMC41MC4yMDguODoyMDMyNCIsICJtYXN0ZXJOYW1lIjogIm1hc3RlcjAiLCAic2xhdmVzIjogW3sic2xhdmVOYW1lIjogInNub2RlMSIsICJ2cGNVcmwiOiAiMTAuNTAuMjA4Ljk6MjAzMjQifV19LCB7InZwY1VybCI6ICIxMC41MC4yMDguODoyMDI2MCIsICJtYXN0ZXJOYW1lIjogIm1hc3RlcjMiLCAic2xhdmVzIjogW3sic2xhdmVOYW1lIjogInNub2RlMSIsICJ2cGNVcmwiOiAiMTAuNTAuMjA4Ljk6MjAyNjAifV19XSwgImFjY2Vzc05vZGVzIjogW3sicHJveHlOYW1lIjogInByb3h5Xzg2NDIxMDg5ODYzMjMxMTgwOF8xIiwgInZwY1VybCI6ICIxMC41MC4yMDguOTozMTA0NiJ9LCB7InByb3h5TmFtZSI6ICJwcm94eV84NjQyMTA4OTg2MzIzMTE4MDhfMiIsICJ2cGNVcmwiOiAiMTAuNTAuMjA4Ljg6MzEwNDYifV19LCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgInN0YXR1c0NvZGUiOiA4MDB9"
+        "body_base64": "ewogICJyZXF1ZXN0SWQiIDogIjUxN2UxNmNkMDk0YzVhMzdlM2I2ZjZmNGI0Nzg2NmFmIiwKICAiY29kZSIgOiAiY29yZS5vayIsCiAgInJldHVybk9iaiIgOiB7CiAgICAicmVkaXNOb2RlcyIgOiBbIHsKICAgICAgInZwY1VybCIgOiAiMTAuNTAuMjA4Ljg6MjAzMjQiLAogICAgICAibWFzdGVyTmFtZSIgOiAibWFzdGVyMCIsCiAgICAgICJub2RlTmFtZSIgOiAicmVkaXNfNjM3OV81OTg4OSIsCiAgICAgICJzbGF2ZXMiIDogWyB7CiAgICAgICAgInNsYXZlTmFtZSIgOiAic25vZGUxIiwKICAgICAgICAidnBjVXJsIiA6ICIxMC41MC4yMDguOToyMDMyNCIsCiAgICAgICAgIm5vZGVOYW1lIiA6ICJyZWRpc182Mzc5XzU5ODkwIgogICAgICB9IF0KICAgIH0sIHsKICAgICAgInZwY1VybCIgOiAiMTAuNTAuMjA4Ljg6MjAyNjAiLAogICAgICAibWFzdGVyTmFtZSIgOiAibWFzdGVyMyIsCiAgICAgICJub2RlTmFtZSIgOiAicmVkaXNfNjM3OV81OTg5MSIsCiAgICAgICJzbGF2ZXMiIDogWyB7CiAgICAgICAgInNsYXZlTmFtZSIgOiAic25vZGUxIiwKICAgICAgICAidnBjVXJsIiA6ICIxMC41MC4yMDguOToyMDI2MCIsCiAgICAgICAgIm5vZGVOYW1lIiA6ICJyZWRpc182Mzc5XzU5ODkyIgogICAgICB9IF0KICAgIH0gXSwKICAgICJhY2Nlc3NOb2RlcyIgOiBbIHsKICAgICAgInByb3h5TmFtZSIgOiAicHJveHlfODY0MjEwODk4NjMyMzExODA4XzEiLAogICAgICAidnBjVXJsIiA6ICIxMC41MC4yMDguOTozMTA0NiIsCiAgICAgICJub2RlTmFtZSIgOiAicHJveHlfODY0MjEwODk4NjMyMzExODA4XzEiCiAgICB9LCB7CiAgICAgICJwcm94eU5hbWUiIDogInByb3h5Xzg2NDIxMDg5ODYzMjMxMTgwOF8yIiwKICAgICAgInZwY1VybCIgOiAiMTAuNTAuMjA4Ljg6MzEwNDYiLAogICAgICAibm9kZU5hbWUiIDogInByb3h5Xzg2NDIxMDg5ODYzMjMxMTgwOF8yIgogICAgfSBdCiAgfSwKICAibWVzc2FnZSIgOiAic3VjY2VzcyIsCiAgInN0YXR1c0NvZGUiIDogODAwCn0="
       },
       "id": "redis.instance.topology.show",
       "api_id": "7741",
@@ -41563,30 +41511,46 @@
           "example": "873209915236156416"
         },
         {
-          "name": "masterNodeIp",
+          "name": "masterNodeName",
           "location": "body",
           "required": true,
           "type": "String",
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "主节点地址，可调用 查询集群节点信息 使用RedisNode表vpcUrl字段",
+          "description": "主节点名称，可调用 获取Redis节点名列表 接口，使用node表nodeName字段。",
           "descriptions": {
-            "en-GB": "Master Node IP",
-            "en-US": "Master Node IP",
-            "zh-CN": "主节点地址，可调用 查询集群节点信息 使用RedisNode表vpcUrl字段"
-          },
-          "help_descriptions": {
-            "en-GB": "Master Node IP",
-            "en-US": "Master Node IP",
-            "zh-CN": "主节点地址，可调用 查询集群节点信息 使用RedisNode表vpcUrl字段"
+            "en-GB": "Master node name",
+            "en-US": "Master node name",
+            "zh-CN": "主节点名称，可调用 获取Redis节点名列表 接口，使用node表nodeName字段。"
           },
           "profile": "",
           "argument": "",
-          "cli_name": "master_node_ip",
-          "cli_flag": "master-node-ip",
+          "cli_name": "master_node_name",
+          "cli_flag": "master-node-name",
           "table_target": "",
-          "example": "10.50.208.7:25324"
+          "example": "redis_6379_59889"
+        },
+        {
+          "name": "newMasterNodeName",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "新主节点名称，可调用 获取Redis节点名列表 接口，使用node表nodeName字段。",
+          "descriptions": {
+            "en-GB": "New master node name",
+            "en-US": "New master node name",
+            "zh-CN": "新主节点名称，可调用 获取Redis节点名列表 接口，使用node表nodeName字段。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "new_master_node_name",
+          "cli_flag": "new-master-node-name",
+          "table_target": "",
+          "example": "redis_6379_59891"
         }
       ],
       "response": {
@@ -41658,7 +41622,6 @@
       },
       "dangerous": true,
       "request_example": {
-        "masterNodeIp": "10.50.208.7:25436",
         "prodInstId": "873894303586321408"
       },
       "example_response": null
@@ -41896,31 +41859,26 @@
           "example": "b5fcacfc2e7069553759558b9a4eb27a"
         },
         {
-          "name": "vpcIps",
+          "name": "nodeNames",
           "location": "body",
-          "required": true,
+          "required": false,
           "type": "Array of Strings",
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "节点VPC IP列表",
+          "description": "节点名称列表，可调用 获取Redis节点名列表 接口，使用node表nodeName字段。",
           "descriptions": {
-            "en-GB": "VPC Ips as a JSON array",
-            "en-US": "VPC Ips as a JSON array",
-            "zh-CN": "节点VPC IP列表"
-          },
-          "help_descriptions": {
-            "en-GB": "VPC Ips as a JSON array",
-            "en-US": "VPC Ips as a JSON array",
-            "zh-CN": "节点VPC IP列表"
+            "en-GB": "Node names",
+            "en-US": "Node names",
+            "zh-CN": "节点名称列表，可调用 获取Redis节点名列表 接口，使用node表nodeName字段。"
           },
           "profile": "",
           "argument": "",
-          "cli_name": "vpc_ips",
-          "cli_flag": "vpc-ips",
+          "cli_name": "node_names",
+          "cli_flag": "node-names",
           "table_target": "",
           "example": [
-            "192.168.0.46"
+            "redis_6379_59889"
           ]
         }
       ],
@@ -42001,10 +41959,7 @@
       },
       "dangerous": true,
       "request_example": {
-        "prodInstId": "b5fcacfc2e7069553759558b9a4eb27a",
-        "vpcIps": [
-          "192.168.0.46"
-        ]
+        "prodInstId": "b5fcacfc2e7069553759558b9a4eb27a"
       },
       "example_response": null
     },
@@ -43892,7 +43847,7 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "目标修改名称。注:实例名称不可重复；实例名称长度4~40个字符，大小写字母开头，只能包含大小写字母、数字及分隔符(-)，大小写字母或数字结尾",
+          "description": "目标修改名称。注:实例名称不可重复；实例名称长度4~64个字符，大小写字母开头，只能包含大小写字母、数字及分隔符(-)、下划线(_)、点(.)，大小写字母或数字结尾。",
           "descriptions": {
             "en-GB": "New Instance Name",
             "en-US": "New Instance Name",
@@ -44428,11 +44383,11 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "审计类型。取值范围： write：仅记录写命令 read：仅记录读命令 all：记录全部命令",
+          "description": "审计类型。取值范围： write：仅记录写命令 read：仅记录读命令 all：记录全部命令 。logSubType、logExpireDay、degradeStrategy三者至少需传一个。",
           "descriptions": {
             "en-GB": "Log Sub Type",
             "en-US": "Log Sub Type",
-            "zh-CN": "审计类型。取值范围： write：仅记录写命令 read：仅记录读命令 all：记录全部命令"
+            "zh-CN": "审计类型。取值范围： write：仅记录写命令 read：仅记录读命令 all：记录全部命令 。logSubType、logExpireDay、degradeStrategy三者至少需传一个。"
           },
           "help_descriptions": {
             "en-GB": "Log Sub Type",

@@ -7297,6 +7297,127 @@
       "dangerous": {
         "confirm": ""
       }
+    },
+    {
+      "id": "kafka.instance.capacity.check",
+      "path": [
+        "kafka",
+        "instance",
+        "capacity",
+        "check"
+      ],
+      "operation": "kafka.instance.capacity.check",
+      "table": "kafka.instance.capacity.check",
+      "parameters": [
+        {
+          "name": "deploy_mode",
+          "flag": "deploy-mode",
+          "target": "deployMode",
+          "required": true,
+          "allowed_values": [
+            "1"
+          ],
+          "description": "Deployment mode (1 for standard deployment)"
+        },
+        {
+          "name": "az_info",
+          "flag": "az-info",
+          "target": "azInfo",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Availability zone IDs, one for single-zone or three for multi-zone deployment"
+        },
+        {
+          "name": "spec_name",
+          "flag": "spec-name",
+          "target": "specName",
+          "required": true,
+          "description": "Kafka instance flavor available in the resource pool"
+        },
+        {
+          "name": "host_type",
+          "flag": "host-type",
+          "target": "hostType",
+          "required": true,
+          "description": "Host type for the requested capacity"
+        },
+        {
+          "name": "select_host_type",
+          "flag": "select-host-type",
+          "target": "selectHostType",
+          "required": false,
+          "description": "Preferred host flavor family"
+        },
+        {
+          "name": "node_num",
+          "flag": "node-num",
+          "target": "nodeNum",
+          "required": true,
+          "value_type": "integer",
+          "description": "Number of nodes, one for standalone instances or 3 to 50 for clusters"
+        },
+        {
+          "name": "data_disk_type",
+          "flag": "data-disk-type",
+          "target": "dataDiskType",
+          "required": false,
+          "description": "Data disk type available in the resource pool"
+        },
+        {
+          "name": "data_disk_size",
+          "flag": "data-disk-size",
+          "target": "dataDiskSize",
+          "required": false,
+          "pattern": "^[0-9]+$",
+          "description": "Data disk size in GB as a string of digits. Omit for elastic storage"
+        },
+        {
+          "name": "vpc_uuid",
+          "flag": "vpc-uuid",
+          "target": "vpcUuid",
+          "required": false,
+          "description": "VPC UUID for the IP capacity check"
+        },
+        {
+          "name": "subnet_uuid",
+          "flag": "subnet-uuid",
+          "target": "subnetUuid",
+          "required": false,
+          "description": "Subnet UUID for the IP capacity check"
+        },
+        {
+          "name": "cluster_num",
+          "flag": "cluster-num",
+          "target": "clusterNum",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Number of clusters to check, from 1 to 100"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Resource pool in which to check capacity"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectId",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project for the capacity check"
+        }
+      ],
+      "fixture_response": "fixtures/kafka-instance-capacity-check.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=48&api=24272&data=83&isNormal=1&vid=330",
+      "examples": [
+        "ctyun kafka instance capacity check --deploy-mode 1 --az-info '[\"cn-huadong1-jsnj1A-public-ctcloud\"]' --spec-name kafka.8u16g.cluster --host-type C --node-num 3"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
     }
   ]
 }

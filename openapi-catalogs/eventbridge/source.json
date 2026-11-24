@@ -1,0 +1,4074 @@
+{
+  "schema_version": 1,
+  "product": {
+    "plugin_name": "eventbridge",
+    "api_product": "eventbridge",
+    "ctyun_product_id": 173,
+    "source_revision": "298",
+    "display_name": {
+      "en-GB": "EventBridge",
+      "en-US": "EventBridge",
+      "zh-CN": "事件总线 EventBridge"
+    },
+    "display_name_policy": {
+      "kind": "brand",
+      "token": "EventBridge"
+    },
+    "endpoint_url": "https://eventbridge-global.ctapi.ctyun.cn",
+    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&data=219&vid=298",
+    "api_scope": {
+      "include_uri_prefixes": [
+        "/v1/bus/",
+        "/v1/busRule/",
+        "/v1/busSource/",
+        "/v1/stream/"
+      ],
+      "notes": "Public customer-side event bus, rule, source and stream APIs in service 219, version 298."
+    }
+  },
+  "operations": [
+    {
+      "id": "eventbridge.rule.list",
+      "api_id": "16524",
+      "title": "查询事件规则列表",
+      "description": {
+        "en-GB": "List event rules",
+        "en-US": "List event rules",
+        "zh-CN": "查询事件规则列表"
+      },
+      "category": "rule",
+      "command_path": [
+        "rule",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v1/busRule/list",
+      "content_type": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=16524&data=219&isNormal=1&vid=298",
+      "retryable": true,
+      "dangerous": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "eventBusName",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "查询的事件总线名称。",
+          "descriptions": {
+            "en-GB": "Event bus name",
+            "en-US": "Event bus name",
+            "zh-CN": "查询的事件总线名称。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_bus_name",
+          "cli_flag": "event-bus-name",
+          "table_target": "",
+          "example": "bus1",
+          "help_descriptions": {
+            "en-GB": "Name of the event bus",
+            "en-US": "Name of the event bus",
+            "zh-CN": "查询的事件总线名称。"
+          }
+        },
+        {
+          "name": "eventRuleName",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "查询的事件规则名称，支持模糊搜索。",
+          "descriptions": {
+            "en-GB": "Event rule name",
+            "en-US": "Event rule name",
+            "zh-CN": "查询的事件规则名称，支持模糊搜索。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_rule_name",
+          "cli_flag": "event-rule-name",
+          "table_target": "",
+          "example": "rule1",
+          "help_descriptions": {
+            "en-GB": "Name of the event rule (supports partial matches)",
+            "en-US": "Name of the event rule (supports partial matches)",
+            "zh-CN": "查询的事件规则名称，支持模糊搜索。"
+          }
+        },
+        {
+          "name": "pageNum",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "1",
+          "pattern": "",
+          "description": "分页中的页数，默认1。",
+          "descriptions": {
+            "en-GB": "Page num",
+            "en-US": "Page num",
+            "zh-CN": "分页中的页数，默认1。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_num",
+          "cli_flag": "page-num",
+          "table_target": "",
+          "example": 1,
+          "help_descriptions": {
+            "en-GB": "Page number, starting at 1",
+            "en-US": "Page number, starting at 1",
+            "zh-CN": "分页中的页数，默认1。"
+          }
+        },
+        {
+          "name": "pageSize",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "10",
+          "pattern": "",
+          "description": "分页中的每页大小，默认10。",
+          "descriptions": {
+            "en-GB": "Page size",
+            "en-US": "Page size",
+            "zh-CN": "分页中的每页大小，默认10。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10,
+          "help_descriptions": {
+            "en-GB": "Number of results per page",
+            "en-US": "Number of results per page",
+            "zh-CN": "分页中的每页大小，默认10。"
+          }
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002",
+          "help_descriptions": {
+            "en-GB": "Resource pool for the EventBridge request",
+            "en-US": "Resource pool for the EventBridge request",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj.list",
+        "row_path": "returnObj.list",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "event_rule_name",
+            "path": "eventRuleName",
+            "label_en": "Event Rule",
+            "label_zh": "事件规则名称"
+          },
+          {
+            "key": "desc",
+            "path": "desc",
+            "label_en": "Description",
+            "label_zh": "描述"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态"
+          },
+          {
+            "key": "event_bus_name",
+            "path": "eventBusName",
+            "label_en": "Event Bus",
+            "label_zh": "事件总线名称"
+          },
+          {
+            "key": "filter_pattern",
+            "path": "filterPattern",
+            "label_en": "Event Pattern",
+            "label_zh": "事件模式"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间"
+          },
+          {
+            "key": "update_time",
+            "path": "updateTime",
+            "label_en": "Update Time",
+            "label_zh": "更新时间"
+          },
+          {
+            "key": "event_targets",
+            "path": "eventTargets",
+            "label_en": "Event Targets",
+            "label_zh": "事件目标"
+          }
+        ],
+        "default_columns": [
+          "event_rule_name",
+          "desc",
+          "status",
+          "event_bus_name"
+        ]
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "success",
+        "returnObj": {
+          "total": 1,
+          "list": [
+            {
+              "eventRuleName": "r123",
+              "desc": "",
+              "status": "201",
+              "eventBusName": "test0723",
+              "filterPattern": "{}",
+              "createTime": "2025-07-25 07:00:00 ",
+              "updateTime": "2025-07-25 07:00:00 ",
+              "eventTargets": [
+                {
+                  "type": "kafka",
+                  "eventTargetName": "_C56pT3570g0X6prTQVPI",
+                  "params": [
+                    {
+                      "resourceKey": "instanceId",
+                      "value": "356b3496b87713542dccfe7deef7fe35",
+                      "form": "CONSTANT",
+                      "template": null
+                    },
+                    {
+                      "resourceKey": "topic",
+                      "value": "test2",
+                      "form": "CONSTANT",
+                      "template": null
+                    },
+                    {
+                      "resourceKey": "value",
+                      "value": "",
+                      "form": "ORIGINAL",
+                      "template": null
+                    },
+                    {
+                      "resourceKey": "key",
+                      "value": "",
+                      "form": "EMPTY",
+                      "template": null
+                    },
+                    {
+                      "resourceKey": "accountId",
+                      "value": "0023e4d7e3754c1c9e11818c12938140",
+                      "form": "CONSTANT",
+                      "template": null
+                    },
+                    {
+                      "resourceKey": "regionCode",
+                      "value": "b342b77ef26b11ecb0ac0242ac110002",
+                      "form": "CONSTANT",
+                      "template": null
+                    },
+                    {
+                      "resourceKey": "tenantId",
+                      "value": "9948704",
+                      "form": "CONSTANT",
+                      "template": null
+                    },
+                    {
+                      "resourceKey": "userId",
+                      "value": "182071",
+                      "form": "CONSTANT",
+                      "template": null
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "eventbridge.rule.create",
+      "api_id": "16525",
+      "title": "创建事件规则",
+      "description": {
+        "en-GB": "Create an event rule",
+        "en-US": "Create an event rule",
+        "zh-CN": "创建事件规则"
+      },
+      "category": "rule",
+      "command_path": [
+        "rule",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v1/busRule/create",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=16525&data=219&isNormal=1&vid=298",
+      "retryable": false,
+      "dangerous": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "eventBusName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件总线名。",
+          "descriptions": {
+            "en-GB": "Event bus name",
+            "en-US": "Event bus name",
+            "zh-CN": "事件总线名。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_bus_name",
+          "cli_flag": "event-bus-name",
+          "table_target": "",
+          "example": "test0723",
+          "help_descriptions": {
+            "en-GB": "Name of the event bus",
+            "en-US": "Name of the event bus",
+            "zh-CN": "事件总线名。"
+          }
+        },
+        {
+          "name": "eventRuleName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件规则名。 规则：长度限制为2~63个字符，可以由小写字母、数字或短划线(-)组成，必须以小写字母开始，事件规则名不可重复。",
+          "descriptions": {
+            "en-GB": "Event rule name",
+            "en-US": "Event rule name",
+            "zh-CN": "事件规则名。 规则：长度限制为2~63个字符，可以由小写字母、数字或短划线(-)组成，必须以小写字母开始，事件规则名不可重复。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_rule_name",
+          "cli_flag": "event-rule-name",
+          "table_target": "",
+          "example": "r123",
+          "help_descriptions": {
+            "en-GB": "Name of the event rule (2–63 lowercase letters, digits or hyphens, starting with a letter)",
+            "en-US": "Name of the event rule (2–63 lowercase letters, digits or hyphens, starting with a letter)",
+            "zh-CN": "事件规则名。 规则：长度限制为2~63个字符，可以由小写字母、数字或短划线(-)组成，必须以小写字母开始，事件规则名不可重复。"
+          }
+        },
+        {
+          "name": "desc",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件规则描述，非必填，限制为须小于256个字符。",
+          "descriptions": {
+            "en-GB": "Desc",
+            "en-US": "Desc",
+            "zh-CN": "事件规则描述，非必填，限制为须小于256个字符。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "desc",
+          "cli_flag": "desc",
+          "table_target": "",
+          "example_unavailable": true,
+          "help_descriptions": {
+            "en-GB": "Resource description, fewer than 256 characters",
+            "en-US": "Resource description, fewer than 256 characters",
+            "zh-CN": "事件规则描述，非必填，限制为须小于256个字符。"
+          }
+        },
+        {
+          "name": "filterPattern",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件模式。需符合一定的规则，详见 事件模式说明",
+          "descriptions": {
+            "en-GB": "Filter pattern",
+            "en-US": "Filter pattern",
+            "zh-CN": "事件模式。需符合一定的规则，详见 事件模式说明"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "filter_pattern",
+          "cli_flag": "filter-pattern",
+          "table_target": "",
+          "example": "{}",
+          "help_descriptions": {
+            "en-GB": "Event matching pattern as a JSON string",
+            "en-US": "Event matching pattern as a JSON string",
+            "zh-CN": "事件模式。需符合一定的规则，详见 事件模式说明"
+          }
+        },
+        {
+          "name": "eventTargets",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件目标数组，详见 事件规则参数说明",
+          "descriptions": {
+            "en-GB": "Event targets",
+            "en-US": "Event targets",
+            "zh-CN": "事件目标数组，详见 事件规则参数说明"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_targets",
+          "cli_flag": "event-targets",
+          "table_target": "",
+          "example": [
+            {
+              "type": "kafka",
+              "eventTargetName": "_C56pT3570g0X6prTQVPI",
+              "params": [
+                {
+                  "resourceKey": "instanceId",
+                  "value": "356b3496b87xxxxxxdccfe7deef7fe35",
+                  "form": "CONSTANT"
+                },
+                {
+                  "resourceKey": "topic",
+                  "value": "test2",
+                  "form": "CONSTANT"
+                },
+                {
+                  "resourceKey": "value",
+                  "value": "",
+                  "form": "ORIGINAL"
+                },
+                {
+                  "resourceKey": "key",
+                  "value": "",
+                  "form": "EMPTY"
+                }
+              ]
+            }
+          ],
+          "help_descriptions": {
+            "en-GB": "JSON array of delivery targets and their parameters",
+            "en-US": "JSON array of delivery targets and their parameters",
+            "zh-CN": "事件目标数组，详见 事件规则参数说明"
+          }
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002",
+          "help_descriptions": {
+            "en-GB": "Resource pool for the EventBridge request",
+            "en-US": "Resource pool for the EventBridge request",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息"
+          }
+        ],
+        "default_columns": [
+          "status_code",
+          "message"
+        ],
+        "layout": "vertical"
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "success",
+        "returnObj": {}
+      },
+      "request_example": {
+        "eventBusName": "test0723",
+        "eventRuleName": "r123",
+        "desc": "",
+        "filterPattern": "{}",
+        "eventTargets": [
+          {
+            "type": "kafka",
+            "eventTargetName": "_C56pT3570g0X6prTQVPI",
+            "params": [
+              {
+                "resourceKey": "instanceId",
+                "value": "356b3496b87xxxxxxdccfe7deef7fe35",
+                "form": "CONSTANT"
+              },
+              {
+                "resourceKey": "topic",
+                "value": "test2",
+                "form": "CONSTANT"
+              },
+              {
+                "resourceKey": "value",
+                "value": "",
+                "form": "ORIGINAL"
+              },
+              {
+                "resourceKey": "key",
+                "value": "",
+                "form": "EMPTY"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "eventbridge.rule.update",
+      "api_id": "16526",
+      "title": "编辑事件规则",
+      "description": {
+        "en-GB": "Update an event rule",
+        "en-US": "Update an event rule",
+        "zh-CN": "编辑事件规则"
+      },
+      "category": "rule",
+      "command_path": [
+        "rule",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v1/busRule/update",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=16526&data=219&isNormal=1&vid=298",
+      "retryable": false,
+      "dangerous": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "eventBusName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件总线名。",
+          "descriptions": {
+            "en-GB": "Event bus name",
+            "en-US": "Event bus name",
+            "zh-CN": "事件总线名。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_bus_name",
+          "cli_flag": "event-bus-name",
+          "table_target": "",
+          "example": "test0723",
+          "help_descriptions": {
+            "en-GB": "Name of the event bus",
+            "en-US": "Name of the event bus",
+            "zh-CN": "事件总线名。"
+          }
+        },
+        {
+          "name": "eventRuleName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件规则名。 规则：长度限制为2~63个字符，可以由小写字母、数字或短划线(-)组成，必须以小写字母开始，事件规则名不可重复。",
+          "descriptions": {
+            "en-GB": "Event rule name",
+            "en-US": "Event rule name",
+            "zh-CN": "事件规则名。 规则：长度限制为2~63个字符，可以由小写字母、数字或短划线(-)组成，必须以小写字母开始，事件规则名不可重复。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_rule_name",
+          "cli_flag": "event-rule-name",
+          "table_target": "",
+          "example": "r123",
+          "help_descriptions": {
+            "en-GB": "Name of the event rule (2–63 lowercase letters, digits or hyphens, starting with a letter)",
+            "en-US": "Name of the event rule (2–63 lowercase letters, digits or hyphens, starting with a letter)",
+            "zh-CN": "事件规则名。 规则：长度限制为2~63个字符，可以由小写字母、数字或短划线(-)组成，必须以小写字母开始，事件规则名不可重复。"
+          }
+        },
+        {
+          "name": "desc",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件规则描述，非必填，限制为须小于256个字符。",
+          "descriptions": {
+            "en-GB": "Desc",
+            "en-US": "Desc",
+            "zh-CN": "事件规则描述，非必填，限制为须小于256个字符。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "desc",
+          "cli_flag": "desc",
+          "table_target": "",
+          "example_unavailable": true,
+          "help_descriptions": {
+            "en-GB": "Resource description, fewer than 256 characters",
+            "en-US": "Resource description, fewer than 256 characters",
+            "zh-CN": "事件规则描述，非必填，限制为须小于256个字符。"
+          }
+        },
+        {
+          "name": "filterPattern",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件模式。需符合一定的规则，详见 事件模式说明",
+          "descriptions": {
+            "en-GB": "Filter pattern",
+            "en-US": "Filter pattern",
+            "zh-CN": "事件模式。需符合一定的规则，详见 事件模式说明"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "filter_pattern",
+          "cli_flag": "filter-pattern",
+          "table_target": "",
+          "example": "{}",
+          "help_descriptions": {
+            "en-GB": "Event matching pattern as a JSON string",
+            "en-US": "Event matching pattern as a JSON string",
+            "zh-CN": "事件模式。需符合一定的规则，详见 事件模式说明"
+          }
+        },
+        {
+          "name": "eventTargets",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件目标数组，详见 事件规则参数说明",
+          "descriptions": {
+            "en-GB": "Event targets",
+            "en-US": "Event targets",
+            "zh-CN": "事件目标数组，详见 事件规则参数说明"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_targets",
+          "cli_flag": "event-targets",
+          "table_target": "",
+          "example": [
+            {
+              "type": "kafka",
+              "eventTargetName": "_C56pT3570g0X6prTQVPI",
+              "params": [
+                {
+                  "resourceKey": "instanceId",
+                  "value": "356b3496b87xxxxxxdccfe7deef7fe35",
+                  "form": "CONSTANT"
+                },
+                {
+                  "resourceKey": "topic",
+                  "value": "test2",
+                  "form": "CONSTANT"
+                },
+                {
+                  "resourceKey": "value",
+                  "value": "",
+                  "form": "ORIGINAL"
+                },
+                {
+                  "resourceKey": "key",
+                  "value": "",
+                  "form": "EMPTY"
+                }
+              ]
+            }
+          ],
+          "help_descriptions": {
+            "en-GB": "JSON array of delivery targets and their parameters",
+            "en-US": "JSON array of delivery targets and their parameters",
+            "zh-CN": "事件目标数组，详见 事件规则参数说明"
+          }
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002",
+          "help_descriptions": {
+            "en-GB": "Resource pool for the EventBridge request",
+            "en-US": "Resource pool for the EventBridge request",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息"
+          }
+        ],
+        "default_columns": [
+          "status_code",
+          "message"
+        ],
+        "layout": "vertical"
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "success",
+        "returnObj": {}
+      },
+      "request_example": {
+        "eventBusName": "test0723",
+        "eventRuleName": "r123",
+        "desc": "",
+        "filterPattern": "{}",
+        "eventTargets": [
+          {
+            "type": "kafka",
+            "eventTargetName": "_C56pT3570g0X6prTQVPI",
+            "params": [
+              {
+                "resourceKey": "instanceId",
+                "value": "356b3496b87xxxxxxdccfe7deef7fe35",
+                "form": "CONSTANT"
+              },
+              {
+                "resourceKey": "topic",
+                "value": "test2",
+                "form": "CONSTANT"
+              },
+              {
+                "resourceKey": "value",
+                "value": "",
+                "form": "ORIGINAL"
+              },
+              {
+                "resourceKey": "key",
+                "value": "",
+                "form": "EMPTY"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "eventbridge.rule.delete",
+      "api_id": "16527",
+      "title": "删除事件规则",
+      "description": {
+        "en-GB": "Delete an event rule",
+        "en-US": "Delete an event rule",
+        "zh-CN": "删除事件规则"
+      },
+      "category": "rule",
+      "command_path": [
+        "rule",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/v1/busRule/delete",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=16527&data=219&isNormal=1&vid=298",
+      "retryable": false,
+      "dangerous": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "eventBusName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件总线名。",
+          "descriptions": {
+            "en-GB": "Event bus name",
+            "en-US": "Event bus name",
+            "zh-CN": "事件总线名。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_bus_name",
+          "cli_flag": "event-bus-name",
+          "table_target": "",
+          "example": "testbus",
+          "help_descriptions": {
+            "en-GB": "Name of the event bus",
+            "en-US": "Name of the event bus",
+            "zh-CN": "事件总线名。"
+          }
+        },
+        {
+          "name": "eventRuleName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件规则名。",
+          "descriptions": {
+            "en-GB": "Event rule name",
+            "en-US": "Event rule name",
+            "zh-CN": "事件规则名。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_rule_name",
+          "cli_flag": "event-rule-name",
+          "table_target": "",
+          "example": "testrule",
+          "help_descriptions": {
+            "en-GB": "Name of the event rule",
+            "en-US": "Name of the event rule",
+            "zh-CN": "事件规则名。"
+          }
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002",
+          "help_descriptions": {
+            "en-GB": "Resource pool for the EventBridge request",
+            "en-US": "Resource pool for the EventBridge request",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息"
+          }
+        ],
+        "default_columns": [
+          "status_code",
+          "message"
+        ],
+        "layout": "vertical"
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "success",
+        "returnObj": {}
+      },
+      "request_example": {
+        "eventRuleName": "testrule",
+        "eventBusName": "testbus"
+      }
+    },
+    {
+      "id": "eventbridge.bus.show",
+      "api_id": "18566",
+      "title": "查询事件总线详情",
+      "description": {
+        "en-GB": "Show an event bus",
+        "en-US": "Show an event bus",
+        "zh-CN": "查询事件总线详情"
+      },
+      "category": "bus",
+      "command_path": [
+        "bus",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v1/bus/detail",
+      "content_type": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18566&data=219&isNormal=1&vid=298",
+      "retryable": true,
+      "dangerous": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "eventBusName",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件总线名。 规则：长度限制为2~63个字符，可以由小写字母、数字或短划线(-)组成，必须以小写字母开始，事件总线名不可重复。",
+          "descriptions": {
+            "en-GB": "Event bus name",
+            "en-US": "Event bus name",
+            "zh-CN": "事件总线名。 规则：长度限制为2~63个字符，可以由小写字母、数字或短划线(-)组成，必须以小写字母开始，事件总线名不可重复。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_bus_name",
+          "cli_flag": "event-bus-name",
+          "table_target": "",
+          "example": "bus1",
+          "help_descriptions": {
+            "en-GB": "Name of the event bus (2–63 lowercase letters, digits or hyphens, starting with a letter)",
+            "en-US": "Name of the event bus (2–63 lowercase letters, digits or hyphens, starting with a letter)",
+            "zh-CN": "事件总线名。 规则：长度限制为2~63个字符，可以由小写字母、数字或短划线(-)组成，必须以小写字母开始，事件总线名不可重复。"
+          }
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002",
+          "help_descriptions": {
+            "en-GB": "Resource pool for the EventBridge request",
+            "en-US": "Resource pool for the EventBridge request",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "event_bus_name",
+            "path": "eventBusName",
+            "label_en": "Event Bus",
+            "label_zh": "事件总线名称"
+          },
+          {
+            "key": "desc",
+            "path": "desc",
+            "label_en": "Description",
+            "label_zh": "描述"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间"
+          },
+          {
+            "key": "update_time",
+            "path": "updateTime",
+            "label_en": "Update Time",
+            "label_zh": "更新时间"
+          }
+        ],
+        "default_columns": [
+          "event_bus_name",
+          "desc"
+        ],
+        "layout": "vertical"
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "success",
+        "returnObj": {
+          "eventBusName": "test",
+          "desc": "",
+          "createTime": "2025-06-01 00:00:00",
+          "updateTime": "2025-06-01 00:00:00"
+        }
+      }
+    },
+    {
+      "id": "eventbridge.bus.list",
+      "api_id": "18567",
+      "title": "查询事件总线列表",
+      "description": {
+        "en-GB": "List event buses",
+        "en-US": "List event buses",
+        "zh-CN": "查询事件总线列表"
+      },
+      "category": "bus",
+      "command_path": [
+        "bus",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v1/bus/list",
+      "content_type": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18567&data=219&isNormal=1&vid=298",
+      "retryable": true,
+      "dangerous": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "eventBusName",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "查询的事件总线名称，支持模糊搜索。",
+          "descriptions": {
+            "en-GB": "Event bus name",
+            "en-US": "Event bus name",
+            "zh-CN": "查询的事件总线名称，支持模糊搜索。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_bus_name",
+          "cli_flag": "event-bus-name",
+          "table_target": "",
+          "example": "bus1",
+          "help_descriptions": {
+            "en-GB": "Name of the event bus (supports partial matches)",
+            "en-US": "Name of the event bus (supports partial matches)",
+            "zh-CN": "查询的事件总线名称，支持模糊搜索。"
+          }
+        },
+        {
+          "name": "pageNum",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "1",
+          "pattern": "",
+          "description": "分页中的页数，默认1。",
+          "descriptions": {
+            "en-GB": "Page num",
+            "en-US": "Page num",
+            "zh-CN": "分页中的页数，默认1。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_num",
+          "cli_flag": "page-num",
+          "table_target": "",
+          "example": 1,
+          "help_descriptions": {
+            "en-GB": "Page number, starting at 1",
+            "en-US": "Page number, starting at 1",
+            "zh-CN": "分页中的页数，默认1。"
+          }
+        },
+        {
+          "name": "pageSize",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "10",
+          "pattern": "",
+          "description": "分页中的每页大小，默认10。",
+          "descriptions": {
+            "en-GB": "Page size",
+            "en-US": "Page size",
+            "zh-CN": "分页中的每页大小，默认10。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10,
+          "help_descriptions": {
+            "en-GB": "Number of results per page",
+            "en-US": "Number of results per page",
+            "zh-CN": "分页中的每页大小，默认10。"
+          }
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002",
+          "help_descriptions": {
+            "en-GB": "Resource pool for the EventBridge request",
+            "en-US": "Resource pool for the EventBridge request",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj.list",
+        "row_path": "returnObj.list",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "event_bus_name",
+            "path": "eventBusName",
+            "label_en": "Event Bus",
+            "label_zh": "事件总线名称"
+          },
+          {
+            "key": "desc",
+            "path": "desc",
+            "label_en": "Description",
+            "label_zh": "描述"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间"
+          },
+          {
+            "key": "update_time",
+            "path": "updateTime",
+            "label_en": "Update Time",
+            "label_zh": "更新时间"
+          }
+        ],
+        "default_columns": [
+          "event_bus_name",
+          "desc"
+        ]
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "success",
+        "returnObj": {
+          "total": 2,
+          "list": [
+            {
+              "eventBusName": "default",
+              "desc": "云服务默认总线",
+              "createTime": "2025-06-01 00:00:00",
+              "updateTime": "2025-06-01 00:00:00"
+            },
+            {
+              "eventBusName": "test",
+              "desc": "demo-bus",
+              "createTime": "2025-06-01 00:00:00",
+              "updateTime": "2025-06-01 00:00:00"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "eventbridge.bus.delete",
+      "api_id": "18568",
+      "title": "删除事件总线",
+      "description": {
+        "en-GB": "Delete an event bus",
+        "en-US": "Delete an event bus",
+        "zh-CN": "删除事件总线"
+      },
+      "category": "bus",
+      "command_path": [
+        "bus",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/v1/bus/delete",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18568&data=219&isNormal=1&vid=298",
+      "retryable": false,
+      "dangerous": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "eventBusName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件总线名。",
+          "descriptions": {
+            "en-GB": "Event bus name",
+            "en-US": "Event bus name",
+            "zh-CN": "事件总线名。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_bus_name",
+          "cli_flag": "event-bus-name",
+          "table_target": "",
+          "example": "test",
+          "help_descriptions": {
+            "en-GB": "Name of the event bus",
+            "en-US": "Name of the event bus",
+            "zh-CN": "事件总线名。"
+          }
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002",
+          "help_descriptions": {
+            "en-GB": "Resource pool for the EventBridge request",
+            "en-US": "Resource pool for the EventBridge request",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息"
+          }
+        ],
+        "default_columns": [
+          "status_code",
+          "message"
+        ],
+        "layout": "vertical"
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "success",
+        "returnObj": {}
+      },
+      "request_example": {
+        "eventBusName": "test"
+      }
+    },
+    {
+      "id": "eventbridge.bus.create",
+      "api_id": "18569",
+      "title": "创建事件总线",
+      "description": {
+        "en-GB": "Create an event bus",
+        "en-US": "Create an event bus",
+        "zh-CN": "创建事件总线"
+      },
+      "category": "bus",
+      "command_path": [
+        "bus",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v1/bus/create",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18569&data=219&isNormal=1&vid=298",
+      "retryable": false,
+      "dangerous": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "eventBusName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件总线名。 规则：长度限制为2~63个字符，可以由小写字母、数字或短划线(-)组成，必须以小写字母开始，事件总线名不可重复。",
+          "descriptions": {
+            "en-GB": "Event bus name",
+            "en-US": "Event bus name",
+            "zh-CN": "事件总线名。 规则：长度限制为2~63个字符，可以由小写字母、数字或短划线(-)组成，必须以小写字母开始，事件总线名不可重复。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_bus_name",
+          "cli_flag": "event-bus-name",
+          "table_target": "",
+          "example": "test",
+          "help_descriptions": {
+            "en-GB": "Name of the event bus (2–63 lowercase letters, digits or hyphens, starting with a letter)",
+            "en-US": "Name of the event bus (2–63 lowercase letters, digits or hyphens, starting with a letter)",
+            "zh-CN": "事件总线名。 规则：长度限制为2~63个字符，可以由小写字母、数字或短划线(-)组成，必须以小写字母开始，事件总线名不可重复。"
+          }
+        },
+        {
+          "name": "desc",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件总线描述，非必填，限制为须小于256个字符。",
+          "descriptions": {
+            "en-GB": "Desc",
+            "en-US": "Desc",
+            "zh-CN": "事件总线描述，非必填，限制为须小于256个字符。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "desc",
+          "cli_flag": "desc",
+          "table_target": "",
+          "example": "demo-bus",
+          "help_descriptions": {
+            "en-GB": "Resource description, fewer than 256 characters",
+            "en-US": "Resource description, fewer than 256 characters",
+            "zh-CN": "事件总线描述，非必填，限制为须小于256个字符。"
+          }
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002",
+          "help_descriptions": {
+            "en-GB": "Resource pool for the EventBridge request",
+            "en-US": "Resource pool for the EventBridge request",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息"
+          }
+        ],
+        "default_columns": [
+          "status_code",
+          "message"
+        ],
+        "layout": "vertical"
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "success",
+        "returnObj": {}
+      },
+      "request_example": {
+        "eventBusName": "test",
+        "desc": "demo-bus"
+      }
+    },
+    {
+      "id": "eventbridge.source.show",
+      "api_id": "18570",
+      "title": "查询事件源详情",
+      "description": {
+        "en-GB": "Show an event source",
+        "en-US": "Show an event source",
+        "zh-CN": "查询事件源详情"
+      },
+      "category": "source",
+      "command_path": [
+        "source",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v1/busSource/detail",
+      "content_type": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18570&data=219&isNormal=1&vid=298",
+      "retryable": true,
+      "dangerous": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "eventBusName",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "查询的事件总线名称。",
+          "descriptions": {
+            "en-GB": "Event bus name",
+            "en-US": "Event bus name",
+            "zh-CN": "查询的事件总线名称。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_bus_name",
+          "cli_flag": "event-bus-name",
+          "table_target": "",
+          "example": "bus1",
+          "help_descriptions": {
+            "en-GB": "Name of the event bus",
+            "en-US": "Name of the event bus",
+            "zh-CN": "查询的事件总线名称。"
+          }
+        },
+        {
+          "name": "eventSourceName",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "查询的事件源名称。",
+          "descriptions": {
+            "en-GB": "Event source name",
+            "en-US": "Event source name",
+            "zh-CN": "查询的事件源名称。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_source_name",
+          "cli_flag": "event-source-name",
+          "table_target": "",
+          "example": "source1",
+          "help_descriptions": {
+            "en-GB": "Name of the event source",
+            "en-US": "Name of the event source",
+            "zh-CN": "查询的事件源名称。"
+          }
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002",
+          "help_descriptions": {
+            "en-GB": "Resource pool for the EventBridge request",
+            "en-US": "Resource pool for the EventBridge request",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "event_source_name",
+            "path": "eventSourceName",
+            "label_en": "Event Source",
+            "label_zh": "事件源名称"
+          },
+          {
+            "key": "desc",
+            "path": "desc",
+            "label_en": "Description",
+            "label_zh": "描述"
+          },
+          {
+            "key": "event_bus_name",
+            "path": "eventBusName",
+            "label_en": "Event Bus",
+            "label_zh": "事件总线名称"
+          },
+          {
+            "key": "type",
+            "path": "type",
+            "label_en": "Source Type",
+            "label_zh": "事件源类型"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间"
+          },
+          {
+            "key": "update_time",
+            "path": "updateTime",
+            "label_en": "Update Time",
+            "label_zh": "更新时间"
+          },
+          {
+            "key": "product_name",
+            "path": "productName",
+            "label_en": "Product Name",
+            "label_zh": "产品名称"
+          },
+          {
+            "key": "product_describe",
+            "path": "productDescribe",
+            "label_en": "Product Description",
+            "label_zh": "产品描述"
+          },
+          {
+            "key": "event_source_params",
+            "path": "eventSourceParams",
+            "label_en": "Source Parameters",
+            "label_zh": "事件源参数"
+          }
+        ],
+        "default_columns": [
+          "event_source_name",
+          "desc",
+          "event_bus_name",
+          "status"
+        ],
+        "layout": "vertical"
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "success",
+        "returnObj": {
+          "eventSourceName": "test",
+          "desc": "",
+          "eventBusName": "test",
+          "type": "kafka",
+          "status": "201",
+          "createTime": "2025-06-01 00:00:00",
+          "updateTime": "2025-06-01 00:00:00",
+          "productName": "kafka",
+          "productDescribe": "分布式消息服务Kafka",
+          "eventSourceParams": [
+            {
+              "resourceKey": "instanceId",
+              "value": "b588842efc5fxxxxx3a1ec3b24c90af8",
+              "form": "CONSTANT",
+              "template": null
+            },
+            {
+              "resourceKey": "topic",
+              "value": "test1",
+              "form": "CONSTANT",
+              "template": null
+            },
+            {
+              "resourceKey": "groupName",
+              "value": "GID_EVENTBRIDGE_1753411132587",
+              "form": "CONSTANT",
+              "template": null
+            },
+            {
+              "resourceKey": "initialOffset",
+              "value": "latest",
+              "form": "CONSTANT",
+              "template": null
+            },
+            {
+              "resourceKey": "dataFormat",
+              "value": "JSON",
+              "form": "CONSTANT",
+              "template": null
+            },
+            {
+              "resourceKey": "accountId",
+              "value": "0023e4d7e3xxxxxc9e11818c12938140",
+              "form": "CONSTANT",
+              "template": null
+            },
+            {
+              "resourceKey": "regionCode",
+              "value": "b342b77ef26xxxxx0ac0242ac110002",
+              "form": "CONSTANT",
+              "template": null
+            },
+            {
+              "resourceKey": "tenantId",
+              "value": "99xxx04",
+              "form": "CONSTANT",
+              "template": null
+            },
+            {
+              "resourceKey": "userId",
+              "value": "18xx71",
+              "form": "CONSTANT",
+              "template": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "eventbridge.source.official.list",
+      "api_id": "18571",
+      "title": "查询官方事件源列表",
+      "description": {
+        "en-GB": "List official event sources",
+        "en-US": "List official event sources",
+        "zh-CN": "查询官方事件源列表"
+      },
+      "category": "source",
+      "command_path": [
+        "source",
+        "official",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v1/busSource/list/official",
+      "content_type": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18571&data=219&isNormal=1&vid=298",
+      "retryable": true,
+      "dangerous": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "eventSourceName",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "查询的事件源名称，支持模糊搜索。",
+          "descriptions": {
+            "en-GB": "Event source name",
+            "en-US": "Event source name",
+            "zh-CN": "查询的事件源名称，支持模糊搜索。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_source_name",
+          "cli_flag": "event-source-name",
+          "table_target": "",
+          "example": "source1",
+          "help_descriptions": {
+            "en-GB": "Name of the event source (supports partial matches)",
+            "en-US": "Name of the event source (supports partial matches)",
+            "zh-CN": "查询的事件源名称，支持模糊搜索。"
+          }
+        },
+        {
+          "name": "pageNum",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "1",
+          "pattern": "",
+          "description": "分页中的页数，默认1。",
+          "descriptions": {
+            "en-GB": "Page num",
+            "en-US": "Page num",
+            "zh-CN": "分页中的页数，默认1。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_num",
+          "cli_flag": "page-num",
+          "table_target": "",
+          "example": 1,
+          "help_descriptions": {
+            "en-GB": "Page number, starting at 1",
+            "en-US": "Page number, starting at 1",
+            "zh-CN": "分页中的页数，默认1。"
+          }
+        },
+        {
+          "name": "pageSize",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "10",
+          "pattern": "",
+          "description": "分页中的每页大小，默认10。",
+          "descriptions": {
+            "en-GB": "Page size",
+            "en-US": "Page size",
+            "zh-CN": "分页中的每页大小，默认10。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10,
+          "help_descriptions": {
+            "en-GB": "Number of results per page",
+            "en-US": "Number of results per page",
+            "zh-CN": "分页中的每页大小，默认10。"
+          }
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002",
+          "help_descriptions": {
+            "en-GB": "Resource pool for the EventBridge request",
+            "en-US": "Resource pool for the EventBridge request",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj.list",
+        "row_path": "returnObj.list",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "event_bus_name",
+            "path": "eventBusName",
+            "label_en": "Event Bus",
+            "label_zh": "事件总线名称"
+          },
+          {
+            "key": "event_source_name",
+            "path": "eventSourceName",
+            "label_en": "Event Source",
+            "label_zh": "事件源名称"
+          },
+          {
+            "key": "source_creator",
+            "path": "sourceCreator",
+            "label_en": "Source Creator",
+            "label_zh": "事件源创建者"
+          },
+          {
+            "key": "desc",
+            "path": "desc",
+            "label_en": "Description",
+            "label_zh": "描述"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间"
+          },
+          {
+            "key": "event_types",
+            "path": "eventTypes",
+            "label_en": "Event Types",
+            "label_zh": "事件类型"
+          }
+        ],
+        "default_columns": [
+          "event_bus_name",
+          "event_source_name",
+          "desc",
+          "status"
+        ]
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "success",
+        "returnObj": {
+          "total": 1,
+          "list": [
+            {
+              "eventBusName": "default",
+              "eventSourceName": "ctyun.ctlts",
+              "sourceCreator": "ctyun",
+              "desc": "云日志服务",
+              "status": "201",
+              "createTime": "2024-08-20 15:38:49",
+              "eventTypes": [
+                {
+                  "eventSourceName": "ctyun.ctlts",
+                  "desc": "日志单元录入日志",
+                  "schemaName": "ctlts:unit-insert",
+                  "groupId": "OFFICIAL_GROUP"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "eventbridge.source.list",
+      "api_id": "18572",
+      "title": "查询自定义事件源列表",
+      "description": {
+        "en-GB": "List custom event sources",
+        "en-US": "List custom event sources",
+        "zh-CN": "查询自定义事件源列表"
+      },
+      "category": "source",
+      "command_path": [
+        "source",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v1/busSource/list",
+      "content_type": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18572&data=219&isNormal=1&vid=298",
+      "retryable": true,
+      "dangerous": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "eventBusName",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "查询的事件总线名称。",
+          "descriptions": {
+            "en-GB": "Event bus name",
+            "en-US": "Event bus name",
+            "zh-CN": "查询的事件总线名称。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_bus_name",
+          "cli_flag": "event-bus-name",
+          "table_target": "",
+          "example": "bus1",
+          "help_descriptions": {
+            "en-GB": "Name of the event bus",
+            "en-US": "Name of the event bus",
+            "zh-CN": "查询的事件总线名称。"
+          }
+        },
+        {
+          "name": "eventSourceName",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "查询的事件源名称，支持模糊搜索。",
+          "descriptions": {
+            "en-GB": "Event source name",
+            "en-US": "Event source name",
+            "zh-CN": "查询的事件源名称，支持模糊搜索。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_source_name",
+          "cli_flag": "event-source-name",
+          "table_target": "",
+          "example": "source1",
+          "help_descriptions": {
+            "en-GB": "Name of the event source (supports partial matches)",
+            "en-US": "Name of the event source (supports partial matches)",
+            "zh-CN": "查询的事件源名称，支持模糊搜索。"
+          }
+        },
+        {
+          "name": "pageNum",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "1",
+          "pattern": "",
+          "description": "分页中的页数，默认1。",
+          "descriptions": {
+            "en-GB": "Page num",
+            "en-US": "Page num",
+            "zh-CN": "分页中的页数，默认1。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_num",
+          "cli_flag": "page-num",
+          "table_target": "",
+          "example": 1,
+          "help_descriptions": {
+            "en-GB": "Page number, starting at 1",
+            "en-US": "Page number, starting at 1",
+            "zh-CN": "分页中的页数，默认1。"
+          }
+        },
+        {
+          "name": "pageSize",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "10",
+          "pattern": "",
+          "description": "分页中的每页大小，默认10。",
+          "descriptions": {
+            "en-GB": "Page size",
+            "en-US": "Page size",
+            "zh-CN": "分页中的每页大小，默认10。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10,
+          "help_descriptions": {
+            "en-GB": "Number of results per page",
+            "en-US": "Number of results per page",
+            "zh-CN": "分页中的每页大小，默认10。"
+          }
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002",
+          "help_descriptions": {
+            "en-GB": "Resource pool for the EventBridge request",
+            "en-US": "Resource pool for the EventBridge request",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj.list",
+        "row_path": "returnObj.list",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "event_source_name",
+            "path": "eventSourceName",
+            "label_en": "Event Source",
+            "label_zh": "事件源名称"
+          },
+          {
+            "key": "desc",
+            "path": "desc",
+            "label_en": "Description",
+            "label_zh": "描述"
+          },
+          {
+            "key": "event_bus_name",
+            "path": "eventBusName",
+            "label_en": "Event Bus",
+            "label_zh": "事件总线名称"
+          },
+          {
+            "key": "type",
+            "path": "type",
+            "label_en": "Source Type",
+            "label_zh": "事件源类型"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间"
+          },
+          {
+            "key": "update_time",
+            "path": "updateTime",
+            "label_en": "Update Time",
+            "label_zh": "更新时间"
+          },
+          {
+            "key": "product_name",
+            "path": "productName",
+            "label_en": "Product Name",
+            "label_zh": "产品名称"
+          },
+          {
+            "key": "product_describe",
+            "path": "productDescribe",
+            "label_en": "Product Description",
+            "label_zh": "产品描述"
+          }
+        ],
+        "default_columns": [
+          "event_source_name",
+          "desc",
+          "event_bus_name",
+          "status"
+        ]
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "success",
+        "returnObj": {
+          "total": 1,
+          "list": [
+            {
+              "eventSourceName": "test123",
+              "desc": "",
+              "eventBusName": "test0723",
+              "type": "kafka",
+              "status": "201",
+              "createTime": "2025-06-01 00:00:00",
+              "updateTime": "2025-06-01 00:00:00",
+              "productName": "kafka",
+              "productDescribe": "分布式消息服务Kafka"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "eventbridge.source.delete",
+      "api_id": "18573",
+      "title": "删除事件源",
+      "description": {
+        "en-GB": "Delete a custom event source",
+        "en-US": "Delete a custom event source",
+        "zh-CN": "删除事件源"
+      },
+      "category": "source",
+      "command_path": [
+        "source",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/v1/busSource/delete",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18573&data=219&isNormal=1&vid=298",
+      "retryable": false,
+      "dangerous": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "eventSourceName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件源名",
+          "descriptions": {
+            "en-GB": "Event source name",
+            "en-US": "Event source name",
+            "zh-CN": "事件源名"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_source_name",
+          "cli_flag": "event-source-name",
+          "table_target": "",
+          "example": "test1",
+          "help_descriptions": {
+            "en-GB": "Name of the event source",
+            "en-US": "Name of the event source",
+            "zh-CN": "事件源名"
+          }
+        },
+        {
+          "name": "eventBusName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件总线名称",
+          "descriptions": {
+            "en-GB": "Event bus name",
+            "en-US": "Event bus name",
+            "zh-CN": "事件总线名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_bus_name",
+          "cli_flag": "event-bus-name",
+          "table_target": "",
+          "example": "test0723",
+          "help_descriptions": {
+            "en-GB": "Name of the event bus",
+            "en-US": "Name of the event bus",
+            "zh-CN": "事件总线名称"
+          }
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002",
+          "help_descriptions": {
+            "en-GB": "Resource pool for the EventBridge request",
+            "en-US": "Resource pool for the EventBridge request",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息"
+          }
+        ],
+        "default_columns": [
+          "status_code",
+          "message"
+        ],
+        "layout": "vertical"
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "success",
+        "returnObj": {}
+      },
+      "request_example": {
+        "eventSourceName": "test1",
+        "eventBusName": "test0723"
+      }
+    },
+    {
+      "id": "eventbridge.source.create",
+      "api_id": "18574",
+      "title": "创建事件源",
+      "description": {
+        "en-GB": "Create a custom event source",
+        "en-US": "Create a custom event source",
+        "zh-CN": "创建事件源"
+      },
+      "category": "source",
+      "command_path": [
+        "source",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v1/busSource/create",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18574&data=219&isNormal=1&vid=298",
+      "retryable": false,
+      "dangerous": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "eventSourceName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件源名。 规则：长度限制为2~63个字符，可以由小写字母、数字或短划线(-)组成，必须以小写字母开始，事件源名同一总线内不可重复。",
+          "descriptions": {
+            "en-GB": "Event source name",
+            "en-US": "Event source name",
+            "zh-CN": "事件源名。 规则：长度限制为2~63个字符，可以由小写字母、数字或短划线(-)组成，必须以小写字母开始，事件源名同一总线内不可重复。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_source_name",
+          "cli_flag": "event-source-name",
+          "table_target": "",
+          "example": "test1",
+          "help_descriptions": {
+            "en-GB": "Name of the event source (2–63 lowercase letters, digits or hyphens, starting with a letter)",
+            "en-US": "Name of the event source (2–63 lowercase letters, digits or hyphens, starting with a letter)",
+            "zh-CN": "事件源名。 规则：长度限制为2~63个字符，可以由小写字母、数字或短划线(-)组成，必须以小写字母开始，事件源名同一总线内不可重复。"
+          }
+        },
+        {
+          "name": "eventBusName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件总线名称。",
+          "descriptions": {
+            "en-GB": "Event bus name",
+            "en-US": "Event bus name",
+            "zh-CN": "事件总线名称。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_bus_name",
+          "cli_flag": "event-bus-name",
+          "table_target": "",
+          "example": "test0723",
+          "help_descriptions": {
+            "en-GB": "Name of the event bus",
+            "en-US": "Name of the event bus",
+            "zh-CN": "事件总线名称。"
+          }
+        },
+        {
+          "name": "desc",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件源描述，非必填，限制为须小于256个字符。",
+          "descriptions": {
+            "en-GB": "Desc",
+            "en-US": "Desc",
+            "zh-CN": "事件源描述，非必填，限制为须小于256个字符。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "desc",
+          "cli_flag": "desc",
+          "table_target": "",
+          "example_unavailable": true,
+          "help_descriptions": {
+            "en-GB": "Resource description, fewer than 256 characters",
+            "en-US": "Resource description, fewer than 256 characters",
+            "zh-CN": "事件源描述，非必填，限制为须小于256个字符。"
+          }
+        },
+        {
+          "name": "type",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "simple",
+            "kafka",
+            "rocketmq",
+            "rabbitmq",
+            "mqtt",
+            "schedule"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "事件源类型，请参考 自定义事件源参数 。",
+          "descriptions": {
+            "en-GB": "Type",
+            "en-US": "Type",
+            "zh-CN": "事件源类型，请参考 自定义事件源参数 。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "type",
+          "cli_flag": "type",
+          "table_target": "",
+          "example": "simple",
+          "help_descriptions": {
+            "en-GB": "Custom event source provider type",
+            "en-US": "Custom event source provider type",
+            "zh-CN": "事件源类型，请参考 自定义事件源参数 。"
+          }
+        },
+        {
+          "name": "eventSourceParams",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件源参数，请参考 自定义事件源参数 。",
+          "descriptions": {
+            "en-GB": "Event source params",
+            "en-US": "Event source params",
+            "zh-CN": "事件源参数，请参考 自定义事件源参数 。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_source_params",
+          "cli_flag": "event-source-params",
+          "table_target": "",
+          "example_unavailable": true,
+          "help_descriptions": {
+            "en-GB": "Provider configuration as a JSON array",
+            "en-US": "Provider configuration as a JSON array",
+            "zh-CN": "事件源参数，请参考 自定义事件源参数 。"
+          }
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002",
+          "help_descriptions": {
+            "en-GB": "Resource pool for the EventBridge request",
+            "en-US": "Resource pool for the EventBridge request",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息"
+          }
+        ],
+        "default_columns": [
+          "status_code",
+          "message"
+        ],
+        "layout": "vertical"
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "success",
+        "returnObj": {}
+      },
+      "request_example": {
+        "eventSourceName": "test1",
+        "eventBusName": "test0723",
+        "desc": "",
+        "type": "simple"
+      },
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "type",
+            "in": [
+              "kafka",
+              "rocketmq",
+              "rabbitmq",
+              "mqtt",
+              "schedule"
+            ]
+          },
+          "required": [
+            "event_source_params"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eventbridge.rule.enable",
+      "api_id": "18575",
+      "title": "启用事件规则",
+      "description": {
+        "en-GB": "Enable an event rule",
+        "en-US": "Enable an event rule",
+        "zh-CN": "启用事件规则"
+      },
+      "category": "rule",
+      "command_path": [
+        "rule",
+        "enable"
+      ],
+      "method": "POST",
+      "path": "/v1/busRule/enable",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18575&data=219&isNormal=1&vid=298",
+      "retryable": false,
+      "dangerous": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "eventBusName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件总线名。",
+          "descriptions": {
+            "en-GB": "Event bus name",
+            "en-US": "Event bus name",
+            "zh-CN": "事件总线名。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_bus_name",
+          "cli_flag": "event-bus-name",
+          "table_target": "",
+          "example": "testbus",
+          "help_descriptions": {
+            "en-GB": "Name of the event bus",
+            "en-US": "Name of the event bus",
+            "zh-CN": "事件总线名。"
+          }
+        },
+        {
+          "name": "eventRuleName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件规则名。",
+          "descriptions": {
+            "en-GB": "Event rule name",
+            "en-US": "Event rule name",
+            "zh-CN": "事件规则名。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_rule_name",
+          "cli_flag": "event-rule-name",
+          "table_target": "",
+          "example": "testrule",
+          "help_descriptions": {
+            "en-GB": "Name of the event rule",
+            "en-US": "Name of the event rule",
+            "zh-CN": "事件规则名。"
+          }
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002",
+          "help_descriptions": {
+            "en-GB": "Resource pool for the EventBridge request",
+            "en-US": "Resource pool for the EventBridge request",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息"
+          }
+        ],
+        "default_columns": [
+          "status_code",
+          "message"
+        ],
+        "layout": "vertical"
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "success",
+        "returnObj": {}
+      },
+      "request_example": {
+        "eventRuleName": "testrule",
+        "eventBusName": "testbus"
+      }
+    },
+    {
+      "id": "eventbridge.rule.disable",
+      "api_id": "18576",
+      "title": "禁用事件规则",
+      "description": {
+        "en-GB": "Disable an event rule",
+        "en-US": "Disable an event rule",
+        "zh-CN": "禁用事件规则"
+      },
+      "category": "rule",
+      "command_path": [
+        "rule",
+        "disable"
+      ],
+      "method": "POST",
+      "path": "/v1/busRule/disable",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18576&data=219&isNormal=1&vid=298",
+      "retryable": false,
+      "dangerous": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "eventBusName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件总线名。",
+          "descriptions": {
+            "en-GB": "Event bus name",
+            "en-US": "Event bus name",
+            "zh-CN": "事件总线名。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_bus_name",
+          "cli_flag": "event-bus-name",
+          "table_target": "",
+          "example": "testbus",
+          "help_descriptions": {
+            "en-GB": "Name of the event bus",
+            "en-US": "Name of the event bus",
+            "zh-CN": "事件总线名。"
+          }
+        },
+        {
+          "name": "eventRuleName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件规则名。",
+          "descriptions": {
+            "en-GB": "Event rule name",
+            "en-US": "Event rule name",
+            "zh-CN": "事件规则名。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_rule_name",
+          "cli_flag": "event-rule-name",
+          "table_target": "",
+          "example": "testrule",
+          "help_descriptions": {
+            "en-GB": "Name of the event rule",
+            "en-US": "Name of the event rule",
+            "zh-CN": "事件规则名。"
+          }
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002",
+          "help_descriptions": {
+            "en-GB": "Resource pool for the EventBridge request",
+            "en-US": "Resource pool for the EventBridge request",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息"
+          }
+        ],
+        "default_columns": [
+          "status_code",
+          "message"
+        ],
+        "layout": "vertical"
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "success",
+        "returnObj": {}
+      },
+      "request_example": {
+        "eventRuleName": "testrule",
+        "eventBusName": "testbus"
+      }
+    },
+    {
+      "id": "eventbridge.rule.show",
+      "api_id": "18577",
+      "title": "查询事件规则详情信息",
+      "description": {
+        "en-GB": "Show an event rule",
+        "en-US": "Show an event rule",
+        "zh-CN": "查询事件规则详情信息"
+      },
+      "category": "rule",
+      "command_path": [
+        "rule",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v1/busRule/detail",
+      "content_type": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18577&data=219&isNormal=1&vid=298",
+      "retryable": true,
+      "dangerous": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "eventBusName",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "查询的事件总线名称。",
+          "descriptions": {
+            "en-GB": "Event bus name",
+            "en-US": "Event bus name",
+            "zh-CN": "查询的事件总线名称。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_bus_name",
+          "cli_flag": "event-bus-name",
+          "table_target": "",
+          "example": "bus1",
+          "help_descriptions": {
+            "en-GB": "Name of the event bus",
+            "en-US": "Name of the event bus",
+            "zh-CN": "查询的事件总线名称。"
+          }
+        },
+        {
+          "name": "eventRuleName",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "查询的事件规则名称。",
+          "descriptions": {
+            "en-GB": "Event rule name",
+            "en-US": "Event rule name",
+            "zh-CN": "查询的事件规则名称。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_rule_name",
+          "cli_flag": "event-rule-name",
+          "table_target": "",
+          "example": "rule1",
+          "help_descriptions": {
+            "en-GB": "Name of the event rule",
+            "en-US": "Name of the event rule",
+            "zh-CN": "查询的事件规则名称。"
+          }
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002",
+          "help_descriptions": {
+            "en-GB": "Resource pool for the EventBridge request",
+            "en-US": "Resource pool for the EventBridge request",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "event_rule_name",
+            "path": "eventRuleName",
+            "label_en": "Event Rule",
+            "label_zh": "事件规则名称"
+          },
+          {
+            "key": "desc",
+            "path": "desc",
+            "label_en": "Description",
+            "label_zh": "描述"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态"
+          },
+          {
+            "key": "event_bus_name",
+            "path": "eventBusName",
+            "label_en": "Event Bus",
+            "label_zh": "事件总线名称"
+          },
+          {
+            "key": "filter_pattern",
+            "path": "filterPattern",
+            "label_en": "Event Pattern",
+            "label_zh": "事件模式"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间"
+          },
+          {
+            "key": "update_time",
+            "path": "updateTime",
+            "label_en": "Update Time",
+            "label_zh": "更新时间"
+          },
+          {
+            "key": "event_targets",
+            "path": "eventTargets",
+            "label_en": "Event Targets",
+            "label_zh": "事件目标"
+          }
+        ],
+        "default_columns": [
+          "event_rule_name",
+          "desc",
+          "status",
+          "event_bus_name"
+        ],
+        "layout": "vertical"
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "success",
+        "returnObj": {
+          "eventRuleName": "r123",
+          "desc": "",
+          "status": "201",
+          "eventBusName": "test0723",
+          "filterPattern": "{}",
+          "createTime": "2025-06-01 00:00:00",
+          "updateTime": "2025-06-01 00:00:00",
+          "eventTargets": [
+            {
+              "type": "kafka",
+              "eventTargetName": "_C56pT3570g0X6prTQVPI",
+              "params": [
+                {
+                  "resourceKey": "instanceId",
+                  "value": "356b3496b87713542dccfe7deef7fe35",
+                  "form": "CONSTANT",
+                  "template": null
+                },
+                {
+                  "resourceKey": "topic",
+                  "value": "test2",
+                  "form": "CONSTANT",
+                  "template": null
+                },
+                {
+                  "resourceKey": "value",
+                  "value": "",
+                  "form": "ORIGINAL",
+                  "template": null
+                },
+                {
+                  "resourceKey": "key",
+                  "value": "",
+                  "form": "EMPTY",
+                  "template": null
+                },
+                {
+                  "resourceKey": "accountId",
+                  "value": "0023e4d7e3754c1c9e11818c12938140",
+                  "form": "CONSTANT",
+                  "template": null
+                },
+                {
+                  "resourceKey": "regionCode",
+                  "value": "b342b77ef26b11ecb0ac0242ac110002",
+                  "form": "CONSTANT",
+                  "template": null
+                },
+                {
+                  "resourceKey": "tenantId",
+                  "value": "9948704",
+                  "form": "CONSTANT",
+                  "template": null
+                },
+                {
+                  "resourceKey": "userId",
+                  "value": "182071",
+                  "form": "CONSTANT",
+                  "template": null
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "eventbridge.stream.delete",
+      "api_id": "18578",
+      "title": "删除事件流",
+      "description": {
+        "en-GB": "Delete an event stream",
+        "en-US": "Delete an event stream",
+        "zh-CN": "删除事件流"
+      },
+      "category": "stream",
+      "command_path": [
+        "stream",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/v1/stream/delete",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18578&data=219&isNormal=1&vid=298",
+      "retryable": false,
+      "dangerous": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "eventStreamName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件流名。",
+          "descriptions": {
+            "en-GB": "Event stream name",
+            "en-US": "Event stream name",
+            "zh-CN": "事件流名。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_stream_name",
+          "cli_flag": "event-stream-name",
+          "table_target": "",
+          "example": "testflow",
+          "help_descriptions": {
+            "en-GB": "Name of the event stream",
+            "en-US": "Name of the event stream",
+            "zh-CN": "事件流名。"
+          }
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002",
+          "help_descriptions": {
+            "en-GB": "Resource pool for the EventBridge request",
+            "en-US": "Resource pool for the EventBridge request",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息"
+          }
+        ],
+        "default_columns": [
+          "status_code",
+          "message"
+        ],
+        "layout": "vertical"
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "success",
+        "returnObj": {}
+      },
+      "request_example": {
+        "eventStreamName": "testflow"
+      }
+    },
+    {
+      "id": "eventbridge.stream.create",
+      "api_id": "18579",
+      "title": "创建事件流",
+      "description": {
+        "en-GB": "Create an event stream",
+        "en-US": "Create an event stream",
+        "zh-CN": "创建事件流"
+      },
+      "category": "stream",
+      "command_path": [
+        "stream",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v1/stream/create",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18579&data=219&isNormal=1&vid=298",
+      "retryable": false,
+      "dangerous": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "eventStreamName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件流名。 规则：长度限制为2~63个字符，可以由小写字母、数字或短划线(-)组成，必须以小写字母开始，事件源名同一总线内不可重复。",
+          "descriptions": {
+            "en-GB": "Event stream name",
+            "en-US": "Event stream name",
+            "zh-CN": "事件流名。 规则：长度限制为2~63个字符，可以由小写字母、数字或短划线(-)组成，必须以小写字母开始，事件源名同一总线内不可重复。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_stream_name",
+          "cli_flag": "event-stream-name",
+          "table_target": "",
+          "example": "stream1",
+          "help_descriptions": {
+            "en-GB": "Name of the event stream (2–63 lowercase letters, digits or hyphens, starting with a letter)",
+            "en-US": "Name of the event stream (2–63 lowercase letters, digits or hyphens, starting with a letter)",
+            "zh-CN": "事件流名。 规则：长度限制为2~63个字符，可以由小写字母、数字或短划线(-)组成，必须以小写字母开始，事件源名同一总线内不可重复。"
+          }
+        },
+        {
+          "name": "desc",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件流描述，非必填，限制为须小于256个字符。",
+          "descriptions": {
+            "en-GB": "Desc",
+            "en-US": "Desc",
+            "zh-CN": "事件流描述，非必填，限制为须小于256个字符。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "desc",
+          "cli_flag": "desc",
+          "table_target": "",
+          "example": "test",
+          "help_descriptions": {
+            "en-GB": "Resource description, fewer than 256 characters",
+            "en-US": "Resource description, fewer than 256 characters",
+            "zh-CN": "事件流描述，非必填，限制为须小于256个字符。"
+          }
+        },
+        {
+          "name": "streamSource",
+          "location": "body",
+          "required": true,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件源项。",
+          "descriptions": {
+            "en-GB": "Stream source",
+            "en-US": "Stream source",
+            "zh-CN": "事件源项。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "stream_source",
+          "cli_flag": "stream-source",
+          "table_target": "",
+          "example": {
+            "type": "kafka",
+            "params": [
+              {
+                "resourceKey": "instanceId",
+                "value": "356b3496b87713542dccfe7deef7fe35",
+                "form": "CONSTANT"
+              },
+              {
+                "resourceKey": "topic",
+                "value": "test",
+                "form": "CONSTANT"
+              },
+              {
+                "resourceKey": "groupName",
+                "value": "GID_EVENTBRIDGE_1753432067956",
+                "form": "CONSTANT"
+              },
+              {
+                "resourceKey": "initialOffset",
+                "value": "latest",
+                "form": "CONSTANT"
+              },
+              {
+                "resourceKey": "dataFormat",
+                "value": "JSON",
+                "form": "CONSTANT"
+              }
+            ]
+          },
+          "help_descriptions": {
+            "en-GB": "Stream source and its parameters as a JSON object",
+            "en-US": "Stream source and its parameters as a JSON object",
+            "zh-CN": "事件源项。"
+          }
+        },
+        {
+          "name": "filterPattern",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件过滤项。需符合一定的规则，详见 事件模式说明",
+          "descriptions": {
+            "en-GB": "Filter pattern",
+            "en-US": "Filter pattern",
+            "zh-CN": "事件过滤项。需符合一定的规则，详见 事件模式说明"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "filter_pattern",
+          "cli_flag": "filter-pattern",
+          "table_target": "",
+          "example": "{}",
+          "help_descriptions": {
+            "en-GB": "Event matching pattern as a JSON string",
+            "en-US": "Event matching pattern as a JSON string",
+            "zh-CN": "事件过滤项。需符合一定的规则，详见 事件模式说明"
+          }
+        },
+        {
+          "name": "transform",
+          "location": "body",
+          "required": true,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件转换项。",
+          "descriptions": {
+            "en-GB": "Transform",
+            "en-US": "Transform",
+            "zh-CN": "事件转换项。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "transform",
+          "cli_flag": "transform",
+          "table_target": "",
+          "example": {
+            "type": "faas",
+            "params": [
+              {
+                "resourceKey": "functionName",
+                "value": "testgo4",
+                "form": "CONSTANT"
+              },
+              {
+                "resourceKey": "functionVersion",
+                "value": "LATEST",
+                "form": "CONSTANT"
+              }
+            ]
+          },
+          "help_descriptions": {
+            "en-GB": "Event transformation configuration as a JSON object",
+            "en-US": "Event transformation configuration as a JSON object",
+            "zh-CN": "事件转换项。"
+          }
+        },
+        {
+          "name": "streamSink",
+          "location": "body",
+          "required": true,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "事件目标项。",
+          "descriptions": {
+            "en-GB": "Stream sink",
+            "en-US": "Stream sink",
+            "zh-CN": "事件目标项。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "stream_sink",
+          "cli_flag": "stream-sink",
+          "table_target": "",
+          "example": {
+            "type": "kafka",
+            "params": [
+              {
+                "resourceKey": "instanceId",
+                "value": "356b3496b87713542dccfe7deef7fe35",
+                "form": "CONSTANT"
+              },
+              {
+                "resourceKey": "topic",
+                "value": "test2",
+                "form": "CONSTANT"
+              },
+              {
+                "resourceKey": "value",
+                "value": "",
+                "form": "ORIGINAL"
+              },
+              {
+                "resourceKey": "key",
+                "value": "",
+                "form": "EMPTY"
+              }
+            ]
+          },
+          "help_descriptions": {
+            "en-GB": "Delivery target and its parameters as a JSON object",
+            "en-US": "Delivery target and its parameters as a JSON object",
+            "zh-CN": "事件目标项。"
+          }
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002",
+          "help_descriptions": {
+            "en-GB": "Resource pool for the EventBridge request",
+            "en-US": "Resource pool for the EventBridge request",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息"
+          }
+        ],
+        "default_columns": [
+          "status_code",
+          "message"
+        ],
+        "layout": "vertical"
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "success",
+        "returnObj": {}
+      },
+      "request_example": {
+        "eventStreamName": "stream1",
+        "desc": "test",
+        "streamSource": {
+          "type": "kafka",
+          "params": [
+            {
+              "resourceKey": "instanceId",
+              "value": "356b3496b87713542dccfe7deef7fe35",
+              "form": "CONSTANT"
+            },
+            {
+              "resourceKey": "topic",
+              "value": "test",
+              "form": "CONSTANT"
+            },
+            {
+              "resourceKey": "groupName",
+              "value": "GID_EVENTBRIDGE_1753432067956",
+              "form": "CONSTANT"
+            },
+            {
+              "resourceKey": "initialOffset",
+              "value": "latest",
+              "form": "CONSTANT"
+            },
+            {
+              "resourceKey": "dataFormat",
+              "value": "JSON",
+              "form": "CONSTANT"
+            }
+          ]
+        },
+        "filterPattern": "{}",
+        "transform": {
+          "type": "faas",
+          "params": [
+            {
+              "resourceKey": "functionName",
+              "value": "testgo4",
+              "form": "CONSTANT"
+            },
+            {
+              "resourceKey": "functionVersion",
+              "value": "LATEST",
+              "form": "CONSTANT"
+            }
+          ]
+        },
+        "streamSink": {
+          "type": "kafka",
+          "params": [
+            {
+              "resourceKey": "instanceId",
+              "value": "356b3496b87713542dccfe7deef7fe35",
+              "form": "CONSTANT"
+            },
+            {
+              "resourceKey": "topic",
+              "value": "test2",
+              "form": "CONSTANT"
+            },
+            {
+              "resourceKey": "value",
+              "value": "",
+              "form": "ORIGINAL"
+            },
+            {
+              "resourceKey": "key",
+              "value": "",
+              "form": "EMPTY"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "eventbridge.stream.list",
+      "api_id": "18580",
+      "title": "查询事件流列表",
+      "description": {
+        "en-GB": "List event streams",
+        "en-US": "List event streams",
+        "zh-CN": "查询事件流列表"
+      },
+      "category": "stream",
+      "command_path": [
+        "stream",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v1/stream/list",
+      "content_type": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18580&data=219&isNormal=1&vid=298",
+      "retryable": true,
+      "dangerous": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "eventStreamName",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "查询的事件流名称，支持模糊搜索。",
+          "descriptions": {
+            "en-GB": "Event stream name",
+            "en-US": "Event stream name",
+            "zh-CN": "查询的事件流名称，支持模糊搜索。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_stream_name",
+          "cli_flag": "event-stream-name",
+          "table_target": "",
+          "example": "bus1",
+          "help_descriptions": {
+            "en-GB": "Name of the event stream (supports partial matches)",
+            "en-US": "Name of the event stream (supports partial matches)",
+            "zh-CN": "查询的事件流名称，支持模糊搜索。"
+          }
+        },
+        {
+          "name": "eventStreamNamePrefix",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "查询的事件流名称前缀。",
+          "descriptions": {
+            "en-GB": "Event stream name prefix",
+            "en-US": "Event stream name prefix",
+            "zh-CN": "查询的事件流名称前缀。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "event_stream_name_prefix",
+          "cli_flag": "event-stream-name-prefix",
+          "table_target": "",
+          "example": "rule1",
+          "help_descriptions": {
+            "en-GB": "Filter streams by name prefix",
+            "en-US": "Filter streams by name prefix",
+            "zh-CN": "查询的事件流名称前缀。"
+          }
+        },
+        {
+          "name": "pageNum",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "1",
+          "pattern": "",
+          "description": "分页中的页数，默认1。",
+          "descriptions": {
+            "en-GB": "Page num",
+            "en-US": "Page num",
+            "zh-CN": "分页中的页数，默认1。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_num",
+          "cli_flag": "page-num",
+          "table_target": "",
+          "example": 1,
+          "help_descriptions": {
+            "en-GB": "Page number, starting at 1",
+            "en-US": "Page number, starting at 1",
+            "zh-CN": "分页中的页数，默认1。"
+          }
+        },
+        {
+          "name": "pageSize",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "10",
+          "pattern": "",
+          "description": "分页中的每页大小，默认10。",
+          "descriptions": {
+            "en-GB": "Page size",
+            "en-US": "Page size",
+            "zh-CN": "分页中的每页大小，默认10。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10,
+          "help_descriptions": {
+            "en-GB": "Number of results per page",
+            "en-US": "Number of results per page",
+            "zh-CN": "分页中的每页大小，默认10。"
+          }
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002",
+          "help_descriptions": {
+            "en-GB": "Resource pool for the EventBridge request",
+            "en-US": "Resource pool for the EventBridge request",
+            "zh-CN": "实例的资源池ID。通过查询 事件总线资源池附录文档 获得。"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj.list",
+        "row_path": "returnObj.list",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "event_stream_name",
+            "path": "eventStreamName",
+            "label_en": "Event Stream",
+            "label_zh": "事件流名称"
+          },
+          {
+            "key": "desc",
+            "path": "desc",
+            "label_en": "Description",
+            "label_zh": "描述"
+          },
+          {
+            "key": "stream_source",
+            "path": "streamSource",
+            "label_en": "Stream Source",
+            "label_zh": "事件流源端"
+          },
+          {
+            "key": "stream_sink",
+            "path": "streamSink",
+            "label_en": "Stream Target",
+            "label_zh": "事件流目标端"
+          },
+          {
+            "key": "filter_pattern",
+            "path": "filterPattern",
+            "label_en": "Event Pattern",
+            "label_zh": "事件模式"
+          },
+          {
+            "key": "transform",
+            "path": "transform",
+            "label_en": "Transformation",
+            "label_zh": "事件转换"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间"
+          },
+          {
+            "key": "update_time",
+            "path": "updateTime",
+            "label_en": "Update Time",
+            "label_zh": "更新时间"
+          }
+        ],
+        "default_columns": [
+          "event_stream_name",
+          "desc",
+          "status"
+        ]
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "success",
+        "returnObj": {
+          "total": 1,
+          "list": [
+            {
+              "eventStreamName": "stream1",
+              "desc": "test",
+              "streamSource": {
+                "productName": "kafka",
+                "productDescribe": "分布式消息服务Kafka",
+                "type": "kafka",
+                "params": [
+                  {
+                    "resourceKey": "instanceId",
+                    "value": "356b3496b87713542dccfe7deef7fe35",
+                    "form": "CONSTANT",
+                    "template": null
+                  },
+                  {
+                    "resourceKey": "topic",
+                    "value": "test",
+                    "form": "CONSTANT",
+                    "template": null
+                  },
+                  {
+                    "resourceKey": "groupName",
+                    "value": "GID_EVENTBRIDGE_1753432067956",
+                    "form": "CONSTANT",
+                    "template": null
+                  },
+                  {
+                    "resourceKey": "initialOffset",
+                    "value": "latest",
+                    "form": "CONSTANT",
+                    "template": null
+                  },
+                  {
+                    "resourceKey": "dataFormat",
+                    "value": "JSON",
+                    "form": "CONSTANT",
+                    "template": null
+                  },
+                  {
+                    "resourceKey": "accountId",
+                    "value": "0023e4d7e3754c1c9e11818c12938140",
+                    "form": "CONSTANT",
+                    "template": null
+                  },
+                  {
+                    "resourceKey": "regionCode",
+                    "value": "b342b77ef26b11ecb0ac0242ac110002",
+                    "form": "CONSTANT",
+                    "template": null
+                  },
+                  {
+                    "resourceKey": "tenantId",
+                    "value": "9948704",
+                    "form": "CONSTANT",
+                    "template": null
+                  },
+                  {
+                    "resourceKey": "userId",
+                    "value": "182071",
+                    "form": "CONSTANT",
+                    "template": null
+                  }
+                ]
+              },
+              "streamSink": {
+                "productName": "kafka",
+                "productDescribe": "分布式消息服务Kafka",
+                "type": "kafka",
+                "params": [
+                  {
+                    "resourceKey": "instanceId",
+                    "value": "356b3496b87713542dccfe7deef7fe35",
+                    "form": "CONSTANT",
+                    "template": null
+                  },
+                  {
+                    "resourceKey": "topic",
+                    "value": "test2",
+                    "form": "CONSTANT",
+                    "template": null
+                  },
+                  {
+                    "resourceKey": "value",
+                    "value": "",
+                    "form": "ORIGINAL",
+                    "template": null
+                  },
+                  {
+                    "resourceKey": "key",
+                    "value": "",
+                    "form": "EMPTY",
+                    "template": null
+                  },
+                  {
+                    "resourceKey": "accountId",
+                    "value": "0023e4d7e3754c1c9e11818c12938140",
+                    "form": "CONSTANT",
+                    "template": null
+                  },
+                  {
+                    "resourceKey": "regionCode",
+                    "value": "b342b77ef26b11ecb0ac0242ac110002",
+                    "form": "CONSTANT",
+                    "template": null
+                  },
+                  {
+                    "resourceKey": "tenantId",
+                    "value": "9948704",
+                    "form": "CONSTANT",
+                    "template": null
+                  },
+                  {
+                    "resourceKey": "userId",
+                    "value": "18xx71",
+                    "form": "CONSTANT",
+                    "template": null
+                  }
+                ]
+              },
+              "filterPattern": "{\"type\":[{\"prefix\":\"ctyun.\"}]}",
+              "transform": {
+                "productName": "faas",
+                "productDescribe": "函数计算",
+                "type": "faas",
+                "params": [
+                  {
+                    "resourceKey": "functionName",
+                    "value": "testgo",
+                    "form": "CONSTANT",
+                    "template": null
+                  },
+                  {
+                    "resourceKey": "functionVersion",
+                    "value": "LATEST",
+                    "form": "CONSTANT",
+                    "template": null
+                  },
+                  {
+                    "resourceKey": "accountId",
+                    "value": "0023e4d7e3754c1c9e11818c12938140",
+                    "form": "CONSTANT",
+                    "template": null
+                  },
+                  {
+                    "resourceKey": "regionCode",
+                    "value": "b342b77ef26xxxxxb0ac0242ac110002",
+                    "form": "CONSTANT",
+                    "template": null
+                  },
+                  {
+                    "resourceKey": "tenantId",
+                    "value": "99xxx04",
+                    "form": "CONSTANT",
+                    "template": null
+                  },
+                  {
+                    "resourceKey": "userId",
+                    "value": "18xx71",
+                    "form": "CONSTANT",
+                    "template": null
+                  }
+                ]
+              },
+              "status": "201",
+              "createTime": "2025-07-25 16:27:45",
+              "updateTime": "2025-07-25 16:27:45"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "waiters": {
+    "eventbridge.source.running": {
+      "commands": [
+        "eventbridge.source.show"
+      ],
+      "path": "returnObj.status",
+      "success": "201",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "API 18570 documents the string 201 as running and returns it in the published response. No terminal failure value is documented."
+    },
+    "eventbridge.official-source.running": {
+      "commands": [
+        "eventbridge.source.official.list"
+      ],
+      "path": "status",
+      "success": "201",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "API 18571 documents the string 201 as running and returns it in the published response. No terminal failure value is documented.",
+      "selector": {
+        "path": "returnObj.list",
+        "key": "eventSourceName",
+        "value": "$param.event_source_name"
+      }
+    },
+    "eventbridge.rule.running": {
+      "commands": [
+        "eventbridge.rule.show"
+      ],
+      "path": "returnObj.status",
+      "success": "201",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "API 18577 documents the string 201 as running and returns it in the published response. No terminal failure value is documented."
+    },
+    "eventbridge.stream.running": {
+      "commands": [
+        "eventbridge.stream.list"
+      ],
+      "path": "status",
+      "success": "201",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "API 18580 documents the string 201 as running and returns it in the published response. No terminal failure value is documented.",
+      "selector": {
+        "path": "returnObj.list",
+        "key": "eventStreamName",
+        "value": "$param.event_stream_name"
+      }
+    }
+  }
+}

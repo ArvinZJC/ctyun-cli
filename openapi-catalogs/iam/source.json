@@ -148,7 +148,7 @@
         {
           "name": "mobilePhone",
           "location": "body",
-          "required": true,
+          "required": false,
           "type": "String",
           "enum": null,
           "default": "",
@@ -360,11 +360,11 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "创建子用户的登录名自定义前缀，长度为1-7位，首字母必须是英文字母或汉字，只支持中文、英文大小写字母、数字和下划线，不能以下划线结尾。和邮箱二者必填其一",
+          "description": "长度1-64位，支持中文、英文大小写字母、数字、\".\"、\"-\"、\"_\"，且不能以下划线结尾",
           "descriptions": {
             "en-GB": "User Nick Name",
             "en-US": "User Nick Name",
-            "zh-CN": "创建子用户的登录名自定义前缀，长度为1-7位，首字母必须是英文字母或汉字，只支持中文、英文大小写字母、数字和下划线，不能以下划线结尾。和邮箱二者必填其一"
+            "zh-CN": "长度1-64位，支持中文、英文大小写字母、数字、\".\"、\"-\"、\"_\"，且不能以下划线结尾"
           },
           "help_descriptions": {
             "en-GB": "User Nick Name",
@@ -751,7 +751,7 @@
         {
           "name": "mobilePhone",
           "location": "body",
-          "required": true,
+          "required": false,
           "type": "String",
           "enum": null,
           "default": "",
@@ -806,16 +806,16 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "用户登录名自定义前缀，邮箱和用户登录名自定义前缀必填其一",
+          "description": "长度1-64位，支持中文、英文大小写字母、数字、\".\"、\"-\"、\"_\"，且不能以下划线结尾",
           "descriptions": {
             "en-GB": "User Nick Name",
             "en-US": "User Nick Name",
-            "zh-CN": "用户登录名自定义前缀，邮箱和用户登录名自定义前缀必填其一"
+            "zh-CN": "长度1-64位，支持中文、英文大小写字母、数字、\".\"、\"-\"、\"_\"，且不能以下划线结尾"
           },
           "help_descriptions": {
             "en-GB": "User Nick Name",
             "en-US": "User Nick Name",
-            "zh-CN": "用户登录名自定义前缀，邮箱和用户登录名自定义前缀必填其一"
+            "zh-CN": "长度1-64位，支持中文、英文大小写字母、数字、\".\"、\"-\"、\"_\"，且不能以下划线结尾"
           },
           "profile": "",
           "argument": "",
@@ -828,7 +828,7 @@
           "name": "prohibit",
           "location": "body",
           "required": true,
-          "type": "Integer",
+          "type": "String",
           "enum": null,
           "default": "",
           "pattern": "",
@@ -1702,22 +1702,43 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "控制台访问(PUB_100_02_0001: 禁止;PUB_100_02_0002: 关闭禁止)",
+          "description": "控制台访问(PUB_100_02_0001: 禁止;PUB_100_02_0002: 开启)",
           "descriptions": {
             "en-GB": "Console Access",
             "en-US": "Console Access",
-            "zh-CN": "控制台访问(PUB_100_02_0001: 禁止;PUB_100_02_0002: 关闭禁止)"
+            "zh-CN": "控制台访问(PUB_100_02_0001: 禁止;PUB_100_02_0002: 开启)"
           },
           "help_descriptions": {
             "en-GB": "Console Access",
             "en-US": "Console Access",
-            "zh-CN": "控制台访问(PUB_100_02_0001: 禁止;PUB_100_02_0002: 关闭禁止)"
+            "zh-CN": "控制台访问(PUB_100_02_0001: 禁止;PUB_100_02_0002: 开启)"
           },
           "profile": "",
           "argument": "",
           "cli_name": "console_access",
           "cli_flag": "console-access",
           "table_target": ""
+        },
+        {
+          "name": "apiAccess",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "OpenAPI访问(PUB_100_02_0001: 禁止;PUB_100_02_0002: 开启)",
+          "descriptions": {
+            "en-GB": "Api access",
+            "en-US": "Api access",
+            "zh-CN": "OpenAPI访问(PUB_100_02_0001: 禁止;PUB_100_02_0002: 开启)"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "api_access",
+          "cli_flag": "api-access",
+          "table_target": "",
+          "example_unavailable": true
         }
       ],
       "response": {
@@ -4774,16 +4795,16 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "0:关闭敏感操作、1: 开启用户级敏感操作、2:开启账号级敏感操作",
+          "description": "0关闭敏感操作、1：开启敏感操作保护，并由操作用户验证、2：开启敏感操作保护，并由主用户验证",
           "descriptions": {
             "en-GB": "Op Verify",
             "en-US": "Op Verify",
-            "zh-CN": "0:关闭敏感操作、1: 开启用户级敏感操作、2:开启账号级敏感操作"
+            "zh-CN": "0关闭敏感操作、1：开启敏感操作保护，并由操作用户验证、2：开启敏感操作保护，并由主用户验证"
           },
           "help_descriptions": {
             "en-GB": "Op Verify",
             "en-US": "Op Verify",
-            "zh-CN": "0:关闭敏感操作、1: 开启用户级敏感操作、2:开启账号级敏感操作"
+            "zh-CN": "0关闭敏感操作、1：开启敏感操作保护，并由操作用户验证、2：开启敏感操作保护，并由主用户验证"
           },
           "profile": "",
           "argument": "",
@@ -14153,6 +14174,1125 @@
         "type": 1
       },
       "example_response": null
+    },
+    {
+      "id": "iam.permission.subject.revoke",
+      "api_id": "24069",
+      "title": "解除用户或用户组授权",
+      "description": {
+        "en-GB": "Revoke permission subject",
+        "en-US": "Revoke permission subject",
+        "zh-CN": "解除用户或用户组授权"
+      },
+      "category": "permission",
+      "command_path": [
+        "permission",
+        "subject",
+        "revoke"
+      ],
+      "method": "POST",
+      "path": "/v1/perm/cancelAuthSubjectPolicy",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&api=24069&data=114&isNormal=1&vid=107",
+      "retryable": false,
+      "dangerous": true,
+      "parameters": [
+        {
+          "name": "policyId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "策略id",
+          "descriptions": {
+            "en-GB": "Policy ID",
+            "en-US": "Policy ID",
+            "zh-CN": "策略id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "policy_id",
+          "cli_flag": "policy-id",
+          "table_target": "",
+          "example": "2f234523e6e34xxxx03dd221b1ecff99",
+          "help_descriptions": {
+            "en-GB": "Policy ID",
+            "en-US": "Policy ID",
+            "zh-CN": "策略id"
+          }
+        },
+        {
+          "name": "authSubjectId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "授权主体ID：用户组id、用户id",
+          "descriptions": {
+            "en-GB": "Auth subject ID",
+            "en-US": "Auth subject ID",
+            "zh-CN": "授权主体ID：用户组id、用户id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "auth_subject_id",
+          "cli_flag": "auth-subject-id",
+          "table_target": "",
+          "example": "580a3c14197xxxx093e0034164e88836",
+          "help_descriptions": {
+            "en-GB": "Auth subject ID",
+            "en-US": "Auth subject ID",
+            "zh-CN": "授权主体ID：用户组id、用户id"
+          }
+        },
+        {
+          "name": "type",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "GLOBAL",
+            "RESOURCE_POOL",
+            "ENTERPRISE_PROJECT"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "策略类型，取值见枚举参数",
+          "descriptions": {
+            "en-GB": "Type",
+            "en-US": "Type",
+            "zh-CN": "策略类型，取值见枚举参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "type",
+          "cli_flag": "type",
+          "table_target": "",
+          "example": "RESOURCE_POOL",
+          "help_descriptions": {
+            "en-GB": "Type",
+            "en-US": "Type",
+            "zh-CN": "策略类型，取值见枚举参数"
+          }
+        },
+        {
+          "name": "authSubjectType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "USER",
+            "USER_GROUP",
+            "DELEGATE"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "授权主体类型，取值见枚举参数",
+          "descriptions": {
+            "en-GB": "Auth subject type",
+            "en-US": "Auth subject type",
+            "zh-CN": "授权主体类型，取值见枚举参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "auth_subject_type",
+          "cli_flag": "auth-subject-type",
+          "table_target": "",
+          "example": "USER",
+          "help_descriptions": {
+            "en-GB": "Auth subject type",
+            "en-US": "Auth subject type",
+            "zh-CN": "授权主体类型，取值见枚举参数"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码"
+          }
+        ],
+        "default_columns": [
+          "status_code"
+        ],
+        "layout": "vertical"
+      },
+      "examples": [],
+      "example_response": {
+        "statusCode": "800"
+      },
+      "request_example": {
+        "policyId": "2f234523e6e34xxxx03dd221b1ecff99",
+        "authSubjectId": "580a3c14197xxxx093e0034164e88836",
+        "type": "RESOURCE_POOL",
+        "authSubjectType": "USER"
+      }
+    },
+    {
+      "id": "iam.permission.subject.list",
+      "api_id": "24070",
+      "title": "用户或用户组授权信息分页查询",
+      "description": {
+        "en-GB": "List permission subject",
+        "en-US": "List permission subject",
+        "zh-CN": "用户或用户组授权信息分页查询"
+      },
+      "category": "permission",
+      "command_path": [
+        "permission",
+        "subject",
+        "list"
+      ],
+      "method": "POST",
+      "path": "/v1/perm/queryAuthSubjectPolicy",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&api=24070&data=114&isNormal=1&vid=107",
+      "retryable": true,
+      "dangerous": false,
+      "parameters": [
+        {
+          "name": "accountId",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "账号Id",
+          "descriptions": {
+            "en-GB": "Account ID",
+            "en-US": "Account ID",
+            "zh-CN": "账号Id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "account_id",
+          "cli_flag": "account-id",
+          "table_target": "",
+          "example_unavailable": true,
+          "help_descriptions": {
+            "en-GB": "Account ID",
+            "en-US": "Account ID",
+            "zh-CN": "账号Id"
+          }
+        },
+        {
+          "name": "searchField",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "POLICY_NAME",
+            "POLICY_DESC",
+            "AUTH_SUBJECT"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "搜索字段类型，取值见枚举参数",
+          "descriptions": {
+            "en-GB": "Search field",
+            "en-US": "Search field",
+            "zh-CN": "搜索字段类型，取值见枚举参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "search_field",
+          "cli_flag": "search-field",
+          "table_target": "",
+          "example_unavailable": true,
+          "help_descriptions": {
+            "en-GB": "Search field",
+            "en-US": "Search field",
+            "zh-CN": "搜索字段类型，取值见枚举参数"
+          }
+        },
+        {
+          "name": "authSubjectId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "授权主体ID，用户组id、用户id",
+          "descriptions": {
+            "en-GB": "Auth subject ID",
+            "en-US": "Auth subject ID",
+            "zh-CN": "授权主体ID，用户组id、用户id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "auth_subject_id",
+          "cli_flag": "auth-subject-id",
+          "table_target": "",
+          "example": "03093e00341xxxx8836580a3c1419707",
+          "help_descriptions": {
+            "en-GB": "Auth subject ID",
+            "en-US": "Auth subject ID",
+            "zh-CN": "授权主体ID，用户组id、用户id"
+          }
+        },
+        {
+          "name": "policyType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "CUSTOM",
+            "SYSTEM"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "策略类型筛选，取值见枚举参数",
+          "descriptions": {
+            "en-GB": "Policy type",
+            "en-US": "Policy type",
+            "zh-CN": "策略类型筛选，取值见枚举参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "policy_type",
+          "cli_flag": "policy-type",
+          "table_target": "",
+          "example_unavailable": true,
+          "help_descriptions": {
+            "en-GB": "Policy type",
+            "en-US": "Policy type",
+            "zh-CN": "策略类型筛选，取值见枚举参数"
+          }
+        },
+        {
+          "name": "policyAttribute",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "GLOBAL",
+            "RESOURCE_POOL",
+            "ENTERPRISE_PROJECT"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "策略属性筛选，取值见枚举参数",
+          "descriptions": {
+            "en-GB": "Policy attribute",
+            "en-US": "Policy attribute",
+            "zh-CN": "策略属性筛选，取值见枚举参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "policy_attribute",
+          "cli_flag": "policy-attribute",
+          "table_target": "",
+          "example_unavailable": true,
+          "help_descriptions": {
+            "en-GB": "Policy attribute",
+            "en-US": "Policy attribute",
+            "zh-CN": "策略属性筛选，取值见枚举参数"
+          }
+        },
+        {
+          "name": "pageSize",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "每页大小",
+          "descriptions": {
+            "en-GB": "Page size",
+            "en-US": "Page size",
+            "zh-CN": "每页大小"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10,
+          "help_descriptions": {
+            "en-GB": "Page size",
+            "en-US": "Page size",
+            "zh-CN": "每页大小"
+          }
+        },
+        {
+          "name": "authType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "IAM",
+            "ENTERPRISE_PROJECT"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "授权类型筛选，取值见枚举参数",
+          "descriptions": {
+            "en-GB": "Auth type",
+            "en-US": "Auth type",
+            "zh-CN": "授权类型筛选，取值见枚举参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "auth_type",
+          "cli_flag": "auth-type",
+          "table_target": "",
+          "example_unavailable": true,
+          "help_descriptions": {
+            "en-GB": "Auth type",
+            "en-US": "Auth type",
+            "zh-CN": "授权类型筛选，取值见枚举参数"
+          }
+        },
+        {
+          "name": "searchValue",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "搜索值（模糊搜索）",
+          "descriptions": {
+            "en-GB": "Search value",
+            "en-US": "Search value",
+            "zh-CN": "搜索值（模糊搜索）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "search_value",
+          "cli_flag": "search-value",
+          "table_target": "",
+          "example_unavailable": true,
+          "help_descriptions": {
+            "en-GB": "Search value",
+            "en-US": "Search value",
+            "zh-CN": "搜索值（模糊搜索）"
+          }
+        },
+        {
+          "name": "pageNum",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "当前页",
+          "descriptions": {
+            "en-GB": "Page num",
+            "en-US": "Page num",
+            "zh-CN": "当前页"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_num",
+          "cli_flag": "page-num",
+          "table_target": "",
+          "example": 1,
+          "help_descriptions": {
+            "en-GB": "Page num",
+            "en-US": "Page num",
+            "zh-CN": "当前页"
+          }
+        },
+        {
+          "name": "authSubjectType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "USER",
+            "USER_GROUP",
+            "DELEGATE"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "授权主体类型，取值见枚举参数",
+          "descriptions": {
+            "en-GB": "Auth subject type",
+            "en-US": "Auth subject type",
+            "zh-CN": "授权主体类型，取值见枚举参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "auth_subject_type",
+          "cli_flag": "auth-subject-type",
+          "table_target": "",
+          "example": "USER",
+          "help_descriptions": {
+            "en-GB": "Auth subject type",
+            "en-US": "Auth subject type",
+            "zh-CN": "授权主体类型，取值见枚举参数"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj.list",
+        "row_path": "returnObj.list",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "policy_id",
+            "path": "policyId",
+            "label_en": "Policy ID",
+            "label_zh": "策略 ID"
+          },
+          {
+            "key": "policy_name",
+            "path": "policyName",
+            "label_en": "Policy Name",
+            "label_zh": "策略名称"
+          },
+          {
+            "key": "policy_type",
+            "path": "policyType",
+            "label_en": "Policy Type",
+            "label_zh": "策略类型"
+          },
+          {
+            "key": "policy_desc",
+            "path": "policyDesc",
+            "label_en": "Policy Desc",
+            "label_zh": "策略描述"
+          },
+          {
+            "key": "auth_type",
+            "path": "authType",
+            "label_en": "Auth Type",
+            "label_zh": "授权类型"
+          },
+          {
+            "key": "policy_attribute",
+            "path": "policyAttribute",
+            "label_en": "Policy Attribute",
+            "label_zh": "策略属性"
+          },
+          {
+            "key": "attribute_info",
+            "path": "attributeInfo",
+            "label_en": "Attribute Info",
+            "label_zh": "策略属性信息"
+          },
+          {
+            "key": "auth_subject_type",
+            "path": "authSubjectType",
+            "label_en": "Auth Subject Type",
+            "label_zh": "授权主体类型"
+          },
+          {
+            "key": "auth_subject_id",
+            "path": "authSubjectId",
+            "label_en": "Auth Subject ID",
+            "label_zh": "授权主体ID"
+          },
+          {
+            "key": "auth_subject_name",
+            "path": "authSubjectName",
+            "label_en": "Auth Subject Name",
+            "label_zh": "授权主体名称"
+          },
+          {
+            "key": "auth_time",
+            "path": "authTime",
+            "label_en": "Auth Time",
+            "label_zh": "授权时间"
+          },
+          {
+            "key": "operations",
+            "path": "operations",
+            "label_en": "Operations",
+            "label_zh": "可执行操作"
+          }
+        ],
+        "default_columns": [
+          "policy_id",
+          "policy_name",
+          "policy_type",
+          "policy_desc",
+          "auth_type"
+        ]
+      },
+      "examples": [],
+      "example_response": {
+        "statusCode": "800",
+        "returnObj": {
+          "pageNum": 1,
+          "pageSize": 10,
+          "startRow": 0,
+          "endRow": 0,
+          "total": 8,
+          "pages": 1,
+          "navigatePages": 0,
+          "list": [
+            {
+              "policyId": "16988688f58xxxx0936c820f7276c4b7",
+              "policyName": "testxxxxtom",
+              "policyType": "CUSTOM",
+              "policyDesc": "testxxxxate",
+              "authType": "ENTERPRISE_PROJECT",
+              "policyAttribute": "ENTERPRISE_PROJECT",
+              "attributeInfo": {
+                "type": "ENTERPRISE_PROJECT",
+                "items": [
+                  {
+                    "id": "0",
+                    "name": "default",
+                    "privilegeId": "17fcc86c9daxxxx690dc6df6ed7e2140"
+                  },
+                  {
+                    "id": "2723b699ef3xxxx184d019260e808e1e",
+                    "name": "chexxxx",
+                    "privilegeId": "ceeae0db69exxxx1938d74c664c2ba44"
+                  },
+                  {
+                    "id": "f657d25488dxxxxaa8c5560d445cc05b",
+                    "name": "费用xxxx",
+                    "privilegeId": "c7cb8b499fdxxxx7a3f1131c298d88ed"
+                  }
+                ],
+                "count": 3
+              },
+              "authSubjectType": "USER_GROUP",
+              "authSubjectId": "b9d3874b74axxxx59f0b471baf17a413",
+              "authSubjectName": "ceshxxxxgai",
+              "authTime": "2026-04-13 16:51:25",
+              "operations": [
+                "REVOKE_AUTH",
+                "MODIFY_ENTERPRISE_PROJECT"
+              ]
+            },
+            {
+              "policyId": "57ccf35762fxxxx291954a8781547f9b",
+              "policyName": "测试资源xxxx206",
+              "policyType": "CUSTOM",
+              "policyDesc": "测试资源xxxx206",
+              "authType": "ENTERPRISE_PROJECT",
+              "policyAttribute": "ENTERPRISE_PROJECT",
+              "attributeInfo": {
+                "type": "ENTERPRISE_PROJECT",
+                "items": [
+                  {
+                    "id": "0",
+                    "name": "default",
+                    "privilegeId": "82b8e5c88aexxxx29395768e2db5079f"
+                  },
+                  {
+                    "id": "2723b699ef3xxxx184d019260e808e1e",
+                    "name": "chexxxx",
+                    "privilegeId": "629d71380d9xxxx0ad1fdc0617fb262d"
+                  },
+                  {
+                    "id": "f657d25488dxxxxaa8c5560d445cc05b",
+                    "name": "费用xxxx",
+                    "privilegeId": "f79e929ae0cxxxx1906edce38b999c0c"
+                  }
+                ],
+                "count": 3
+              },
+              "authSubjectType": "USER_GROUP",
+              "authSubjectId": "b9d3874b74axxxx59f0b471baf17a413",
+              "authSubjectName": "ceshxxxxgai",
+              "authTime": "2026-04-13 16:51:25",
+              "operations": [
+                "REVOKE_AUTH",
+                "MODIFY_ENTERPRISE_PROJECT"
+              ]
+            },
+            {
+              "policyId": "7a085e32e1axxxxead07a46abafe9654",
+              "policyName": "danxxxx",
+              "policyType": "CUSTOM",
+              "policyDesc": "danxxxx",
+              "authType": "IAM",
+              "policyAttribute": "GLOBAL",
+              "attributeInfo": {
+                "type": "GLOBAL",
+                "items": [
+                  {
+                    "id": "global",
+                    "name": "global",
+                    "privilegeId": "d0954ffee5dxxxx3b4b0a83d3f936a97"
+                  }
+                ],
+                "count": 1
+              },
+              "authSubjectType": "USER",
+              "authSubjectId": "03093e00341xxxx8836580a3c1419707",
+              "authSubjectName": "773c1aba3e6xxxx59e6f37722cd6c8d7",
+              "authTime": "2026-09-24 10:07:40",
+              "operations": [
+                "REVOKE_AUTH"
+              ]
+            },
+            {
+              "policyId": "6306cab23c8xxxxd8a3104c8cbcf82c8",
+              "policyName": "danxxxx",
+              "policyType": "CUSTOM",
+              "policyDesc": "danxxxx",
+              "authType": "IAM",
+              "policyAttribute": "GLOBAL",
+              "attributeInfo": {
+                "type": "GLOBAL",
+                "items": [
+                  {
+                    "id": "global",
+                    "name": "global",
+                    "privilegeId": "6d1642a5795xxxxeae1cea11afddd727"
+                  }
+                ],
+                "count": 1
+              },
+              "authSubjectType": "USER",
+              "authSubjectId": "03093e00341xxxx8836580a3c1419707",
+              "authSubjectName": "773c1aba3e6xxxx59e6f37722cd6c8d7",
+              "authTime": "2026-09-03 15:13:22",
+              "operations": [
+                "REVOKE_AUTH"
+              ]
+            },
+            {
+              "policyId": "7ffb721895dxxxxda59b93b7a9f1dc99",
+              "policyName": "ixxxx",
+              "policyType": "CUSTOM",
+              "authType": "IAM",
+              "policyAttribute": "GLOBAL",
+              "attributeInfo": {
+                "type": "GLOBAL",
+                "items": [
+                  {
+                    "id": "global",
+                    "name": "global",
+                    "privilegeId": "f746b444e4fxxxx7870f59a58f31ad09"
+                  }
+                ],
+                "count": 1
+              },
+              "authSubjectType": "USER",
+              "authSubjectId": "03093e00341xxxx8836580a3c1419707",
+              "authSubjectName": "773c1aba3e6xxxx59e6f37722cd6c8d7",
+              "authTime": "2026-06-10 09:51:19",
+              "operations": [
+                "REVOKE_AUTH"
+              ]
+            },
+            {
+              "policyId": "06224b26578xxxxa8c673d359787d3fc",
+              "policyName": "safxxxx",
+              "policyType": "CUSTOM",
+              "authType": "IAM",
+              "policyAttribute": "RESOURCE_POOL",
+              "attributeInfo": {
+                "type": "RESOURCE_POOL",
+                "items": [
+                  {
+                    "id": "41f64827f25xxxx595ffa3a5deb5d15d",
+                    "name": "内xxxx",
+                    "privilegeId": "54db8d7e122xxxxaae57a9a3e0e7de9e"
+                  },
+                  {
+                    "id": "c82f140b70axxxx5a2ce9a6f08270d46",
+                    "name": "广州xxxx",
+                    "privilegeId": "b138a5674d5xxxx0a04a73fbf8043a12"
+                  },
+                  {
+                    "id": "d15ff6c8f92xxxx4a2fbe2ad47403cef",
+                    "name": "北xxxx",
+                    "privilegeId": "3d432275610xxxxe9eff9fa1c4b5e8e7"
+                  },
+                  {
+                    "id": "ea072d783a4xxxx584abe2ad47403cef",
+                    "name": "广xxxx",
+                    "privilegeId": "1b670eab19axxxx2bd425c758d6278cd"
+                  }
+                ],
+                "count": 4
+              },
+              "authSubjectType": "USER_GROUP",
+              "authSubjectId": "b9d3874b74axxxx59f0b471baf17a413",
+              "authSubjectName": "ceshxxxxgai",
+              "authTime": "2026-04-13 16:50:38",
+              "operations": [
+                "REVOKE_AUTH",
+                "MODIFY_RESOURCE_POOL"
+              ]
+            },
+            {
+              "policyId": "70650c8053exxxxfb33886955649e683",
+              "policyName": "sso权xxxxb96",
+              "policyType": "CUSTOM",
+              "authType": "IAM",
+              "policyAttribute": "GLOBAL",
+              "attributeInfo": {
+                "type": "GLOBAL",
+                "items": [
+                  {
+                    "id": "global",
+                    "name": "global",
+                    "privilegeId": "76cd55cc68axxxx5840dad5958eceb83"
+                  }
+                ],
+                "count": 1
+              },
+              "authSubjectType": "USER",
+              "authSubjectId": "03093e00341xxxx8836580a3c1419707",
+              "authSubjectName": "773c1aba3e6xxxx59e6f37722cd6c8d7",
+              "authTime": "2026-09-24 10:07:40",
+              "operations": [
+                "REVOKE_AUTH"
+              ]
+            },
+            {
+              "policyId": "6d2c1e9ad47xxxxea7cf0a5e176ca28d",
+              "policyName": "测试修改xxxx",
+              "policyType": "CUSTOM",
+              "policyDesc": "测试修改xxxx",
+              "authType": "IAM",
+              "policyAttribute": "RESOURCE_POOL",
+              "attributeInfo": {
+                "type": "RESOURCE_POOL",
+                "items": [
+                  {
+                    "id": "41f64827f25xxxx595ffa3a5deb5d15d",
+                    "name": "内xxxx",
+                    "privilegeId": "1312a3b15bbxxxxc9eb99e0a6b505e07"
+                  },
+                  {
+                    "id": "c82f140b70axxxx5a2ce9a6f08270d46",
+                    "name": "广州xxxx",
+                    "privilegeId": "d62cfa6893axxxx2917a3ea2e603d93f"
+                  },
+                  {
+                    "id": "d15ff6c8f92xxxx4a2fbe2ad47403cef",
+                    "name": "北xxxx",
+                    "privilegeId": "341ddbb4489xxxx4bf8cef16c19800b1"
+                  },
+                  {
+                    "id": "ea072d783a4xxxx584abe2ad47403cef",
+                    "name": "广xxxx",
+                    "privilegeId": "4ad9764f0dbxxxx88cbac54db1b9a644"
+                  }
+                ],
+                "count": 4
+              },
+              "authSubjectType": "USER_GROUP",
+              "authSubjectId": "b9d3874b74axxxx59f0b471baf17a413",
+              "authSubjectName": "ceshxxxxgai",
+              "authTime": "2026-04-13 16:50:38",
+              "operations": [
+                "REVOKE_AUTH",
+                "MODIFY_RESOURCE_POOL"
+              ]
+            }
+          ]
+        }
+      },
+      "request_example": {
+        "authSubjectId": "03093e00341xxxx8836580a3c1419707",
+        "pageSize": 10,
+        "pageNum": 1,
+        "authSubjectType": "USER"
+      }
+    },
+    {
+      "id": "iam.enterprise-project.access.grant",
+      "api_id": "24071",
+      "title": "为用户授权企业项目",
+      "description": {
+        "en-GB": "Grant enterprise project access",
+        "en-US": "Grant enterprise project access",
+        "zh-CN": "为用户授权企业项目"
+      },
+      "category": "enterprise-project",
+      "command_path": [
+        "enterprise-project",
+        "access",
+        "grant"
+      ],
+      "method": "POST",
+      "path": "/v1/perm/setUserEpPloy",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&api=24071&data=114&isNormal=1&vid=107",
+      "retryable": false,
+      "dangerous": true,
+      "parameters": [
+        {
+          "name": "id",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "用户ID",
+          "descriptions": {
+            "en-GB": "ID",
+            "en-US": "ID",
+            "zh-CN": "用户ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "id",
+          "cli_flag": "id",
+          "table_target": "",
+          "example": "03093e0034xxxx88836580a3c1419707",
+          "help_descriptions": {
+            "en-GB": "ID",
+            "en-US": "ID",
+            "zh-CN": "用户ID"
+          }
+        },
+        {
+          "name": "ployIds",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "策略ID（多个以逗号分隔）",
+          "descriptions": {
+            "en-GB": "Ploy IDs",
+            "en-US": "Ploy IDs",
+            "zh-CN": "策略ID（多个以逗号分隔）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "ploy_ids",
+          "cli_flag": "ploy-ids",
+          "table_target": "",
+          "example": "5e98194ea717xxxx85a26af7f7548daf",
+          "help_descriptions": {
+            "en-GB": "Ploy IDs",
+            "en-US": "Ploy IDs",
+            "zh-CN": "策略ID（多个以逗号分隔）"
+          }
+        },
+        {
+          "name": "projectId",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "企业项目ID",
+          "descriptions": {
+            "en-GB": "Project ID",
+            "en-US": "Project ID",
+            "zh-CN": "企业项目ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "project_id",
+          "cli_flag": "project-id",
+          "table_target": "",
+          "example": "2b3dbf3a251c41efxxxx340192887899",
+          "help_descriptions": {
+            "en-GB": "Project ID",
+            "en-US": "Project ID",
+            "zh-CN": "企业项目ID"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj.list",
+        "row_path": "returnObj.list",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "poly_id",
+            "path": "polyId",
+            "label_en": "Poly ID",
+            "label_zh": "策略ID"
+          },
+          {
+            "key": "privilege_id",
+            "path": "privilegeId",
+            "label_en": "Privilege ID",
+            "label_zh": "授权ID"
+          },
+          {
+            "key": "ploy_name",
+            "path": "ployName",
+            "label_en": "Ploy Name",
+            "label_zh": "策略名称"
+          },
+          {
+            "key": "ploy_type",
+            "path": "ployType",
+            "label_en": "Ploy Type",
+            "label_zh": "策略类型"
+          },
+          {
+            "key": "project_name",
+            "path": "projectName",
+            "label_en": "Project Name",
+            "label_zh": "企业项目名称"
+          },
+          {
+            "key": "project_id",
+            "path": "projectId",
+            "label_en": "Project ID",
+            "label_zh": "企业项目ID"
+          },
+          {
+            "key": "project_description",
+            "path": "projectDescription",
+            "label_en": "Project Description",
+            "label_zh": "企业项目描述"
+          }
+        ],
+        "default_columns": [
+          "poly_id",
+          "privilege_id",
+          "ploy_name",
+          "ploy_type",
+          "project_name"
+        ]
+      },
+      "examples": [],
+      "example_response": {
+        "statusCode": "800",
+        "returnObj": {
+          "list": [
+            {
+              "polyId": "5e98194ea717xxxx85a26af7f7548daf",
+              "privilegeId": "b8708935f5b1xxxxab22b23705f0f04b",
+              "ployName": "testPloy",
+              "ployType": 2,
+              "projectName": "testproject20251117111625",
+              "projectId": "2b3dbf3a251c41efxxxx340192887899",
+              "projectDescription": "测试企业项目。"
+            }
+          ]
+        }
+      },
+      "request_example": {
+        "id": "03093e0034xxxx88836580a3c1419707",
+        "ployIds": "5e98194ea717xxxx85a26af7f7548daf",
+        "projectId": "2b3dbf3a251c41efxxxx340192887899"
+      }
+    },
+    {
+      "id": "iam.enterprise-project.access.revoke",
+      "api_id": "24100",
+      "title": "取消用户或用户组企业项目授权",
+      "description": {
+        "en-GB": "Revoke enterprise project access",
+        "en-US": "Revoke enterprise project access",
+        "zh-CN": "取消用户或用户组企业项目授权"
+      },
+      "category": "enterprise-project",
+      "command_path": [
+        "enterprise-project",
+        "access",
+        "revoke"
+      ],
+      "method": "POST",
+      "path": "/v1/perm/invalidEpPloy",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&api=24100&data=114&isNormal=1&vid=107",
+      "retryable": false,
+      "dangerous": true,
+      "parameters": [
+        {
+          "name": "privilegeIds",
+          "location": "body",
+          "required": false,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "授权ID列表",
+          "descriptions": {
+            "en-GB": "Privilege IDs",
+            "en-US": "Privilege IDs",
+            "zh-CN": "授权ID列表"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "privilege_ids",
+          "cli_flag": "privilege-ids",
+          "table_target": "",
+          "example": [
+            "e7678ca0f1954d6b9aaf40d1ef16727c"
+          ],
+          "help_descriptions": {
+            "en-GB": "Privilege IDs",
+            "en-US": "Privilege IDs",
+            "zh-CN": "授权ID列表"
+          }
+        },
+        {
+          "name": "accountId",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "账号Id",
+          "descriptions": {
+            "en-GB": "Account ID",
+            "en-US": "Account ID",
+            "zh-CN": "账号Id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "account_id",
+          "cli_flag": "account-id",
+          "table_target": "",
+          "example_unavailable": true,
+          "help_descriptions": {
+            "en-GB": "Account ID",
+            "en-US": "Account ID",
+            "zh-CN": "账号Id"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码"
+          }
+        ],
+        "default_columns": [
+          "status_code"
+        ],
+        "layout": "vertical"
+      },
+      "examples": [],
+      "example_response": {
+        "statusCode": "800"
+      },
+      "request_example": {
+        "privilegeIds": [
+          "e7678ca0f1954d6b9aaf40d1ef16727c"
+        ]
+      }
     }
   ]
 }

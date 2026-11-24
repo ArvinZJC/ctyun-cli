@@ -119,7 +119,7 @@ func validRecommendationDocsURL(raw string) bool {
 
 // englishRecommendationPattern matches recommendation verbs and notices without
 // mistaking resource preference settings for API replacement guidance.
-var englishRecommendationPattern = regexp.MustCompile(`\b(?:recommend(?:s|ed|ing|ation(?:s)?)?|prefer(?:s|red|ring)?)\b`)
+var englishRecommendationPattern = regexp.MustCompile(`\b(?:recommend(?:s|ed|ing|ations?)?|prefer(?:s|red|ring)?)\b`)
 
 // hasRecommendationText reports whether any source text contains common
 // recommendation-only wording.

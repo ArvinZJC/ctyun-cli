@@ -17,20 +17,22 @@ import (
 
 // TestStorageProjectionsRetainResults verifies sparse and mixed results against promoted metadata.
 func TestStorageProjectionsRetainResults(t *testing.T) {
-	// HTTP URIs in these fixtures are XML namespace identifiers, never network destinations.
+	// The S3 XML namespace identifies elements in these fixtures.
 	//goland:noinspection HttpUrlsUsage
+	const namespace = `xmlns="http://s3.amazonaws.com/doc/2006-03-01/"`
+
 	for _, tc := range []struct {
 		product, command, xml, key, want string
 		count                            int
 	}{
-		{"media-storage", "website.show", `<WebsiteConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><RedirectAllRequestsTo><HostName>example.test</HostName><Protocol>https</Protocol></RedirectAllRequestsTo></WebsiteConfiguration>`, "redirect_host", "example.test", 1},
+		{"media-storage", "website.show", `<WebsiteConfiguration ` + namespace + `><RedirectAllRequestsTo><HostName>example.test</HostName><Protocol>https</Protocol></RedirectAllRequestsTo></WebsiteConfiguration>`, "redirect_host", "example.test", 1},
 		{"classic-object-storage", "account-summary.show", `<GetAccountSummaryResponse><GetAccountSummaryResult><SummaryMap><entry><key>Users</key><value>392</value></entry><entry><key>Groups</key><value>29</value></entry></SummaryMap></GetAccountSummaryResult></GetAccountSummaryResponse>`, "key", "Users", 2},
 		{"classic-object-storage", "user.show", `<GetUserResponse><GetUserResult><User><UserName>untagged</UserName><UserId>7</UserId></User></GetUserResult></GetUserResponse>`, "user_name", "untagged", 1},
 		{"classic-object-storage", "user.create", `<CreateUserResponse><CreateUserResult><User><UserName>untagged</UserName></User></CreateUserResult></CreateUserResponse>`, "user_name", "untagged", 1},
 		{"classic-object-storage", "entities-for-policy.list", `<ListEntitiesForPolicyResponse><ListEntitiesForPolicyResult><PolicyGroups><member><GroupName>group-only</GroupName></member></PolicyGroups></ListEntitiesForPolicyResult></ListEntitiesForPolicyResponse>`, "group_name", "group-only", 1},
 		{"classic-object-storage", "multiple-objects.delete", `<DeleteResult><Error><Key>failed</Key><Code>AccessDenied</Code></Error><Deleted><Key>done</Key></Deleted></DeleteResult>`, "code", "AccessDenied", 2},
-		{"media-storage", "multiple-objects.delete", `<DeleteResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Error><Key>failed</Key><Code>AccessDenied</Code></Error><Deleted><Key>done</Key></Deleted></DeleteResult>`, "code", "AccessDenied", 2},
-		{"media-storage", "versions.list", `<ListVersionsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><DeleteMarker><Key>deleted</Key></DeleteMarker><Version><Key>existing</Key></Version></ListVersionsResult>`, "record_type", "DeleteMarker", 2},
+		{"media-storage", "multiple-objects.delete", `<DeleteResult ` + namespace + `><Error><Key>failed</Key><Code>AccessDenied</Code></Error><Deleted><Key>done</Key></Deleted></DeleteResult>`, "code", "AccessDenied", 2},
+		{"media-storage", "versions.list", `<ListVersionsResult ` + namespace + `><DeleteMarker><Key>deleted</Key></DeleteMarker><Version><Key>existing</Key></Version></ListVersionsResult>`, "record_type", "DeleteMarker", 2},
 	} {
 		t.Run(tc.product+"."+tc.command, func(t *testing.T) {
 			bundle, err := plugin.LoadBundle(repoPath(t, filepath.Join("plugins", tc.product)), version.Version)

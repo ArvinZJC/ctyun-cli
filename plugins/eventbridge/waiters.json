@@ -1,0 +1,54 @@
+{
+  "waiters": {
+    "eventbridge.official-source.running": {
+      "selector": {
+        "path": "returnObj.list",
+        "key": "eventSourceName",
+        "value": "$param.event_source_name"
+      },
+      "commands": [
+        "eventbridge.source.official.list"
+      ],
+      "path": "status",
+      "success": "201",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "eventbridge.rule.running": {
+      "commands": [
+        "eventbridge.rule.show"
+      ],
+      "path": "returnObj.status",
+      "success": "201",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "eventbridge.source.running": {
+      "commands": [
+        "eventbridge.source.show"
+      ],
+      "path": "returnObj.status",
+      "success": "201",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "eventbridge.stream.running": {
+      "selector": {
+        "path": "returnObj.list",
+        "key": "eventStreamName",
+        "value": "$param.event_stream_name"
+      },
+      "commands": [
+        "eventbridge.stream.list"
+      ],
+      "path": "status",
+      "success": "201",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
+}

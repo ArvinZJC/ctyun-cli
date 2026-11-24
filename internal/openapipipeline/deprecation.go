@@ -192,7 +192,7 @@ var imageLifecycleValuePattern = regexp.MustCompile(`(?:deactivated\s*[:：]\s*�
 
 // resourceOfflineValuePattern recognizes explicit offline state labels and
 // forced session logout, which do not retire the containing API field.
-var resourceOfflineValuePattern = regexp.MustCompile(`(?:offline\s*[:：]\s*(?:已)?下线|drain\s*[:：]\s*节点已下线|1\s*[:：]\s*下线|登录将被强制下线|无损上下线)`)
+var resourceOfflineValuePattern = regexp.MustCompile(`offline\s*[:：]\s*已?下线|drain\s*[:：]\s*节点已下线|1\s*[:：]\s*下线|登录将被强制下线|无损上下线`)
 
 // hasDeprecationText reports whether any source text looks like an upstream
 // deprecation notice.

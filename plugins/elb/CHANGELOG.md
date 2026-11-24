@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.2 - 2026-11-24
+
+- Refresh dedicated load balancer creation input guidance.
+
 ## 0.1.0-beta.1 - 2026-09-23
 
 ### Added

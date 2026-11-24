@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.4 - 2026-11-24
+
+- Send the disaster recovery server detail identifiers as query parameters and read records from the top-level returnObj array.
+
 ## 0.1.0-beta.3 - 2026-09-23
 
 ### Added

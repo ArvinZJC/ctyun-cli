@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.7 - 2026-11-24
+
+- Update flavor inputs and local disk fields, accept the documented policy ID string and link CPU history help to the current monitoring command.
+
 ## 0.1.0-beta.6 - 2026-10-10
 
 ### Changed

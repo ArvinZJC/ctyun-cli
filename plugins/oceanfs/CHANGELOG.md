@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.3 - 2026-11-24
+
+- Add subdirectory quota management, a bounded wait for quota activation and file-system tag update and lookup commands.
+
 ## 0.1.0-beta.2 - 2026-09-23
 
 ### Added

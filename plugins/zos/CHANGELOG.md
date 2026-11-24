@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.4 - 2026-11-24
+
+- Refresh bucket, replication, retention and multipart upload input guidance.
+
 ## 0.1.0-beta.3 - 2026-10-10
 
 ### Added

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.3 - 2026-11-24
+
+- Refresh the historical monitoring query input description.
+
 ## 0.1.0-beta.2 - 2026-10-10
 
 ### Fixed

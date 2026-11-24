@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.2 - 2026-11-24
+
+- Add four v4.2 alarm-rule commands and align existing alarm-rule input requirements and types.
+
 ## 0.1.0-beta.1 - 2026-10-10
 
 ### Added

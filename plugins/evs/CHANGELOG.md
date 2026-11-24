@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.4 - 2026-11-24
+
+- Update the source fingerprint for revised upstream guidance on volume creation and attachment. The command interface is unchanged.
+
 ## 0.1.0-beta.3 - 2026-10-10
 
 ### Changed

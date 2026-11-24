@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.5 - 2026-11-24
+
+- Refresh image detail and sharing input guidance.
+
 ## 0.1.0-beta.4 - 2026-10-10
 
 ### Changed

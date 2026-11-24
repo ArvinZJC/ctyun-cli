@@ -13897,6 +13897,110 @@
         "confirm": "yes",
         "message": "update"
       }
+    },
+    {
+      "id": "cce.node.flavor.list",
+      "path": [
+        "cce",
+        "node",
+        "flavor",
+        "list"
+      ],
+      "operation": "cce.node.flavor.list",
+      "table": "cce.node.flavor.list",
+      "parameters": [
+        {
+          "name": "flavor_family",
+          "flag": "flavor-family",
+          "target": "flavorFamily",
+          "required": true,
+          "allowed_values": [
+            "c",
+            "hc",
+            "s",
+            "hs",
+            "m",
+            "hm",
+            "g",
+            "p",
+            "hne",
+            "kc",
+            "fc",
+            "ks",
+            "fs",
+            "km",
+            "fm",
+            "kne",
+            "physical_cpu",
+            "physical_gpu"
+          ],
+          "description": "Flavor family"
+        },
+        {
+          "name": "cluster_type",
+          "flag": "cluster-type",
+          "target": "clusterType",
+          "required": true,
+          "value_type": "integer",
+          "allowed_values": [
+            "0",
+            "2",
+            "4"
+          ],
+          "description": "Cluster type"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/cce-node-flavor-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=43&api=24128&data=128&isNormal=1&vid=121",
+      "examples": [
+        "ctyun cce node flavor list --flavor-family c --cluster-type 0"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cce.node.flavor.disk-type.list",
+      "path": [
+        "cce",
+        "node",
+        "flavor",
+        "disk-type",
+        "list"
+      ],
+      "operation": "cce.node.flavor.disk-type.list",
+      "table": "cce.node.flavor.disk-type.list",
+      "parameters": [
+        {
+          "name": "flavor_name",
+          "flag": "flavor-name",
+          "target": "flavorName",
+          "required": true,
+          "description": "Flavor name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/cce-node-flavor-disk-type-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=43&api=24129&data=128&isNormal=1&vid=121",
+      "examples": [
+        "ctyun cce node flavor disk-type list --flavor-name s3.2xlarge.2"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
     }
   ]
 }

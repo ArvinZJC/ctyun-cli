@@ -1143,7 +1143,7 @@
           "name": "conditions",
           "flag": "conditions",
           "target": "conditions",
-          "required": false,
+          "required": true,
           "value_type": "object_array",
           "description": "Conditions as a JSON array"
         },
@@ -1281,7 +1281,7 @@
       "fixture_response": "fixtures/cm-alarm-rule-create.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=22&vid=84&data=90&api=15764&isNormal=1",
       "examples": [
-        "ctyun cm alarm-rule create --name 告警规则示例 --service ecs --dimension ecs --resources '[{\"resource\":[{\"name\":\"uuid\",\"value\":\"7dd744ea-5a02-61d3-e627-38f82f5fd3e1\"},{\"name\":\"instancename\",\"value\":\"ecm-af97\"}]}]'"
+        "ctyun cm alarm-rule create --name 告警规则示例 --service ecs --dimension ecs --conditions '[{\"evaluationCount\":2,\"fun\":\"last\",\"operator\":\"ge\",\"unit\":\"%\",\"value\":\"0\",\"metric\":\"cpu_util\"}]' --resources '[{\"resource\":[{\"name\":\"uuid\",\"value\":\"7dd744ea-5a02-61d3-e627-38f82f5fd3e1\"},{\"name\":\"instancename\",\"value\":\"ecm-af97\"}]}]'"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -4276,7 +4276,7 @@
           "name": "conditions",
           "flag": "conditions",
           "target": "conditions",
-          "required": false,
+          "required": true,
           "value_type": "object_array",
           "description": "Conditions as a JSON array"
         },
@@ -4414,7 +4414,7 @@
       "fixture_response": "fixtures/cm-alarm-rule-update.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=22&vid=84&data=90&api=15767&isNormal=1",
       "examples": [
-        "ctyun cm alarm-rule update --alarm-rule-id efb7d30c-c6e4-5fb5-8b3b-81ca99923184 --name 告警规则更新示例 --service ecs --dimension ecs --resources '[{\"resource\":[{\"name\":\"uuid\",\"value\":\"7dd744ea-5a02-61d3-e627-38f82f5fd3e1\"},{\"name\":\"instancename\",\"value\":\"ecm-af97\"}]}]'"
+        "ctyun cm alarm-rule update --alarm-rule-id efb7d30c-c6e4-5fb5-8b3b-81ca99923184 --name 告警规则更新示例 --service ecs --dimension ecs --conditions '[{\"evaluationCount\":2,\"fun\":\"last\",\"operator\":\"ge\",\"unit\":\"%\",\"value\":\"0\",\"metric\":\"cpu_util\"}]' --resources '[{\"resource\":[{\"name\":\"uuid\",\"value\":\"7dd744ea-5a02-61d3-e627-38f82f5fd3e1\"},{\"name\":\"instancename\",\"value\":\"ecm-af97\"}]}]'"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -4844,7 +4844,7 @@
           "name": "status",
           "flag": "status",
           "target": "status",
-          "required": true,
+          "required": false,
           "value_type": "integer",
           "description": "Status"
         },
@@ -4860,7 +4860,7 @@
       "fixture_response": "fixtures/cm-alarm-rule-status-update.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=22&vid=84&data=90&api=15768&isNormal=1",
       "examples": [
-        "ctyun cm alarm-rule status update --status 1 --alarm-rule-id-list '[\"f79fe6a8-284f-5cd8-9031-812b06821b9c\",\"eec4a76a-35ba-57b8-91c6-c4fd923351d6\"]'"
+        "ctyun cm alarm-rule status update --alarm-rule-id-list '[\"f79fe6a8-284f-5cd8-9031-812b06821b9c\",\"eec4a76a-35ba-57b8-91c6-c4fd923351d6\"]'"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -7293,7 +7293,7 @@
           "name": "alarm_rule_id",
           "flag": "alarm-rule-id",
           "target": "alarmRuleID",
-          "required": false,
+          "required": true,
           "description": "Alarm Rule ID"
         },
         {
@@ -7307,35 +7307,35 @@
           "name": "name",
           "flag": "name",
           "target": "name",
-          "required": false,
+          "required": true,
           "description": "Name"
         },
         {
           "name": "desc",
           "flag": "desc",
           "target": "desc",
-          "required": true,
+          "required": false,
           "description": "Description"
         },
         {
           "name": "service",
           "flag": "service",
           "target": "service",
-          "required": false,
+          "required": true,
           "description": "Service"
         },
         {
           "name": "dimension",
           "flag": "dimension",
           "target": "dimension",
-          "required": false,
+          "required": true,
           "description": "Dimension"
         },
         {
           "name": "repeat_times",
           "flag": "repeat-times",
           "target": "repeatTimes",
-          "required": true,
+          "required": false,
           "value_type": "integer",
           "description": "Repeat Times"
         },
@@ -7343,7 +7343,7 @@
           "name": "silence_time",
           "flag": "silence-time",
           "target": "silenceTime",
-          "required": true,
+          "required": false,
           "value_type": "integer",
           "description": "Silence Time"
         },
@@ -7351,7 +7351,7 @@
           "name": "recover_notify",
           "flag": "recover-notify",
           "target": "recoverNotify",
-          "required": true,
+          "required": false,
           "value_type": "integer",
           "description": "Recover Notify"
         },
@@ -7359,7 +7359,7 @@
           "name": "notify_type",
           "flag": "notify-type",
           "target": "notifyType",
-          "required": true,
+          "required": false,
           "value_type": "string_array",
           "description": "Notify Type as a JSON array"
         },
@@ -7367,7 +7367,7 @@
           "name": "contact_group_list",
           "flag": "contact-group-list",
           "target": "contactGroupList",
-          "required": true,
+          "required": false,
           "value_type": "string_array",
           "description": "Contact Group List as a JSON array"
         },
@@ -7375,7 +7375,7 @@
           "name": "notify_weekdays",
           "flag": "notify-weekdays",
           "target": "notifyWeekdays",
-          "required": true,
+          "required": false,
           "value_type": "integer_array",
           "description": "Notify Weekdays as a JSON array"
         },
@@ -7383,21 +7383,21 @@
           "name": "notify_start",
           "flag": "notify-start",
           "target": "notifyStart",
-          "required": true,
+          "required": false,
           "description": "Notify Start"
         },
         {
           "name": "notify_end",
           "flag": "notify-end",
           "target": "notifyEnd",
-          "required": true,
+          "required": false,
           "description": "Notify End"
         },
         {
           "name": "webhook_url",
           "flag": "webhook-url",
           "target": "webhookUrl",
-          "required": true,
+          "required": false,
           "value_type": "string_array",
           "description": "Webhook URL as a JSON array"
         },
@@ -7405,14 +7405,14 @@
           "name": "project_id",
           "flag": "project-id",
           "target": "projectID",
-          "required": true,
+          "required": false,
           "description": "Project ID"
         },
         {
           "name": "conditions",
           "flag": "conditions",
           "target": "conditions",
-          "required": false,
+          "required": true,
           "value_type": "object_array",
           "description": "Conditions as a JSON array"
         },
@@ -7420,7 +7420,7 @@
           "name": "resources",
           "flag": "resources",
           "target": "resources",
-          "required": false,
+          "required": true,
           "value_type": "object_array",
           "description": "Resources as a JSON array"
         },
@@ -7428,7 +7428,7 @@
           "name": "resource_scope",
           "flag": "resource-scope",
           "target": "resourceScope",
-          "required": true,
+          "required": false,
           "value_type": "integer",
           "description": "Resource Scope"
         },
@@ -7436,7 +7436,7 @@
           "name": "default_contact",
           "flag": "default-contact",
           "target": "defaultContact",
-          "required": true,
+          "required": false,
           "value_type": "integer",
           "description": "Default Contact"
         }
@@ -7444,7 +7444,7 @@
       "fixture_response": "fixtures/cm-event-alarm-rule-update.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=22&vid=84&data=90&api=19304&isNormal=1",
       "examples": [
-        "ctyun cm event alarm-rule update --desc 描述 --repeat-times 0 --silence-time 300 --recover-notify 0 --notify-type '[\"{notify_type}\"]' --contact-group-list '[\"{contact_group_list}\"]' --notify-weekdays '[0]' --notify-start 00:00:00 --notify-end 23:59:59 --webhook-url '[\"{webhook_url}\"]' --project-id 0 --resource-scope 0 --default-contact 0"
+        "ctyun cm event alarm-rule update --alarm-rule-id b3d970d7-9c4d-5ac1-a9ec-ba2487221a99 --name ctyun_rule --service ecs --dimension ecs --conditions '[{\"eventName\":\"migration_event_start\",\"value\":\"15\",\"period\":\"1h\"}]' --resources '[{\"resource\":[{\"name\":\"uuid\",\"value\":\"7dd744ea-5a02-61d3-e627-38f82f5fd3e1\"},{\"name\":\"instancename\",\"value\":\"ecmaf97\"}]}]'"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -9104,6 +9104,664 @@
       "examples": null,
       "dangerous": {
         "confirm": ""
+      }
+    },
+    {
+      "id": "cm.alarm-rule.v4-2.list",
+      "path": [
+        "cm",
+        "alarm-rule",
+        "v4-2",
+        "list"
+      ],
+      "operation": "cm.alarm-rule.v4-2.list",
+      "table": "cm.alarm-rule.v4-2.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "service",
+          "flag": "service",
+          "target": "service",
+          "required": false,
+          "description": "Service"
+        },
+        {
+          "name": "dimension",
+          "flag": "dimension",
+          "target": "dimension",
+          "required": false,
+          "description": "Dimension"
+        },
+        {
+          "name": "alarm_status",
+          "flag": "alarm-status",
+          "target": "alarmStatus",
+          "required": false,
+          "value_type": "integer",
+          "description": "Alarm status"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "value_type": "integer",
+          "description": "Status"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Name"
+        },
+        {
+          "name": "contact_group_name",
+          "flag": "contact-group-name",
+          "target": "contactGroupName",
+          "required": false,
+          "description": "Contact group name"
+        },
+        {
+          "name": "instance_name",
+          "flag": "instance-name",
+          "target": "instanceName",
+          "required": false,
+          "description": "Instance name"
+        },
+        {
+          "name": "sort_key",
+          "flag": "sort-key",
+          "target": "sortKey",
+          "required": false,
+          "description": "Sort key"
+        },
+        {
+          "name": "sort_type",
+          "flag": "sort-type",
+          "target": "sortType",
+          "required": false,
+          "description": "Sort type"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page no"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page size"
+        },
+        {
+          "name": "res_group_id",
+          "flag": "res-group-id",
+          "target": "resGroupID",
+          "required": false,
+          "description": "Res group ID"
+        }
+      ],
+      "fixture_response": "fixtures/cm-alarm-rule-v4-2-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=22&api=24152&data=90&isNormal=1&vid=84",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cm.alarm-rule.v4-2.create",
+      "path": [
+        "cm",
+        "alarm-rule",
+        "v4-2",
+        "create"
+      ],
+      "operation": "cm.alarm-rule.v4-2.create",
+      "table": "cm.alarm-rule.v4-2.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "service",
+          "flag": "service",
+          "target": "service",
+          "required": true,
+          "description": "Service"
+        },
+        {
+          "name": "dimension",
+          "flag": "dimension",
+          "target": "dimension",
+          "required": true,
+          "description": "Dimension"
+        },
+        {
+          "name": "conditions",
+          "flag": "conditions",
+          "target": "conditions",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Conditions"
+        },
+        {
+          "name": "desc",
+          "flag": "desc",
+          "target": "desc",
+          "required": false,
+          "description": "Desc"
+        },
+        {
+          "name": "repeat_times",
+          "flag": "repeat-times",
+          "target": "repeatTimes",
+          "required": false,
+          "value_type": "integer",
+          "description": "Repeat times"
+        },
+        {
+          "name": "silence_time",
+          "flag": "silence-time",
+          "target": "silenceTime",
+          "required": false,
+          "value_type": "integer",
+          "description": "Silence time"
+        },
+        {
+          "name": "recover_notify",
+          "flag": "recover-notify",
+          "target": "recoverNotify",
+          "required": false,
+          "value_type": "integer",
+          "description": "Recover notify"
+        },
+        {
+          "name": "notify_type",
+          "flag": "notify-type",
+          "target": "notifyType",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Notify type"
+        },
+        {
+          "name": "contact_group_list",
+          "flag": "contact-group-list",
+          "target": "contactGroupList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Contact group list"
+        },
+        {
+          "name": "notify_weekdays",
+          "flag": "notify-weekdays",
+          "target": "notifyWeekdays",
+          "required": false,
+          "value_type": "integer_array",
+          "description": "Notify weekdays"
+        },
+        {
+          "name": "notify_start",
+          "flag": "notify-start",
+          "target": "notifyStart",
+          "required": false,
+          "description": "Notify start"
+        },
+        {
+          "name": "notify_end",
+          "flag": "notify-end",
+          "target": "notifyEnd",
+          "required": false,
+          "description": "Notify end"
+        },
+        {
+          "name": "webhook_url",
+          "flag": "webhook-url",
+          "target": "webhookUrl",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Webhook URL"
+        },
+        {
+          "name": "res_group_id",
+          "flag": "res-group-id",
+          "target": "resGroupID",
+          "required": false,
+          "description": "Resource group ID for a group-scoped rule. Supply either this ID or the matching resources."
+        },
+        {
+          "name": "resources",
+          "flag": "resources",
+          "target": "resources",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Resources"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "description": "Project ID"
+        },
+        {
+          "name": "condition_type",
+          "flag": "condition-type",
+          "target": "conditionType",
+          "required": false,
+          "value_type": "integer",
+          "description": "Condition type"
+        },
+        {
+          "name": "resource_scope",
+          "flag": "resource-scope",
+          "target": "resourceScope",
+          "required": false,
+          "value_type": "integer",
+          "description": "Resource scope"
+        },
+        {
+          "name": "default_contact",
+          "flag": "default-contact",
+          "target": "defaultContact",
+          "required": false,
+          "value_type": "integer",
+          "description": "Default contact"
+        },
+        {
+          "name": "notice_strategy_id",
+          "flag": "notice-strategy-id",
+          "target": "noticeStrategyID",
+          "required": false,
+          "description": "Notice strategy ID"
+        },
+        {
+          "name": "is_upgrade",
+          "flag": "is-upgrade",
+          "target": "isUpgrade",
+          "required": false,
+          "value_type": "integer",
+          "description": "Is upgrade"
+        },
+        {
+          "name": "upgrade_status",
+          "flag": "upgrade-status",
+          "target": "upgradeStatus",
+          "required": false,
+          "value_type": "integer",
+          "description": "Upgrade status"
+        },
+        {
+          "name": "upgrade_interval",
+          "flag": "upgrade-interval",
+          "target": "upgradeInterval",
+          "required": false,
+          "value_type": "integer",
+          "description": "Upgrade interval"
+        },
+        {
+          "name": "upgrade_contact_group_list",
+          "flag": "upgrade-contact-group-list",
+          "target": "upgradeContactGroupList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Upgrade contact group list"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "always": true
+          },
+          "any_of": [
+            "res_group_id",
+            "resources"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_scope",
+            "equals": "1"
+          },
+          "required": [
+            "res_group_id"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "is_upgrade",
+            "equals": "1"
+          },
+          "required": [
+            "upgrade_status",
+            "upgrade_interval",
+            "upgrade_contact_group_list"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/cm-alarm-rule-v4-2-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=22&api=24276&data=90&isNormal=1&vid=84",
+      "examples": [
+        "ctyun cm alarm-rule v4-2 create --name 告警规则示例 --service ecs --dimension ecs --conditions '[{\"evaluationCount\":2,\"fun\":\"last\",\"operator\":\"ge\",\"unit\":\"%\",\"metric\":\"cpu_util\",\"thresholds\":[{\"value\":\"80\",\"level\":2},{\"value\":\"90\",\"level\":1}]}]' --res-group-id eec4a76a-35ba-57b8-91c6-c4fd923351d6"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "cm.alarm-rule.v4-2.show",
+      "path": [
+        "cm",
+        "alarm-rule",
+        "v4-2",
+        "show"
+      ],
+      "operation": "cm.alarm-rule.v4-2.show",
+      "table": "cm.alarm-rule.v4-2.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "alarm_rule_id",
+          "flag": "alarm-rule-id",
+          "target": "alarmRuleID",
+          "required": true,
+          "description": "Alarm rule ID"
+        }
+      ],
+      "fixture_response": "fixtures/cm-alarm-rule-v4-2-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=22&api=24277&data=90&isNormal=1&vid=84",
+      "examples": [
+        "ctyun cm alarm-rule v4-2 show --alarm-rule-id 3dbd23b2-74e2-53f8-869c-6fe6b07b9dba"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cm.alarm-rule.v4-2.update",
+      "path": [
+        "cm",
+        "alarm-rule",
+        "v4-2",
+        "update"
+      ],
+      "operation": "cm.alarm-rule.v4-2.update",
+      "table": "cm.alarm-rule.v4-2.update",
+      "parameters": [
+        {
+          "name": "alarm_rule_id",
+          "flag": "alarm-rule-id",
+          "target": "alarmRuleID",
+          "required": true,
+          "description": "Alarm rule ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "service",
+          "flag": "service",
+          "target": "service",
+          "required": true,
+          "description": "Service"
+        },
+        {
+          "name": "dimension",
+          "flag": "dimension",
+          "target": "dimension",
+          "required": true,
+          "description": "Dimension"
+        },
+        {
+          "name": "conditions",
+          "flag": "conditions",
+          "target": "conditions",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Conditions"
+        },
+        {
+          "name": "desc",
+          "flag": "desc",
+          "target": "desc",
+          "required": false,
+          "description": "Desc"
+        },
+        {
+          "name": "repeat_times",
+          "flag": "repeat-times",
+          "target": "repeatTimes",
+          "required": false,
+          "value_type": "integer",
+          "description": "Repeat times"
+        },
+        {
+          "name": "silence_time",
+          "flag": "silence-time",
+          "target": "silenceTime",
+          "required": false,
+          "value_type": "integer",
+          "description": "Silence time"
+        },
+        {
+          "name": "recover_notify",
+          "flag": "recover-notify",
+          "target": "recoverNotify",
+          "required": false,
+          "value_type": "integer",
+          "description": "Recover notify"
+        },
+        {
+          "name": "notify_type",
+          "flag": "notify-type",
+          "target": "notifyType",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Notify type"
+        },
+        {
+          "name": "contact_group_list",
+          "flag": "contact-group-list",
+          "target": "contactGroupList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Contact group list"
+        },
+        {
+          "name": "notify_weekdays",
+          "flag": "notify-weekdays",
+          "target": "notifyWeekdays",
+          "required": false,
+          "value_type": "integer_array",
+          "description": "Notify weekdays"
+        },
+        {
+          "name": "notify_start",
+          "flag": "notify-start",
+          "target": "notifyStart",
+          "required": false,
+          "description": "Notify start"
+        },
+        {
+          "name": "notify_end",
+          "flag": "notify-end",
+          "target": "notifyEnd",
+          "required": false,
+          "description": "Notify end"
+        },
+        {
+          "name": "webhook_url",
+          "flag": "webhook-url",
+          "target": "webhookUrl",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Webhook URL"
+        },
+        {
+          "name": "res_group_id",
+          "flag": "res-group-id",
+          "target": "resGroupID",
+          "required": false,
+          "description": "Resource group ID for a group-scoped rule. Supply either this ID or the matching resources."
+        },
+        {
+          "name": "resources",
+          "flag": "resources",
+          "target": "resources",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Resources"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "description": "Project ID"
+        },
+        {
+          "name": "condition_type",
+          "flag": "condition-type",
+          "target": "conditionType",
+          "required": false,
+          "value_type": "integer",
+          "description": "Condition type"
+        },
+        {
+          "name": "resource_scope",
+          "flag": "resource-scope",
+          "target": "resourceScope",
+          "required": false,
+          "value_type": "integer",
+          "description": "Resource scope"
+        },
+        {
+          "name": "default_contact",
+          "flag": "default-contact",
+          "target": "defaultContact",
+          "required": false,
+          "value_type": "integer",
+          "description": "Default contact"
+        },
+        {
+          "name": "notice_strategy_id",
+          "flag": "notice-strategy-id",
+          "target": "noticeStrategyID",
+          "required": false,
+          "description": "Notice strategy ID"
+        },
+        {
+          "name": "is_upgrade",
+          "flag": "is-upgrade",
+          "target": "isUpgrade",
+          "required": false,
+          "value_type": "integer",
+          "description": "Is upgrade"
+        },
+        {
+          "name": "upgrade_status",
+          "flag": "upgrade-status",
+          "target": "upgradeStatus",
+          "required": false,
+          "value_type": "integer",
+          "description": "Upgrade status"
+        },
+        {
+          "name": "upgrade_interval",
+          "flag": "upgrade-interval",
+          "target": "upgradeInterval",
+          "required": false,
+          "value_type": "integer",
+          "description": "Upgrade interval"
+        },
+        {
+          "name": "upgrade_contact_group_list",
+          "flag": "upgrade-contact-group-list",
+          "target": "upgradeContactGroupList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Upgrade contact group list"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "always": true
+          },
+          "any_of": [
+            "res_group_id",
+            "resources"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_scope",
+            "equals": "1"
+          },
+          "required": [
+            "res_group_id"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "is_upgrade",
+            "equals": "1"
+          },
+          "required": [
+            "upgrade_status",
+            "upgrade_interval",
+            "upgrade_contact_group_list"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/cm-alarm-rule-v4-2-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=22&api=24278&data=90&isNormal=1&vid=84",
+      "examples": [
+        "ctyun cm alarm-rule v4-2 update --alarm-rule-id efb7d30c-c6e4-5fb5-8b3b-81ca99923184 --name 告警规则更新示例 --service ecs --dimension ecs --conditions '[{\"evaluationCount\":2,\"fun\":\"last\",\"operator\":\"ge\",\"unit\":\"%\",\"metric\":\"cpu_util\",\"thresholds\":[{\"value\":\"80\",\"level\":2},{\"value\":\"90\",\"level\":1}]}]' --res-group-id eec4a76a-35ba-57b8-91c6-c4fd923351d6"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
       }
     }
   ]

@@ -15521,6 +15521,3703 @@
       "dangerous": {
         "confirm": ""
       }
+    },
+    {
+      "id": "ecpc.desktop-policy.audio-video.set",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "audio-video",
+        "set"
+      ],
+      "operation": "ecpc.desktop-policy.audio-video.set",
+      "table": "ecpc.desktop-policy.audio-video.set",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        },
+        {
+          "name": "audio_mode",
+          "flag": "audio-mode",
+          "target": "audioMode",
+          "required": false,
+          "value_type": "json",
+          "description": "Audio mode"
+        },
+        {
+          "name": "h5_redirect",
+          "flag": "h5-redirect",
+          "target": "h5Redirect",
+          "required": false,
+          "value_type": "json",
+          "description": "H5 redirect"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-audio-video-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23858&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy audio-video set --strategy-oid dsy-xxxxxx"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.usb-redirect.show",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "usb-redirect",
+        "show"
+      ],
+      "operation": "ecpc.desktop-policy.usb-redirect.show",
+      "table": "ecpc.desktop-policy.usb-redirect.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-usb-redirect-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23859&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy usb-redirect show --strategy-oid dsy-xxxxxx"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.printer-redirect.show",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "printer-redirect",
+        "show"
+      ],
+      "operation": "ecpc.desktop-policy.printer-redirect.show",
+      "table": "ecpc.desktop-policy.printer-redirect.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-printer-redirect-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23862&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy printer-redirect show --strategy-oid dsy-xxxxxx"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.printer-redirect.set",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "printer-redirect",
+        "set"
+      ],
+      "operation": "ecpc.desktop-policy.printer-redirect.set",
+      "table": "ecpc.desktop-policy.printer-redirect.set",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        },
+        {
+          "name": "printer_redirect_type",
+          "flag": "printer-redirect-type",
+          "target": "printerRedirectType",
+          "required": true,
+          "allowed_values": [
+            "NoRedir",
+            "UsbRedir",
+            "PrinterRedir",
+            "CloudPrinter"
+          ],
+          "description": "Printer redirect type"
+        },
+        {
+          "name": "sync_default_printer",
+          "flag": "sync-default-printer",
+          "target": "syncDefaultPrinter",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Sync default printer"
+        },
+        {
+          "name": "enable_compress",
+          "flag": "enable-compress",
+          "target": "enableCompress",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Enable compress"
+        },
+        {
+          "name": "network_printer_list",
+          "flag": "network-printer-list",
+          "target": "networkPrinterList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Network printer list"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "printer_redirect_type",
+            "equals": "PrinterRedir"
+          },
+          "required": [
+            "sync_default_printer",
+            "enable_compress"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-printer-redirect-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23863&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy printer-redirect set --strategy-oid dsy-xxxxxx --printer-redirect-type PrinterRedir --sync-default-printer true --enable-compress false"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.camera-redirect.show",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "camera-redirect",
+        "show"
+      ],
+      "operation": "ecpc.desktop-policy.camera-redirect.show",
+      "table": "ecpc.desktop-policy.camera-redirect.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-camera-redirect-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23864&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy camera-redirect show --strategy-oid dsy-xxxxxx"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.camera-redirect.set",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "camera-redirect",
+        "set"
+      ],
+      "operation": "ecpc.desktop-policy.camera-redirect.set",
+      "table": "ecpc.desktop-policy.camera-redirect.set",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        },
+        {
+          "name": "camera_redirect_type",
+          "flag": "camera-redirect-type",
+          "target": "cameraRedirectType",
+          "required": true,
+          "allowed_values": [
+            "NoRedir",
+            "VirtualCamera"
+          ],
+          "description": "Camera redirect type"
+        },
+        {
+          "name": "encode_mode",
+          "flag": "encode-mode",
+          "target": "encodeMode",
+          "required": false,
+          "allowed_values": [
+            "h264",
+            "mjpeg",
+            "adaptive"
+          ],
+          "description": "Encode mode"
+        },
+        {
+          "name": "resolution",
+          "flag": "resolution",
+          "target": "resolution",
+          "required": false,
+          "allowed_values": [
+            "800x600",
+            "960x540",
+            "1280x720",
+            "1600x1200",
+            "1920x1080",
+            "2560x1440",
+            "3840x2160"
+          ],
+          "description": "Resolution"
+        },
+        {
+          "name": "framerate",
+          "flag": "framerate",
+          "target": "framerate",
+          "required": false,
+          "description": "Framerate"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "camera_redirect_type",
+            "equals": "VirtualCamera"
+          },
+          "required": [
+            "encode_mode",
+            "resolution"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "encode_mode",
+            "equals": "mjpeg"
+          },
+          "required": [
+            "framerate"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-camera-redirect-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23865&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy camera-redirect set --strategy-oid dsy-xxxxxx --camera-redirect-type VirtualCamera --encode-mode h264 --resolution 1920x1080"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.clipboard-file-redirect.show",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "clipboard-file-redirect",
+        "show"
+      ],
+      "operation": "ecpc.desktop-policy.clipboard-file-redirect.show",
+      "table": "ecpc.desktop-policy.clipboard-file-redirect.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-clipboard-file-redirect-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23866&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy clipboard-file-redirect show --strategy-oid dsy-xxxxxx"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.clipboard-file-redirect.set",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "clipboard-file-redirect",
+        "set"
+      ],
+      "operation": "ecpc.desktop-policy.clipboard-file-redirect.set",
+      "table": "ecpc.desktop-policy.clipboard-file-redirect.set",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        },
+        {
+          "name": "clipboard",
+          "flag": "clipboard",
+          "target": "clipboard",
+          "required": false,
+          "value_type": "json",
+          "description": "Clipboard"
+        },
+        {
+          "name": "file_clipboard",
+          "flag": "file-clipboard",
+          "target": "fileClipboard",
+          "required": false,
+          "value_type": "json",
+          "description": "File clipboard"
+        },
+        {
+          "name": "file_redirect",
+          "flag": "file-redirect",
+          "target": "fileRedirect",
+          "required": false,
+          "value_type": "json",
+          "description": "File redirect"
+        },
+        {
+          "name": "sync_tools",
+          "flag": "sync-tools",
+          "target": "syncTools",
+          "required": false,
+          "value_type": "json",
+          "description": "Sync tools"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-clipboard-file-redirect-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23867&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy clipboard-file-redirect set --strategy-oid dsy-xxxxxx"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.image.upload",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "image",
+        "upload"
+      ],
+      "operation": "ecpc.desktop-policy.image.upload",
+      "table": "ecpc.desktop-policy.image.upload",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        },
+        {
+          "name": "image_base64",
+          "flag": "image-base64",
+          "target": "imageBase64",
+          "required": true,
+          "description": "Image base64"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-image-upload.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23869&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy image upload --strategy-oid dsy-xxxxxx --type DESKTOP_WATERMARK_LOGO --image-base64 iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVR4nGP4DwQACfsD/fteaysAAAAASUVORK5CYII="
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "upload"
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.windows-update.show",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "windows-update",
+        "show"
+      ],
+      "operation": "ecpc.desktop-policy.windows-update.show",
+      "table": "ecpc.desktop-policy.windows-update.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-windows-update-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23870&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy windows-update show --strategy-oid dsy-xxxxxx"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.display-basic.show",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "display-basic",
+        "show"
+      ],
+      "operation": "ecpc.desktop-policy.display-basic.show",
+      "table": "ecpc.desktop-policy.display-basic.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-display-basic-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23871&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy display-basic show --strategy-oid dsy-xxxxxx"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.display-quality.show",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "display-quality",
+        "show"
+      ],
+      "operation": "ecpc.desktop-policy.display-quality.show",
+      "table": "ecpc.desktop-policy.display-quality.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-display-quality-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23873&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy display-quality show --strategy-oid dsy-xxxxxx"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.desktop-toolbar.show",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "desktop-toolbar",
+        "show"
+      ],
+      "operation": "ecpc.desktop-policy.desktop-toolbar.show",
+      "table": "ecpc.desktop-policy.desktop-toolbar.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-desktop-toolbar-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23874&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy desktop-toolbar show --strategy-oid dsy-xxxxxx"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.terminal-device.show",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "terminal-device",
+        "show"
+      ],
+      "operation": "ecpc.desktop-policy.terminal-device.show",
+      "table": "ecpc.desktop-policy.terminal-device.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-terminal-device-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23875&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy terminal-device show --strategy-oid dsy-xxxxxx"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.terminal-run-mode.show",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "terminal-run-mode",
+        "show"
+      ],
+      "operation": "ecpc.desktop-policy.terminal-run-mode.show",
+      "table": "ecpc.desktop-policy.terminal-run-mode.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-terminal-run-mode-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23876&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy terminal-run-mode show --strategy-oid dsy-xxxxxx"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.network-control.show",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "network-control",
+        "show"
+      ],
+      "operation": "ecpc.desktop-policy.network-control.show",
+      "table": "ecpc.desktop-policy.network-control.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-network-control-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23877&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy network-control show --strategy-oid dsy-xxxxxx"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.virtual-machine.show",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "virtual-machine",
+        "show"
+      ],
+      "operation": "ecpc.desktop-policy.virtual-machine.show",
+      "table": "ecpc.desktop-policy.virtual-machine.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-virtual-machine-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23878&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy virtual-machine show --strategy-oid dsy-xxxxxx"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.windows-update.set",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "windows-update",
+        "set"
+      ],
+      "operation": "ecpc.desktop-policy.windows-update.set",
+      "table": "ecpc.desktop-policy.windows-update.set",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        },
+        {
+          "name": "windows_update_policy",
+          "flag": "windows-update-policy",
+          "target": "windowsUpdatePolicy",
+          "required": true,
+          "value_type": "json",
+          "description": "Windows update policy"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-windows-update-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23879&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy windows-update set --strategy-oid dsy-xxxxxx --windows-update-policy '{\"mode\":\"CUSTOM_WSUS\",\"customWsus\":{\"name\":\"企业WSUS策略\",\"description\":\"办公网终端更新策略\",\"updateService\":{\"useWuServer\":\"ENABLED\",\"updateServerUrl\":\"https://wsus.example.com/update\",\"statisticsServerUrl\":\"https://wsus.example.com/statistics\",\"alternateDownloadServerUrl\":\"https://download.example.com/windows\",\"fillEmptyContentUrlsEnable\":true},\"automaticUpdates\":\"ENABLED\",\"updateMode\":\"AUTO_DOWNLOAD_SCHEDULE_INSTALL\",\"installDay\":\"MONDAY\",\"installTime\":{\"mode\":\"FIXED_HOUR\",\"hour\":2},\"automaticMaintenanceEnable\":true,\"detectionFrequency\":{\"state\":\"ENABLED\",\"hours\":6},\"targetGroup\":{\"state\":\"ENABLED\",\"name\":\"OFFICE-DESKTOPS\"},\"autoInstallMinorUpdates\":\"ENABLED\",\"elevateNonAdmins\":\"DISABLED\",\"noAutoRebootWithLoggedOnUsers\":\"ENABLED\"}}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.display-basic.set",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "display-basic",
+        "set"
+      ],
+      "operation": "ecpc.desktop-policy.display-basic.set",
+      "table": "ecpc.desktop-policy.display-basic.set",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        },
+        {
+          "name": "auto_lock_screen_minutes",
+          "flag": "auto-lock-screen-minutes",
+          "target": "autoLockScreenMinutes",
+          "required": true,
+          "value_type": "integer",
+          "description": "Auto lock screen minutes"
+        },
+        {
+          "name": "fixed_resolution",
+          "flag": "fixed-resolution",
+          "target": "fixedResolution",
+          "required": true,
+          "value_type": "json",
+          "description": "Fixed resolution"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-display-basic-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23880&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy display-basic set --strategy-oid dsy-xxxxxx --auto-lock-screen-minutes 15 --fixed-resolution '{\"enable\":false}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.screen-security.set",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "screen-security",
+        "set"
+      ],
+      "operation": "ecpc.desktop-policy.screen-security.set",
+      "table": "ecpc.desktop-policy.screen-security.set",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        },
+        {
+          "name": "screenshot_protection_enable",
+          "flag": "screenshot-protection-enable",
+          "target": "screenshotProtectionEnable",
+          "required": true,
+          "value_type": "boolean",
+          "description": "Screenshot protection enable"
+        },
+        {
+          "name": "desktop_watermark",
+          "flag": "desktop-watermark",
+          "target": "desktopWatermark",
+          "required": true,
+          "value_type": "json",
+          "description": "Desktop watermark"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-screen-security-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23881&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy screen-security set --strategy-oid dsy-xxxxxx --screenshot-protection-enable true --desktop-watermark '{\"enable\":true,\"watermarkType\":\"VISIBLE\",\"screenshotWatermarkEnable\":true,\"tenantLogoToken\":\"xxx\",\"visibleWatermark\":{\"customContent\":\"内部资料\",\"dynamicContents\":[\"TENANT_NAME\",\"USER_NAME\",\"SYSTEM_TIME\"],\"style\":{\"mode\":\"CUSTOM\",\"fontSizePx\":20,\"bold\":false,\"fontColor\":\"#FFFFFF\",\"opacityPercent\":30,\"inclinationDegrees\":-30,\"density\":\"MEDIUM\"}}}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.display-quality.set",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "display-quality",
+        "set"
+      ],
+      "operation": "ecpc.desktop-policy.display-quality.set",
+      "table": "ecpc.desktop-policy.display-quality.set",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        },
+        {
+          "name": "flow_mode",
+          "flag": "flow-mode",
+          "target": "flowMode",
+          "required": true,
+          "description": "Flow mode"
+        },
+        {
+          "name": "image_max_frame_rate",
+          "flag": "image-max-frame-rate",
+          "target": "imageMaxFrameRate",
+          "required": true,
+          "value_type": "integer",
+          "description": "Image max frame rate"
+        },
+        {
+          "name": "image_max_frame_rate_enforced",
+          "flag": "image-max-frame-rate-enforced",
+          "target": "imageMaxFrameRateEnforced",
+          "required": true,
+          "value_type": "boolean",
+          "description": "Image max frame rate enforced"
+        },
+        {
+          "name": "image_quality",
+          "flag": "image-quality",
+          "target": "imageQuality",
+          "required": true,
+          "description": "Image quality"
+        },
+        {
+          "name": "video_frame_rate",
+          "flag": "video-frame-rate",
+          "target": "videoFrameRate",
+          "required": true,
+          "value_type": "integer",
+          "description": "Video frame rate"
+        },
+        {
+          "name": "video_quality",
+          "flag": "video-quality",
+          "target": "videoQuality",
+          "required": true,
+          "description": "Video quality"
+        },
+        {
+          "name": "gpu_desktop_video_frame_rate",
+          "flag": "gpu-desktop-video-frame-rate",
+          "target": "gpuDesktopVideoFrameRate",
+          "required": true,
+          "value_type": "integer",
+          "description": "GPU desktop video frame rate"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-display-quality-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23882&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy display-quality set --strategy-oid dsy-xxxxxx --flow-mode ADAPTIVE --image-max-frame-rate 30 --image-max-frame-rate-enforced true --image-quality RGB_24 --video-frame-rate 25 --video-quality GOOD --gpu-desktop-video-frame-rate 30"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.desktop-toolbar.set",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "desktop-toolbar",
+        "set"
+      ],
+      "operation": "ecpc.desktop-policy.desktop-toolbar.set",
+      "table": "ecpc.desktop-policy.desktop-toolbar.set",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        },
+        {
+          "name": "desktop_toolbar",
+          "flag": "desktop-toolbar",
+          "target": "desktopToolbar",
+          "required": true,
+          "value_type": "json",
+          "description": "Desktop toolbar"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-desktop-toolbar-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23883&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy desktop-toolbar set --strategy-oid dsy-xxxxxx --desktop-toolbar '{\"bigScreen\":{\"deskMin\":true,\"deskWin\":true,\"bigScreenExit\":{\"enable\":true,\"exit\":true,\"lock\":true,\"restart\":true,\"shutdown\":false},\"bigScreenTools\":{\"enable\":true,\"oneKeyOptimization\":true,\"network\":true,\"report\":true,\"safeCenter\":true,\"screenSharing\":false,\"operationAudit\":true,\"liveZoneMgr\":false,\"desktopManager\":{\"enable\":true,\"usbConfig\":true,\"desktopInfo\":true,\"otherConfig\":true,\"picConfig\":true,\"showConfig\":true,\"systemReset\":false,\"usbDeviceConfig\":true}}},\"mobile\":{\"mobileExit\":{\"enable\":true,\"exit\":true,\"restart\":true,\"shutdown\":false},\"mobileTools\":{\"enable\":true,\"showConfig\":true,\"network\":true,\"report\":true,\"safeCenter\":true,\"systemRecovery\":true,\"screenSharing\":false,\"operationAudit\":true,\"liveZoneMgr\":false}}}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.terminal-device.set",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "terminal-device",
+        "set"
+      ],
+      "operation": "ecpc.desktop-policy.terminal-device.set",
+      "table": "ecpc.desktop-policy.terminal-device.set",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        },
+        {
+          "name": "auto_reconnect_interval_seconds",
+          "flag": "auto-reconnect-interval-seconds",
+          "target": "autoReconnectIntervalSeconds",
+          "required": true,
+          "value_type": "integer",
+          "description": "Auto reconnect interval seconds"
+        },
+        {
+          "name": "auto_reconnect_total_seconds",
+          "flag": "auto-reconnect-total-seconds",
+          "target": "autoReconnectTotalSeconds",
+          "required": true,
+          "value_type": "integer",
+          "description": "Auto reconnect total seconds"
+        },
+        {
+          "name": "endpoint_auto_shutdown",
+          "flag": "endpoint-auto-shutdown",
+          "target": "endpointAutoShutdown",
+          "required": true,
+          "value_type": "json",
+          "description": "Endpoint auto shutdown"
+        },
+        {
+          "name": "auto_disconnect_after_inactivity",
+          "flag": "auto-disconnect-after-inactivity",
+          "target": "autoDisconnectAfterInactivity",
+          "required": true,
+          "value_type": "integer",
+          "description": "Auto disconnect after inactivity"
+        },
+        {
+          "name": "forbidden_device_types",
+          "flag": "forbidden-device-types",
+          "target": "forbiddenDeviceTypes",
+          "required": true,
+          "value_type": "integer_array",
+          "description": "Forbidden device types"
+        },
+        {
+          "name": "client_shutdown_action",
+          "flag": "client-shutdown-action",
+          "target": "clientShutdownAction",
+          "required": true,
+          "description": "Client shutdown action"
+        },
+        {
+          "name": "client_reboot_action",
+          "flag": "client-reboot-action",
+          "target": "clientRebootAction",
+          "required": true,
+          "description": "Client reboot action"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-terminal-device-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23884&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy terminal-device set --strategy-oid dsy-xxxxxx --auto-reconnect-interval-seconds 10 --auto-reconnect-total-seconds 300 --endpoint-auto-shutdown '{\"mode\":\"AFTER_INACTIVITY\",\"inactivityMinutes\":60}' --auto-disconnect-after-inactivity 30 --forbidden-device-types '[10,20]' --client-shutdown-action CLOUD_DESKTOP_ONLY --client-reboot-action BOTH"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.terminal-run-mode.set",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "terminal-run-mode",
+        "set"
+      ],
+      "operation": "ecpc.desktop-policy.terminal-run-mode.set",
+      "table": "ecpc.desktop-policy.terminal-run-mode.set",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        },
+        {
+          "name": "run_mode",
+          "flag": "run-mode",
+          "target": "runMode",
+          "required": true,
+          "value_type": "json",
+          "description": "Run mode"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-terminal-run-mode-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23885&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy terminal-run-mode set --strategy-oid dsy-xxxxxx --run-mode '{\"priority\":\"STRATEGY\",\"mode\":\"LOCKED\",\"deviceModelAllowlist\":{\"enable\":true,\"entries\":[\"CTDesk-T10\"]},\"macAddressAllowlist\":{\"enable\":true,\"entries\":[\"00:11:22:33:44:55\"]}}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.network-control.set",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "network-control",
+        "set"
+      ],
+      "operation": "ecpc.desktop-policy.network-control.set",
+      "table": "ecpc.desktop-policy.network-control.set",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        },
+        {
+          "name": "cloud_desktop_internet_access_enable",
+          "flag": "cloud-desktop-internet-access-enable",
+          "target": "cloudDesktopInternetAccessEnable",
+          "required": true,
+          "value_type": "boolean",
+          "description": "Cloud desktop internet access enable"
+        },
+        {
+          "name": "desktop_network_interworking_enable",
+          "flag": "desktop-network-interworking-enable",
+          "target": "desktopNetworkInterworkingEnable",
+          "required": true,
+          "value_type": "boolean",
+          "description": "Desktop network interworking enable"
+        },
+        {
+          "name": "client_internet_connectivity",
+          "flag": "client-internet-connectivity",
+          "target": "clientInternetConnectivity",
+          "required": true,
+          "allowed_values": [
+            "ALLOW",
+            "DENY",
+            "INHERIT"
+          ],
+          "description": "Client internet connectivity"
+        },
+        {
+          "name": "client_cloud_line_connectivity",
+          "flag": "client-cloud-line-connectivity",
+          "target": "clientCloudLineConnectivity",
+          "required": true,
+          "allowed_values": [
+            "ALLOW",
+            "DENY",
+            "INHERIT"
+          ],
+          "description": "Client cloud line connectivity"
+        },
+        {
+          "name": "bandwidth_control",
+          "flag": "bandwidth-control",
+          "target": "bandwidthControl",
+          "required": true,
+          "value_type": "json",
+          "description": "Bandwidth control"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-network-control-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23886&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy network-control set --strategy-oid dsy-xxxxxx --cloud-desktop-internet-access-enable true --desktop-network-interworking-enable false --client-internet-connectivity ALLOW --client-cloud-line-connectivity INHERIT --bandwidth-control '{\"enable\":true,\"usbBandwidthKB\":2000,\"cameraBandwidthKB\":3000,\"fileDragBandwidthKB\":2000,\"fileRedirectionBandwidthKB\":2000,\"printerBandwidthKB\":1500,\"networkRedirectionBandwidthKB\":3000}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.virtual-machine.set",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "virtual-machine",
+        "set"
+      ],
+      "operation": "ecpc.desktop-policy.virtual-machine.set",
+      "table": "ecpc.desktop-policy.virtual-machine.set",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        },
+        {
+          "name": "rebuild_after_reboot",
+          "flag": "rebuild-after-reboot",
+          "target": "rebuildAfterReboot",
+          "required": true,
+          "value_type": "json",
+          "description": "Rebuild after reboot"
+        },
+        {
+          "name": "computer_alias_modification_enable",
+          "flag": "computer-alias-modification-enable",
+          "target": "computerAliasModificationEnable",
+          "required": true,
+          "value_type": "boolean",
+          "description": "Computer alias modification enable"
+        },
+        {
+          "name": "floating_ball_enable",
+          "flag": "floating-ball-enable",
+          "target": "floatingBallEnable",
+          "required": true,
+          "value_type": "boolean",
+          "description": "Floating ball enable"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-virtual-machine-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23887&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy virtual-machine set --strategy-oid dsy-xxxxxx --rebuild-after-reboot '{\"mode\":\"TEMPLATE\",\"templateScope\":\"SYSTEM_DISK\"}' --computer-alias-modification-enable true --floating-ball-enable true"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "ecpc.time-policy.create",
+      "path": [
+        "ecpc",
+        "time-policy",
+        "create"
+      ],
+      "operation": "ecpc.time-policy.create",
+      "table": "ecpc.time-policy.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_time_name",
+          "flag": "strategy-time-name",
+          "target": "strategyTimeName",
+          "required": true,
+          "description": "Strategy time name"
+        },
+        {
+          "name": "org_oid",
+          "flag": "org-oid",
+          "target": "orgOid",
+          "required": true,
+          "description": "Org ID"
+        },
+        {
+          "name": "share_flag",
+          "flag": "share-flag",
+          "target": "shareFlag",
+          "required": true,
+          "value_type": "integer",
+          "description": "Share flag"
+        },
+        {
+          "name": "remark",
+          "flag": "remark",
+          "target": "remark",
+          "required": false,
+          "description": "Remark"
+        },
+        {
+          "name": "strategy_time_item_list",
+          "flag": "strategy-time-item-list",
+          "target": "strategyTimeItemList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Strategy time item list"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-time-policy-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23906&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc time-policy create --strategy-time-name 时间策略名称 --org-oid org-xxxxxx --share-flag 0 --strategy-time-item-list '[{\"strategyDateName\":\"星期\",\"dateType\":1,\"dateLabels\":\"0,1,2,3\",\"stime\":\"08:00:00\",\"etime\":64800},{\"strategyDateName\":\"月\",\"dateType\":3,\"dateLabels\":\"1,2,3\",\"stime\":\"08:00:00\",\"etime\":64800},{\"strategyDateName\":\"日期\",\"dateType\":4,\"dateLabels\":\"2026-07-23,2026-07-24\",\"sdate\":\"2026-07-23\",\"edate\":\"2026-07-24\",\"stime\":\"08:00:00\",\"etime\":64800}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "ecpc.time-policy.list",
+      "path": [
+        "ecpc",
+        "time-policy",
+        "list"
+      ],
+      "operation": "ecpc.time-policy.list",
+      "table": "ecpc.time-policy.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "org_oid",
+          "flag": "org-oid",
+          "target": "orgOid",
+          "required": true,
+          "description": "Org ID"
+        },
+        {
+          "name": "strategy_time_name",
+          "flag": "strategy-time-name",
+          "target": "strategyTimeName",
+          "required": false,
+          "description": "Strategy time name"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page num"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page size"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-time-policy-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23907&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc time-policy list --org-oid {org_oid}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.time-policy.show",
+      "path": [
+        "ecpc",
+        "time-policy",
+        "show"
+      ],
+      "operation": "ecpc.time-policy.show",
+      "table": "ecpc.time-policy.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_time_oid",
+          "flag": "strategy-time-oid",
+          "target": "strategyTimeOid",
+          "required": true,
+          "description": "Strategy time ID"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-time-policy-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23908&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc time-policy show --strategy-time-oid {strategy_time_oid}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.time-policy.update",
+      "path": [
+        "ecpc",
+        "time-policy",
+        "update"
+      ],
+      "operation": "ecpc.time-policy.update",
+      "table": "ecpc.time-policy.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_time_oid",
+          "flag": "strategy-time-oid",
+          "target": "strategyTimeOid",
+          "required": true,
+          "description": "Strategy time ID"
+        },
+        {
+          "name": "strategy_time_name",
+          "flag": "strategy-time-name",
+          "target": "strategyTimeName",
+          "required": true,
+          "description": "Strategy time name"
+        },
+        {
+          "name": "org_oid",
+          "flag": "org-oid",
+          "target": "orgOid",
+          "required": true,
+          "description": "Org ID"
+        },
+        {
+          "name": "share_flag",
+          "flag": "share-flag",
+          "target": "shareFlag",
+          "required": true,
+          "value_type": "integer",
+          "description": "Share flag"
+        },
+        {
+          "name": "remark",
+          "flag": "remark",
+          "target": "remark",
+          "required": false,
+          "description": "Remark"
+        },
+        {
+          "name": "strategy_time_item_list",
+          "flag": "strategy-time-item-list",
+          "target": "strategyTimeItemList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Strategy time item list"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-time-policy-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23909&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc time-policy update --strategy-time-oid sdt-xxxxxx --strategy-time-name 时间策略名称 --org-oid org-xxxxxx --share-flag 0 --strategy-time-item-list '[{\"strategyTimeItemOid\":\"sda-xxxxxx\",\"strategyDateName\":\"星期\",\"dateType\":1,\"dateLabels\":\"0,1,2,3,4,5,6\",\"stime\":\"08:00:00\",\"etime\":64800},{\"strategyDateName\":\"日期\",\"dateType\":4,\"dateLabels\":\"2026-07-23,2026-07-24\",\"sdate\":\"2026-07-23\",\"edate\":\"2026-07-24\",\"stime\":\"08:00:00\",\"etime\":64800}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "ecpc.time-policy.delete",
+      "path": [
+        "ecpc",
+        "time-policy",
+        "delete"
+      ],
+      "operation": "ecpc.time-policy.delete",
+      "table": "ecpc.time-policy.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_time_oid",
+          "flag": "strategy-time-oid",
+          "target": "strategyTimeOid",
+          "required": true,
+          "description": "Strategy time ID"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-time-policy-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23910&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc time-policy delete --strategy-time-oid sdt-xxxxxx"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "ecpc.power-policy.list",
+      "path": [
+        "ecpc",
+        "power-policy",
+        "list"
+      ],
+      "operation": "ecpc.power-policy.list",
+      "table": "ecpc.power-policy.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_name",
+          "flag": "strategy-name",
+          "target": "strategyName",
+          "required": false,
+          "description": "Strategy name"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page num"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page size"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-power-policy-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23912&data=62&isNormal=1&vid=58",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.power-policy.show",
+      "path": [
+        "ecpc",
+        "power-policy",
+        "show"
+      ],
+      "operation": "ecpc.power-policy.show",
+      "table": "ecpc.power-policy.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_power_oid",
+          "flag": "strategy-power-oid",
+          "target": "strategyPowerOid",
+          "required": true,
+          "description": "Strategy power ID"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-power-policy-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23913&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc power-policy show --strategy-power-oid {strategy_power_oid}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.power-policy.create",
+      "path": [
+        "ecpc",
+        "power-policy",
+        "create"
+      ],
+      "operation": "ecpc.power-policy.create",
+      "table": "ecpc.power-policy.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_name",
+          "flag": "strategy-name",
+          "target": "strategyName",
+          "required": true,
+          "description": "Strategy name"
+        },
+        {
+          "name": "remark",
+          "flag": "remark",
+          "target": "remark",
+          "required": false,
+          "description": "Remark"
+        },
+        {
+          "name": "strategy_item_list",
+          "flag": "strategy-item-list",
+          "target": "strategyItemList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Strategy item list"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-power-policy-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23914&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc power-policy create --strategy-name 电源策略名称 --strategy-item-list '[{\"operationType\":10,\"optionType\":1,\"strategyTimeOid\":\"sdt-xxxxxx\"},{\"operationType\":15,\"optionType\":1,\"strategyTimeOid\":\"sdt-xxxxxx\",\"offlineTime\":\"10\"},{\"operationType\":20,\"optionType\":1,\"strategyTimeOid\":\"sdt-xxxxxx\",\"offlineTime\":\"20\"},{\"operationType\":30,\"optionType\":1,\"strategyTimeOid\":\"sdt-xxxxxx\",\"offlineTime\":\"30\"},{\"operationType\":35,\"optionType\":1,\"offlineTime\":\"60\"},{\"operationType\":40,\"optionType\":1,\"strategyTimeOid\":\"sdt-xxxxxx\",\"offlineTime\":\"120\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "ecpc.power-policy.update",
+      "path": [
+        "ecpc",
+        "power-policy",
+        "update"
+      ],
+      "operation": "ecpc.power-policy.update",
+      "table": "ecpc.power-policy.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_power_oid",
+          "flag": "strategy-power-oid",
+          "target": "strategyPowerOid",
+          "required": true,
+          "description": "Strategy power ID"
+        },
+        {
+          "name": "strategy_name",
+          "flag": "strategy-name",
+          "target": "strategyName",
+          "required": true,
+          "description": "Strategy name"
+        },
+        {
+          "name": "remark",
+          "flag": "remark",
+          "target": "remark",
+          "required": false,
+          "description": "Remark"
+        },
+        {
+          "name": "strategy_item_list",
+          "flag": "strategy-item-list",
+          "target": "strategyItemList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Strategy item list"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-power-policy-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23915&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc power-policy update --strategy-power-oid dsy-xxxxxx --strategy-name 电源策略名称 --strategy-item-list '[{\"strategyPowerItemOid\":\"dpsb-xxxxxx\",\"optionType\":1,\"operationType\":10,\"strategyTimeOid\":\"sdt-xxxxxx\"},{\"operationType\":15,\"optionType\":1,\"strategyTimeOid\":\"sdt-xxxxxx\",\"offlineTime\":\"30\"},{\"strategyPowerItemOid\":\"dpsb-xxxxxx\",\"operationType\":20,\"optionType\":0}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "ecpc.power-policy.offline-time.list",
+      "path": [
+        "ecpc",
+        "power-policy",
+        "offline-time",
+        "list"
+      ],
+      "operation": "ecpc.power-policy.offline-time.list",
+      "table": "ecpc.power-policy.offline-time.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-power-policy-offline-time-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23917&data=62&isNormal=1&vid=58",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.power-policy.assign",
+      "path": [
+        "ecpc",
+        "power-policy",
+        "assign"
+      ],
+      "operation": "ecpc.power-policy.assign",
+      "table": "ecpc.power-policy.assign",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_power_oid",
+          "flag": "strategy-power-oid",
+          "target": "strategyPowerOid",
+          "required": true,
+          "description": "Strategy power ID"
+        },
+        {
+          "name": "alloc_type",
+          "flag": "alloc-type",
+          "target": "allocType",
+          "required": true,
+          "value_type": "integer",
+          "description": "Alloc type"
+        },
+        {
+          "name": "alloc_desktop_oid_list",
+          "flag": "alloc-desktop-oid-list",
+          "target": "allocDesktopOidList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Alloc desktop ID list"
+        },
+        {
+          "name": "delete_desktop_oid_list",
+          "flag": "delete-desktop-oid-list",
+          "target": "deleteDesktopOidList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Delete desktop ID list"
+        },
+        {
+          "name": "alloc_desktop_pool_oid_list",
+          "flag": "alloc-desktop-pool-oid-list",
+          "target": "allocDesktopPoolOidList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Alloc desktop pool ID list"
+        },
+        {
+          "name": "delete_desktop_pool_oid_list",
+          "flag": "delete-desktop-pool-oid-list",
+          "target": "deleteDesktopPoolOidList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Delete desktop pool ID list"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-power-policy-assign.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23919&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc power-policy assign --strategy-power-oid dsy-xxxxxx --alloc-type 20"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "assign"
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.create",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "create"
+      ],
+      "operation": "ecpc.desktop-policy.create",
+      "table": "ecpc.desktop-policy.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_name",
+          "flag": "strategy-name",
+          "target": "strategyName",
+          "required": true,
+          "description": "Strategy name"
+        },
+        {
+          "name": "remark",
+          "flag": "remark",
+          "target": "remark",
+          "required": false,
+          "description": "Remark"
+        },
+        {
+          "name": "org_oid",
+          "flag": "org-oid",
+          "target": "orgOid",
+          "required": true,
+          "description": "Org ID"
+        },
+        {
+          "name": "security_group_oid",
+          "flag": "security-group-oid",
+          "target": "securityGroupOid",
+          "required": true,
+          "description": "Security group ID"
+        },
+        {
+          "name": "qos_oid",
+          "flag": "qos-oid",
+          "target": "qosOid",
+          "required": true,
+          "description": "QoS ID"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23921&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy create --strategy-name strategy-apitest --org-oid org-xxxxxx --security-group-oid sg-xxxxxx --qos-oid sqs-xxxxxx"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.update",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "update"
+      ],
+      "operation": "ecpc.desktop-policy.update",
+      "table": "ecpc.desktop-policy.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        },
+        {
+          "name": "strategy_name",
+          "flag": "strategy-name",
+          "target": "strategyName",
+          "required": false,
+          "description": "Strategy name"
+        },
+        {
+          "name": "remark",
+          "flag": "remark",
+          "target": "remark",
+          "required": false,
+          "description": "Remark"
+        },
+        {
+          "name": "security_group_oid",
+          "flag": "security-group-oid",
+          "target": "securityGroupOid",
+          "required": false,
+          "description": "Security group ID"
+        },
+        {
+          "name": "qos_oid",
+          "flag": "qos-oid",
+          "target": "qosOid",
+          "required": false,
+          "description": "QoS ID"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23922&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy update --strategy-oid dsy-xxxxxx"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "ecpc.desktop-policy.desktop.list",
+      "path": [
+        "ecpc",
+        "desktop-policy",
+        "desktop",
+        "list"
+      ],
+      "operation": "ecpc.desktop-policy.desktop.list",
+      "table": "ecpc.desktop-policy.desktop.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "strategy_oid",
+          "flag": "strategy-oid",
+          "target": "strategyOid",
+          "required": true,
+          "description": "Strategy ID"
+        },
+        {
+          "name": "desktop_code",
+          "flag": "desktop-code",
+          "target": "desktopCode",
+          "required": false,
+          "description": "Desktop code"
+        },
+        {
+          "name": "desktop_nick_name",
+          "flag": "desktop-nick-name",
+          "target": "desktopNickName",
+          "required": false,
+          "description": "Desktop nick name"
+        },
+        {
+          "name": "user_name",
+          "flag": "user-name",
+          "target": "userName",
+          "required": false,
+          "description": "User name"
+        },
+        {
+          "name": "mobile_phone",
+          "flag": "mobile-phone",
+          "target": "mobilePhone",
+          "required": false,
+          "description": "Mobile phone"
+        },
+        {
+          "name": "email",
+          "flag": "email",
+          "target": "email",
+          "required": false,
+          "description": "Email"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page num"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page size"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-desktop-policy-desktop-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23923&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc desktop-policy desktop list --strategy-oid {strategy_oid}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.resource-pack.purchase-price.show",
+      "path": [
+        "ecpc",
+        "resource-pack",
+        "purchase-price",
+        "show"
+      ],
+      "operation": "ecpc.resource-pack.purchase-price.show",
+      "table": "ecpc.resource-pack.purchase-price.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "period",
+          "flag": "period",
+          "target": "period",
+          "required": true,
+          "value_type": "integer",
+          "description": "Period"
+        },
+        {
+          "name": "cpu_count",
+          "flag": "cpu-count",
+          "target": "cpuCount",
+          "required": true,
+          "value_type": "integer",
+          "description": "CPU count"
+        },
+        {
+          "name": "memory_size",
+          "flag": "memory-size",
+          "target": "memorySize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Memory size"
+        },
+        {
+          "name": "disk_size",
+          "flag": "disk-size",
+          "target": "diskSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Disk size"
+        },
+        {
+          "name": "disk_type",
+          "flag": "disk-type",
+          "target": "diskType",
+          "required": true,
+          "description": "Disk type"
+        },
+        {
+          "name": "bandwidth_size",
+          "flag": "bandwidth-size",
+          "target": "bandwidthSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Bandwidth size"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-resource-pack-purchase-price-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23924&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc resource-pack purchase-price show --period 1 --cpu-count 10 --memory-size 20 --disk-size 0 --disk-type hio"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.resource-pack.renewal-price.show",
+      "path": [
+        "ecpc",
+        "resource-pack",
+        "renewal-price",
+        "show"
+      ],
+      "operation": "ecpc.resource-pack.renewal-price.show",
+      "table": "ecpc.resource-pack.renewal-price.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "resource_pack_oid",
+          "flag": "resource-pack-oid",
+          "target": "resourcePackOid",
+          "required": true,
+          "description": "Resource pack ID"
+        },
+        {
+          "name": "period",
+          "flag": "period",
+          "target": "period",
+          "required": true,
+          "value_type": "integer",
+          "description": "Period"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-resource-pack-renewal-price-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23925&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc resource-pack renewal-price show --resource-pack-oid rsp-xxx --period 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.firewall.list",
+      "path": [
+        "ecpc",
+        "firewall",
+        "list"
+      ],
+      "operation": "ecpc.firewall.list",
+      "table": "ecpc.firewall.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page num"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page size"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Name"
+        },
+        {
+          "name": "group_id",
+          "flag": "group-id",
+          "target": "groupId",
+          "required": false,
+          "description": "Group ID"
+        },
+        {
+          "name": "firewall_version",
+          "flag": "firewall-version",
+          "target": "version",
+          "required": false,
+          "description": "Version"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "description": "Status"
+        },
+        {
+          "name": "ids",
+          "flag": "ids",
+          "target": "ids",
+          "required": false,
+          "description": "IDs"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24354&data=62&isNormal=1&vid=58",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.firewall.group.list",
+      "path": [
+        "ecpc",
+        "firewall",
+        "group",
+        "list"
+      ],
+      "operation": "ecpc.firewall.group.list",
+      "table": "ecpc.firewall.group.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page num"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page size"
+        },
+        {
+          "name": "search",
+          "flag": "search",
+          "target": "search",
+          "required": false,
+          "description": "Search"
+        },
+        {
+          "name": "group_name",
+          "flag": "group-name",
+          "target": "groupName",
+          "required": false,
+          "description": "Group name"
+        },
+        {
+          "name": "ids",
+          "flag": "ids",
+          "target": "ids",
+          "required": false,
+          "description": "IDs"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-group-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24355&data=62&isNormal=1&vid=58",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.firewall.group.create",
+      "path": [
+        "ecpc",
+        "firewall",
+        "group",
+        "create"
+      ],
+      "operation": "ecpc.firewall.group.create",
+      "table": "ecpc.firewall.group.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": true,
+          "description": "Description"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-group-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24356&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc firewall group create --name xxx --description xxx"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "ecpc.firewall.group.delete",
+      "path": [
+        "ecpc",
+        "firewall",
+        "group",
+        "delete"
+      ],
+      "operation": "ecpc.firewall.group.delete",
+      "table": "ecpc.firewall.group.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "ids",
+          "flag": "ids",
+          "target": "ids",
+          "required": true,
+          "value_type": "integer_array",
+          "description": "IDs"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-group-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24357&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc firewall group delete --ids '[1,2]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "ecpc.firewall.group.update",
+      "path": [
+        "ecpc",
+        "firewall",
+        "group",
+        "update"
+      ],
+      "operation": "ecpc.firewall.group.update",
+      "table": "ecpc.firewall.group.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "value_type": "integer",
+          "description": "ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": true,
+          "description": "Description"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-group-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24358&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc firewall group update --id 1 --name xxx --description xxx"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "ecpc.firewall.group.member.list",
+      "path": [
+        "ecpc",
+        "firewall",
+        "group",
+        "member",
+        "list"
+      ],
+      "operation": "ecpc.firewall.group.member.list",
+      "table": "ecpc.firewall.group.member.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "value_type": "integer",
+          "description": "ID"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page num"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page size"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-group-member-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24359&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc firewall group member list --id 0"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.firewall.group.member.update",
+      "path": [
+        "ecpc",
+        "firewall",
+        "group",
+        "member",
+        "update"
+      ],
+      "operation": "ecpc.firewall.group.member.update",
+      "table": "ecpc.firewall.group.member.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "group_id",
+          "flag": "group-id",
+          "target": "groupId",
+          "required": false,
+          "value_type": "integer",
+          "description": "Group ID"
+        },
+        {
+          "name": "firewall_ids",
+          "flag": "firewall-ids",
+          "target": "firewallIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Firewall IDs"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-group-member-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24360&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc firewall group member update --firewall-ids '[\"xxx\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "ecpc.firewall.group.member.remove",
+      "path": [
+        "ecpc",
+        "firewall",
+        "group",
+        "member",
+        "remove"
+      ],
+      "operation": "ecpc.firewall.group.member.remove",
+      "table": "ecpc.firewall.group.member.remove",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "firewall_ids",
+          "flag": "firewall-ids",
+          "target": "firewallIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Firewall IDs"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-group-member-remove.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24361&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc firewall group member remove --firewall-ids '[\"xxx\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "remove"
+      }
+    },
+    {
+      "id": "ecpc.firewall.policy.list",
+      "path": [
+        "ecpc",
+        "firewall",
+        "policy",
+        "list"
+      ],
+      "operation": "ecpc.firewall.policy.list",
+      "table": "ecpc.firewall.policy.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page num"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page size"
+        },
+        {
+          "name": "search",
+          "flag": "search",
+          "target": "search",
+          "required": false,
+          "description": "Search"
+        },
+        {
+          "name": "ids",
+          "flag": "ids",
+          "target": "ids",
+          "required": false,
+          "description": "IDs"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-policy-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24362&data=62&isNormal=1&vid=58",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.firewall.policy.create",
+      "path": [
+        "ecpc",
+        "firewall",
+        "policy",
+        "create"
+      ],
+      "operation": "ecpc.firewall.policy.create",
+      "table": "ecpc.firewall.policy.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": true,
+          "description": "Description"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "description": "Status"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-policy-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24363&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc firewall policy create --name xxx --description xxx"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "ecpc.firewall.policy.delete",
+      "path": [
+        "ecpc",
+        "firewall",
+        "policy",
+        "delete"
+      ],
+      "operation": "ecpc.firewall.policy.delete",
+      "table": "ecpc.firewall.policy.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "ids",
+          "flag": "ids",
+          "target": "ids",
+          "required": true,
+          "value_type": "integer_array",
+          "description": "IDs"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-policy-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24364&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc firewall policy delete --ids '[1,2]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "ecpc.firewall.policy.update",
+      "path": [
+        "ecpc",
+        "firewall",
+        "policy",
+        "update"
+      ],
+      "operation": "ecpc.firewall.policy.update",
+      "table": "ecpc.firewall.policy.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "value_type": "integer",
+          "description": "ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": true,
+          "description": "Description"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "description": "Status"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-policy-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24365&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc firewall policy update --id 1 --name xxx --description xxx"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "ecpc.firewall.policy.assignment.list",
+      "path": [
+        "ecpc",
+        "firewall",
+        "policy",
+        "assignment",
+        "list"
+      ],
+      "operation": "ecpc.firewall.policy.assignment.list",
+      "table": "ecpc.firewall.policy.assignment.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "value_type": "integer",
+          "description": "ID"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page num"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page size"
+        },
+        {
+          "name": "search",
+          "flag": "search",
+          "target": "search",
+          "required": false,
+          "description": "Search"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-policy-assignment-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24366&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc firewall policy assignment list --id 0"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.firewall.policy.assignment.update",
+      "path": [
+        "ecpc",
+        "firewall",
+        "policy",
+        "assignment",
+        "update"
+      ],
+      "operation": "ecpc.firewall.policy.assignment.update",
+      "table": "ecpc.firewall.policy.assignment.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "value_type": "integer",
+          "description": "ID"
+        },
+        {
+          "name": "ids",
+          "flag": "ids",
+          "target": "ids",
+          "required": false,
+          "value_type": "integer_array",
+          "description": "IDs"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-policy-assignment-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24367&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc firewall policy assignment update --id 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "ecpc.firewall.policy.acl.list",
+      "path": [
+        "ecpc",
+        "firewall",
+        "policy",
+        "acl",
+        "list"
+      ],
+      "operation": "ecpc.firewall.policy.acl.list",
+      "table": "ecpc.firewall.policy.acl.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Policy ID"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page num"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page size"
+        },
+        {
+          "name": "search",
+          "flag": "search",
+          "target": "search",
+          "required": false,
+          "description": "Search"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-policy-acl-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24368&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc firewall policy acl list --policy-id 0"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.firewall.policy.acl.create",
+      "path": [
+        "ecpc",
+        "firewall",
+        "policy",
+        "acl",
+        "create"
+      ],
+      "operation": "ecpc.firewall.policy.acl.create",
+      "table": "ecpc.firewall.policy.acl.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Policy ID"
+        },
+        {
+          "name": "priority",
+          "flag": "priority",
+          "target": "priority",
+          "required": false,
+          "value_type": "integer",
+          "description": "Priority"
+        },
+        {
+          "name": "rule",
+          "flag": "rule",
+          "target": "rule",
+          "required": false,
+          "value_type": "json",
+          "description": "Rule"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-policy-acl-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24369&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc firewall policy acl create --policy-id 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "ecpc.firewall.policy.acl.delete",
+      "path": [
+        "ecpc",
+        "firewall",
+        "policy",
+        "acl",
+        "delete"
+      ],
+      "operation": "ecpc.firewall.policy.acl.delete",
+      "table": "ecpc.firewall.policy.acl.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Policy ID"
+        },
+        {
+          "name": "ids",
+          "flag": "ids",
+          "target": "ids",
+          "required": true,
+          "value_type": "integer_array",
+          "description": "IDs"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-policy-acl-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24370&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc firewall policy acl delete --policy-id 1 --ids '[1,2]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "ecpc.firewall.policy.acl.update",
+      "path": [
+        "ecpc",
+        "firewall",
+        "policy",
+        "acl",
+        "update"
+      ],
+      "operation": "ecpc.firewall.policy.acl.update",
+      "table": "ecpc.firewall.policy.acl.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Policy ID"
+        },
+        {
+          "name": "rule_id",
+          "flag": "rule-id",
+          "target": "ruleId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Rule ID"
+        },
+        {
+          "name": "priority",
+          "flag": "priority",
+          "target": "priority",
+          "required": false,
+          "value_type": "integer",
+          "description": "Priority"
+        },
+        {
+          "name": "rule",
+          "flag": "rule",
+          "target": "rule",
+          "required": false,
+          "value_type": "json",
+          "description": "Rule"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-policy-acl-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24371&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc firewall policy acl update --policy-id 1 --rule-id 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "ecpc.firewall.policy.resource-group.list",
+      "path": [
+        "ecpc",
+        "firewall",
+        "policy",
+        "resource-group",
+        "list"
+      ],
+      "operation": "ecpc.firewall.policy.resource-group.list",
+      "table": "ecpc.firewall.policy.resource-group.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Policy ID"
+        },
+        {
+          "name": "sub_type",
+          "flag": "sub-type",
+          "target": "subType",
+          "required": true,
+          "description": "Sub type"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page num"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page size"
+        },
+        {
+          "name": "search",
+          "flag": "search",
+          "target": "search",
+          "required": false,
+          "description": "Search"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-policy-resource-group-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24372&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc firewall policy resource-group list --policy-id 0 --sub-type ipGroup"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.firewall.policy.resource-group.create",
+      "path": [
+        "ecpc",
+        "firewall",
+        "policy",
+        "resource-group",
+        "create"
+      ],
+      "operation": "ecpc.firewall.policy.resource-group.create",
+      "table": "ecpc.firewall.policy.resource-group.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Policy ID"
+        },
+        {
+          "name": "sub_type",
+          "flag": "sub-type",
+          "target": "subType",
+          "required": true,
+          "description": "Sub type"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-policy-resource-group-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24373&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc firewall policy resource-group create --policy-id 1 --sub-type ipGroup --name xxx"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "ecpc.firewall.policy.resource-group.delete",
+      "path": [
+        "ecpc",
+        "firewall",
+        "policy",
+        "resource-group",
+        "delete"
+      ],
+      "operation": "ecpc.firewall.policy.resource-group.delete",
+      "table": "ecpc.firewall.policy.resource-group.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Policy ID"
+        },
+        {
+          "name": "sub_type",
+          "flag": "sub-type",
+          "target": "subType",
+          "required": true,
+          "description": "Sub type"
+        },
+        {
+          "name": "ids",
+          "flag": "ids",
+          "target": "ids",
+          "required": true,
+          "value_type": "integer_array",
+          "description": "IDs"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-policy-resource-group-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24374&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc firewall policy resource-group delete --policy-id 1 --sub-type ipGroup --ids '[1,2]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "ecpc.firewall.policy.resource-group.update",
+      "path": [
+        "ecpc",
+        "firewall",
+        "policy",
+        "resource-group",
+        "update"
+      ],
+      "operation": "ecpc.firewall.policy.resource-group.update",
+      "table": "ecpc.firewall.policy.resource-group.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Policy ID"
+        },
+        {
+          "name": "sub_type",
+          "flag": "sub-type",
+          "target": "subType",
+          "required": true,
+          "description": "Sub type"
+        },
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "value_type": "integer",
+          "description": "ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-policy-resource-group-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24375&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc firewall policy resource-group update --policy-id 1 --sub-type ipGroup --id 1 --name xxx"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "ecpc.firewall.policy.resource-element.list",
+      "path": [
+        "ecpc",
+        "firewall",
+        "policy",
+        "resource-element",
+        "list"
+      ],
+      "operation": "ecpc.firewall.policy.resource-element.list",
+      "table": "ecpc.firewall.policy.resource-element.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Policy ID"
+        },
+        {
+          "name": "sub_type",
+          "flag": "sub-type",
+          "target": "subType",
+          "required": true,
+          "description": "Sub type"
+        },
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "value_type": "integer",
+          "description": "ID"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page num"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page size"
+        },
+        {
+          "name": "search",
+          "flag": "search",
+          "target": "search",
+          "required": false,
+          "description": "Search"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-policy-resource-element-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24376&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc firewall policy resource-element list --policy-id 0 --sub-type ipGroup --id 0"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecpc.firewall.policy.resource-element.create",
+      "path": [
+        "ecpc",
+        "firewall",
+        "policy",
+        "resource-element",
+        "create"
+      ],
+      "operation": "ecpc.firewall.policy.resource-element.create",
+      "table": "ecpc.firewall.policy.resource-element.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Policy ID"
+        },
+        {
+          "name": "sub_type",
+          "flag": "sub-type",
+          "target": "subType",
+          "required": true,
+          "description": "Sub type"
+        },
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "value_type": "integer",
+          "description": "ID"
+        },
+        {
+          "name": "values",
+          "flag": "values",
+          "target": "values",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Values"
+        },
+        {
+          "name": "comment",
+          "flag": "comment",
+          "target": "comment",
+          "required": false,
+          "description": "Comment"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-policy-resource-element-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24377&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc firewall policy resource-element create --policy-id 1 --sub-type ipGroup --id 1 --values '[\"xxx\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "ecpc.firewall.policy.resource-element.delete",
+      "path": [
+        "ecpc",
+        "firewall",
+        "policy",
+        "resource-element",
+        "delete"
+      ],
+      "operation": "ecpc.firewall.policy.resource-element.delete",
+      "table": "ecpc.firewall.policy.resource-element.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Policy ID"
+        },
+        {
+          "name": "sub_type",
+          "flag": "sub-type",
+          "target": "subType",
+          "required": true,
+          "description": "Sub type"
+        },
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "value_type": "integer",
+          "description": "ID"
+        },
+        {
+          "name": "ids",
+          "flag": "ids",
+          "target": "ids",
+          "required": true,
+          "value_type": "integer_array",
+          "description": "IDs"
+        },
+        {
+          "name": "clean_all",
+          "flag": "clean-all",
+          "target": "cleanAll",
+          "required": false,
+          "value_type": "boolean",
+          "description": "Clean all"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-policy-resource-element-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24378&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc firewall policy resource-element delete --policy-id 1 --sub-type ipGroup --id 1 --ids '[1,2]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "ecpc.firewall.policy.resource-element.update",
+      "path": [
+        "ecpc",
+        "firewall",
+        "policy",
+        "resource-element",
+        "update"
+      ],
+      "operation": "ecpc.firewall.policy.resource-element.update",
+      "table": "ecpc.firewall.policy.resource-element.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Policy ID"
+        },
+        {
+          "name": "sub_type",
+          "flag": "sub-type",
+          "target": "subType",
+          "required": true,
+          "description": "Sub type"
+        },
+        {
+          "name": "rsc_id",
+          "flag": "rsc-id",
+          "target": "rscId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Rsc ID"
+        },
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "value_type": "integer",
+          "description": "ID"
+        },
+        {
+          "name": "value",
+          "flag": "value",
+          "target": "value",
+          "required": true,
+          "description": "Value"
+        },
+        {
+          "name": "comment",
+          "flag": "comment",
+          "target": "comment",
+          "required": false,
+          "description": "Comment"
+        }
+      ],
+      "fixture_response": "fixtures/ecpc-firewall-policy-resource-element-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=24379&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc firewall policy resource-element update --policy-id 1 --sub-type ipGroup --rsc-id 1 --id 1 --value xxx"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
     }
   ]
 }

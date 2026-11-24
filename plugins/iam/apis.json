@@ -467,6 +467,27 @@
       },
       "retryable": false
     },
+    "iam.enterprise-project.access.grant": {
+      "method": "POST",
+      "path": "/v1/perm/setUserEpPloy",
+      "content_type": "application/json",
+      "body": {
+        "id": "$param.id",
+        "ployIds": "$param.ploy_ids",
+        "projectId": "$param.project_id"
+      },
+      "retryable": false
+    },
+    "iam.enterprise-project.access.revoke": {
+      "method": "POST",
+      "path": "/v1/perm/invalidEpPloy",
+      "content_type": "application/json",
+      "body": {
+        "accountId": "$param.account_id",
+        "privilegeIds": "$param.privilege_ids"
+      },
+      "retryable": false
+    },
     "iam.group.create": {
       "response": {
         "variants": [
@@ -965,6 +986,36 @@
         "privilegeId": "$param.privilege_id"
       },
       "retryable": true
+    },
+    "iam.permission.subject.list": {
+      "method": "POST",
+      "path": "/v1/perm/queryAuthSubjectPolicy",
+      "content_type": "application/json",
+      "body": {
+        "accountId": "$param.account_id",
+        "authSubjectId": "$param.auth_subject_id",
+        "authSubjectType": "$param.auth_subject_type",
+        "authType": "$param.auth_type",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "policyAttribute": "$param.policy_attribute",
+        "policyType": "$param.policy_type",
+        "searchField": "$param.search_field",
+        "searchValue": "$param.search_value"
+      },
+      "retryable": true
+    },
+    "iam.permission.subject.revoke": {
+      "method": "POST",
+      "path": "/v1/perm/cancelAuthSubjectPolicy",
+      "content_type": "application/json",
+      "body": {
+        "authSubjectId": "$param.auth_subject_id",
+        "authSubjectType": "$param.auth_subject_type",
+        "policyId": "$param.policy_id",
+        "type": "$param.type"
+      },
+      "retryable": false
     },
     "iam.policy.create": {
       "response": {
@@ -1729,6 +1780,7 @@
       "path": "/v1/user/setAccessControl",
       "content_type": "application/json",
       "body": {
+        "apiAccess": "$param.api_access",
         "consoleAccess": "$param.console_access",
         "userId": "$param.user_id"
       },

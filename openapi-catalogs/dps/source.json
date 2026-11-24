@@ -1354,11 +1354,11 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "页码，取值范围:[1~1000]，默认从1开始",
+          "description": "页码，默认从1开始",
           "descriptions": {
             "en-GB": "Page No",
             "en-US": "Page No",
-            "zh-CN": "页码，取值范围:[1~1000]，默认从1开始"
+            "zh-CN": "页码，默认从1开始"
           },
           "profile": "",
           "argument": "",
@@ -1375,11 +1375,11 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "每页记录数目，取值范围:[1~1000]，默认值:10，单页最大记录不超过1000",
+          "description": "每页记录数目，取值范围:[1~200]，默认值:10，单页最大记录不超过200",
           "descriptions": {
             "en-GB": "Page Size",
             "en-US": "Page Size",
-            "zh-CN": "每页记录数目，取值范围:[1~1000]，默认值:10，单页最大记录不超过1000"
+            "zh-CN": "每页记录数目，取值范围:[1~200]，默认值:10，单页最大记录不超过200"
           },
           "profile": "",
           "argument": "",
@@ -1429,6 +1429,27 @@
           "cli_flag": "label-n-value",
           "table_target": "",
           "example": "test"
+        },
+        {
+          "name": "projectID",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "企业项目ID，仅私有镜像(imageType=private)下生效：传入时仅查询该企业项目下的私有镜像；不传时查询当前用户有权限的全部企业项目下的私有镜像（同时传入 imageUUID 时取两者交集）。imageType=standard 时传入无效；imageType=shared 时仅参与权限校验、不做结果过滤。传入的企业项目必须为当前用户有权限的项目，可使用 查询企业项目列表 接口查询企业项目ID。",
+          "descriptions": {
+            "en-GB": "Project ID",
+            "en-US": "Project ID",
+            "zh-CN": "企业项目ID，仅私有镜像(imageType=private)下生效：传入时仅查询该企业项目下的私有镜像；不传时查询当前用户有权限的全部企业项目下的私有镜像（同时传入 imageUUID 时取两者交集）。imageType=standard 时传入无效；imageType=shared 时仅参与权限校验、不做结果过滤。传入的企业项目必须为当前用户有权限的项目，可使用 查询企业项目列表 接口查询企业项目ID。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "project_id",
+          "cli_flag": "project-id",
+          "table_target": "",
+          "example": "6732237e53bc4591b0e67d750030ebe3"
         }
       ],
       "response": {
@@ -1554,6 +1575,13 @@
             "descriptions": {
               "zh-CN": "标签列表"
             }
+          },
+          {
+            "key": "project_id",
+            "path": "projectID",
+            "label_en": "Project ID",
+            "label_zh": "企业项目ID",
+            "description": "企业项目ID"
           }
         ]
       },
@@ -7279,7 +7307,7 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "多个实例UUID用,分隔，您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9715&data=87&isNormal=1\">根据订单号查询uuid</a>获取实例UUID",
+          "description": "多个实例UUID用,分隔，每次请求的实例id数量建议不超过100,您可以调用 根据订单号查询uuid 获取实例UUID",
           "descriptions": {
             "en-GB": "Instance Uuid List",
             "en-US": "Instance Uuid List",
@@ -7426,11 +7454,11 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "每页记录数目，取值范围:[1~1000]，默认值:10，单页最大记录不超过1000",
+          "description": "每页记录数目，取值范围:[1~200]，默认值:10，单页最大记录不超过200",
           "descriptions": {
             "en-GB": "Page Size",
             "en-US": "Page Size",
-            "zh-CN": "每页记录数目，取值范围:[1~1000]，默认值:10，单页最大记录不超过1000"
+            "zh-CN": "每页记录数目，取值范围:[1~200]，默认值:10，单页最大记录不超过200"
           },
           "profile": "",
           "argument": "",
@@ -15846,7 +15874,7 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "订购时长，该参数需要与cycleType一同使用<br/>注：最长订购周期为60个月（5年）；cycleType与cycleCount一起填写",
+          "description": "订购时长，该参数需要与cycleType一同使用 注：最长订购周期为36个月（3年）；cycleType与cycleCount一起填写",
           "descriptions": {
             "en-GB": "Renewal duration with cycle type, up to 60 months or 5 years",
             "en-US": "Renewal duration with cycle type, up to 60 months or 5 years",

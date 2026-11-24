@@ -66,6 +66,18 @@
       "interval_seconds": 5,
       "evidence": "API 9048 documents session status on/off and captures on. off remains pending; this waits for enablement, not billing acceptance."
     },
+    "vpc.path.analysis.completed": {
+      "commands": [
+        "vpc.path.show",
+        "vpc.path.analysis.show"
+      ],
+      "path": "returnObj.analysisStatus",
+      "success": "finish",
+      "failure": "error",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "APIs 16183 and 16186 document create, running, finish and error on an identified analysis or network path; their detail examples include finish and error. Completion is independent of reachability."
+    },
     "vpc.path.report.usable": {
       "commands": [
         "vpc.path.report.show"

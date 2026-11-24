@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.2 - 2026-11-24
+
+- Update the source fingerprint for revised upstream guidance on deleting load balancers and public IPs during instance unsubscription. The command interface is unchanged.
+
 ## 0.1.0-beta.1 - 2026-10-10
 
 ### Added

@@ -7956,9 +7956,9 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "GPU配置列表列表，多个容量配置逗号分隔",
+          "description": "GPU配置列表，多个容量配置逗号分隔",
           "descriptions": {
-            "zh-CN": "GPU配置列表列表，多个容量配置逗号分隔"
+            "zh-CN": "GPU配置列表，多个容量配置逗号分隔"
           },
           "profile": "",
           "argument": "",
@@ -8186,25 +8186,6 @@
           "example": 32
         },
         {
-          "name": "flavorArch",
-          "location": "body",
-          "required": false,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "指令集架构",
-          "descriptions": {
-            "zh-CN": "指令集架构"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "flavor_arch",
-          "cli_flag": "flavor-arch",
-          "table_target": "flavorArch",
-          "example": "x86"
-        },
-        {
           "name": "flavorSeries",
           "location": "body",
           "required": false,
@@ -8286,6 +8267,27 @@
             "path": "flavorType",
             "label_en": "Flavor Type",
             "label_zh": "规格类型"
+          },
+          {
+            "key": "local_disk_type",
+            "path": "localDiskType",
+            "label_en": "Local Disk Type",
+            "label_zh": "本地盘类型",
+            "description": "本地盘类型"
+          },
+          {
+            "key": "local_disk_size",
+            "path": "localDiskSize",
+            "label_en": "Local Disk Size",
+            "label_zh": "单盘容量",
+            "description": "单盘容量，单位 GB"
+          },
+          {
+            "key": "local_disk_count",
+            "path": "localDiskCount",
+            "label_en": "Local Disk Count",
+            "label_zh": "本地盘数量",
+            "description": "本地盘数量"
           }
         ]
       },
@@ -10043,9 +10045,9 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "代金券，满足以下规则：两位小数，不足两位自动补0，超过两位小数无效；不可为负数；字段为0时表示不使用代金券",
+          "description": "代金券，满足以下规则：两位小数，不足两位自动补0，超过两位小数四舍五入；不可为负数。例：传入代金券金额1.545，四舍五入为1.55；传入代金券金额为1，补齐为1.00） 注：字段为0时表示不使用代金券，默认不使用",
           "descriptions": {
-            "zh-CN": "代金券，满足以下规则：两位小数，不足两位自动补0，超过两位小数无效；不可为负数；字段为0时表示不使用代金券"
+            "zh-CN": "代金券，满足以下规则：两位小数，不足两位自动补0，超过两位小数四舍五入；不可为负数。例：传入代金券金额1.545，四舍五入为1.55；传入代金券金额为1，补齐为1.00） 注：字段为0时表示不使用代金券，默认不使用"
           },
           "profile": "",
           "argument": "",
@@ -12870,9 +12872,9 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "系统盘类型，在不使用参数templateID（云主机启动模板ID）时必填。取值范围： 取值范围： SATA（普通IO）， SAS（高IO，只有该类型支持FCSAN模式）， SSD（超高IO）， FAST-SSD（极速型SSD，不支持ISCSI模式）， XSSD-0、XSSD-1、XSSD-2（X系列云硬盘，不支持加密，不支持ISCSI模式或FCSAN模式）您可以查看 磁盘类型及性能介绍 来了解磁盘类型及其对应性能指标，查看 X系列云硬盘 来了解X系列云硬盘",
+          "description": "系统盘类型，在不使用参数templateID（云主机启动模板ID）时必填。取值范围： SATA（普通IO）， SAS（高IO，只有该类型支持FCSAN模式）， SSD（超高IO）， FAST-SSD（极速型SSD，不支持ISCSI模式）， XSSD-0、XSSD-1、XSSD-2（X系列云硬盘，不支持加密，不支持ISCSI模式或FCSAN模式）您可以查看 磁盘类型及性能介绍 来了解磁盘类型及其对应性能指标，查看 X系列云硬盘 来了解X系列云硬盘",
           "descriptions": {
-            "zh-CN": "系统盘类型，在不使用参数templateID（云主机启动模板ID）时必填。取值范围： 取值范围： SATA（普通IO）， SAS（高IO，只有该类型支持FCSAN模式）， SSD（超高IO）， FAST-SSD（极速型SSD，不支持ISCSI模式）， XSSD-0、XSSD-1、XSSD-2（X系列云硬盘，不支持加密，不支持ISCSI模式或FCSAN模式）您可以查看 磁盘类型及性能介绍 来了解磁盘类型及其对应性能指标，查看 X系列云硬盘 来了解X系列云硬盘"
+            "zh-CN": "系统盘类型，在不使用参数templateID（云主机启动模板ID）时必填。取值范围： SATA（普通IO）， SAS（高IO，只有该类型支持FCSAN模式）， SSD（超高IO）， FAST-SSD（极速型SSD，不支持ISCSI模式）， XSSD-0、XSSD-1、XSSD-2（X系列云硬盘，不支持加密，不支持ISCSI模式或FCSAN模式）您可以查看 磁盘类型及性能介绍 来了解磁盘类型及其对应性能指标，查看 X系列云硬盘 来了解X系列云硬盘"
           },
           "profile": "",
           "argument": "",
@@ -12889,9 +12891,9 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "系统盘大小，单位为GiB，在不使用参数templateID（云主机启动模板ID）时必填。非X系列云盘，单个系统盘取值范围：[所选镜像大小，2048]；X系列系云盘，单个系统盘取值范围：[所选镜像大小，2048]，如果为XSSD-2类型，单个系统盘取值范围：[max(所选镜像大小，512)~2048]，您可以查看 磁盘使用限制 来了解磁盘容量。 注：创建云主机过程中会存在单位转换，因此该参数只能传入整型，如果填写小数值则会被取整，影响到涉及计费",
+          "description": "系统盘大小，单位为GiB，在不使用参数templateID（云主机启动模板ID）时必填。非X系列云盘，单个系统盘取值范围：[所选镜像大小，2048]；X系列云盘，单个系统盘取值范围：[所选镜像大小，2048]，如果为XSSD-2类型，单个系统盘取值范围：[max(所选镜像大小，512)~2048]，您可以查看 磁盘使用限制 来了解磁盘容量。 注：创建云主机过程中会存在单位转换，因此该参数只能传入整型，如果填写小数值则会被取整，影响到涉及计费",
           "descriptions": {
-            "zh-CN": "系统盘大小，单位为GiB，在不使用参数templateID（云主机启动模板ID）时必填。非X系列云盘，单个系统盘取值范围：[所选镜像大小，2048]；X系列系云盘，单个系统盘取值范围：[所选镜像大小，2048]，如果为XSSD-2类型，单个系统盘取值范围：[max(所选镜像大小，512)~2048]，您可以查看 磁盘使用限制 来了解磁盘容量。 注：创建云主机过程中会存在单位转换，因此该参数只能传入整型，如果填写小数值则会被取整，影响到涉及计费"
+            "zh-CN": "系统盘大小，单位为GiB，在不使用参数templateID（云主机启动模板ID）时必填。非X系列云盘，单个系统盘取值范围：[所选镜像大小，2048]；X系列云盘，单个系统盘取值范围：[所选镜像大小，2048]，如果为XSSD-2类型，单个系统盘取值范围：[max(所选镜像大小，512)~2048]，您可以查看 磁盘使用限制 来了解磁盘容量。 注：创建云主机过程中会存在单位转换，因此该参数只能传入整型，如果填写小数值则会被取整，影响到涉及计费"
           },
           "profile": "",
           "argument": "",
@@ -13290,9 +13292,9 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "代金券，满足以下规则： 两位小数，不足两位自动补0，超过两位小数无效； 不可为负数； 注：字段为0时表示不使用代金券，默认不使用",
+          "description": "代金券，满足以下规则：两位小数，不足两位自动补0，超过两位小数四舍五入；不可为负数。例：传入代金券金额1.545，四舍五入为1.55；传入代金券金额为1，补齐为1.00） 注：字段为0时表示不使用代金券，默认不使用",
           "descriptions": {
-            "zh-CN": "代金券，满足以下规则： 两位小数，不足两位自动补0，超过两位小数无效； 不可为负数； 注：字段为0时表示不使用代金券，默认不使用"
+            "zh-CN": "代金券，满足以下规则：两位小数，不足两位自动补0，超过两位小数四舍五入；不可为负数。例：传入代金券金额1.545，四舍五入为1.55；传入代金券金额为1，补齐为1.00） 注：字段为0时表示不使用代金券，默认不使用"
           },
           "profile": "",
           "argument": "",
@@ -13959,9 +13961,9 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "系统盘大小单位为GB，默认使用原云主机的盘大小。 非X系列云盘，单个系统盘取值范围：[所选镜像大小，2048]；X系列系云盘，单个系统盘取值范围：[所选镜像大小，2048]，如果为XSSD-2类型，单个系统盘取值范围：[max(所选镜像大小，512)~2048]，您可以查看 磁盘使用限制 来了解磁盘容量。 注：创建云主机过程中会存在单位转换，因此该参数只能传入整型，如果填写小数值则会被取整，影响到涉及计费",
+          "description": "系统盘大小单位为GB，默认使用原云主机的盘大小。 非X系列云盘，单个系统盘取值范围：[所选镜像大小，2048]；X系列云盘，单个系统盘取值范围：[所选镜像大小，2048]，如果为XSSD-2类型，单个系统盘取值范围：[max(所选镜像大小，512)~2048]，您可以查看 磁盘使用限制 来了解磁盘容量。 注：创建云主机过程中会存在单位转换，因此该参数只能传入整型，如果填写小数值则会被取整，影响到涉及计费",
           "descriptions": {
-            "zh-CN": "系统盘大小单位为GB，默认使用原云主机的盘大小。 非X系列云盘，单个系统盘取值范围：[所选镜像大小，2048]；X系列系云盘，单个系统盘取值范围：[所选镜像大小，2048]，如果为XSSD-2类型，单个系统盘取值范围：[max(所选镜像大小，512)~2048]，您可以查看 磁盘使用限制 来了解磁盘容量。 注：创建云主机过程中会存在单位转换，因此该参数只能传入整型，如果填写小数值则会被取整，影响到涉及计费"
+            "zh-CN": "系统盘大小单位为GB，默认使用原云主机的盘大小。 非X系列云盘，单个系统盘取值范围：[所选镜像大小，2048]；X系列云盘，单个系统盘取值范围：[所选镜像大小，2048]，如果为XSSD-2类型，单个系统盘取值范围：[max(所选镜像大小，512)~2048]，您可以查看 磁盘使用限制 来了解磁盘容量。 注：创建云主机过程中会存在单位转换，因此该参数只能传入整型，如果填写小数值则会被取整，影响到涉及计费"
           },
           "profile": "",
           "argument": "",
@@ -15670,9 +15672,9 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "每页记录数目，取值范围：单可用区[1, 50]；多可用区[1, 200]，注：默认值为10",
+          "description": "每页记录数目，取值范围：多可用区类型资源池[1, 200]，单可用区类型资源池[1, 50]，注：默认值为10",
           "descriptions": {
-            "zh-CN": "每页记录数目，取值范围：单可用区[1, 50]；多可用区[1, 200]，注：默认值为10"
+            "zh-CN": "每页记录数目，取值范围：多可用区类型资源池[1, 200]，单可用区类型资源池[1, 50]，注：默认值为10"
           },
           "profile": "",
           "argument": "",
@@ -15869,9 +15871,9 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "返回最大条数，单页最大记录不超过200。注：此功能处于公测期",
+          "description": "返回最大条数，取值范围[1, 200]。注：此功能处于公测期，仅支持部分资源池",
           "descriptions": {
-            "zh-CN": "返回最大条数，单页最大记录不超过200。注：此功能处于公测期"
+            "zh-CN": "返回最大条数，取值范围[1, 200]。注：此功能处于公测期，仅支持部分资源池"
           },
           "profile": "",
           "argument": "",
@@ -15888,9 +15890,9 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "下一页令牌，配合maxResults使用。注：此功能处于公测期",
+          "description": "下一页令牌，配合maxResults使用。注：此功能处于公测期，仅支持部分资源池",
           "descriptions": {
-            "zh-CN": "下一页令牌，配合maxResults使用。注：此功能处于公测期"
+            "zh-CN": "下一页令牌，配合maxResults使用。注：此功能处于公测期，仅支持部分资源池"
           },
           "profile": "",
           "argument": "",
@@ -16077,9 +16079,9 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "代金券，满足以下规则： 两位小数，不足两位自动补0，超过两位小数无效； 不可为负数； 注：字段为0时表示不使用代金券，默认不使用",
+          "description": "代金券，满足以下规则：两位小数，不足两位自动补0，超过两位小数四舍五入；不可为负数。例：传入代金券金额1.545，四舍五入为1.55；传入代金券金额为1，补齐为1.00） 注：字段为0时表示不使用代金券，默认不使用",
           "descriptions": {
-            "zh-CN": "代金券，满足以下规则： 两位小数，不足两位自动补0，超过两位小数无效； 不可为负数； 注：字段为0时表示不使用代金券，默认不使用"
+            "zh-CN": "代金券，满足以下规则：两位小数，不足两位自动补0，超过两位小数四舍五入；不可为负数。例：传入代金券金额1.545，四舍五入为1.55；传入代金券金额为1，补齐为1.00） 注：字段为0时表示不使用代金券，默认不使用"
           },
           "profile": "",
           "argument": "",
@@ -16916,9 +16918,9 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "GPU云主机安装驱动的工具包。注：只多可用区支持安装GPU驱动",
+          "description": "GPU云主机安装驱动的工具包。注：仅多可用区支持安装GPU驱动",
           "descriptions": {
-            "zh-CN": "GPU云主机安装驱动的工具包。注：只多可用区支持安装GPU驱动"
+            "zh-CN": "GPU云主机安装驱动的工具包。注：仅多可用区支持安装GPU驱动"
           },
           "profile": "",
           "argument": "",
@@ -17191,9 +17193,9 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "用户名，当非Windows云主机存在ecs-user用户，重置密码可选用户可选： root（系统超级用户）， ecs-user（系统普通用户）；当Windows云主机重置密码时用户名默认为administrator，若用户对administrator用户名进行了修改，应设置为修改后的用户名 注：非Windows云主机用户默认为root，大小写敏；Windows云主机用户默认为administrator，大小写不敏感",
+          "description": "用户名，取值范围如下 非Windows操作系统：root（系统超级用户，默认值）、ecs-user（系统普通用户，当云主机存在ecs-user用户可选） Windows操作系统：administrator（系统超级用户，默认值）",
           "descriptions": {
-            "zh-CN": "用户名，当非Windows云主机存在ecs-user用户，重置密码可选用户可选： root（系统超级用户）， ecs-user（系统普通用户）；当Windows云主机重置密码时用户名默认为administrator，若用户对administrator用户名进行了修改，应设置为修改后的用户名 注：非Windows云主机用户默认为root，大小写敏；Windows云主机用户默认为administrator，大小写不敏感"
+            "zh-CN": "用户名，取值范围如下 非Windows操作系统：root（系统超级用户，默认值）、ecs-user（系统普通用户，当云主机存在ecs-user用户可选） Windows操作系统：administrator（系统超级用户，默认值）"
           },
           "profile": "",
           "argument": "",
@@ -19842,6 +19844,15 @@
         "target_api": {
           "method": "POST",
           "path": "/v4.2/monitor/query-history-metric-data"
+        },
+        "target_command": {
+          "plugin": "cm",
+          "path": [
+            "cm",
+            "metric",
+            "history",
+            "list"
+          ]
         }
       },
       "request_example": {
@@ -30226,9 +30237,9 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "test-volume",
+          "description": "磁盘名字，长度限制2~63字符，不支持中文",
           "descriptions": {
-            "zh-CN": "test-volume"
+            "zh-CN": "磁盘名字，长度限制2~63字符，不支持中文"
           },
           "profile": "",
           "argument": "",
@@ -32659,7 +32670,7 @@
           "name": "ids",
           "location": "query",
           "required": false,
-          "type": "Array of Strings",
+          "type": "String",
           "enum": null,
           "default": "",
           "pattern": "",
@@ -32673,7 +32684,8 @@
           "argument": "",
           "cli_name": "ids",
           "cli_flag": "ids",
-          "table_target": ""
+          "table_target": "",
+          "example_unavailable": true
         },
         {
           "name": "attester_type",
