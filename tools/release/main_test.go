@@ -374,6 +374,39 @@ func TestRunRejectsInvalidInputs(t *testing.T) {
 	}
 }
 
+// TestReleaseRejectsInvalidInputsBeforeWriting checks that a stray operand cannot
+// hide later build flags and a damaged signing key cannot produce release files.
+func TestReleaseRejectsInvalidInputsBeforeWriting(t *testing.T) {
+	_, key, err := ed25519.GenerateKey(nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	damaged := bytes.Clone(key)
+	damaged[ed25519.SeedSize] ^= 1
+	for _, tc := range []struct {
+		name  string
+		key   []byte
+		extra []string
+	}{
+		{"stray operand", key, []string{"extra", "--channel", "beta"}},
+		{"inconsistent signing key", damaged, nil},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			out := filepath.Join(t.TempDir(), "release")
+			args := []string{"--version", "0.2.0", "--out", out, "--platform", "darwin/arm64"}
+			err := run(append(args, tc.extra...), func(string) string {
+				return base64.StdEncoding.EncodeToString(tc.key)
+			}, &bytes.Buffer{})
+			if err == nil {
+				t.Fatal("packaging reported success")
+			}
+			if _, err := os.Stat(out); !os.IsNotExist(err) {
+				t.Fatalf("invalid input touched output directory, stat error = %v", err)
+			}
+		})
+	}
+}
+
 // TestValidateReleaseOptionsRequiresSemanticVersion checks release version syntax.
 func TestValidateReleaseOptionsRequiresSemanticVersion(t *testing.T) {
 	valid := releaseOptions{
@@ -462,6 +495,18 @@ func TestReleaseToolWritesWindowsArtifactAndPropagatesBuildError(t *testing.T) {
 	}
 }
 
+// TestRepeatedPlatformBuildsOnce verifies that repeating a target retains the first
+// requested order without adding another build or index entry.
+func TestRepeatedPlatformBuildsOnce(t *testing.T) {
+	opts, err := parseOptions([]string{"--platform", "linux/amd64", "--platform", "darwin/arm64", "--platform", "linux/amd64"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := strings.Join(opts.Platforms, ","); got != "linux/amd64,darwin/arm64" {
+		t.Fatalf("build targets = %q", got)
+	}
+}
+
 // TestReleaseHelpersCoverUtilityBranches checks flag and filesystem helpers.
 func TestReleaseHelpersCoverUtilityBranches(t *testing.T) {
 	if got := (*multiFlag)(nil).String(); got != "" {
@@ -500,5 +545,36 @@ func patchBuildBinary(fn func(buildOptions) error) func() {
 	buildBinary = fn
 	return func() {
 		buildBinary = original
+	}
+}
+
+// TestFailedCoreArchiveRebuildPreservesPreviousBytes protects an archive still referenced by the current signed index.
+func TestFailedCoreArchiveRebuildPreservesPreviousBytes(t *testing.T) {
+	dir := t.TempDir()
+	archive := filepath.Join(dir, "core.tar.gz")
+	binary := filepath.Join(dir, "ctyun")
+	if err := os.WriteFile(binary, []byte("binary"), 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := writeArchive(archive, binary, "ctyun"); err != nil {
+		t.Fatal(err)
+	}
+	before, err := os.ReadFile(archive)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := writeArchive(archive, filepath.Join(dir, "missing"), "ctyun"); err == nil {
+		t.Fatal("expected archive build failure")
+	}
+	after, err := os.ReadFile(archive)
+	if err != nil || !bytes.Equal(before, after) {
+		t.Fatalf("previous archive changed after failed rebuild: %v", err)
+	}
+}
+
+// TestCoreArchiveRejectsMissingParent checks the staging boundary before creating an archive.
+func TestCoreArchiveRejectsMissingParent(t *testing.T) {
+	if err := writeArchive(filepath.Join(t.TempDir(), "missing", "core.tar.gz"), "ctyun", "ctyun"); err == nil {
+		t.Fatal("expected missing parent error")
 	}
 }

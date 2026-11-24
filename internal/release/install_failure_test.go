@@ -152,3 +152,32 @@ func TestInstallArtifactStorageFailures(t *testing.T) {
 		})
 	}
 }
+
+// TestInstallArtifactReportsRollbackFailure preserves both causes when the original binary can only be recovered from its backup.
+func TestInstallArtifactReportsRollbackFailure(t *testing.T) {
+	current := filepath.Join(t.TempDir(), "ctyun")
+	if err := os.WriteFile(current, []byte("original"), 0755); err != nil {
+		t.Fatal(err)
+	}
+	archive := writeTarGz(t, []tarEntry{{name: "ctyun", body: "updated"}})
+	replaceErr, restoreErr := errors.New("replace failed"), errors.New("restore failed")
+	var backup string
+	err := InstallArtifact(InstallOptions{CurrentExecutable: current, ArchivePath: archive, Rename: func(from, to string) error {
+		switch from {
+		case current:
+			backup = to
+			return os.Rename(from, to)
+		case backup:
+			return &os.LinkError{Op: "rename", Old: from, New: to, Err: restoreErr}
+		default:
+			return replaceErr
+		}
+	}})
+	if !errors.Is(err, replaceErr) || !errors.Is(err, restoreErr) {
+		t.Fatalf("missing replacement or rollback cause: %v", err)
+	}
+	data, err := os.ReadFile(backup)
+	if err != nil || string(data) != "original" {
+		t.Fatalf("backup=%q err=%v", data, err)
+	}
+}

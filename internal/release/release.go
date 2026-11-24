@@ -41,6 +41,14 @@ type Artifact struct {
 	Size   int64  `json:"size"`
 }
 
+// ArchiveBinaryName returns the binary name used inside a release archive.
+func ArchiveBinaryName(goos string) string {
+	if goos == "windows" {
+		return "ctyun.exe"
+	}
+	return "ctyun"
+}
+
 // LoadIndex decodes and validates a core release index document.
 func LoadIndex(raw []byte) (Index, error) {
 	var idx Index

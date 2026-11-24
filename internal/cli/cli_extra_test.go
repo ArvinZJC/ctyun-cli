@@ -777,7 +777,7 @@ func TestRunPluginReportsOptionAndSubcommandErrors(t *testing.T) {
 
 // TestRunPluginBundledInstallPropagatesInstallErrors returns filesystem failures from bundled installation.
 func TestRunPluginBundledInstallPropagatesInstallErrors(t *testing.T) {
-	t.Cleanup(patchVersion("0.5.1-dev"))
+	t.Cleanup(patchVersion(testCoreVersion() + "-dev"))
 	rootFile := filepath.Join(t.TempDir(), "plugins")
 	mustWrite(t, rootFile, "not a directory")
 	if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), rootFile, "plugin", []string{"install", "ecs", "--bundled"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Output: "table", Language: "en-US"}); err == nil {

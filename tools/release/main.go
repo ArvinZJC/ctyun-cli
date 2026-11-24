@@ -123,6 +123,9 @@ func parseOptions(args []string) (releaseOptions, error) {
 	if err := fs.Parse(args); err != nil {
 		return releaseOptions{}, err
 	}
+	if fs.NArg() != 0 {
+		return releaseOptions{}, fmt.Errorf("unexpected argument %q", fs.Arg(0))
+	}
 	opts.Platforms = platforms
 	return opts, nil
 }
@@ -165,7 +168,8 @@ func generateKey(stdout io.Writer) error {
 	return nil
 }
 
-// privateKeyFromEnv decodes the base64 Ed25519 private key from envName.
+// privateKeyFromEnv decodes the Ed25519 private key and checks that its
+// embedded public key matches the seed before packaging uses it.
 func privateKeyFromEnv(getenv func(string) string, envName string) (ed25519.PrivateKey, error) {
 	if getenv == nil {
 		getenv = os.Getenv
@@ -181,7 +185,11 @@ func privateKeyFromEnv(getenv func(string) string, envName string) (ed25519.Priv
 	if len(key) != ed25519.PrivateKeySize {
 		return nil, fmt.Errorf("%s has length %d, want %d", envName, len(key), ed25519.PrivateKeySize)
 	}
-	return key, nil
+	derived := ed25519.NewKeyFromSeed(key[:ed25519.SeedSize])
+	if !derived.Equal(ed25519.PrivateKey(key)) {
+		return nil, fmt.Errorf("%s contains an inconsistent Ed25519 private key", envName)
+	}
+	return derived, nil
 }
 
 // writeRelease builds core and plugin archives, then writes signed indexes.
@@ -236,7 +244,7 @@ func buildCoreArtifact(opts releaseOptions, publicKeyBase64, platform string) (c
 	if err != nil {
 		return corerelease.Artifact{}, err
 	}
-	binaryName := archiveBinaryName(goos)
+	binaryName := corerelease.ArchiveBinaryName(goos)
 	buildDir, err := os.MkdirTemp("", "ctyun-release-build-*")
 	if err != nil {
 		return corerelease.Artifact{}, err
@@ -264,14 +272,6 @@ func buildCoreArtifact(opts releaseOptions, publicKeyBase64, platform string) (c
 		SHA256: sum,
 		Size:   size,
 	}, nil
-}
-
-// archiveBinaryName returns the binary name used inside a release archive.
-func archiveBinaryName(goos string) string {
-	if goos == "windows" {
-		return "ctyun.exe"
-	}
-	return "ctyun"
 }
 
 // mergeCoreIndex preserves other release channels while replacing the current
@@ -315,19 +315,24 @@ func upsertCoreRelease(index corerelease.Index, release corerelease.Release) cor
 	return index
 }
 
-// mergeCoreArtifacts replaces artifacts for matching GOOS/GOARCH pairs.
+// mergeCoreArtifacts keeps the first indexed entry for each retained platform
+// and replaces rebuilt platforms in place, preserving platform order.
 func mergeCoreArtifacts(existing, current []corerelease.Artifact) []corerelease.Artifact {
-	merged := slices.Clone(existing)
-	for _, artifact := range current {
-		replaced := false
-		for i, candidate := range merged {
-			if candidate.OS == artifact.OS && candidate.Arch == artifact.Arch {
-				merged[i] = artifact
-				replaced = true
-				break
-			}
+	merged := make([]corerelease.Artifact, 0, len(existing)+len(current))
+	positions := make(map[[2]string]int)
+	for _, artifact := range existing {
+		key := [2]string{artifact.OS, artifact.Arch}
+		if _, exists := positions[key]; !exists {
+			positions[key] = len(merged)
+			merged = append(merged, artifact)
 		}
-		if !replaced {
+	}
+	for _, artifact := range current {
+		key := [2]string{artifact.OS, artifact.Arch}
+		if index, exists := positions[key]; exists {
+			merged[index] = artifact
+		} else {
+			positions[key] = len(merged)
 			merged = append(merged, artifact)
 		}
 	}
@@ -356,8 +361,14 @@ func defaultBuildBinary(opts buildOptions) error {
 }
 
 // writeArchive writes one platform archive with the binary and public docs.
-func writeArchive(archivePath, binaryPath, binaryName string) error {
-	return writeTarGzArchive(archivePath, func(tarWriter *tar.Writer) error {
+func writeArchive(archivePath, binaryPath, binaryName string) (err error) {
+	stage, err := os.MkdirTemp(filepath.Dir(archivePath), ".ctyun-core-*")
+	if err != nil {
+		return err
+	}
+	defer func() { err = closeWithError(err, func() error { return os.RemoveAll(stage) }) }()
+	candidate := filepath.Join(stage, "core.tar.gz")
+	if err := writeTarGzArchive(candidate, func(tarWriter *tar.Writer) error {
 		if err := addFileToArchive(tarWriter, binaryPath, binaryName, 0o755); err != nil {
 			return err
 		}
@@ -371,7 +382,10 @@ func writeArchive(archivePath, binaryPath, binaryName string) error {
 			}
 		}
 		return nil
-	})
+	}); err != nil {
+		return err
+	}
+	return os.Rename(candidate, archivePath)
 }
 
 // writeTarGzArchive creates archivePath and passes its tar writer to write.
@@ -661,11 +675,13 @@ func (m *multiFlag) String() string {
 	return strings.Join(*m, ",")
 }
 
-// Set appends one repeated flag value.
+// Set schedules each valid build target once in first-requested order.
 func (m *multiFlag) Set(value string) error {
 	if _, _, err := splitPlatform(value); err != nil {
 		return err
 	}
-	*m = append(*m, value)
+	if !slices.Contains(*m, value) {
+		*m = append(*m, value)
+	}
 	return nil
 }

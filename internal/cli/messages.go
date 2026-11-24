@@ -38,6 +38,7 @@ var messageCatalog = map[string]map[string]string{
 	"error.prefix":                               {"en-US": "Error: %s", "en-GB": "Error: %s", "zh-CN": "错误：%s"},
 	"error.missing_command":                      {"en-US": "missing command", "en-GB": "missing command", "zh-CN": "缺少命令"},
 	"error.requires_value":                       {"en-US": "%s requires a value", "en-GB": "%s requires a value", "zh-CN": "%s 需要一个值"},
+	"error.seconds_exceed_maximum":               {"en-US": "%q exceeds the maximum of %d seconds", "en-GB": "%q exceeds the maximum of %d seconds", "zh-CN": "%q 超过上限 %d 秒"},
 	"error.requires_positive_seconds":            {"en-US": "%s requires a positive integer number of seconds", "en-GB": "%s requires a positive integer number of seconds", "zh-CN": "%s 需要正整数秒数"},
 	"error.option_requires_value":                {"en-US": "%s requires a value", "en-GB": "%s requires a value", "zh-CN": "%s 需要一个值"},
 	"error.missing_required_argument":            {"en-US": "missing required argument {%s}", "en-GB": "missing required argument {%s}", "zh-CN": "缺少必填参数 {%s}"},

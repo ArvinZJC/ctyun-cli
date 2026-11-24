@@ -21,6 +21,7 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/client"
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
+	"github.com/ArvinZJC/ctyun-cli/internal/durationlimit"
 	"github.com/ArvinZJC/ctyun-cli/internal/output"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
@@ -587,6 +588,9 @@ func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs
 
 // buildAPIRequest resolves credentials, routing, and metadata for both response paths.
 func buildAPIRequest(bundle plugin.Bundle, command plugin.Command, commandArgs, parameterValues map[string]string, profile coreconfig.Profile, getenv func(string) string, stderr, debug io.Writer, language string) (client.RequestSpec, error) {
+	if err := durationlimit.CheckSeconds(profile.TimeoutSeconds, "timeout_seconds"); err != nil {
+		return client.RequestSpec{}, err
+	}
 	operation, ok := bundle.APIs.Operations[command.Operation]
 	if !ok {
 		return client.RequestSpec{}, diagnostic.New("error.command_missing_operation_ref")

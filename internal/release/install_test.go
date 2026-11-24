@@ -223,3 +223,12 @@ func writeTarGz(t *testing.T, entries []tarEntry) string {
 	}
 	return path
 }
+
+// TestArchiveBinaryName verifies the fixed filenames used by both packaging and self-upgrade.
+func TestArchiveBinaryName(t *testing.T) {
+	for platform, want := range map[string]string{"linux": "ctyun", "darwin": "ctyun", "windows": "ctyun.exe"} {
+		if got := ArchiveBinaryName(platform); got != want {
+			t.Errorf("archive name for %s = %q, want %q", platform, got, want)
+		}
+	}
+}

@@ -98,7 +98,7 @@ func TestPluginBundledInstallSkipsInstalledPlugin(t *testing.T) {
 	bundledRoot, pluginRoot := prepareBundledPluginRoots(t)
 	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.2.0")
 	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.1.0")
-	t.Cleanup(patchVersion("0.5.1-dev"))
+	t.Cleanup(patchVersion(testCoreVersion() + "-dev"))
 
 	var stdout bytes.Buffer
 	if err := Run(Config{
@@ -187,7 +187,7 @@ func TestPluginReinstallCanDowngradeSelectedChannel(t *testing.T) {
 // TestPluginBundledReinstallRejectsMissingTarget requires an installed target before bundled reinstall.
 func TestPluginBundledReinstallRejectsMissingTarget(t *testing.T) {
 	prepareBundledPluginRoots(t)
-	t.Cleanup(patchVersion("0.5.1-dev"))
+	t.Cleanup(patchVersion(testCoreVersion() + "-dev"))
 	var stdout, stderr bytes.Buffer
 	err := Run(Config{
 		Args:       []string{"plugin", "reinstall", "ecs", "--bundled"},
@@ -301,7 +301,7 @@ func TestPluginOperationPrecheckAndBundleErrors(t *testing.T) {
 		t.Fatal(err)
 	}
 	mustWrite(t, filepath.Join(bundledRoot, "ecs", "plugin.json"), `{`)
-	t.Cleanup(patchVersion("0.5.1-dev"))
+	t.Cleanup(patchVersion(testCoreVersion() + "-dev"))
 	if err := installBundledPlugins(io.Discard, pluginRoot, []string{"ecs"}, false, "en-US"); err == nil {
 		t.Fatal("bundled install accepted invalid source bundle")
 	}

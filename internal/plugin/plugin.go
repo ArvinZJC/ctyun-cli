@@ -17,6 +17,7 @@ import (
 
 	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
+	"github.com/ArvinZJC/ctyun-cli/internal/durationlimit"
 	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
 	"github.com/ArvinZJC/ctyun-cli/internal/waiter"
 )
@@ -701,6 +702,9 @@ func validateWaiters(waiters Waiters) error {
 		}
 		if spec.MaxAttempts < 0 {
 			return diagnostic.New("error.waiter_negative_max_attempts", id)
+		}
+		if err := durationlimit.CheckSeconds(spec.IntervalSeconds, "interval_seconds"); err != nil {
+			return err
 		}
 		if spec.IntervalSeconds < 0 {
 			return diagnostic.New("error.waiter_negative_interval_seconds", id)

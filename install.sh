@@ -70,8 +70,20 @@ if [ -n "${CTYUN_INSTALL_BASE_URL:-}" ]; then
   roots="$CTYUN_INSTALL_BASE_URL"
 fi
 
+case "$channel" in
+  ""|stable|beta|alpha) ;;
+  *) die "CTYUN_INSTALL_CHANNEL must be stable, beta, or alpha" ;;
+esac
+
 tmp="$(mktemp -d)"
-trap 'rm -rf "$tmp"' EXIT
+staged=""
+cleanup() {
+  if [ -n "$staged" ]; then
+    rm -f -- "$staged"
+  fi
+  rm -rf -- "$tmp"
+}
+trap cleanup EXIT
 
 root=""
 for candidate in $roots; do
@@ -80,7 +92,7 @@ for candidate in $roots; do
     break
   fi
 done
-[ -n "$root" ] || die "could not download core-index.json"
+[ -n "$root" ] || die "could not download core-index.json. Check your connection and CTYUN_INSTALL_SOURCE, then rerun the installer."
 
 channel_order="$channel"
 if [ -z "$channel_order" ]; then
@@ -113,31 +125,37 @@ for candidate_channel in $channel_order; do
   [ -n "$selection" ] && break
 done
 channel_label="${channel:-any channel}"
-[ -n "$selection" ] || die "no ctyun release found for $goos/$goarch on $channel_label"
+[ -n "$selection" ] || die "no ctyun release found for $goos/$goarch on $channel_label. If you pinned a channel, run unset CTYUN_INSTALL_CHANNEL and retry."
 
 version="$(printf '%s\n' "$selection" | awk -F '\t' '{print $1}')"
 artifact_url="$(printf '%s\n' "$selection" | awk -F '\t' '{print $2}')"
 artifact_sha="$(printf '%s\n' "$selection" | awk -F '\t' '{print $3}')"
 archive="$tmp/ctyun.tar.gz"
-download "$(join_url "$root" "$artifact_url")" "$archive"
+printf 'Downloading ctyun %s (%s, %s/%s)...\n' "$version" "$candidate_channel" "$goos" "$goarch"
+download "$(join_url "$root" "$artifact_url")" "$archive" || die "could not download $artifact_url. Check your connection to the release source and retry."
 
 actual_sha="$(sha256_file "$archive")"
-[ "$actual_sha" = "$artifact_sha" ] || die "checksum mismatch for $artifact_url"
+[ "$actual_sha" = "$artifact_sha" ] || die "checksum mismatch for $artifact_url. Retry from a trusted release source. If it fails again, report the version and source."
 
 extract_dir="$tmp/extract"
 mkdir -p "$extract_dir" "$install_dir"
-tar -xzf "$archive" -C "$extract_dir"
+tar -xzf "$archive" -C "$extract_dir" || die "could not extract the archive. Check that tar is available and the temporary directory has free space, then retry."
 [ -f "$extract_dir/ctyun" ] || die "archive does not contain ctyun"
+[ ! -d "$install_dir/ctyun" ] || die "install target is a directory: $install_dir/ctyun. Set CTYUN_INSTALL_DIR to another writable directory and retry."
 
-if command -v install >/dev/null 2>&1; then
-  install -m 0755 "$extract_dir/ctyun" "$install_dir/ctyun"
-else
-  cp "$extract_dir/ctyun" "$install_dir/ctyun"
-  chmod 0755 "$install_dir/ctyun"
-fi
+install_dir="$(CDPATH= cd -- "$install_dir" && pwd -P)"
+staged="$(mktemp "$install_dir/.ctyun-install.XXXXXXXX")"
+cp "$extract_dir/ctyun" "$staged" || die "could not copy ctyun. Check free space in the installation directory and retry."
+chmod 0755 "$staged"
+mv -f -- "$staged" "$install_dir/ctyun"
+staged=""
 
 printf 'Installed ctyun %s to %s\n' "$version" "$install_dir/ctyun"
-case ":$PATH:" in
-  *":$install_dir:"*) ;;
-  *) printf 'Add %s to PATH before running ctyun from a new shell.\n' "$install_dir" ;;
-esac
+if ! [ "$(command -v ctyun || true)" -ef "$install_dir/ctyun" ]; then
+  printf 'In Bash or Zsh, run this in your current shell. To keep it for future sessions, also add it to your shell startup file.\n'
+  # Escape embedded single quotes for a literal Bash or Zsh PATH entry.
+  quoted_dir="$(printf '%s' "$install_dir" | sed "s/'/'\\\\''/g")"
+  printf "  export PATH='%s':%s\n" "$quoted_dir" '"$PATH"'
+fi
+printf 'Verify the installation and view the available commands:\n  ctyun --version\n  ctyun --help\n'
+printf 'To browse product plugins in all release channels, run:\n  ctyun plugin list --available --channel all\n'

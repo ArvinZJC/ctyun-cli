@@ -11,6 +11,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -714,5 +715,16 @@ func closeTestResource(t *testing.T, name string, close func() error) {
 
 	if err := close(); err != nil {
 		t.Fatalf("close %s: %v", name, err)
+	}
+}
+
+// TestWaitIntervalRepresentableSeconds rejects an interval that would cause immediate repolling.
+func TestWaitIntervalRepresentableSeconds(t *testing.T) {
+	n, err := strconv.Atoi("9223372037")
+	if err != nil {
+		t.Skip("platform int is narrower than the duration boundary")
+	}
+	if err := validateWaiters(Waiters{Waiters: map[string]Waiter{"w": {IntervalSeconds: n}}}); err == nil {
+		t.Fatal("accepted overflowing polling interval")
 	}
 }

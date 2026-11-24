@@ -65,3 +65,27 @@ func TestCopyBundleReplacementFailureCleansStaging(t *testing.T) {
 		t.Fatalf("destination changed: %q, %v", target, err)
 	}
 }
+
+// TestReplaceDirReportsRollbackFailure verifies both filesystem errors are visible when restoration fails.
+func TestReplaceDirReportsRollbackFailure(t *testing.T) {
+	src, dest := t.TempDir(), filepath.Join(t.TempDir(), "installed")
+	if err := os.Mkdir(dest, 0755); err != nil {
+		t.Fatal(err)
+	}
+	original := renameBundlePath
+	t.Cleanup(func() { renameBundlePath = original })
+	replaceErr, restoreErr := errors.New("replacement failed"), errors.New("rollback failed")
+	renameBundlePath = func(from, to string) error {
+		if from == dest {
+			return os.Rename(from, to)
+		}
+		if from == src {
+			return replaceErr
+		}
+		return &os.LinkError{Op: "rename", Old: from, New: to, Err: restoreErr}
+	}
+	err := replaceDir(src, dest)
+	if !errors.Is(err, replaceErr) || !errors.Is(err, restoreErr) {
+		t.Fatalf("missing replacement or rollback cause: %v", err)
+	}
+}

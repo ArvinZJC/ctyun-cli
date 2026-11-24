@@ -106,7 +106,7 @@ func ExtractBinary(archivePath, destDir, binaryName string) (binaryPath string, 
 }
 
 // InstallArtifact extracts an artifact archive and replaces the current
-// executable, restoring the old binary if final replacement fails.
+// executable. If replacement fails, it attempts to restore the backup and reports any restoration error.
 func InstallArtifact(opts InstallOptions) error {
 	if opts.CurrentExecutable == "" {
 		return diagnostic.New("error.current_executable_required")
@@ -147,8 +147,7 @@ func InstallArtifact(opts InstallOptions) error {
 		return err
 	}
 	if err := renamePath(newBinary, opts.CurrentExecutable); err != nil {
-		_ = renamePath(backup, opts.CurrentExecutable)
-		return err
+		return errors.Join(err, renamePath(backup, opts.CurrentExecutable))
 	}
 	return os.Remove(backup)
 }

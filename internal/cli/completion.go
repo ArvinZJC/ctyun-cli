@@ -34,15 +34,35 @@ func runCompletion(stdout io.Writer, args []string) error {
 			"_ctyun \"$@\"",
 		)
 	case "bash":
-		return writeLines(stdout,
-			"_ctyun_completion() {",
-			"  local -a arguments",
-			"  arguments=(\"${COMP_WORDS[@]:1:$COMP_CWORD}\")",
-			"  local IFS=$'\\n'",
-			"  COMPREPLY=($(ctyun __complete \"${arguments[@]}\"))",
-			"}",
-			"complete -F _ctyun_completion ctyun",
-		)
+		return writeLines(stdout, `_ctyun_completion() {
+  local -a arguments=()
+  local remaining=${COMP_LINE-} word last i current fragment kept= candidate
+  for ((i=0; i<=COMP_CWORD; i++)); do
+    word=${COMP_WORDS[i]}
+    last=$((${#arguments[@]} - 1))
+    # Bash versions differ in whether they split inline options at word breaks.
+    # Join only adjacent pieces of an option; whitespace still separates arguments.
+    if (( last >= 0 )) && [[ -n $word && $remaining == "$word"* && ${arguments[last]} == -* && ( $word == '=' || ${arguments[last]} == *=* ) ]]; then
+      arguments[last]+=$word
+    elif (( i > 0 )); then
+      arguments+=("$word")
+    fi
+    remaining=${remaining#*"$word"}
+  done
+  if (( ${#arguments[@]} )); then
+    current=${arguments[${#arguments[@]}-1]}
+    fragment=${2-$current}
+    # Readline has already retained the part before its replacement fragment.
+    if [[ $current == -*=* && $current == *"$fragment" ]]; then
+      kept=${current%"$fragment"}
+    fi
+  fi
+  COMPREPLY=()
+  while IFS= read -r candidate; do
+    COMPREPLY+=("${candidate#"$kept"}")
+  done < <(ctyun __complete "${arguments[@]}")
+}
+complete -F _ctyun_completion ctyun`)
 	case "fish":
 		return writeLines(stdout,
 			"function __ctyun_complete",

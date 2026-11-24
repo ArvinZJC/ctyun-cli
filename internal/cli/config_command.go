@@ -7,6 +7,7 @@ package cli
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -18,6 +19,7 @@ import (
 
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
+	"github.com/ArvinZJC/ctyun-cli/internal/durationlimit"
 )
 
 // credentialMask is the fixed middle segment for displayed AK/SK values.
@@ -566,6 +568,9 @@ func validateConfigForWrite(cfg coreconfig.Config) error {
 		if strings.TrimSpace(name) == "" {
 			return diagnostic.New("error.profile_name_empty")
 		}
+		if err := durationlimit.CheckSeconds(profile.TimeoutSeconds, "timeout_seconds"); err != nil {
+			return err
+		}
 		if profile.TimeoutSeconds < 0 {
 			return diagnostic.New("error.profile_timeout_negative", name)
 		}
@@ -800,13 +805,23 @@ func backupConfigFile(path string) (string, error) {
 	}
 	backupPath := path + ".bak"
 	for i := 2; ; i++ {
-		if _, err := os.Stat(backupPath); os.IsNotExist(err) {
-			break
+		file, err := os.OpenFile(backupPath, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o600)
+		if os.IsExist(err) {
+			backupPath = fmt.Sprintf("%s.bak.%d", path, i)
+			continue
 		}
-		backupPath = fmt.Sprintf("%s.bak.%d", path, i)
+		if err != nil {
+			return "", err
+		}
+		if err := writeConfigBackup(file, data); err != nil {
+			return "", errors.Join(err, os.Remove(backupPath))
+		}
+		return backupPath, nil
 	}
-	if err := os.WriteFile(backupPath, data, 0o600); err != nil {
-		return "", err
-	}
-	return backupPath, nil
+}
+
+// writeConfigBackup writes the snapshot and closes its file even when writing fails.
+var writeConfigBackup = func(file *os.File, data []byte) error {
+	_, writeErr := file.Write(data)
+	return errors.Join(writeErr, file.Close())
 }

@@ -334,7 +334,7 @@ func TestUnknownOptionWordingIsConsistentAcrossLanguages(t *testing.T) {
 func TestReleasedBuildDevelopmentOptionsAreUnknown(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeValidationBundle(t, filepath.Join(pluginRoot, "ecs"))
-	restoreVersion := patchVersion("0.5.1")
+	restoreVersion := patchVersion(testCoreVersion())
 	t.Cleanup(restoreVersion)
 	for _, args := range [][]string{
 		{"ecs", "instance", "list", "--offline"},
@@ -348,7 +348,7 @@ func TestReleasedBuildDevelopmentOptionsAreUnknown(t *testing.T) {
 
 // TestBundledHelpersRejectReleasedBuilds rejects repository bundle access from released builds.
 func TestBundledHelpersRejectReleasedBuilds(t *testing.T) {
-	restoreVersion := patchVersion("0.5.1")
+	restoreVersion := patchVersion(testCoreVersion())
 	t.Cleanup(restoreVersion)
 
 	if _, err := bundledPluginSource("ecs"); err == nil {

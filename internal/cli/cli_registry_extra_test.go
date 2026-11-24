@@ -120,7 +120,7 @@ func TestPluginReinstallBundledErrorPaths(t *testing.T) {
 
 	originalCaller := runtimeCaller
 	t.Cleanup(func() { runtimeCaller = originalCaller })
-	t.Cleanup(patchVersion("0.5.1-dev"))
+	t.Cleanup(patchVersion(testCoreVersion() + "-dev"))
 	missingRepoRoot := t.TempDir()
 	runtimeCaller = func(int) (uintptr, string, int, bool) {
 		return 0, filepath.Join(missingRepoRoot, "internal", "cli", "cli.go"), 1, true
@@ -306,7 +306,7 @@ func TestPluginRegistrySourceEdges(t *testing.T) {
 		t.Fatal("updateAllBundledPlugins returned nil error for file root")
 	}
 
-	restore := patchVersion("0.5.1-dev")
+	restore := patchVersion(testCoreVersion() + "-dev")
 	defer restore()
 	if _, err := bundledPluginSource("../bad"); err == nil {
 		t.Fatal("bundledPluginSource returned nil error for invalid name")
@@ -447,7 +447,7 @@ func TestInstallBundledPluginsAllRequiresDevelopmentBuild(t *testing.T) {
 
 // TestInstallBundledPluginsAllInstallsDevelopmentBundles installs every synthetic development bundle and reports output failures.
 func TestInstallBundledPluginsAllInstallsDevelopmentBundles(t *testing.T) {
-	restoreVersion := patchVersion("0.5.1-dev")
+	restoreVersion := patchVersion(testCoreVersion() + "-dev")
 	defer restoreVersion()
 	repository := t.TempDir()
 	for _, name := range []string{"ecs", "region"} {
@@ -479,7 +479,7 @@ func TestInstallBundledPluginsAllInstallsDevelopmentBundles(t *testing.T) {
 
 // TestInstallBundledPluginsAllReportsBundleAndInstallErrors distinguishes invalid source metadata from destination failures.
 func TestInstallBundledPluginsAllReportsBundleAndInstallErrors(t *testing.T) {
-	restoreVersion := patchVersion("0.5.1-dev")
+	restoreVersion := patchVersion(testCoreVersion() + "-dev")
 	defer restoreVersion()
 
 	cwd, err := os.Getwd()
@@ -513,7 +513,7 @@ func TestInstallBundledPluginsAllReportsBundleAndInstallErrors(t *testing.T) {
 
 // TestPluginBundledUpdateErrorPaths propagates invalid source, destination, and update failures.
 func TestPluginBundledUpdateErrorPaths(t *testing.T) {
-	restore := patchVersion("0.5.1-dev")
+	restore := patchVersion(testCoreVersion() + "-dev")
 	defer restore()
 
 	root := t.TempDir()

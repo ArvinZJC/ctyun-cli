@@ -432,7 +432,7 @@ func TestECSInstanceShowSupportsWaiter(t *testing.T) {
 // TestFixtureModeIsDevOnly rejects development-only fixture options in released builds.
 func TestFixtureModeIsDevOnly(t *testing.T) {
 	pluginRoot := writeSyntheticHelpBundles(t)
-	restoreVersion := patchVersion("0.5.1")
+	restoreVersion := patchVersion(testCoreVersion())
 	t.Cleanup(restoreVersion)
 
 	for _, flag := range []string{"--offline", "--fixture", "-O"} {

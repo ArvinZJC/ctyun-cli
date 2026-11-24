@@ -1,9 +1,15 @@
 # Changelog
 
-## Unreleased
+## 0.5.2 - 2026-11-24
 
 ### Fixed
 
+- Direct users who run the Windows installer on another operating system to the Bash installation instructions.
+- Complete Bash inline option values such as `--output=j` without repeating the option name.
+- Reserve configuration backup names exclusively so simultaneous backups cannot overwrite one another.
+- Reject request timeouts and waiter polling intervals that overflow the supported duration.
+- Allow a renamed core executable to self-upgrade from the standard platform archive.
+- Report both the replacement and rollback errors when a core upgrade or plugin reinstall cannot restore the previous installation.
 - Bound hosted index, signature, and artifact requests to five minutes so stalled sources cannot block updates or mirror fallback indefinitely.
 - Preserve service-filtered live table results, including fuzzy matches, instead of applying fixture-only exact parameter filters to them.
 - Preserve equals and inequality characters inside table-filter values when parsing equality and inequality expressions.

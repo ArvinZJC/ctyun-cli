@@ -168,6 +168,12 @@ func TestUpgradeInstallsExplicitSignedSource(t *testing.T) {
 	restoreVersion := patchVersion("0.1.0")
 	defer restoreVersion()
 	current, publicKey, transport := signedUpgradeFixture(t)
+	// A package manager may install the binary under a versioned filename.
+	installed := filepath.Join(filepath.Dir(current), "ctyun-previous")
+	if err := os.Rename(current, installed); err != nil {
+		t.Fatal(err)
+	}
+	current = installed
 
 	var stdout bytes.Buffer
 	err := Run(Config{
@@ -516,16 +522,6 @@ func TestUpgradePropagatesSourceErrors(t *testing.T) {
 	}
 	if err := runUpgrade(io.Discard, io.Discard, nil, getenv, nil, "en-US", os.Executable); err == nil {
 		t.Fatal("runUpgrade returned nil error for invalid env source")
-	}
-}
-
-// TestUpgradeBinaryNameForGOOS adds the executable suffix only for Windows artifacts.
-func TestUpgradeBinaryNameForGOOS(t *testing.T) {
-	if got := upgradeBinaryNameForGOOS("/usr/local/bin/ctyun", "linux"); got != "ctyun" {
-		t.Fatalf("upgradeBinaryNameForGOOS linux = %q", got)
-	}
-	if got := upgradeBinaryNameForGOOS(`C:\bin\ctyun.exe`, "windows"); got != "ctyun.exe" {
-		t.Fatalf("upgradeBinaryNameForGOOS windows = %q", got)
 	}
 }
 

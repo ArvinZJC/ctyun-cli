@@ -8,12 +8,15 @@ package cli
 import (
 	"bytes"
 	"errors"
+	"io"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"testing"
 
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
+	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
 // TestConfigPathPrintsResolvedPath prints the selected config file path without loading its contents.
@@ -844,4 +847,78 @@ type ioDiscardForConfigTest struct{}
 // Write reports every supplied byte as written.
 func (ioDiscardForConfigTest) Write(p []byte) (int, error) {
 	return len(p), nil
+}
+
+// TestBackupConfigReservesUniqueNames checks concurrent backups of one configuration.
+func TestBackupConfigReservesUniqueNames(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "config.json")
+	mustWrite(t, path, "original")
+	const workers = 32
+	start := make(chan struct{})
+	results := make(chan string, workers)
+	for range workers {
+		go func() {
+			<-start
+			p, err := backupConfigFile(path)
+			if err != nil {
+				t.Errorf("backup: %v", err)
+			}
+			results <- p
+		}()
+	}
+	close(start)
+	paths := map[string]bool{}
+	for range workers {
+		paths[<-results] = true
+	}
+	if len(paths) != workers {
+		t.Fatalf("%d backups produced %d distinct paths", workers, len(paths))
+	}
+}
+
+// TestTimeoutRepresentableSeconds checks the duration conversion boundary before request execution.
+func TestTimeoutRepresentableSeconds(t *testing.T) {
+	const maxSeconds = "9223372036"
+	const tooLarge = "9223372037"
+	if _, err := strconv.Atoi(maxSeconds); err != nil {
+		t.Skip("platform int is narrower than the duration boundary")
+	}
+	if _, _, err := parseGlobalOptions([]string{"--timeout", maxSeconds}); err != nil {
+		t.Fatal(err)
+	}
+	if _, _, err := parseGlobalOptions([]string{"--timeout", tooLarge}); err == nil {
+		t.Error("accepted timeout that overflows time.Duration")
+	}
+	seconds, _ := strconv.Atoi(tooLarge)
+	p := coreconfig.Profile{TimeoutSeconds: seconds}
+	if err := validateConfigForWrite(coreconfig.Config{Profiles: map[string]coreconfig.Profile{"test": p}}); err == nil {
+		t.Error("stored overflowing profile timeout")
+	}
+	b := plugin.Bundle{Manifest: plugin.Manifest{API: plugin.APIInfo{EndpointURL: "https://example.test"}}, APIs: plugin.APIs{Operations: map[string]plugin.Operation{"list": {Method: "GET", Path: "/list"}}}}
+	if _, err := buildAPIRequest(b, plugin.Command{Operation: "list"}, nil, nil, p, regionTestCredentials, io.Discard, nil, "en-US"); err == nil {
+		t.Error("built request with an overflowing timeout")
+	}
+}
+
+// TestBackupConfigDiscardsPartialCopy keeps the source when a backup cannot finish.
+func TestBackupConfigDiscardsPartialCopy(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "config.json")
+	mustWrite(t, path, "original")
+	original := writeConfigBackup
+	t.Cleanup(func() { writeConfigBackup = original })
+	writeConfigBackup = func(file *os.File, data []byte) error {
+		if _, err := file.Write(data[:1]); err != nil {
+			t.Fatal(err)
+		}
+		return errors.Join(io.ErrShortWrite, file.Close())
+	}
+	if _, err := backupConfigFile(path); !errors.Is(err, io.ErrShortWrite) {
+		t.Fatal(err)
+	}
+	if _, err := os.Stat(path + ".bak"); !os.IsNotExist(err) {
+		t.Fatalf("partial backup remains: %v", err)
+	}
+	if data, err := os.ReadFile(path); err != nil || string(data) != "original" {
+		t.Fatalf("original=%q error=%v", data, err)
+	}
 }

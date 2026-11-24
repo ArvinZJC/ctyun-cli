@@ -24,6 +24,7 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/client"
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
+	"github.com/ArvinZJC/ctyun-cli/internal/durationlimit"
 	"github.com/ArvinZJC/ctyun-cli/internal/i18n"
 	"github.com/ArvinZJC/ctyun-cli/internal/localdoctor"
 	"github.com/ArvinZJC/ctyun-cli/internal/output"
@@ -704,6 +705,9 @@ func parseGlobalOptions(args []string) (globalOptions, []string, error) {
 			timeout, err := strconv.Atoi(args[i])
 			if err != nil || timeout <= 0 {
 				return opts, nil, diagnostic.New("error.requires_positive_seconds", arg)
+			}
+			if err := durationlimit.CheckSeconds(timeout, arg); err != nil {
+				return opts, nil, err
 			}
 			opts.Timeout = timeout
 		case "--config", "-C":

@@ -154,22 +154,23 @@ func copyBundleIntoPlace(srcDir, destRoot, name string) (string, error) {
 	return destDir, nil
 }
 
-// replaceDir atomically swaps src into dest while preserving the old dest on
-// rename failure.
+// renameBundlePath is the filesystem boundary for bundle replacement and rollback.
+var renameBundlePath = os.Rename
+
+// replaceDir stages the existing bundle in a backup and attempts to restore it if replacement fails.
 func replaceDir(src, dest string) error {
 	if _, err := os.Stat(dest); os.IsNotExist(err) {
-		return os.Rename(src, dest)
+		return renameBundlePath(src, dest)
 	} else if err != nil {
 		return err
 	}
 
 	backup := dest + ".old-" + fmt.Sprint(time.Now().UnixNano())
-	if err := os.Rename(dest, backup); err != nil {
+	if err := renameBundlePath(dest, backup); err != nil {
 		return err
 	}
-	if err := os.Rename(src, dest); err != nil {
-		_ = os.Rename(backup, dest)
-		return err
+	if err := renameBundlePath(src, dest); err != nil {
+		return errors.Join(err, renameBundlePath(backup, dest))
 	}
 	return os.RemoveAll(backup)
 }

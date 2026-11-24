@@ -49,7 +49,7 @@ func releaseTestKey() ed25519.PrivateKey {
 // updating its artifact, and advancing a channel without losing other channels.
 func TestMergeReplacesOnlySelectedRelease(t *testing.T) {
 	old := corerelease.Index{Releases: []corerelease.Release{
-		{Version: "0.1.0", Channel: "stable", Artifacts: []corerelease.Artifact{{OS: "linux", Arch: "amd64", URL: "old"}, {OS: "darwin", Arch: "arm64", URL: "retained"}}},
+		{Version: "0.1.0", Channel: "stable", Artifacts: []corerelease.Artifact{{OS: "linux", Arch: "amd64", URL: "old"}, {OS: "darwin", Arch: "arm64", URL: "retained"}, {OS: "linux", Arch: "amd64", URL: "stale duplicate"}, {OS: "darwin", Arch: "arm64", URL: "later duplicate"}}},
 		{Version: "0.2.0-beta.1", Channel: "beta"},
 	}}
 	merged := upsertCoreRelease(old, corerelease.Release{Version: "0.1.0", Channel: "stable", PublishedAt: "now", Artifacts: []corerelease.Artifact{{OS: "linux", Arch: "amd64", URL: "replacement"}, {OS: "windows", Arch: "amd64", URL: "added"}}})
