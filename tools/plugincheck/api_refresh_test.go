@@ -75,6 +75,52 @@ func TestCloudAssistantDocumentationStatusKeepsCommandAvailable(t *testing.T) {
 	}
 }
 
+// TestScopedShutdownNoticesKeepFieldsUsable verifies that an offline flavor
+// state and a retiring modification action preserve normal field and option use.
+func TestScopedShutdownNoticesKeepFieldsUsable(t *testing.T) {
+	var warnings bytes.Buffer
+	err := cli.Run(cli.Config{
+		Args:       []string{"api-gateway", "flavor", "list", "--region", "test-region", "--cols", "status,az", "--offline"},
+		PluginRoot: t.TempDir(),
+		Stdout:     io.Discard,
+		Stderr:     &warnings,
+	})
+	if err != nil || warnings.Len() != 0 {
+		t.Fatalf("flavor fields: %v, %s", err, warnings.String())
+	}
+	for _, name := range []string{"cdn", "whole-site-acceleration"} {
+		context := loadStorageReviewContext(t, name)
+		operation := name + ".domain.create"
+		if context.commandParameter(operation, "action").Deprecation.Active() {
+			t.Errorf("%s marks all actions deprecated", operation)
+		}
+		for _, locale := range []string{"en-GB", "en-US", "zh-CN"} {
+			help := context.bundle.I18N[locale]["parameter."+operation+".action.description"]
+			if !strings.Contains(help, "2") || !strings.Contains(help, name+" domain update") {
+				t.Errorf("%s %s lost the value-specific replacement: %q", operation, locale, help)
+			}
+		}
+	}
+}
+
+// TestServerSecurityLastScanVulnerabilityTypes checks the localized heading
+// for the scan categories returned in osType by the last-scan detail API.
+func TestServerSecurityLastScanVulnerabilityTypes(t *testing.T) {
+	for _, tc := range []struct{ locale, label string }{
+		{"en-US", "Vulnerability Types"}, {"en-GB", "Vulnerability Types"}, {"zh-CN", "漏洞类型"},
+	} {
+		var stdout bytes.Buffer
+		err := cli.Run(cli.Config{
+			Args:       []string{"--lang", tc.locale, "server-security", "vulnerability", "last-scan", "show", "--offline", "--cols", tc.label},
+			PluginRoot: t.TempDir(),
+			Stdout:     &stdout,
+		})
+		if err != nil || !strings.Contains(stdout.String(), tc.label) || !strings.Contains(stdout.String(), "LINUX,WINDOWS") {
+			t.Errorf("%s rendered %q, %v", tc.locale, stdout.String(), err)
+		}
+	}
+}
+
 // refreshTransport captures signed API requests without making network calls.
 type refreshTransport struct{ body map[string]any }
 

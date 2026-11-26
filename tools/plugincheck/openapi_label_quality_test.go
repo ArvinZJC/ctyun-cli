@@ -82,58 +82,10 @@ func assertOpenAPIPluginLabelsMatchCatalog(t *testing.T, product string) {
 			t.Errorf("%s operation %s has no table %s", product, operation.ID, command.Table)
 			continue
 		}
-		for _, sourceColumn := range operation.Response.Columns {
-			matches := promotedTableColumnMatches(table.Columns, sourceColumn)
-			if len(matches) != 1 {
-				t.Errorf("%s operation %s response column %s/%s has %d promoted matches, want 1", product, operation.ID, sourceColumn.Key, sourceColumn.Path, len(matches))
-				continue
-			}
-			assertPromotedColumnLabels(t, product, operation.ID, sourceColumn, matches[0])
-		}
-	}
-}
-
-// promotedTableColumnMatches returns promoted columns with the same stable key
-// and response path as one baseline column.
-func promotedTableColumnMatches(columns []plugin.TableColumn, source openapipipeline.Column) []plugin.TableColumn {
-	var matches []plugin.TableColumn
-	for _, column := range columns {
-		if column.Key == source.Key && column.Path == source.Path {
-			matches = append(matches, column)
-		}
-	}
-	return matches
-}
-
-// assertPromotedColumnLabels checks source and generated quality plus exact
-// agreement after documented canonical normalization.
-func assertPromotedColumnLabels(t *testing.T, product string, operationID string, source openapipipeline.Column, generated plugin.TableColumn) {
-	t.Helper()
-	for _, sourceLabel := range []struct {
-		language string
-		value    string
-	}{
-		{language: "en-US", value: source.LabelEN},
-		{language: "zh-CN", value: source.LabelZH},
-	} {
-		if sourceLabel.value == "" {
-			continue
-		}
-		if finding := openapipipeline.DisplayLabelQualityFinding(sourceLabel.language, sourceLabel.value); finding != "" {
-			t.Errorf("%s operation %s response column %s source %s label %q %s", product, operationID, source.Path, sourceLabel.language, sourceLabel.value, finding)
-		}
-	}
-	for _, language := range []string{"en-US", "en-GB", "zh-CN"} {
-		label := generated.Labels[language]
-		if finding := openapipipeline.DisplayLabelQualityFinding(language, label); finding != "" {
-			t.Errorf("%s operation %s response column %s generated %s label %q %s", product, operationID, source.Path, language, label, finding)
-		}
-		sourceLabel := source.LabelEN
-		if language == "zh-CN" {
-			sourceLabel = source.LabelZH
-		}
-		if finding := openapipipeline.DisplayLabelAgreementFinding(language, sourceLabel, label); finding != "" {
-			t.Errorf("%s operation %s response column %s source %s label %q generated label %q %s", product, operationID, source.Path, language, sourceLabel, label, finding)
+		var report openapipipeline.ReviewReport
+		openapipipeline.CheckOperationTable(&report, operation, table)
+		for _, finding := range report.Findings {
+			t.Errorf("%s: %s", product, finding)
 		}
 	}
 }

@@ -25,3 +25,19 @@ func TestResourceOfflineTextDoesNotDeprecateFields(t *testing.T) {
 		}
 	}
 }
+
+// TestEnumMemberRetirementLeavesFieldUsable distinguishes a resource state or
+// a retiring enum action from a notice that the whole field is being retired.
+func TestEnumMemberRetirementLeavesFieldUsable(t *testing.T) {
+	for _, tc := range []struct{ kind, text string }{
+		{"field", "规格状态normal（正常使用）、abandon（下线）、sellout（售罄）"},
+		{"parameter", "域名操作动作，取值范围：1-创建（固定值），2-修改（该功能即将下线，若需修改域名请使用增量修改域名配置接口）"},
+	} {
+		if got := deprecationFromTexts(tc.kind, tc.text, nil); got != nil {
+			t.Errorf("enum member retired its containing %s: %#v", tc.kind, got)
+		}
+		if got := deprecationFromTexts(tc.kind, tc.text+"。该字段即将下线。", nil); got == nil {
+			t.Errorf("explicit %s retirement was lost", tc.kind)
+		}
+	}
+}

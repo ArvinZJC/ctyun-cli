@@ -32,18 +32,28 @@ func ParseCommandExample(example string) ([]string, error) {
 			}
 			continue
 		}
+		if char == '\\' {
+			if index+1 >= len(runes) {
+				return nil, fmt.Errorf("trailing escape")
+			}
+			index++
+			next := runes[index]
+			if next == '\n' {
+				continue
+			}
+			if quote == '"' && !strings.ContainsRune("$`\"\\", next) {
+				token.WriteRune(char)
+			}
+			token.WriteRune(next)
+			active = true
+			continue
+		}
 		if quote == '"' {
 			switch char {
 			case '"':
 				quote = 0
 			case '`':
 				return nil, fmt.Errorf("shell substitution is not allowed")
-			case '\\':
-				if index+1 >= len(runes) {
-					return nil, fmt.Errorf("trailing escape")
-				}
-				index++
-				token.WriteRune(runes[index])
 			default:
 				token.WriteRune(char)
 			}
@@ -61,12 +71,6 @@ func ParseCommandExample(example string) ([]string, error) {
 		switch char {
 		case '\'', '"':
 			quote = char
-		case '\\':
-			if index+1 >= len(runes) {
-				return nil, fmt.Errorf("trailing escape")
-			}
-			index++
-			token.WriteRune(runes[index])
 		case ';', '|', '&', '<', '>':
 			return nil, fmt.Errorf("shell operator %q is not allowed", char)
 		case '`':

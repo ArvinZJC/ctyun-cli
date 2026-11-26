@@ -194,12 +194,17 @@ var imageLifecycleValuePattern = regexp.MustCompile(`(?:deactivated\s*[:：]\s*�
 // forced session logout, which do not retire the containing API field.
 var resourceOfflineValuePattern = regexp.MustCompile(`offline\s*[:：]\s*已?下线|drain\s*[:：]\s*节点已下线|1\s*[:：]\s*下线|登录将被强制下线|无损上下线`)
 
+// enumMemberOfflinePattern removes only an offline enum label or a shutdown
+// notice attached to a numbered action. Other notices in the text still apply.
+var enumMemberOfflinePattern = regexp.MustCompile(`\babandon\s*[（(]\s*下线\s*[）)]|[0-9]+\s*[-－]\s*\p{Han}+\s*[（(]\s*该功能即将下线`)
+
 // hasDeprecationText reports whether any source text looks like an upstream
 // deprecation notice.
 func hasDeprecationText(texts []string) bool {
 	for _, text := range texts {
 		lower := imageLifecycleValuePattern.ReplaceAllString(strings.ToLower(text), "")
 		lower = resourceOfflineValuePattern.ReplaceAllString(lower, "")
+		lower = enumMemberOfflinePattern.ReplaceAllString(lower, "")
 		for _, term := range []string{"弃用", "废弃", "下线", "退役", "deprecated", "obsolete"} {
 			if strings.Contains(lower, term) {
 				return true

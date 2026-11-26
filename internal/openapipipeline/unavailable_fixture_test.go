@@ -41,6 +41,21 @@ func TestUnavailableFixturePreservesPublishedCommand(t *testing.T) {
 	if err != nil || !report.Ready {
 		t.Fatalf("%+v %v", report, err)
 	}
+	target := filepath.Join(workspace.Root, "plugins", "ecs")
+	stale := filepath.Join(target, "fixtures", "old.json")
+	if err := writeJSON(stale, map[string]bool{"stale": true}); err != nil {
+		t.Fatal(err)
+	}
+	if err := workspace.PromoteDraft("ecs", target); err != nil {
+		t.Fatalf("promote a reviewed plugin with no fixtures: %v", err)
+	}
+	if _, err := os.Stat(stale); !os.IsNotExist(err) {
+		t.Fatalf("obsolete fixture remains after promotion: %v", err)
+	}
+	baseline, err := workspace.ReadBaseline("ecs")
+	if err != nil || catalogFingerprint(baseline) != catalogFingerprint(catalog) {
+		t.Fatalf("promoted baseline does not match source: %v", err)
+	}
 }
 
 // TestUnavailableFixtureRejectsConflictingEvidence prevents absence markers from bypassing captured-response validation.

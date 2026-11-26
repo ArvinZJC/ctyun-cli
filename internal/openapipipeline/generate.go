@@ -475,19 +475,37 @@ func arguments(operation Operation) []string {
 	return values
 }
 
-// concreteExamples replaces argument placeholders with values captured from
-// upstream example responses when the evidence is available.
+// concreteExamples fills positional placeholders in captured CLI examples
+// using the same evidence order as newly composed examples.
 func concreteExamples(operation Operation) []string {
-	examples := append([]string(nil), operation.Examples...)
-	values := exampleArgumentValues(operation)
-	if len(values) == 0 {
-		return examples
-	}
+	examples := slices.Clone(operation.Examples)
 	for index, example := range examples {
-		for argument, value := range values {
-			example = strings.ReplaceAll(example, "{"+argument+"}", value)
+		if !strings.Contains(example, "{") {
+			continue
 		}
-		examples[index] = example
+		tokens, err := plugin.ParseCommandExample(example)
+		if err != nil {
+			continue
+		}
+		changed := false
+		for position, token := range tokens {
+			if strings.HasPrefix(token, "--") {
+				break
+			}
+			if argument, ok := examplePathArgument(token); ok {
+				value := operationArgumentExample(operation, argument)
+				if value != token {
+					tokens[position] = value
+					changed = true
+				}
+			}
+		}
+		if changed {
+			for position, token := range tokens {
+				tokens[position] = shellQuoteExampleValue(token)
+			}
+			examples[index] = strings.Join(tokens, " ")
+		}
 	}
 	return examples
 }
@@ -580,7 +598,8 @@ func writeFixtures(draftDir string, catalog Catalog) error {
 			return err
 		}
 	}
-	return nil
+	// Mark an intentionally empty fixture set so promotion can remove stale fixtures.
+	return os.MkdirAll(filepath.Join(draftDir, "fixtures"), 0o755)
 }
 
 // writeRawJSON writes an already validated JSON document with indentation.
