@@ -14,7 +14,6 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/hex"
-	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
@@ -26,6 +25,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/dirlock"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 	"github.com/ArvinZJC/ctyun-cli/internal/registry"
 	corerelease "github.com/ArvinZJC/ctyun-cli/internal/release"
@@ -59,11 +59,33 @@ type multiFlag []string
 // buildBinary permits packaging tests to replace compilation with a fixture.
 var buildBinary = defaultBuildBinary
 
+// exitProcess is the process boundary used to verify main without terminating tests.
+var exitProcess = os.Exit
+
+// createSigningKey keeps key-provider failures observable independently of the
+// operating system entropy source.
+var createSigningKey = ed25519.GenerateKey
+
+// encodeReleaseJSON is the serialization boundary for signed publication bytes.
+var encodeReleaseJSON = indentedJSON
+
+// checksumArchive binds completed archives to their index entries, with an I/O
+// seam for failures occurring between archive creation and checksum reading.
+var checksumArchive = checksumAndSize
+
+// loadArchivePayload verifies published and candidate archive payloads before
+// replacement; the seam permits deterministic candidate-read failure tests.
+var loadArchivePayload = readArchivePayload
+
+// workingDirectory exposes failures resolving the process directory before
+// project-file discovery, independently of platform-specific Getwd caching.
+var workingDirectory = os.Getwd
+
 // main runs release packaging and reports failures to stderr.
 func main() {
 	if err := run(os.Args[1:], os.Getenv, os.Stdout); err != nil {
 		_, _ = fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		exitProcess(1)
 	}
 }
 
@@ -102,6 +124,9 @@ func parseOptions(args []string) (releaseOptions, error) {
 	if err := fs.Parse(args); err != nil {
 		return releaseOptions{}, err
 	}
+	if fs.NArg() != 0 {
+		return releaseOptions{}, fmt.Errorf("unexpected argument %q", fs.Arg(0))
+	}
 	opts.Platforms = platforms
 	return opts, nil
 }
@@ -120,15 +145,28 @@ func validateReleaseOptions(opts releaseOptions) error {
 	if opts.Channel != "stable" && opts.Channel != "beta" && opts.Channel != "alpha" {
 		return fmt.Errorf("--channel must be stable, beta, or alpha")
 	}
+	if err := validateVersionChannel(opts.Version, opts.Channel); err != nil {
+		return err
+	}
 	if len(opts.Platforms) == 0 {
 		return fmt.Errorf("at least one --platform GOOS/GOARCH is required")
 	}
 	return validateGiteePluginDownloadRoot(opts.GiteePluginDownloadRoot)
 }
 
+// validateVersionChannel keeps stable releases and SemVer prereleases in their corresponding distribution channels.
+func validateVersionChannel(version, channel string) error {
+	precedence, _, _ := strings.Cut(version, "+")
+	prerelease := strings.Contains(precedence, "-")
+	if prerelease == (channel == "stable") {
+		return fmt.Errorf("version %q does not match release channel %q", version, channel)
+	}
+	return nil
+}
+
 // generateKey writes a new base64 Ed25519 signing key pair.
 func generateKey(stdout io.Writer) error {
-	publicKey, privateKey, err := ed25519.GenerateKey(rand.Reader)
+	publicKey, privateKey, err := createSigningKey(rand.Reader)
 	if err != nil {
 		return err
 	}
@@ -144,7 +182,8 @@ func generateKey(stdout io.Writer) error {
 	return nil
 }
 
-// privateKeyFromEnv decodes the base64 Ed25519 private key from envName.
+// privateKeyFromEnv decodes the Ed25519 private key and checks that its
+// embedded public key matches the seed before packaging uses it.
 func privateKeyFromEnv(getenv func(string) string, envName string) (ed25519.PrivateKey, error) {
 	if getenv == nil {
 		getenv = os.Getenv
@@ -160,14 +199,39 @@ func privateKeyFromEnv(getenv func(string) string, envName string) (ed25519.Priv
 	if len(key) != ed25519.PrivateKeySize {
 		return nil, fmt.Errorf("%s has length %d, want %d", envName, len(key), ed25519.PrivateKeySize)
 	}
-	return key, nil
+	derived := ed25519.NewKeyFromSeed(key[:ed25519.SeedSize])
+	if !derived.Equal(ed25519.PrivateKey(key)) {
+		return nil, fmt.Errorf("%s contains an inconsistent Ed25519 private key", envName)
+	}
+	return derived, nil
 }
 
-// writeRelease builds core and plugin archives, then writes signed indexes.
-func writeRelease(opts releaseOptions, privateKey ed25519.PrivateKey) error {
+// writeRelease prepares a complete set of artifacts and signed metadata before replacing release files.
+func writeRelease(opts releaseOptions, privateKey ed25519.PrivateKey) (err error) {
 	if err := os.MkdirAll(opts.OutDir, 0o755); err != nil {
 		return err
 	}
+	output := opts.OutDir
+	stage, err := createReleaseStage(output, ".ctyun-release-*")
+	if err != nil {
+		return err
+	}
+	defer func() { err = closeWithError(err, func() error { return os.RemoveAll(stage) }) }()
+	opts.OutDir = stage
+	index, err := buildCoreRelease(opts, privateKey)
+	if err != nil {
+		return err
+	}
+	return dirlock.With(output, true, func() error {
+		if err := writeReleaseMetadata(opts, privateKey, output, index); err != nil {
+			return err
+		}
+		return publishReleaseFiles(stage, output)
+	})
+}
+
+// buildCoreRelease compiles the independent platform archives before locking the shared publication directory.
+func buildCoreRelease(opts releaseOptions, privateKey ed25519.PrivateKey) (corerelease.Index, error) {
 	publicKey := privateKey.Public().(ed25519.PublicKey)
 	publicKeyBase64 := base64.StdEncoding.EncodeToString(publicKey)
 	publishedAt := time.Now().UTC().Format(time.RFC3339)
@@ -180,19 +244,27 @@ func writeRelease(opts releaseOptions, privateKey ed25519.PrivateKey) error {
 	for _, platform := range opts.Platforms {
 		artifact, err := buildCoreArtifact(opts, publicKeyBase64, platform)
 		if err != nil {
-			return err
+			return corerelease.Index{}, err
 		}
 		index.Releases[0].Artifacts = append(index.Releases[0].Artifacts, artifact)
 	}
-	index, err := mergeCoreIndex(opts.OutDir, index)
+	return index, nil
+}
+
+// writeReleaseMetadata merges the current output indexes and reuses unchanged plugin archives under the publisher lock.
+func writeReleaseMetadata(opts releaseOptions, privateKey ed25519.PrivateKey, previousDir string, index corerelease.Index) error {
+	index, err := mergeCoreIndex(previousDir, index)
 	if err != nil {
 		return err
 	}
-	indexBytes, err := json.MarshalIndent(coreIndexDocument(index), "", "  ")
+	// Bootstrap installers take the first match for their channel and platform.
+	slices.SortStableFunc(index.Releases, func(left, right corerelease.Release) int {
+		return coreversion.CompareSemanticVersions(right.Version, left.Version)
+	})
+	indexBytes, err := encodeReleaseJSON(coreIndexDocument(index))
 	if err != nil {
 		return err
 	}
-	indexBytes = append(indexBytes, '\n')
 	indexPath := filepath.Join(opts.OutDir, "core-index.json")
 	if err := os.WriteFile(indexPath, indexBytes, 0o644); err != nil {
 		return err
@@ -204,7 +276,7 @@ func writeRelease(opts releaseOptions, privateKey ed25519.PrivateKey) error {
 	if err := copyInstallerScripts(opts.OutDir); err != nil {
 		return err
 	}
-	if err := writePluginRegistry(opts, privateKey); err != nil {
+	if err := writePluginRegistry(opts, privateKey, previousDir); err != nil {
 		return err
 	}
 	return writeGiteePluginRegistry(opts.OutDir, opts.GiteePluginDownloadRoot, privateKey)
@@ -216,7 +288,7 @@ func buildCoreArtifact(opts releaseOptions, publicKeyBase64, platform string) (c
 	if err != nil {
 		return corerelease.Artifact{}, err
 	}
-	binaryName := archiveBinaryName(goos)
+	binaryName := corerelease.ArchiveBinaryName(goos)
 	buildDir, err := os.MkdirTemp("", "ctyun-release-build-*")
 	if err != nil {
 		return corerelease.Artifact{}, err
@@ -233,7 +305,7 @@ func buildCoreArtifact(opts releaseOptions, publicKeyBase64, platform string) (c
 	if err := writeArchive(archivePath, binaryPath, binaryName); err != nil {
 		return corerelease.Artifact{}, err
 	}
-	sum, size, err := checksumAndSize(archivePath)
+	sum, size, err := checksumArchive(archivePath)
 	if err != nil {
 		return corerelease.Artifact{}, err
 	}
@@ -246,27 +318,20 @@ func buildCoreArtifact(opts releaseOptions, publicKeyBase64, platform string) (c
 	}, nil
 }
 
-// archiveBinaryName returns the binary name used inside a release archive.
-func archiveBinaryName(goos string) string {
-	if goos == "windows" {
-		return "ctyun.exe"
-	}
-	return "ctyun"
-}
-
-// mergeCoreIndex preserves other release channels while replacing the current
-// channel pointer rebuilt by this packaging run.
+// mergeCoreIndex checks tag ownership before merging platform builds into existing channels.
 func mergeCoreIndex(outDir string, current corerelease.Index) (corerelease.Index, error) {
 	indexPath := filepath.Join(outDir, "core-index.json")
+	existing := corerelease.Index{Schema: current.Schema}
 	raw, err := os.ReadFile(indexPath)
-	if err != nil {
-		if os.IsNotExist(err) {
-			return current, nil
-		}
+	if err == nil {
+		existing, err = corerelease.LoadIndex(raw)
+	}
+	if err != nil && !os.IsNotExist(err) {
 		return corerelease.Index{}, err
 	}
-	existing, err := corerelease.LoadIndex(raw)
-	if err != nil {
+	if err := validateTagChannels(slices.Concat(existing.Releases, current.Releases), func(rel corerelease.Release) (string, string) {
+		return "releases/core/" + rel.Version, rel.Channel
+	}); err != nil {
 		return corerelease.Index{}, err
 	}
 	for _, release := range current.Releases {
@@ -275,39 +340,70 @@ func mergeCoreIndex(outDir string, current corerelease.Index) (corerelease.Index
 	return existing, nil
 }
 
-// upsertCoreRelease replaces one channel entry, merging platform artifacts only
-// when rebuilding the same version.
+// upsertCoreRelease advances each platform independently. An indexed historical
+// version can be rebuilt without displacing newer builds on the same channel.
 func upsertCoreRelease(index corerelease.Index, release corerelease.Release) corerelease.Index {
-	for i, existing := range index.Releases {
-		if existing.Channel != release.Channel {
-			continue
+	slot := slices.IndexFunc(index.Releases, func(old corerelease.Release) bool {
+		return old.Version == release.Version && old.Channel == release.Channel
+	})
+	if slot >= 0 {
+		release.Artifacts = mergeCoreArtifacts(index.Releases[slot].Artifacts, release.Artifacts)
+		index.Releases[slot] = release
+	} else {
+		// An out-of-order first build can supply targets with no newer release.
+		for _, old := range index.Releases {
+			if old.Channel == release.Channel && coreversion.CompareSemanticVersions(old.Version, release.Version) > 0 {
+				release.Artifacts = withoutCorePlatforms(release.Artifacts, old.Artifacts)
+			}
 		}
-		if existing.Version != release.Version {
-			index.Releases[i] = release
+		if len(release.Artifacts) == 0 {
 			return index
 		}
-		index.Releases[i].PublishedAt = release.PublishedAt
-		index.Releases[i].NotesURL = release.NotesURL
-		index.Releases[i].Artifacts = mergeCoreArtifacts(existing.Artifacts, release.Artifacts)
-		return index
+		// Put newly published build metadata ahead of equally ranked alternatives.
+		slot = slices.IndexFunc(index.Releases, func(old corerelease.Release) bool { return old.Channel == release.Channel })
+		if slot < 0 {
+			slot = len(index.Releases)
+		}
+		index.Releases = slices.Insert(index.Releases, slot, release)
 	}
-	index.Releases = append(index.Releases, release)
+	for i, old := range index.Releases {
+		if i != slot && old.Channel == release.Channel && coreversion.CompareSemanticVersions(old.Version, release.Version) <= 0 {
+			index.Releases[i].Artifacts = withoutCorePlatforms(old.Artifacts, release.Artifacts)
+		}
+	}
+	index.Releases = slices.DeleteFunc(index.Releases, func(old corerelease.Release) bool {
+		return old.Channel == release.Channel && len(old.Artifacts) == 0
+	})
 	return index
 }
 
-// mergeCoreArtifacts replaces artifacts for matching GOOS/GOARCH pairs.
+// withoutCorePlatforms excludes targets already supplied by another release.
+func withoutCorePlatforms(artifacts, supplied []corerelease.Artifact) []corerelease.Artifact {
+	return slices.DeleteFunc(artifacts, func(artifact corerelease.Artifact) bool {
+		return slices.ContainsFunc(supplied, func(other corerelease.Artifact) bool {
+			return artifact.OS == other.OS && artifact.Arch == other.Arch
+		})
+	})
+}
+
+// mergeCoreArtifacts keeps the first indexed entry for each retained platform
+// and replaces rebuilt platforms in place, preserving platform order.
 func mergeCoreArtifacts(existing, current []corerelease.Artifact) []corerelease.Artifact {
-	merged := slices.Clone(existing)
-	for _, artifact := range current {
-		replaced := false
-		for i, candidate := range merged {
-			if candidate.OS == artifact.OS && candidate.Arch == artifact.Arch {
-				merged[i] = artifact
-				replaced = true
-				break
-			}
+	merged := make([]corerelease.Artifact, 0, len(existing)+len(current))
+	positions := make(map[[2]string]int)
+	for _, artifact := range existing {
+		key := [2]string{artifact.OS, artifact.Arch}
+		if _, exists := positions[key]; !exists {
+			positions[key] = len(merged)
+			merged = append(merged, artifact)
 		}
-		if !replaced {
+	}
+	for _, artifact := range current {
+		key := [2]string{artifact.OS, artifact.Arch}
+		if index, exists := positions[key]; exists {
+			merged[index] = artifact
+		} else {
+			positions[key] = len(merged)
 			merged = append(merged, artifact)
 		}
 	}
@@ -332,12 +428,22 @@ func defaultBuildBinary(opts buildOptions) error {
 	}, " ")
 	cmd := exec.Command("go", "build", "-trimpath", "-ldflags", ldflags, "-o", opts.Output, "./cmd/ctyun")
 	cmd.Env = append(os.Environ(), "GOOS="+opts.GOOS, "GOARCH="+opts.GOARCH)
-	return cmd.Run()
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("build ctyun for %s/%s: %w%s", opts.GOOS, opts.GOARCH, err, strings.TrimRight("\n"+string(output), "\r\n"))
+	}
+	return nil
 }
 
 // writeArchive writes one platform archive with the binary and public docs.
-func writeArchive(archivePath, binaryPath, binaryName string) error {
-	return writeTarGzArchive(archivePath, func(tarWriter *tar.Writer) error {
+func writeArchive(archivePath, binaryPath, binaryName string) (err error) {
+	stage, err := os.MkdirTemp(filepath.Dir(archivePath), ".ctyun-core-*")
+	if err != nil {
+		return err
+	}
+	defer func() { err = closeWithError(err, func() error { return os.RemoveAll(stage) }) }()
+	candidate := filepath.Join(stage, "core.tar.gz")
+	if err := writeTarGzArchive(candidate, func(tarWriter *tar.Writer) error {
 		if err := addFileToArchive(tarWriter, binaryPath, binaryName, 0o755); err != nil {
 			return err
 		}
@@ -351,7 +457,10 @@ func writeArchive(archivePath, binaryPath, binaryName string) error {
 			}
 		}
 		return nil
-	})
+	}); err != nil {
+		return err
+	}
+	return os.Rename(candidate, archivePath)
 }
 
 // writeTarGzArchive creates archivePath and passes its tar writer to write.
@@ -376,7 +485,7 @@ func writeTarGzArchive(archivePath string, write func(*tar.Writer) error) (err e
 
 // writePluginRegistry writes bundled plugin archives and a signed registry
 // index.
-func writePluginRegistry(opts releaseOptions, privateKey ed25519.PrivateKey) error {
+func writePluginRegistry(opts releaseOptions, privateKey ed25519.PrivateKey, previousDir string) error {
 	pluginsRoot, err := projectFilePath("plugins")
 	if err != nil {
 		return err
@@ -395,35 +504,32 @@ func writePluginRegistry(opts releaseOptions, privateKey ed25519.PrivateKey) err
 		if err != nil {
 			return err
 		}
+		if err := validateVersionChannel(bundle.Manifest.Version, bundle.Manifest.Channel); err != nil {
+			return fmt.Errorf("plugin %q: %w", bundle.Manifest.Name, err)
+		}
 		archiveName := fmt.Sprintf("ctyun_plugin_%s_%s.tar.gz", bundle.Manifest.Name, bundle.Manifest.Version)
 		archivePath := filepath.Join(opts.OutDir, archiveName)
-		if err := writeDirectoryArchive(archivePath, bundlePath, bundle.Manifest.Name); err != nil {
-			return err
-		}
-		sum, _, err := checksumAndSize(archivePath)
+		chosen, err := writeDirectoryArchive(archivePath, bundlePath, bundle.Manifest.Name, filepath.Join(previousDir, archiveName))
 		if err != nil {
 			return err
 		}
-		index.Plugins = append(index.Plugins, registry.Artifact{
-			Name:        bundle.Manifest.Name,
-			Product:     bundle.Manifest.API.Product,
-			DisplayName: pluginDisplayName(bundle),
-			Version:     bundle.Manifest.Version,
-			Channel:     bundle.Manifest.Channel,
-			Quality:     bundle.Manifest.Quality,
-			URL:         archiveName,
-			SHA256:      sum,
-		})
+		sum, _, err := checksumArchive(chosen)
+		if err != nil {
+			return err
+		}
+		artifact := registry.ArtifactFromBundle(bundle)
+		artifact.URL = archiveName
+		artifact.SHA256 = sum
+		index.Plugins = append(index.Plugins, artifact)
 	}
-	index, err = mergeRegistryIndex(opts.OutDir, index)
+	index, err = mergeRegistryIndex(previousDir, index)
 	if err != nil {
 		return err
 	}
-	indexBytes, err := json.MarshalIndent(registryIndexDocument(index), "", "  ")
+	indexBytes, err := encodeReleaseJSON(registryIndexDocument(index))
 	if err != nil {
 		return err
 	}
-	indexBytes = append(indexBytes, '\n')
 	if err := os.WriteFile(filepath.Join(opts.OutDir, "index.json"), indexBytes, 0o644); err != nil {
 		return err
 	}
@@ -431,30 +537,20 @@ func writePluginRegistry(opts releaseOptions, privateKey ed25519.PrivateKey) err
 	return os.WriteFile(filepath.Join(opts.OutDir, "index.sig"), []byte(base64.StdEncoding.EncodeToString(signature)), 0o644)
 }
 
-// pluginDisplayName returns a stable English storefront name when plugin i18n
-// metadata provides one.
-func pluginDisplayName(bundle plugin.Bundle) string {
-	for _, language := range []string{"en-US", "en-GB", "zh-CN"} {
-		if texts := bundle.I18N[language]; texts != nil && texts["name"] != "" {
-			return texts["name"]
-		}
-	}
-	return bundle.Manifest.Name
-}
-
-// mergeRegistryIndex preserves other plugin channels while replacing the
-// current plugin channel pointers rebuilt by this packaging run.
+// mergeRegistryIndex checks tag ownership before refreshing the selected plugin channel entries.
 func mergeRegistryIndex(outDir string, current registry.Index) (registry.Index, error) {
 	indexPath := filepath.Join(outDir, "index.json")
+	existing := registry.Index{Plugins: []registry.Artifact{}}
 	raw, err := os.ReadFile(indexPath)
-	if err != nil {
-		if os.IsNotExist(err) {
-			return current, nil
-		}
+	if err == nil {
+		existing, err = registry.LoadIndex(raw)
+	}
+	if err != nil && !os.IsNotExist(err) {
 		return registry.Index{}, err
 	}
-	existing, err := registry.LoadIndex(raw)
-	if err != nil {
+	if err := validateTagChannels(slices.Concat(existing.Plugins, current.Plugins), func(artifact registry.Artifact) (string, string) {
+		return pluginReleaseTag(artifact), artifact.Channel
+	}); err != nil {
 		return registry.Index{}, err
 	}
 	for _, artifact := range current.Plugins {
@@ -463,47 +559,57 @@ func mergeRegistryIndex(outDir string, current registry.Index) (registry.Index, 
 	return existing, nil
 }
 
-// upsertRegistryArtifact replaces one plugin artifact with the same name and
-// channel.
+// upsertRegistryArtifact refreshes a known plugin version or advances its channel pointer for a new version.
 func upsertRegistryArtifact(index registry.Index, artifact registry.Artifact) registry.Index {
+	channelSlot := -1
 	for i, existing := range index.Plugins {
-		if existing.Name == artifact.Name && existing.Channel == artifact.Channel {
-			index.Plugins[i] = artifact
-			return index
+		if existing.Name != artifact.Name || existing.Channel != artifact.Channel {
+			continue
+		}
+		if channelSlot == -1 || coreversion.CompareSemanticVersions(existing.Version, index.Plugins[channelSlot].Version) > 0 {
+			channelSlot = i
+		}
+		if existing.Version == artifact.Version {
+			channelSlot = i
+			break
 		}
 	}
-	index.Plugins = append(index.Plugins, artifact)
+	if channelSlot == -1 {
+		index.Plugins = append(index.Plugins, artifact)
+	} else if coreversion.CompareSemanticVersions(artifact.Version, index.Plugins[channelSlot].Version) >= 0 {
+		index.Plugins[channelSlot] = artifact
+	}
 	return index
 }
 
 // writeDirectoryArchive preserves existing compressed bytes when the generated
-// tar payload is unchanged, keeping immutable plugin archive checksums stable.
-func writeDirectoryArchive(archivePath, rootPath, rootName string) (err error) {
+// tar payload is unchanged. It returns the actual file to hash, either the retained or staged archive.
+func writeDirectoryArchive(archivePath, rootPath, rootName, previousPath string) (chosen string, err error) {
 	temporaryDir, err := os.MkdirTemp(filepath.Dir(archivePath), ".ctyun-plugin-*")
 	if err != nil {
-		return err
+		return "", err
 	}
 	defer func() {
 		err = closeWithError(err, func() error { return os.RemoveAll(temporaryDir) })
 	}()
 	candidate := filepath.Join(temporaryDir, "plugin.tar.gz")
 	if err := writeDirectoryArchiveFile(candidate, rootPath, rootName); err != nil {
-		return err
+		return "", err
 	}
-	previous, err := readArchivePayload(archivePath)
+	previous, err := loadArchivePayload(previousPath)
 	if err != nil && !os.IsNotExist(err) {
-		return err
+		return "", err
 	}
 	if err == nil {
-		generated, err := readArchivePayload(candidate)
+		generated, err := loadArchivePayload(candidate)
 		if err != nil {
-			return err
+			return "", err
 		}
 		if bytes.Equal(previous, generated) {
-			return nil
+			return previousPath, nil
 		}
 	}
-	return os.Rename(candidate, archivePath)
+	return archivePath, os.Rename(candidate, archivePath)
 }
 
 // readArchivePayload decodes an archive without extracting its entries.
@@ -530,10 +636,9 @@ func writeDirectoryArchiveFile(archivePath, rootPath, rootName string) error {
 			if err != nil {
 				return err
 			}
-			rel, err := filepath.Rel(rootPath, path)
-			if err != nil {
-				return err
-			}
+			// WalkDir supplies rootPath itself or its lexical descendants, so
+			// Rel cannot cross volumes or mix absolute and relative paths.
+			rel, _ := filepath.Rel(rootPath, path)
 			name := rootName
 			if rel != "." {
 				name = filepath.ToSlash(filepath.Join(rootName, rel))
@@ -588,7 +693,7 @@ func copyInstallerScripts(outDir string) error {
 
 // projectFilePath finds a repository file from the current directory or a parent.
 func projectFilePath(name string) (string, error) {
-	dir, err := os.Getwd()
+	dir, err := workingDirectory()
 	if err != nil {
 		return "", err
 	}
@@ -643,11 +748,13 @@ func (m *multiFlag) String() string {
 	return strings.Join(*m, ",")
 }
 
-// Set appends one repeated flag value.
+// Set schedules each valid build target once in first-requested order.
 func (m *multiFlag) Set(value string) error {
 	if _, _, err := splitPlatform(value); err != nil {
 		return err
 	}
-	*m = append(*m, value)
+	if !slices.Contains(*m, value) {
+		*m = append(*m, value)
+	}
 	return nil
 }

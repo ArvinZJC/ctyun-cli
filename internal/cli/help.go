@@ -8,6 +8,7 @@ package cli
 import (
 	"fmt"
 	"io"
+	"slices"
 	"sort"
 	"strings"
 
@@ -157,9 +158,16 @@ var helpCatalog = map[string]map[string]string{
 }
 
 // runHelp routes help requests to core, plugin manager, or product-command help.
-func runHelp(stdout io.Writer, args []string, installedRoot, language string) error {
+func runHelp(stdout io.Writer, args []string, installedRoot, language string, invocation bool) error {
 	if len(args) == 0 {
 		return printMainHelp(stdout, language)
+	}
+	if invocation {
+		var err error
+		args, err = coreInvocationHelpPath(args)
+		if err != nil {
+			return err
+		}
 	}
 	handled, err := printCoreHelp(stdout, args, language)
 	if err != nil {
@@ -172,19 +180,32 @@ func runHelp(stdout io.Writer, args []string, installedRoot, language string) er
 	if err != nil {
 		return err
 	}
+	if invocation && slices.ContainsFunc(args, func(token string) bool { return strings.HasPrefix(token, "-") }) {
+		if bundle, command, _, rest, ok := matchProductCommand(bundles, args); ok {
+			if _, err := parseSuppliedCommandParameters(command, rest, language); err != nil {
+				return err
+			}
+			return printProductCommandHelp(stdout, args, bundle, command, bundles, language)
+		}
+	}
 	bundle, command, ok := matchPluginCommandForHelp(args, bundles)
 	if !ok {
+		group, commands, matched := matchPluginCommandGroup(args, bundles)
+		if len(commands) > 0 {
+			return printPluginCommandIndex(stdout, group, args, commands, language)
+		}
 		for _, candidate := range bundles {
-			if _, _, rest, prefixOK := plugin.FindCommandPrefixWithArgs(candidate, args); prefixOK {
+			if leaf, _, rest, ok := plugin.FindCommandPrefixWithArgs(candidate, args); ok && len(leaf.Path) == matched {
 				return validatePositionalArguments(rest, nil, 0, 0)
 			}
 		}
-		bundle, commands, groupOK := matchPluginCommandGroupForHelp(args, bundles)
-		if !groupOK {
-			return commandBoundaryError(args)
-		}
-		return printPluginCommandIndex(stdout, bundle, args, commands, language)
+		return commandBoundaryError(args[:matched+1])
 	}
+	return printProductCommandHelp(stdout, args, bundle, command, bundles, language)
+}
+
+// printProductCommandHelp renders a resolved metadata command without executing it.
+func printProductCommandHelp(stdout io.Writer, args []string, bundle plugin.Bundle, command plugin.Command, bundles []plugin.Bundle, language string) error {
 	writer := newOutputWriter(stdout)
 	if description := localizedPluginText(bundle, language, "command."+command.ID+".description", ""); description != "" {
 		writer.Format("%s\n", helpPageDescription(description, language))
@@ -267,6 +288,8 @@ func matchPluginCommandForHelp(args []string, bundles []plugin.Bundle) (plugin.B
 		if command, ok := plugin.FindCommand(bundle, args); ok {
 			return bundle, command, true
 		}
+	}
+	for _, bundle := range bundles {
 		if command, _, ok := plugin.FindCommandMissingPathArgs(bundle, args); ok {
 			return bundle, command, true
 		}
@@ -274,33 +297,23 @@ func matchPluginCommandForHelp(args []string, bundles []plugin.Bundle) (plugin.B
 	return plugin.Bundle{}, plugin.Command{}, false
 }
 
-// matchPluginCommandGroupForHelp finds product commands below a shared prefix.
-func matchPluginCommandGroupForHelp(args []string, bundles []plugin.Bundle) (plugin.Bundle, []plugin.Command, bool) {
+// matchPluginCommandGroup finds commands below a group, or reports the longest matched prefix for diagnostics.
+func matchPluginCommandGroup(args []string, bundles []plugin.Bundle) (plugin.Bundle, []plugin.Command, int) {
+	longest := 0
 	for _, bundle := range bundles {
-		commands := make([]plugin.Command, 0)
+		var commands []plugin.Command
 		for _, command := range bundle.Commands.Commands {
-			if pathHasPrefix(command.Path, args) {
+			matched := plugin.MatchedPathLength(command.Path, args)
+			longest = max(longest, matched)
+			if matched == len(args) && matched < len(command.Path) {
 				commands = append(commands, command)
 			}
 		}
 		if len(commands) > 0 {
-			return bundle, commands, true
+			return bundle, commands, longest
 		}
 	}
-	return plugin.Bundle{}, nil, false
-}
-
-// pathHasPrefix reports whether prefix identifies a non-leaf command group.
-func pathHasPrefix(path, prefix []string) bool {
-	if len(prefix) == 0 || len(prefix) >= len(path) {
-		return false
-	}
-	for i, part := range prefix {
-		if path[i] != part {
-			return false
-		}
-	}
-	return true
+	return plugin.Bundle{}, nil, longest
 }
 
 // printMainHelp prints top-level CLI usage and command groups.
@@ -469,7 +482,7 @@ func printDoctorHelp(stdout io.Writer, args []string, language string) (bool, er
 		}}, "  ")
 		return true, writer.Err()
 	}
-	return false, nil
+	return true, commandBoundaryError(args[:2])
 }
 
 // printPluginCommandHints prints discovery hints for product commands.
@@ -886,14 +899,18 @@ func localizedColumnList(value string, labels map[string]string) string {
 	return strings.Join(parts, ",")
 }
 
-// localizedFilterSelector rewrites the filter key before the first '='.
+// localizedFilterSelector rewrites the stable key while preserving the comparison and value.
 func localizedFilterSelector(value string, labels map[string]string) string {
 	key, rest, ok := strings.Cut(value, "=")
 	if !ok {
 		return value
 	}
+	key, inequality := strings.CutSuffix(key, "!")
 	if label := labels[key]; label != "" {
 		key = label
+	}
+	if inequality {
+		return key + "!=" + rest
 	}
 	return key + "=" + rest
 }

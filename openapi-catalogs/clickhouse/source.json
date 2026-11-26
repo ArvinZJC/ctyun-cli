@@ -10826,6 +10826,151 @@
         "prodPerformanceSpec": "16C64G"
       },
       "example_response": null
+    },
+    {
+      "id": "clickhouse.cluster.database.table.list",
+      "api_id": "24273",
+      "title": "查询指定集群下的数据库与表结构",
+      "description": {
+        "en-GB": "List cluster database table",
+        "en-US": "List cluster database table",
+        "zh-CN": "查询指定集群下的数据库与表结构"
+      },
+      "category": "cluster",
+      "command_path": [
+        "cluster",
+        "database",
+        "table",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/clickhouse/v2/user-open-api/cluster/db-tables",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&api=24273&data=176&isNormal=1&vid=169",
+      "retryable": true,
+      "dangerous": false,
+      "parameters": [
+        {
+          "name": "prodInstId",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例ID",
+          "descriptions": {
+            "en-GB": "Prod inst ID",
+            "en-US": "Prod inst ID",
+            "zh-CN": "实例ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "prod_inst_id",
+          "cli_flag": "prod-inst-id",
+          "table_target": "",
+          "example": "123",
+          "help_descriptions": {
+            "en-GB": "Prod inst ID",
+            "en-US": "Prod inst ID",
+            "zh-CN": "实例ID"
+          }
+        },
+        {
+          "name": "clusterName",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "集群名",
+          "descriptions": {
+            "en-GB": "Cluster name",
+            "en-US": "Cluster name",
+            "zh-CN": "集群名"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cluster_name",
+          "cli_flag": "cluster-name",
+          "table_target": "",
+          "example": "default_cluster",
+          "help_descriptions": {
+            "en-GB": "Cluster name",
+            "en-US": "Cluster name",
+            "zh-CN": "集群名"
+          }
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "区域ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "123",
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "区域ID"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "0",
+        "result_path": "$",
+        "row_path": "$",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Code",
+            "label_zh": "返回码"
+          }
+        ],
+        "default_columns": [
+          "code"
+        ],
+        "layout": "vertical",
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "code",
+              "values": [
+                "0"
+              ]
+            }
+          ]
+        }
+      },
+      "examples": [],
+      "example_response": null,
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "ewogICJjb2RlIiA6IDAsCiAgIm1zZyIgOiAic3VjY2VzcyIsCiAgImRhdGEiIDogewogICAgInJlc2hhcmRUYWJsZXMiIDogWyB7CiAgICAgICJkYXRhYmFzZSIgOiAiZGVmYXVsdCIsCiAgICAgICJuYW1lIiA6ICJfcl9kaXNfMTgyIiwKICAgICAgImRhdGFfcGF0aHMiIDogWyAiL2RhdGEvY2tkYXRhL2NsaWNraG91c2Utc2VydmVyL3N0b3JlLzdiYS83YmE2NGY1NC01NjA3LTRhZjgtODg1Mi0zOTQ3NzQ3Y2ZkMzQvIiBdLAogICAgICAibWV0YWRhdGFfcGF0aCIgOiAic3RvcmUvOGM4LzhjOGY1YjZmLTEzYzAtNDU3MC1iMzllLThhNmYxYWM5NThhOS9fcl9kaXNfMTgyLnNxbCIsCiAgICAgICJlbmdpbmUiIDogIkRpc3RyaWJ1dGVkIiwKICAgICAgInN0b3JhZ2VfcG9saWN5IiA6ICJkZWZhdWx0IiwKICAgICAgImNyZWF0ZV90YWJsZV9xdWVyeSIgOiAiQ1JFQVRFIFRBQkxFIGRlZmF1bHQuX3JfZGlzXzE4MiAoYHVzZXJfaWRgIFVJbnQ2NCwgYGV2ZW50X3RpbWVgIERhdGVUaW1lLCBgZXZlbnRfdHlwZWAgU3RyaW5nLCBgcGFnZV91cmxgIFN0cmluZywgYGRldmljZWAgU3RyaW5nLCBgcmVnaW9uYCBTdHJpbmcpIEVOR0lORSA9IERpc3RyaWJ1dGVkKCdkZWZhdWx0X2NsdXN0ZXInLCAnZGVmYXVsdCcsICdfcl8xODInLCB4eEhhc2g2NCh1c2VyX2lkKSkiLAogICAgICAibG9jYWxfY2x1c3RlciIgOiAiZGVmYXVsdF9jbHVzdGVyIiwKICAgICAgImxvY2FsX2RhdGFiYXNlIiA6ICJkZWZhdWx0IiwKICAgICAgImxvY2FsX3RhYmxlIiA6ICJfcl8xODIiLAogICAgICAicmVwbGljYXRlZF96b29fcGF0aCIgOiAiIiwKICAgICAgInJlcGxpY2F0ZWRfcmVwX25hbWUiIDogIiIsCiAgICAgICJlbmdpbmVfZnVsbCIgOiAiRGlzdHJpYnV0ZWQoJ2RlZmF1bHRfY2x1c3RlcicsICdkZWZhdWx0JywgJ19yXzE4MicsIHh4SGFzaDY0KHVzZXJfaWQpKSIsCiAgICAgICJpc19kaXN0cmlidXRlZCIgOiAidHJ1ZSIsCiAgICAgICJpc19yZXBsaWNhdGVkIiA6IGZhbHNlCiAgICB9LCB7CiAgICAgICJkYXRhYmFzZSIgOiAiZGVmYXVsdCIsCiAgICAgICJuYW1lIiA6ICJfcl9kaXNfMTg4IiwKICAgICAgImRhdGFfcGF0aHMiIDogWyAiL2RhdGEvY2tkYXRhL2NsaWNraG91c2Utc2VydmVyL3N0b3JlLzBhNC8wYTQwNDk0Yy0wN2RkLTQ1MjMtOGY0NC1hNjBkMzE4ZDA1YzMvIiBdLAogICAgICAibWV0YWRhdGFfcGF0aCIgOiAic3RvcmUvOGM4LzhjOGY1YjZmLTEzYzAtNDU3MC1iMzllLThhNmYxYWM5NThhOS9fcl9kaXNfMTg4LnNxbCIsCiAgICAgICJlbmdpbmUiIDogIkRpc3RyaWJ1dGVkIiwKICAgICAgInN0b3JhZ2VfcG9saWN5IiA6ICJkZWZhdWx0IiwKICAgICAgImNyZWF0ZV90YWJsZV9xdWVyeSIgOiAiQ1JFQVRFIFRBQkxFIGRlZmF1bHQuX3JfZGlzXzE4OCAoYHVzZXJfaWRgIFVJbnQ2NCwgYGV2ZW50X3RpbWVgIERhdGVUaW1lLCBgZXZlbnRfdHlwZWAgU3RyaW5nLCBgcGFnZV91cmxgIFN0cmluZywgYGRldmljZWAgU3RyaW5nLCBgcmVnaW9uYCBTdHJpbmcpIEVOR0lORSA9IERpc3RyaWJ1dGVkKCdkZWZhdWx0X2NsdXN0ZXInLCAnZGVmYXVsdCcsICdfcl8xODgnLCB4eEhhc2g2NCh1c2VyX2lkKSkiLAogICAgICAibG9jYWxfY2x1c3RlciIgOiAiZGVmYXVsdF9jbHVzdGVyIiwKICAgICAgImxvY2FsX2RhdGFiYXNlIiA6ICJkZWZhdWx0IiwKICAgICAgImxvY2FsX3RhYmxlIiA6ICJfcl8xODgiLAogICAgICAicmVwbGljYXRlZF96b29fcGF0aCIgOiAiIiwKICAgICAgInJlcGxpY2F0ZWRfcmVwX25hbWUiIDogIiIsCiAgICAgICJlbmdpbmVfZnVsbCIgOiAiRGlzdHJpYnV0ZWQoJ2RlZmF1bHRfY2x1c3RlcicsICdkZWZhdWx0JywgJ19yXzE4OCcsIHh4SGFzaDY0KHVzZXJfaWQpKSIsCiAgICAgICJpc19kaXN0cmlidXRlZCIgOiAidHJ1ZSIsCiAgICAgICJpc19yZXBsaWNhdGVkIiA6IGZhbHNlCiAgICB9IF0KICB9Cn0="
+      }
     }
   ],
   "waiters": {}

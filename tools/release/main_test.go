@@ -9,6 +9,7 @@ import (
 	"bytes"
 	"crypto/ed25519"
 	"encoding/base64"
+	"encoding/json"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -105,6 +106,35 @@ func TestReleaseToolWritesSignedIndexAndArchive(t *testing.T) {
 	}
 	if err := distribution.VerifyIndexSignature(registryIndexBytes, registrySignature, base64.StdEncoding.EncodeToString(publicKey), "registry"); err != nil {
 		t.Fatalf("registry signature invalid: %v", err)
+	}
+	var storefront struct {
+		Plugins []struct {
+			Name         string
+			DisplayName  string            `json:"display_name"`
+			DisplayNames map[string]string `json:"display_names"`
+		}
+	}
+	if err := json.Unmarshal(registryIndexBytes, &storefront); err != nil {
+		t.Fatal(err)
+	}
+	for _, artifact := range storefront.Plugins {
+		for _, language := range []string{"en-US", "en-GB", "zh-CN"} {
+			path, err := projectFilePath(filepath.Join("plugins", artifact.Name, "i18n", language+".json"))
+			if err != nil {
+				t.Fatal(err)
+			}
+			var catalog map[string]string
+			data, err := os.ReadFile(path)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := json.Unmarshal(data, &catalog); err != nil {
+				t.Fatal(err)
+			}
+			if want := catalog["name"]; want == "" || artifact.DisplayNames[language] != want || (language == "en-US" && artifact.DisplayName != want) {
+				t.Fatalf("%s %s storefront names = %q, %v; want %q", artifact.Name, language, artifact.DisplayName, artifact.DisplayNames, want)
+			}
+		}
 	}
 	registryIndex, err := registry.LoadIndex(registryIndexBytes)
 	if err != nil {
@@ -321,8 +351,14 @@ esac
 		t.Fatal(err)
 	}
 	installDir := filepath.Join(t.TempDir(), "install")
+	// GNU checksum tools escape the printed digest when a filename contains a backslash.
+	tmpDir := filepath.Join(t.TempDir(), `temporary\path`)
+	if err := os.Mkdir(tmpDir, 0o700); err != nil {
+		t.Fatal(err)
+	}
 	cmd := exec.Command("bash", scriptPath)
 	cmd.Env = append(os.Environ(),
+		"TMPDIR="+tmpDir,
 		"CTYUN_INSTALL_BASE_URL=https://example.test/core",
 		"CTYUN_INSTALL_DIR="+installDir,
 		"CTYUN_TEST_ROOT="+root,
@@ -374,6 +410,39 @@ func TestRunRejectsInvalidInputs(t *testing.T) {
 	}
 }
 
+// TestReleaseRejectsInvalidInputsBeforeWriting checks that a stray operand cannot
+// hide later build flags and a damaged signing key cannot produce release files.
+func TestReleaseRejectsInvalidInputsBeforeWriting(t *testing.T) {
+	_, key, err := ed25519.GenerateKey(nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	damaged := bytes.Clone(key)
+	damaged[ed25519.SeedSize] ^= 1
+	for _, tc := range []struct {
+		name  string
+		key   []byte
+		extra []string
+	}{
+		{"stray operand", key, []string{"extra", "--channel", "beta"}},
+		{"inconsistent signing key", damaged, nil},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			out := filepath.Join(t.TempDir(), "release")
+			args := []string{"--version", "0.2.0", "--out", out, "--platform", "darwin/arm64"}
+			err := run(append(args, tc.extra...), func(string) string {
+				return base64.StdEncoding.EncodeToString(tc.key)
+			}, &bytes.Buffer{})
+			if err == nil {
+				t.Fatal("packaging reported success")
+			}
+			if _, err := os.Stat(out); !os.IsNotExist(err) {
+				t.Fatalf("invalid input touched output directory, stat error = %v", err)
+			}
+		})
+	}
+}
+
 // TestValidateReleaseOptionsRequiresSemanticVersion checks release version syntax.
 func TestValidateReleaseOptionsRequiresSemanticVersion(t *testing.T) {
 	valid := releaseOptions{
@@ -384,6 +453,18 @@ func TestValidateReleaseOptionsRequiresSemanticVersion(t *testing.T) {
 	}
 	if err := validateReleaseOptions(valid); err != nil {
 		t.Fatalf("validateReleaseOptions rejected SemVer prerelease: %v", err)
+	}
+	for _, tt := range []struct {
+		version, channel string
+	}{
+		{"0.2.0-beta.1", "stable"},
+		{"0.2.0+release-note", "beta"},
+	} {
+		opts := valid
+		opts.Version, opts.Channel = tt.version, tt.channel
+		if err := validateReleaseOptions(opts); err == nil {
+			t.Errorf("accepted incompatible version %s and channel %s", opts.Version, opts.Channel)
+		}
 	}
 
 	invalid := valid
@@ -427,6 +508,14 @@ func TestDefaultBuildBinaryUsesTrimpath(t *testing.T) {
 	}
 }
 
+// TestBuildFailureIncludesCompilerDiagnostic checks the real Go tool's platform failure on every host.
+func TestBuildFailureIncludesCompilerDiagnostic(t *testing.T) {
+	err := defaultBuildBinary(buildOptions{GOOS: "ctyun-test-os", GOARCH: "amd64", Output: filepath.Join(t.TempDir(), "ctyun")})
+	if err == nil || !strings.Contains(err.Error(), "build ctyun for ctyun-test-os/amd64") || !strings.Contains(err.Error(), "unsupported GOOS/GOARCH") {
+		t.Fatalf("build failure lost platform or compiler diagnostic: %v", err)
+	}
+}
+
 // TestReleaseToolWritesWindowsArtifactAndPropagatesBuildError checks Windows archive naming and build failures.
 func TestReleaseToolWritesWindowsArtifactAndPropagatesBuildError(t *testing.T) {
 	_, privateKey, err := ed25519.GenerateKey(nil)
@@ -459,6 +548,18 @@ func TestReleaseToolWritesWindowsArtifactAndPropagatesBuildError(t *testing.T) {
 		return base64.StdEncoding.EncodeToString(privateKey)
 	}, &bytes.Buffer{}); err == nil {
 		t.Fatal("run returned nil error for build failure")
+	}
+}
+
+// TestRepeatedPlatformBuildsOnce verifies that repeating a target retains the first
+// requested order without adding another build or index entry.
+func TestRepeatedPlatformBuildsOnce(t *testing.T) {
+	opts, err := parseOptions([]string{"--platform", "linux/amd64", "--platform", "darwin/arm64", "--platform", "linux/amd64"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := strings.Join(opts.Platforms, ","); got != "linux/amd64,darwin/arm64" {
+		t.Fatalf("build targets = %q", got)
 	}
 }
 
@@ -500,5 +601,36 @@ func patchBuildBinary(fn func(buildOptions) error) func() {
 	buildBinary = fn
 	return func() {
 		buildBinary = original
+	}
+}
+
+// TestFailedCoreArchiveRebuildPreservesPreviousBytes protects an archive still referenced by the current signed index.
+func TestFailedCoreArchiveRebuildPreservesPreviousBytes(t *testing.T) {
+	dir := t.TempDir()
+	archive := filepath.Join(dir, "core.tar.gz")
+	binary := filepath.Join(dir, "ctyun")
+	if err := os.WriteFile(binary, []byte("binary"), 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := writeArchive(archive, binary, "ctyun"); err != nil {
+		t.Fatal(err)
+	}
+	before, err := os.ReadFile(archive)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := writeArchive(archive, filepath.Join(dir, "missing"), "ctyun"); err == nil {
+		t.Fatal("expected archive build failure")
+	}
+	after, err := os.ReadFile(archive)
+	if err != nil || !bytes.Equal(before, after) {
+		t.Fatalf("previous archive changed after failed rebuild: %v", err)
+	}
+}
+
+// TestCoreArchiveRejectsMissingParent checks the staging boundary before creating an archive.
+func TestCoreArchiveRejectsMissingParent(t *testing.T) {
+	if err := writeArchive(filepath.Join(t.TempDir(), "missing", "core.tar.gz"), "ctyun", "ctyun"); err == nil {
+		t.Fatal("expected missing parent error")
 	}
 }

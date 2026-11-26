@@ -197,6 +197,23 @@ func TestDoJSONAcceptsGuardedCTyunStatusCode(t *testing.T) {
 	}
 }
 
+// TestGuardedStatusRequiresNonNullResult distinguishes a negative answer from a missing result.
+func TestGuardedStatusRequiresNonNullResult(t *testing.T) {
+	spec := RequestSpec{BaseURL: "https://ctapi.example.test", Path: "/check", AcceptedStatuses: []AcceptedStatusRule{{Code: "900", RequiredPath: "returnObj.satisfied"}}}
+	for _, result := range []string{"null", "false"} {
+		transport := roundTripFunc(func(*http.Request) (*http.Response, error) {
+			body := `{"statusCode":900,"returnObj":{"satisfied":` + result + `}}`
+			return &http.Response{StatusCode: http.StatusOK, Body: io.NopCloser(strings.NewReader(body))}, nil
+		})
+		_, err := DoJSON(transport, spec)
+		if result == "null" {
+			requireDiagnosticKey(t, err, "error.api_status")
+		} else if err != nil {
+			t.Fatalf("false result was rejected: %v", err)
+		}
+	}
+}
+
 func TestDoJSONRejectsGuardedCTyunStatusCodeWithoutRequiredPath(t *testing.T) {
 	transport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
 		return &http.Response{

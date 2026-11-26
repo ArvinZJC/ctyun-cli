@@ -23,7 +23,7 @@ func confirmDangerousOperation(stderr io.Writer, stdin io.Reader, opts globalOpt
 		return err
 	}
 	line, err := bufio.NewReader(stdin).ReadString('\n')
-	if err != nil && len(line) == 0 {
+	if err != nil && err != io.EOF {
 		return diagnostic.New("error.confirmation_cancelled")
 	}
 	answer := strings.ToLower(strings.TrimSpace(line))

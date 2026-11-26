@@ -248,6 +248,8 @@ func resolveExplicitBody(bindings map[string]string, profile coreconfig.Profile,
 					fields[key] = typed
 				}
 			}
+		} else if source == "$profile.region" {
+			fields[key] = regionForTarget(key, profile.Region, parameters, values)
 		} else {
 			for name, value := range resolveMap(map[string]string{key: source}, profile, args, values, nil, false) {
 				fields[name] = value

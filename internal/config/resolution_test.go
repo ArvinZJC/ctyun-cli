@@ -10,6 +10,32 @@ import (
 	"testing"
 )
 
+// TestWarningSettingsIgnoreBlankEnvironment verifies explanations use the same
+// stored values as the warnings emitted during command execution.
+func TestWarningSettingsIgnoreBlankEnvironment(t *testing.T) {
+	getenv := func(string) string { return " \t " }
+	resolved, err := Resolve(ResolveInput{
+		Raw:    []byte(`{"warn_config_credentials":false,"profiles":{"prod":{"warn_deprecated":false}}}`),
+		Getenv: getenv,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, tc := range []struct {
+		key     string
+		source  SourceKind
+		runtime bool
+	}{
+		{"warn_config_credentials", SourceConfig, ShouldWarnConfigCredentials(getenv, resolved.Profile())},
+		{"warn_deprecated", SourceProfile, ShouldWarnDeprecated(getenv, resolved.Profile())},
+	} {
+		setting, _ := resolved.Setting(tc.key)
+		if setting.Source.Kind != tc.source || setting.Value != "false" || tc.runtime {
+			t.Errorf("%s explanation = %q from %s, runtime warning = %t", tc.key, setting.Value, setting.Source.Kind, tc.runtime)
+		}
+	}
+}
+
 func TestResolvePathReportsWinningSource(t *testing.T) {
 	tests := []struct {
 		in   PathInput

@@ -14,6 +14,22 @@
       "max_attempts": 60,
       "interval_seconds": 5,
       "evidence": "file-system.show-by-name response.columns.sfsStatus: creating is pending, available is usable, expired and unusable cannot satisfy availability. The by-ID retrieval exposes the same sfsStatus field."
+    },
+    "oceanfs.subdirectory.quota.available": {
+      "selector": {
+        "path": "returnObj.subdirQuotaList",
+        "key": "subdirPath",
+        "value": "$param.subdir_path"
+      },
+      "commands": [
+        "oceanfs.subdirectory.quota.list"
+      ],
+      "path": "subdirQuotaStatus",
+      "success": "available",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "API 21769 requires a file-system ID and returns one quota per directory path. The example contains available; unusable means not in effect and is not documented as terminal failure."
     }
   },
   "schema_version": 1,
@@ -2283,16 +2299,16 @@
           "enum": null,
           "default": "1",
           "pattern": "",
-          "description": "同一订单创建相同配置文件系统的数量，实际能批量创建的的数量受用户配额约束。同时创建多个实例时，系统将自动在名称末尾增加数字编号后缀进行区分。例如数量为2时，名称为“oceanfs-36d8、oceanfs -36d8-001\"。取值：[1, 10]，注：默认值为1",
+          "description": "同一订单创建相同配置文件系统的数量，实际能批量创建的数量受用户配额约束。同时创建多个实例时，系统将自动在名称末尾增加数字编号后缀进行区分。例如数量为2时，名称为“oceanfs-36d8、oceanfs-36d8-001\"。取值：[1, 10]，注：默认值为1",
           "descriptions": {
             "en-GB": "Order Num",
             "en-US": "Order Num",
-            "zh-CN": "同一订单创建相同配置文件系统的数量，实际能批量创建的的数量受用户配额约束。同时创建多个实例时，系统将自动在名称末尾增加数字编号后缀进行区分。例如数量为2时，名称为“oceanfs-36d8、oceanfs -36d8-001\"。取值：[1, 10]，注：默认值为1"
+            "zh-CN": "同一订单创建相同配置文件系统的数量，实际能批量创建的数量受用户配额约束。同时创建多个实例时，系统将自动在名称末尾增加数字编号后缀进行区分。例如数量为2时，名称为“oceanfs-36d8、oceanfs-36d8-001\"。取值：[1, 10]，注：默认值为1"
           },
           "help_descriptions": {
             "en-GB": "Number of identically configured file systems to create, from 1 to 10; default is 1.",
             "en-US": "Number of identically configured file systems to create, from 1 to 10; default is 1.",
-            "zh-CN": "同一订单创建相同配置文件系统的数量，实际能批量创建的的数量受用户配额约束。同时创建多个实例时，系统将自动在名称末尾增加数字编号后缀进行区分。例如数量为2时，名称为“oceanfs-36d8、oceanfs -36d8-001\"。取值：[1, 10]，注：默认值为1"
+            "zh-CN": "同一订单创建相同配置文件系统的数量，实际能批量创建的数量受用户配额约束。同时创建多个实例时，系统将自动在名称末尾增加数字编号后缀进行区分。例如数量为2时，名称为“oceanfs-36d8、oceanfs-36d8-001\"。取值：[1, 10]，注：默认值为1"
           },
           "profile": "",
           "argument": "",
@@ -2926,7 +2942,7 @@
           ],
           "default": "",
           "pattern": "",
-          "description": "付费方式为包年包月的周期类型，onDemand为false时必须指定。取值：\nyear：按年订购\nmonth：按月订购",
+          "description": "付费方式为包年包月的周期类型。取值： year：按年订购 month：按月订购",
           "descriptions": {
             "en-GB": "Cycle Type",
             "en-US": "Cycle Type",
@@ -2952,7 +2968,7 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "付费方式为包年包月时周期数量，onDemand为false时必须指定，周期最大长度不能超过3年。取值：\nyear：1、2、3\nmonth：1~36，正整数\n注：cycleType与cycleCount一起填写，不区分大小写。按需计费（即onDemand为true）时，无需填写该参数（填写无效）。按年订购可享受包年折扣优惠，按月订购无法享受折扣，详见<a href=\"https://www.ctyun.cn/document/10088966/10123364\" target=\"_blank\">包年包月-计费说明-产品价格</a>",
+          "description": "付费方式为包年包月时周期数量，周期最大长度不能超过3年。取值： year：1、2、3 month：1~36，正整数 注：cycleType与cycleCount一起填写，不区分大小写。按需计费（即onDemand为true）时，无需填写该参数（填写无效）。按年订购可享受包年折扣优惠，按月订购无法享受折扣，详见 包年包月-计费说明-产品价格",
           "descriptions": {
             "en-GB": "Cycle Count",
             "en-US": "Cycle Count",
@@ -4679,7 +4695,7 @@
           ],
           "default": "",
           "pattern": "",
-          "description": "读写权限类型。取值：\nrw：读写权限。对应IP下的计算服务可以对文件系统进行读写操作\nro：只读权限。对应IP下的计算服务可以对文件系统只有只读权限",
+          "description": "读写权限类型。取值： rw：读写权限。对应IP下的计算服务可以对文件系统进行读写操作 ro：只读权限。对应IP下的计算服务只能对文件系统进行只读操作",
           "descriptions": {
             "en-GB": "RW Permission",
             "en-US": "RW Permission",
@@ -5329,7 +5345,7 @@
           ],
           "default": "",
           "pattern": "",
-          "description": "读写权限类型。取值：\nrw：读写权限。对应IP下的计算服务可以对文件系统进行读写操作\nro：只读权限。对应IP下的计算服务可以对文件系统只有只读权限",
+          "description": "读写权限类型。取值： rw：读写权限。对应IP下的计算服务可以对文件系统进行读写操作 ro：只读权限。对应IP下的计算服务对文件系统只有只读权限",
           "descriptions": {
             "en-GB": "RW Permission",
             "en-US": "RW Permission",
@@ -5692,16 +5708,16 @@
           ],
           "default": "true",
           "pattern": "",
-          "description": "是否关闭目的文件系统覆盖保护，默认为true。只有设置为false，才表示关闭覆盖保护，可以创建跨域复制",
+          "description": "是否开启目的文件系统覆盖保护。设置为true表示开启覆盖保护；设置为false表示关闭覆盖保护，关闭后方可作为跨域复制的目标文件系统",
           "descriptions": {
             "en-GB": "Protect Switch",
             "en-US": "Protect Switch",
-            "zh-CN": "是否关闭目的文件系统覆盖保护，默认为true。只有设置为false，才表示关闭覆盖保护，可以创建跨域复制"
+            "zh-CN": "是否开启目的文件系统覆盖保护。设置为true表示开启覆盖保护；设置为false表示关闭覆盖保护，关闭后方可作为跨域复制的目标文件系统"
           },
           "help_descriptions": {
             "en-GB": "Whether overwrite protection is enabled on the replication target; set false before creating replication.",
             "en-US": "Whether overwrite protection is enabled on the replication target; set false before creating replication.",
-            "zh-CN": "是否关闭目的文件系统覆盖保护，默认为true。只有设置为false，才表示关闭覆盖保护，可以创建跨域复制"
+            "zh-CN": "是否开启目的文件系统覆盖保护。设置为true表示开启覆盖保护；设置为false表示关闭覆盖保护，关闭后方可作为跨域复制的目标文件系统"
           },
           "profile": "",
           "argument": "",
@@ -7721,7 +7737,7 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "付费方式为包年包月时周期数量，onDemand为false时必须指定，周期最大长度不能超过3年。取值：\nyear：1、2、3\nmonth：1~36，正整数\n注：cycleType与cycleCount一起填写，不区分大小写。按需计费（即onDemand为true）时，无需填写该参数（填写无效）。按年订购可享受包年折扣优惠，按月订购无法享受折扣，详见<a href=\"https://www.ctyun.cn/document/10088966/10123364\" target=\"_blank\">包年包月-计费说明-产品价格</a>",
+          "description": "付费方式为包年包月时周期数量，onDemand为false时必须指定，周期最大长度不能超过3年。取值： year：1、2、3 month：1~36，正整数 注：cycleType与cycleCnt一起填写，不区分大小写。按需计费（即onDemand为true）时，无需填写该参数（填写无效）。按年订购可享受包年折扣优惠，按月订购无法享受折扣，详见 包年包月-计费说明-产品价格",
           "descriptions": {
             "en-GB": "Cycle Cnt",
             "en-US": "Cycle Cnt",
@@ -8118,7 +8134,7 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "付费方式为包年包月时周期数量，周期最大长度不能超过3年。取值：\nyear：1、2、3\nmonth：1~36，正整数\n注：cycleType与cycleCount一起填写，不区分大小写。按年订购可享受包年折扣优惠，按月订购无法享受折扣，详见<a href=\"https://www.ctyun.cn/document/10088966/10123364\" target=\"_blank\">包年包月-计费说明-产品价格</a>",
+          "description": "付费方式为包年包月时周期数量，周期最大长度不能超过3年。取值： year：1、2、3 month：1~36，正整数 注：cycleType与cycleCnt一起填写，不区分大小写。按年订购可享受包年折扣优惠，按月订购无法享受折扣，详见 包年包月-计费说明-产品价格",
           "descriptions": {
             "en-GB": "Cycle Cnt",
             "en-US": "Cycle Cnt",
@@ -8208,6 +8224,1565 @@
             }
           ],
           "finalPrice": 97920.0
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "oceanfs.subdirectory.quota.create",
+      "api_id": "21766",
+      "title": "创建子目录配额",
+      "description": {
+        "en-GB": "Create subdirectory quota",
+        "en-US": "Create subdirectory quota",
+        "zh-CN": "创建子目录配额"
+      },
+      "category": "subdirectory",
+      "command_path": [
+        "subdirectory",
+        "quota",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v4/oceanfs/new-subdir-quota",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=145&api=21766&data=200&isNormal=1&vid=279",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。获取： 资源池列表查询",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池ID。获取： 资源池列表查询"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool containing the file system",
+            "en-US": "Resource pool containing the file system",
+            "zh-CN": "资源池ID。获取： 资源池列表查询"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "sfsUID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "文件系统ID",
+          "descriptions": {
+            "en-GB": "SFS UID",
+            "en-US": "SFS UID",
+            "zh-CN": "文件系统ID"
+          },
+          "help_descriptions": {
+            "en-GB": "ID of the target OceanFS file system",
+            "en-US": "ID of the target OceanFS file system",
+            "zh-CN": "文件系统ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sfs_uid",
+          "cli_flag": "sfs-uid",
+          "table_target": "",
+          "example": "68209584-b16b-5df2-b028-7f86c99a1bab"
+        },
+        {
+          "name": "subdirPath",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "文件系统子目录的绝对路径，仅支持已存在的目录路径；目录命名规则符合linux和Windows命名规则；限制规则：每层目录1-255字符；允许中文、英文、数字、下划线_、连字符-；特殊字符只允许包含“.”、“*”、“%”、“!”；不允许出现空格；不允许连续/，只能单/；必须以/开头，不能以/结尾；不能为根目录设置配额；每层目录不能为.snap",
+          "descriptions": {
+            "en-GB": "Subdir path",
+            "en-US": "Subdir path",
+            "zh-CN": "文件系统子目录的绝对路径，仅支持已存在的目录路径；目录命名规则符合linux和Windows命名规则；限制规则：每层目录1-255字符；允许中文、英文、数字、下划线_、连字符-；特殊字符只允许包含“.”、“*”、“%”、“!”；不允许出现空格；不允许连续/，只能单/；必须以/开头，不能以/结尾；不能为根目录设置配额；每层目录不能为.snap"
+          },
+          "help_descriptions": {
+            "en-GB": "Absolute path to an existing subdirectory. Omit the trailing slash",
+            "en-US": "Absolute path to an existing subdirectory. Omit the trailing slash",
+            "zh-CN": "文件系统子目录的绝对路径，仅支持已存在的目录路径；目录命名规则符合linux和Windows命名规则；限制规则：每层目录1-255字符；允许中文、英文、数字、下划线_、连字符-；特殊字符只允许包含“.”、“*”、“%”、“!”；不允许出现空格；不允许连续/，只能单/；必须以/开头，不能以/结尾；不能为根目录设置配额；每层目录不能为.snap"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "subdir_path",
+          "cli_flag": "subdir-path",
+          "table_target": "",
+          "example": "/test/dir1"
+        },
+        {
+          "name": "sizeQuota",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "子目录的容量配额，单位：GB。仅支持输入1到文件系统容量大小之间的整数，不填代表无限制，实际可用配额受父目录及根目录约束。与fileCountQuota参数至少填一个",
+          "descriptions": {
+            "en-GB": "Size quota",
+            "en-US": "Size quota",
+            "zh-CN": "子目录的容量配额，单位：GB。仅支持输入1到文件系统容量大小之间的整数，不填代表无限制，实际可用配额受父目录及根目录约束。与fileCountQuota参数至少填一个"
+          },
+          "help_descriptions": {
+            "en-GB": "Maximum storage in GB. Omit for unlimited storage",
+            "en-US": "Maximum storage in GB. Omit for unlimited storage",
+            "zh-CN": "子目录的容量配额，单位：GB。仅支持输入1到文件系统容量大小之间的整数，不填代表无限制，实际可用配额受父目录及根目录约束。与fileCountQuota参数至少填一个"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "size_quota",
+          "cli_flag": "size-quota",
+          "table_target": "",
+          "example": 50
+        },
+        {
+          "name": "fileCountQuota",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "子目录的文件数配额，单位：个。仅支持输入1~min{文件系统总容量（GB）*20000，4000000000}之间的整数，不填代表无限制，实际可用配额受父目录及根目录约束。与sizeQuota参数至少填一个。注意：目录路径本身会占用一个文件数配额，实际可用的文件数配额=配额值-1",
+          "descriptions": {
+            "en-GB": "File count quota",
+            "en-US": "File count quota",
+            "zh-CN": "子目录的文件数配额，单位：个。仅支持输入1~min{文件系统总容量（GB）*20000，4000000000}之间的整数，不填代表无限制，实际可用配额受父目录及根目录约束。与sizeQuota参数至少填一个。注意：目录路径本身会占用一个文件数配额，实际可用的文件数配额=配额值-1"
+          },
+          "help_descriptions": {
+            "en-GB": "Maximum file count including the directory itself. Omit for unlimited files",
+            "en-US": "Maximum file count including the directory itself. Omit for unlimited files",
+            "zh-CN": "子目录的文件数配额，单位：个。仅支持输入1~min{文件系统总容量（GB）*20000，4000000000}之间的整数，不填代表无限制，实际可用配额受父目录及根目录约束。与sizeQuota参数至少填一个。注意：目录路径本身会占用一个文件数配额，实际可用的文件数配额=配额值-1"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "file_count_quota",
+          "cli_flag": "file-count-quota",
+          "table_target": "",
+          "example": 100000
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "always": true
+          },
+          "any_of": [
+            "size_quota",
+            "file_count_quota"
+          ]
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "subdir_path",
+          "sfs_uid"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "subdir_path",
+            "path": "subdirPath",
+            "label_en": "Subdir Path",
+            "label_zh": "文件系统子目录的绝对路径"
+          },
+          {
+            "key": "sfs_uid",
+            "path": "sfsUID",
+            "label_en": "SFS UID",
+            "label_zh": "文件系统ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "fileCountQuota": 100000,
+        "regionID": "81f7728662dd11ec810800155d307d5b",
+        "sfsUID": "68209584-b16b-5df2-b028-7f86c99a1bab",
+        "sizeQuota": 50,
+        "subdirPath": "/test/dir1"
+      },
+      "example_response": {
+        "returnObj": {
+          "subdirPath": "/test/dir1",
+          "sfsUID": "68209584-b16b-5df2-b028-7f86c99a1bab"
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "oceanfs.subdirectory.quota.update",
+      "api_id": "21767",
+      "title": "编辑子目录配额",
+      "description": {
+        "en-GB": "Update subdirectory quota",
+        "en-US": "Update subdirectory quota",
+        "zh-CN": "编辑子目录配额"
+      },
+      "category": "subdirectory",
+      "command_path": [
+        "subdirectory",
+        "quota",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v4/oceanfs/update-subdir-quota",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=145&api=21767&data=200&isNormal=1&vid=279",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。获取： 资源池列表查询",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池ID。获取： 资源池列表查询"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool containing the file system",
+            "en-US": "Resource pool containing the file system",
+            "zh-CN": "资源池ID。获取： 资源池列表查询"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "sfsUID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "文件系统ID",
+          "descriptions": {
+            "en-GB": "SFS UID",
+            "en-US": "SFS UID",
+            "zh-CN": "文件系统ID"
+          },
+          "help_descriptions": {
+            "en-GB": "ID of the target OceanFS file system",
+            "en-US": "ID of the target OceanFS file system",
+            "zh-CN": "文件系统ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sfs_uid",
+          "cli_flag": "sfs-uid",
+          "table_target": "",
+          "example": "68209584-b16b-5df2-b028-7f86c99a1bab"
+        },
+        {
+          "name": "subdirPath",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "文件系统子目录的绝对路径，仅支持已存在的目录路径；目录命名规则符合linux和Windows命名规则；限制规则：每层目录1-255字符；允许中文、英文、数字、下划线_、连字符-；特殊字符只允许包含“.”、“*”、“%”、“!”；不允许出现空格；不允许连续/，只能单/；必须以/开头，不能以/结尾；不能为根目录设置配额；每层目录不能为.snap",
+          "descriptions": {
+            "en-GB": "Subdir path",
+            "en-US": "Subdir path",
+            "zh-CN": "文件系统子目录的绝对路径，仅支持已存在的目录路径；目录命名规则符合linux和Windows命名规则；限制规则：每层目录1-255字符；允许中文、英文、数字、下划线_、连字符-；特殊字符只允许包含“.”、“*”、“%”、“!”；不允许出现空格；不允许连续/，只能单/；必须以/开头，不能以/结尾；不能为根目录设置配额；每层目录不能为.snap"
+          },
+          "help_descriptions": {
+            "en-GB": "Absolute path to an existing subdirectory. Omit the trailing slash",
+            "en-US": "Absolute path to an existing subdirectory. Omit the trailing slash",
+            "zh-CN": "文件系统子目录的绝对路径，仅支持已存在的目录路径；目录命名规则符合linux和Windows命名规则；限制规则：每层目录1-255字符；允许中文、英文、数字、下划线_、连字符-；特殊字符只允许包含“.”、“*”、“%”、“!”；不允许出现空格；不允许连续/，只能单/；必须以/开头，不能以/结尾；不能为根目录设置配额；每层目录不能为.snap"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "subdir_path",
+          "cli_flag": "subdir-path",
+          "table_target": "",
+          "example": "/test/dir1"
+        },
+        {
+          "name": "sizeQuota",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "子目录的容量配额，单位：GB。仅支持输入0到文件系统容量大小之间的整数，0表示无限制，实际可用配额受父目录及根目录约束。与fileCountQuota参数至少填一个",
+          "descriptions": {
+            "en-GB": "Size quota",
+            "en-US": "Size quota",
+            "zh-CN": "子目录的容量配额，单位：GB。仅支持输入0到文件系统容量大小之间的整数，0表示无限制，实际可用配额受父目录及根目录约束。与fileCountQuota参数至少填一个"
+          },
+          "help_descriptions": {
+            "en-GB": "Maximum storage in GB. Set to zero to remove the limit",
+            "en-US": "Maximum storage in GB. Set to zero to remove the limit",
+            "zh-CN": "子目录的容量配额，单位：GB。仅支持输入0到文件系统容量大小之间的整数，0表示无限制，实际可用配额受父目录及根目录约束。与fileCountQuota参数至少填一个"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "size_quota",
+          "cli_flag": "size-quota",
+          "table_target": "",
+          "example": 50
+        },
+        {
+          "name": "fileCountQuota",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "子目录的文件数配额，单位：个。仅支持输入0~min{文件系统总容量（GB）*20000，4000000000}，0表示无限制，实际可用配额受父目录及根目录约束。与sizeQuota参数至少填一个。注意：目录路径本身会占用一个文件数配额，实际可用的文件数配额=配额值-1",
+          "descriptions": {
+            "en-GB": "File count quota",
+            "en-US": "File count quota",
+            "zh-CN": "子目录的文件数配额，单位：个。仅支持输入0~min{文件系统总容量（GB）*20000，4000000000}，0表示无限制，实际可用配额受父目录及根目录约束。与sizeQuota参数至少填一个。注意：目录路径本身会占用一个文件数配额，实际可用的文件数配额=配额值-1"
+          },
+          "help_descriptions": {
+            "en-GB": "Maximum file count including the directory itself. Set to zero to remove the limit",
+            "en-US": "Maximum file count including the directory itself. Set to zero to remove the limit",
+            "zh-CN": "子目录的文件数配额，单位：个。仅支持输入0~min{文件系统总容量（GB）*20000，4000000000}，0表示无限制，实际可用配额受父目录及根目录约束。与sizeQuota参数至少填一个。注意：目录路径本身会占用一个文件数配额，实际可用的文件数配额=配额值-1"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "file_count_quota",
+          "cli_flag": "file-count-quota",
+          "table_target": "",
+          "example": 10000
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "always": true
+          },
+          "any_of": [
+            "size_quota",
+            "file_count_quota"
+          ]
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "subdir_path",
+          "sfs_uid"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "subdir_path",
+            "path": "subdirPath",
+            "label_en": "Subdir Path",
+            "label_zh": "文件系统子目录的绝对路径"
+          },
+          {
+            "key": "sfs_uid",
+            "path": "sfsUID",
+            "label_en": "SFS UID",
+            "label_zh": "文件系统ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "fileCountQuota": 10000,
+        "regionID": "81f7728662dd11ec810800155d307d5b",
+        "sfsUID": "68209584-b16b-5df2-b028-7f86c99a1bab",
+        "sizeQuota": 50,
+        "subdirPath": "/test/dir1"
+      },
+      "example_response": {
+        "returnObj": {
+          "subdirPath": "/test/dir1",
+          "sfsUID": "68209584-b16b-5df2-b028-7f86c99a1bab"
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "oceanfs.subdirectory.quota.delete",
+      "api_id": "21768",
+      "title": "删除子目录配额",
+      "description": {
+        "en-GB": "Delete subdirectory quota",
+        "en-US": "Delete subdirectory quota",
+        "zh-CN": "删除子目录配额"
+      },
+      "category": "subdirectory",
+      "command_path": [
+        "subdirectory",
+        "quota",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/v4/oceanfs/delete-subdir-quota",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=145&api=21768&data=200&isNormal=1&vid=279",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。获取： 资源池列表查询",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池ID。获取： 资源池列表查询"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool containing the file system",
+            "en-US": "Resource pool containing the file system",
+            "zh-CN": "资源池ID。获取： 资源池列表查询"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "sfsUID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "文件系统ID",
+          "descriptions": {
+            "en-GB": "SFS UID",
+            "en-US": "SFS UID",
+            "zh-CN": "文件系统ID"
+          },
+          "help_descriptions": {
+            "en-GB": "ID of the target OceanFS file system",
+            "en-US": "ID of the target OceanFS file system",
+            "zh-CN": "文件系统ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sfs_uid",
+          "cli_flag": "sfs-uid",
+          "table_target": "",
+          "example": "68209584-b16b-5df2-b028-7f86c99a1bab"
+        },
+        {
+          "name": "subdirPath",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "文件系统子目录的绝对路径，仅支持已存在的目录路径；目录命名规则符合linux和Windows命名规则；限制规则：每层目录1-255字符；允许中文、英文、数字、下划线_、连字符-；特殊字符只允许包含“.”、“*”、“%”、“!”；不允许出现空格；不允许连续/，只能单/；必须以/开头，不能以/结尾；不能为根目录设置配额；每层目录不能为.snap",
+          "descriptions": {
+            "en-GB": "Subdir path",
+            "en-US": "Subdir path",
+            "zh-CN": "文件系统子目录的绝对路径，仅支持已存在的目录路径；目录命名规则符合linux和Windows命名规则；限制规则：每层目录1-255字符；允许中文、英文、数字、下划线_、连字符-；特殊字符只允许包含“.”、“*”、“%”、“!”；不允许出现空格；不允许连续/，只能单/；必须以/开头，不能以/结尾；不能为根目录设置配额；每层目录不能为.snap"
+          },
+          "help_descriptions": {
+            "en-GB": "Absolute path to an existing subdirectory. Omit the trailing slash",
+            "en-US": "Absolute path to an existing subdirectory. Omit the trailing slash",
+            "zh-CN": "文件系统子目录的绝对路径，仅支持已存在的目录路径；目录命名规则符合linux和Windows命名规则；限制规则：每层目录1-255字符；允许中文、英文、数字、下划线_、连字符-；特殊字符只允许包含“.”、“*”、“%”、“!”；不允许出现空格；不允许连续/，只能单/；必须以/开头，不能以/结尾；不能为根目录设置配额；每层目录不能为.snap"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "subdir_path",
+          "cli_flag": "subdir-path",
+          "table_target": "",
+          "example": "/test/dir1"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "subdir_path",
+          "sfs_uid"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "subdir_path",
+            "path": "subdirPath",
+            "label_en": "Subdir Path",
+            "label_zh": "文件系统子目录的绝对路径"
+          },
+          {
+            "key": "sfs_uid",
+            "path": "sfsUID",
+            "label_en": "SFS UID",
+            "label_zh": "文件系统ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "regionID": "81f7728662dd11ec810800155d307d5b",
+        "sfsUID": "68209584-b16b-5df2-b028-7f86c99a1bab",
+        "subdirPath": "/test/dir1"
+      },
+      "example_response": {
+        "returnObj": {
+          "subdirPath": "/test/dir1",
+          "sfsUID": "68209584-b16b-5df2-b028-7f86c99a1bab"
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "oceanfs.subdirectory.quota.list",
+      "api_id": "21769",
+      "title": "查询子目录配额",
+      "description": {
+        "en-GB": "List subdirectory quota",
+        "en-US": "List subdirectory quota",
+        "zh-CN": "查询子目录配额"
+      },
+      "category": "subdirectory",
+      "command_path": [
+        "subdirectory",
+        "quota",
+        "list"
+      ],
+      "method": "POST",
+      "path": "/v4/oceanfs/list-subdir-quota",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=145&api=21769&data=200&isNormal=1&vid=279",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。获取： 资源池列表查询",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池ID。获取： 资源池列表查询"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool containing the file system",
+            "en-US": "Resource pool containing the file system",
+            "zh-CN": "资源池ID。获取： 资源池列表查询"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "sfsUID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "文件系统ID",
+          "descriptions": {
+            "en-GB": "SFS UID",
+            "en-US": "SFS UID",
+            "zh-CN": "文件系统ID"
+          },
+          "help_descriptions": {
+            "en-GB": "ID of the target OceanFS file system",
+            "en-US": "ID of the target OceanFS file system",
+            "zh-CN": "文件系统ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sfs_uid",
+          "cli_flag": "sfs-uid",
+          "table_target": "",
+          "example": "a2d4b927-9511-5a9b-b1de-cfe55779c1ea"
+        },
+        {
+          "name": "subdirPath",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "文件系统子目录的绝对路径，仅支持已存在的目录路径；目录命名规则符合linux和Windows命名规则；限制规则：每层目录1-255字符；允许中文、英文、数字、下划线_、连字符-；特殊字符只允许包含“.”、“*”、“%”、“!”；不允许出现空格；不允许连续/，只能单/；必须以/开头，不能以/结尾；不能为根目录设置配额；每层目录不能为.snap",
+          "descriptions": {
+            "en-GB": "Subdir path",
+            "en-US": "Subdir path",
+            "zh-CN": "文件系统子目录的绝对路径，仅支持已存在的目录路径；目录命名规则符合linux和Windows命名规则；限制规则：每层目录1-255字符；允许中文、英文、数字、下划线_、连字符-；特殊字符只允许包含“.”、“*”、“%”、“!”；不允许出现空格；不允许连续/，只能单/；必须以/开头，不能以/结尾；不能为根目录设置配额；每层目录不能为.snap"
+          },
+          "help_descriptions": {
+            "en-GB": "Absolute path to an existing subdirectory. Omit the trailing slash",
+            "en-US": "Absolute path to an existing subdirectory. Omit the trailing slash",
+            "zh-CN": "文件系统子目录的绝对路径，仅支持已存在的目录路径；目录命名规则符合linux和Windows命名规则；限制规则：每层目录1-255字符；允许中文、英文、数字、下划线_、连字符-；特殊字符只允许包含“.”、“*”、“%”、“!”；不允许出现空格；不允许连续/，只能单/；必须以/开头，不能以/结尾；不能为根目录设置配额；每层目录不能为.snap"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "subdir_path",
+          "cli_flag": "subdir-path",
+          "table_target": "",
+          "example": "/test/dir1"
+        },
+        {
+          "name": "subdirQuotaStatus",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "available",
+            "unusable"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "子目录配额的状态。取值： available：生效 unusable：未生效",
+          "descriptions": {
+            "en-GB": "Subdir quota status",
+            "en-US": "Subdir quota status",
+            "zh-CN": "子目录配额的状态。取值： available：生效 unusable：未生效"
+          },
+          "help_descriptions": {
+            "en-GB": "Return quotas with the specified activation state",
+            "en-US": "Return quotas with the specified activation state",
+            "zh-CN": "子目录配额的状态。取值： available：生效 unusable：未生效"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "subdir_quota_status",
+          "cli_flag": "subdir-quota-status",
+          "table_target": "",
+          "example": "available"
+        },
+        {
+          "name": "exactSearch",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "是否精准匹配子目录路径。取值： true：精准匹配 false：模糊匹配，默认值为false",
+          "descriptions": {
+            "en-GB": "Exact search",
+            "en-US": "Exact search",
+            "zh-CN": "是否精准匹配子目录路径。取值： true：精准匹配 false：模糊匹配，默认值为false"
+          },
+          "help_descriptions": {
+            "en-GB": "Match the entire subdirectory path instead of using fuzzy matching",
+            "en-US": "Match the entire subdirectory path instead of using fuzzy matching",
+            "zh-CN": "是否精准匹配子目录路径。取值： true：精准匹配 false：模糊匹配，默认值为false"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "exact_search",
+          "cli_flag": "exact-search",
+          "table_target": "",
+          "example": true
+        },
+        {
+          "name": "pageSize",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "每页记录数目，取值：[1, 50]，注：默认值为10",
+          "descriptions": {
+            "en-GB": "Page size",
+            "en-US": "Page size",
+            "zh-CN": "每页记录数目，取值：[1, 50]，注：默认值为10"
+          },
+          "help_descriptions": {
+            "en-GB": "Number of records per page, from 1 to 50",
+            "en-US": "Number of records per page, from 1 to 50",
+            "zh-CN": "每页记录数目，取值：[1, 50]，注：默认值为10"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        },
+        {
+          "name": "pageNo",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "页码，取值：正整数（≥1），注：默认值为1",
+          "descriptions": {
+            "en-GB": "Page no",
+            "en-US": "Page no",
+            "zh-CN": "页码，取值：正整数（≥1），注：默认值为1"
+          },
+          "help_descriptions": {
+            "en-GB": "Page to retrieve, starting at 1",
+            "en-US": "Page to retrieve, starting at 1",
+            "zh-CN": "页码，取值：正整数（≥1），注：默认值为1"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_no",
+          "cli_flag": "page-no",
+          "table_target": "",
+          "example": 1
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj.subdirQuotaList",
+        "row_path": "returnObj.subdirQuotaList",
+        "default_columns": [
+          "region_id",
+          "sfs_uid",
+          "subdir_quota_status",
+          "az_name",
+          "subdir_path"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "region_id",
+            "path": "regionID",
+            "label_en": "Region ID",
+            "label_zh": "资源池ID"
+          },
+          {
+            "key": "sfs_uid",
+            "path": "sfsUID",
+            "label_en": "SFS UID",
+            "label_zh": "文件系统ID"
+          },
+          {
+            "key": "subdir_quota_status",
+            "path": "subdirQuotaStatus",
+            "label_en": "Subdir Quota Status",
+            "label_zh": "子目录配额状态"
+          },
+          {
+            "key": "az_name",
+            "path": "azName",
+            "label_en": "AZ Name",
+            "label_zh": "多可用区下可用区的名字"
+          },
+          {
+            "key": "subdir_path",
+            "path": "subdirPath",
+            "label_en": "Subdir Path",
+            "label_zh": "子目录在文件系统中的绝对路径"
+          },
+          {
+            "key": "size_quota",
+            "path": "sizeQuota",
+            "label_en": "Size Quota",
+            "label_zh": "子目录的容量配额限制"
+          },
+          {
+            "key": "file_count_quota",
+            "path": "fileCountQuota",
+            "label_en": "File Count Quota",
+            "label_zh": "子目录的数量配额限制"
+          },
+          {
+            "key": "used_size_quota",
+            "path": "usedSizeQuota",
+            "label_en": "Used Size Quota",
+            "label_zh": "子目录已使用的容量配额"
+          },
+          {
+            "key": "used_file_count_quota",
+            "path": "usedFileCountQuota",
+            "label_en": "Used File Count Quota",
+            "label_zh": "子目录已使用的数量配额"
+          },
+          {
+            "key": "subdir_quota_create_time",
+            "path": "subdirQuotaCreateTime",
+            "label_en": "Subdir Quota Create Time",
+            "label_zh": "子目录配额的创建时间"
+          },
+          {
+            "key": "subdir_quota_update_time",
+            "path": "subdirQuotaUpdateTime",
+            "label_en": "Subdir Quota Update Time",
+            "label_zh": "子目录配额的更新时间"
+          },
+          {
+            "key": "subdir_quota_type",
+            "path": "subdirQuotaType",
+            "label_en": "Subdir Quota Type",
+            "label_zh": "配额类型"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "regionID": "81f7728662dd11ec810800155d307d5b",
+        "sfsUID": "a2d4b927-9511-5a9b-b1de-cfe55779c1ea"
+      },
+      "example_response": {
+        "returnObj": {
+          "currentCount": 1,
+          "totalCount": 1,
+          "subdirQuotaList": [
+            {
+              "regionID": "81f7728662dd11ec810800155d307d5b",
+              "sfsUID": "a2d4b927-9511-5a9b-b1de-cfe55779c1ea",
+              "subdirQuotaStatus": "available",
+              "azName": "az1",
+              "subdirPath": "/test01/test01",
+              "sizeQuota": 500,
+              "fileCountQuota": 2000000,
+              "usedSizeQuota": 50.5,
+              "usedFileCountQuota": 90000,
+              "subdirQuotaCreateTime": 1692259481000,
+              "subdirQuotaUpdateTime": 1692259483000,
+              "subdirQuotaType": "dir"
+            }
+          ],
+          "pageSize": 10,
+          "pageNo": 1
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "oceanfs.file-system.tag.update",
+      "api_id": "21770",
+      "title": "文件系统绑定或解绑标签",
+      "description": {
+        "en-GB": "Update file system tag",
+        "en-US": "Update file system tag",
+        "zh-CN": "文件系统绑定或解绑标签"
+      },
+      "category": "file-system",
+      "command_path": [
+        "file-system",
+        "tag",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v4/oceanfs/update-label",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=145&api=21770&data=200&isNormal=1&vid=279",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "sfsUID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "文件系统ID",
+          "descriptions": {
+            "en-GB": "SFS UID",
+            "en-US": "SFS UID",
+            "zh-CN": "文件系统ID"
+          },
+          "help_descriptions": {
+            "en-GB": "ID of the target OceanFS file system",
+            "en-US": "ID of the target OceanFS file system",
+            "zh-CN": "文件系统ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sfs_uid",
+          "cli_flag": "sfs-uid",
+          "table_target": "",
+          "example": "0b55feb9-1331-5934-bf66-9155b7371731"
+        },
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。获取： 资源池列表查询",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池ID。获取： 资源池列表查询"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool containing the file system",
+            "en-US": "Resource pool containing the file system",
+            "zh-CN": "资源池ID。获取： 资源池列表查询"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "labelList",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "标签信息列表。注：单文件系统最多可绑定10个标签；文件系统创建完成后，文件系统变为可用状态，此时标签仍可能未绑定，需等待一段时间（0~10分钟）；批量创建文件系统时，这同一批的所有文件系统都会绑定labelList中所有的标签",
+          "descriptions": {
+            "en-GB": "Label list",
+            "en-US": "Label list",
+            "zh-CN": "标签信息列表。注：单文件系统最多可绑定10个标签；文件系统创建完成后，文件系统变为可用状态，此时标签仍可能未绑定，需等待一段时间（0~10分钟）；批量创建文件系统时，这同一批的所有文件系统都会绑定labelList中所有的标签"
+          },
+          "help_descriptions": {
+            "en-GB": "Tags to bind or unbind on the file system (up to ten bound tags)",
+            "en-US": "Tags to bind or unbind on the file system (up to ten bound tags)",
+            "zh-CN": "标签信息列表。注：单文件系统最多可绑定10个标签；文件系统创建完成后，文件系统变为可用状态，此时标签仍可能未绑定，需等待一段时间（0~10分钟）；批量创建文件系统时，这同一批的所有文件系统都会绑定labelList中所有的标签"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_list",
+          "cli_flag": "label-list",
+          "table_target": "",
+          "example": [
+            {
+              "key": "hezzzzzz",
+              "value": "llllll",
+              "operateType": "BIND"
+            },
+            {
+              "key": "test_key2",
+              "value": "test_value2",
+              "operateType": "UNBIND"
+            }
+          ]
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "code",
+          "success"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "code",
+            "path": "code",
+            "label_en": "Code",
+            "label_zh": "返回码"
+          },
+          {
+            "key": "success",
+            "path": "success",
+            "label_en": "Success",
+            "label_zh": "是否成功"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "labelList": [
+          {
+            "key": "hezzzzzz",
+            "value": "llllll",
+            "operateType": "BIND"
+          },
+          {
+            "key": "test_key2",
+            "value": "test_value2",
+            "operateType": "UNBIND"
+          }
+        ],
+        "regionID": "81f7728662dd11ec810800155d307d5b",
+        "sfsUID": "0b55feb9-1331-5934-bf66-9155b7371731"
+      },
+      "example_response": {
+        "returnObj": {
+          "code": "800",
+          "success": true
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "oceanfs.file-system.tag.list",
+      "api_id": "21771",
+      "title": "查询指定文件系统绑定的标签",
+      "description": {
+        "en-GB": "List file system tag",
+        "en-US": "List file system tag",
+        "zh-CN": "查询指定文件系统绑定的标签"
+      },
+      "category": "file-system",
+      "command_path": [
+        "file-system",
+        "tag",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v4/oceanfs/list-label-by-sfs",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=145&api=21771&data=200&isNormal=1&vid=279",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "sfsUID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "文件系统ID",
+          "descriptions": {
+            "en-GB": "SFS UID",
+            "en-US": "SFS UID",
+            "zh-CN": "文件系统ID"
+          },
+          "help_descriptions": {
+            "en-GB": "ID of the target OceanFS file system",
+            "en-US": "ID of the target OceanFS file system",
+            "zh-CN": "文件系统ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sfs_uid",
+          "cli_flag": "sfs-uid",
+          "table_target": "",
+          "example": "a9c7a4d6-515f-5b98-986c-c1405956957c"
+        },
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。获取： 资源池列表查询",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池ID。获取： 资源池列表查询"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool containing the file system",
+            "en-US": "Resource pool containing the file system",
+            "zh-CN": "资源池ID。获取： 资源池列表查询"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "pageNo",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "页码，取值：正整数（≥1），注：默认值为1",
+          "descriptions": {
+            "en-GB": "Page no",
+            "en-US": "Page no",
+            "zh-CN": "页码，取值：正整数（≥1），注：默认值为1"
+          },
+          "help_descriptions": {
+            "en-GB": "Page to retrieve, starting at 1",
+            "en-US": "Page to retrieve, starting at 1",
+            "zh-CN": "页码，取值：正整数（≥1），注：默认值为1"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_no",
+          "cli_flag": "page-no",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "每页记录数目，取值：[1, 50]，注：默认值为10",
+          "descriptions": {
+            "en-GB": "Page size",
+            "en-US": "Page size",
+            "zh-CN": "每页记录数目，取值：[1, 50]，注：默认值为10"
+          },
+          "help_descriptions": {
+            "en-GB": "Number of records per page, from 1 to 50",
+            "en-US": "Number of records per page, from 1 to 50",
+            "zh-CN": "每页记录数目，取值：[1, 50]，注：默认值为10"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj.labelsList",
+        "row_path": "returnObj.labelsList",
+        "default_columns": [
+          "value",
+          "key"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "value",
+            "path": "value",
+            "label_en": "Value",
+            "label_zh": "文件系统绑定的标签值"
+          },
+          {
+            "key": "key",
+            "path": "key",
+            "label_en": "Key",
+            "label_zh": "文件系统绑定的标签键"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "returnObj": {
+          "totalCount": 2,
+          "currentCount": 2,
+          "pageNo": 1,
+          "pageSize": 10,
+          "labelsList": [
+            {
+              "value": "world",
+              "key": "hi333"
+            },
+            {
+              "value": "11111222223333344444",
+              "key": "hi2222"
+            }
+          ]
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "oceanfs.file-system.list-by-tag",
+      "api_id": "21772",
+      "title": "根据标签查询文件系统",
+      "description": {
+        "en-GB": "List by tag file system",
+        "en-US": "List by tag file system",
+        "zh-CN": "根据标签查询文件系统"
+      },
+      "category": "file-system",
+      "command_path": [
+        "file-system",
+        "list-by-tag"
+      ],
+      "method": "POST",
+      "path": "/v4/oceanfs/list-sfs-by-label",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=145&api=21772&data=200&isNormal=1&vid=279",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。获取： 资源池列表查询",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池ID。获取： 资源池列表查询"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool containing the file system",
+            "en-US": "Resource pool containing the file system",
+            "zh-CN": "资源池ID。获取： 资源池列表查询"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "labelList",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "待查询的文件系统标签列表",
+          "descriptions": {
+            "en-GB": "Label list",
+            "en-US": "Label list",
+            "zh-CN": "待查询的文件系统标签列表"
+          },
+          "help_descriptions": {
+            "en-GB": "Tags to match when listing file systems",
+            "en-US": "Tags to match when listing file systems",
+            "zh-CN": "待查询的文件系统标签列表"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_list",
+          "cli_flag": "label-list",
+          "table_target": "",
+          "example": [
+            {
+              "key": "hezzzzzz",
+              "value": "llllll"
+            },
+            {
+              "key": "test_key2",
+              "value": "test_value2"
+            }
+          ]
+        },
+        {
+          "name": "pageSize",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "每页记录数目，取值：[1, 50]，注：默认值为10",
+          "descriptions": {
+            "en-GB": "Page size",
+            "en-US": "Page size",
+            "zh-CN": "每页记录数目，取值：[1, 50]，注：默认值为10"
+          },
+          "help_descriptions": {
+            "en-GB": "Number of records per page, from 1 to 50",
+            "en-US": "Number of records per page, from 1 to 50",
+            "zh-CN": "每页记录数目，取值：[1, 50]，注：默认值为10"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        },
+        {
+          "name": "pageNo",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "页码，取值：正整数（≥1），注：默认值为1",
+          "descriptions": {
+            "en-GB": "Page no",
+            "en-US": "Page no",
+            "zh-CN": "页码，取值：正整数（≥1），注：默认值为1"
+          },
+          "help_descriptions": {
+            "en-GB": "Page to retrieve, starting at 1",
+            "en-US": "Page to retrieve, starting at 1",
+            "zh-CN": "页码，取值：正整数（≥1），注：默认值为1"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_no",
+          "cli_flag": "page-no",
+          "table_target": "",
+          "example": 1
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj.sfsList",
+        "row_path": "returnObj.sfsList",
+        "default_columns": [
+          "update_time",
+          "project_id",
+          "used_size",
+          "sfs_size",
+          "vpce_share_path"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "update_time",
+            "path": "updateTime",
+            "label_en": "Update Time",
+            "label_zh": "更新时刻"
+          },
+          {
+            "key": "project_id",
+            "path": "projectID",
+            "label_en": "Project ID",
+            "label_zh": "资源所属企业项目ID"
+          },
+          {
+            "key": "used_size",
+            "path": "usedSize",
+            "label_en": "Used Size",
+            "label_zh": "文件系统已使用容量"
+          },
+          {
+            "key": "sfs_size",
+            "path": "sfsSize",
+            "label_en": "SFS Size",
+            "label_zh": "文件系统总容量"
+          },
+          {
+            "key": "vpce_share_path",
+            "path": "vpceSharePath",
+            "label_en": "VPCE Share Path",
+            "label_zh": "终端节点共享路径"
+          },
+          {
+            "key": "on_demand",
+            "path": "onDemand",
+            "label_en": "On Demand",
+            "label_zh": "付费方式"
+          },
+          {
+            "key": "region_id",
+            "path": "regionID",
+            "label_en": "Region ID",
+            "label_zh": "资源池ID"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Create Time",
+            "label_zh": "创建时刻"
+          },
+          {
+            "key": "mount_count",
+            "path": "mountCount",
+            "label_en": "Mount Count",
+            "label_zh": "文件系统绑定的VPC数量"
+          },
+          {
+            "key": "sfs_type",
+            "path": "sfsType",
+            "label_en": "SFS Type",
+            "label_zh": "存储类型"
+          },
+          {
+            "key": "expire_time",
+            "path": "expireTime",
+            "label_en": "Expire Time",
+            "label_zh": "过期时刻"
+          },
+          {
+            "key": "sfs_protocol",
+            "path": "sfsProtocol",
+            "label_en": "SFS Protocol",
+            "label_zh": "协议类型"
+          },
+          {
+            "key": "az_name",
+            "path": "azName",
+            "label_en": "AZ Name",
+            "label_zh": "多可用区下可用区的名字"
+          },
+          {
+            "key": "ceph_id",
+            "path": "cephID",
+            "label_en": "Ceph ID",
+            "label_zh": "监控实例ID"
+          },
+          {
+            "key": "sfs_uid",
+            "path": "sfsUID",
+            "label_en": "SFS UID",
+            "label_zh": "文件系统ID"
+          },
+          {
+            "key": "sfs_status",
+            "path": "sfsStatus",
+            "label_en": "SFS Status",
+            "label_zh": "文件系统状态"
+          },
+          {
+            "key": "sfs_name",
+            "path": "sfsName",
+            "label_en": "SFS Name",
+            "label_zh": "文件系统名称"
+          },
+          {
+            "key": "protect_switch",
+            "path": "protectSwitch",
+            "label_en": "Protect Switch",
+            "label_zh": "是否开启目的文件系统复制覆盖保护"
+          },
+          {
+            "key": "used_size_charge_legacy",
+            "path": "used_size_charge",
+            "label_en": "Usage Billing (Underscore Field)",
+            "label_zh": "按使用量计费（下划线字段）"
+          },
+          {
+            "key": "used_size_charge",
+            "path": "usedSizeCharge",
+            "label_en": "Used Size Charge",
+            "label_zh": "是否为按实际使用量计费的文件系统"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "labelList": [
+          {
+            "key": "hezzzzzz",
+            "value": "llllll"
+          },
+          {
+            "key": "test_key2",
+            "value": "test_value2"
+          }
+        ],
+        "regionID": "81f7728662dd11ec810800155d307d5b"
+      },
+      "example_response": {
+        "returnObj": {
+          "currentCount": 1,
+          "totalCount": 1,
+          "sfsList": [
+            {
+              "updateTime": 1671076697000,
+              "projectID": "0",
+              "usedSize": 33,
+              "sfsSize": 500,
+              "vpceSharePath": [
+                {
+                  "vpcID": "vpc-66jrjem533",
+                  "windowsSharePathV6": "",
+                  "windowsSharePath": "",
+                  "vpcName": "vpc-tzbtest",
+                  "sharePath": "192.xxx.x.x:/mnt/sfs_mass/a7135589f022439c1edefc74b9336f7a_5czqobzhm0d4rjbx",
+                  "sharePathV6": "",
+                  "endpointID": "endpoint-skdflewjfs"
+                }
+              ],
+              "onDemand": true,
+              "regionID": "81f7728662dd11ec810800155d307d5b",
+              "createTime": 1670809851000,
+              "sharePath": "100.127.155.200:/mnt/sfs_mass/a7135589f022439c1edefc74b9336f7a_5czqobzhm0d4rjbx",
+              "mountCount": 0,
+              "sfsType": "massive",
+              "windowsSharePath": "",
+              "expireTime": 32503737600000,
+              "sfsProtocol": "nfs",
+              "azName": "az1",
+              "cephID": "5czqobzhm0d4rjbx",
+              "sfsUID": "e1a18059-83fe-5426-83b9-2cd0924cf6b0",
+              "sharePathV6": "",
+              "sfsStatus": "available",
+              "windowsSharePathV6": "",
+              "sfsName": "oceanfs-yyx-03",
+              "protectSwitch": true,
+              "used_size_charge": false,
+              "usedSizeCharge": false
+            }
+          ],
+          "pageSize": 10,
+          "pageNo": 1
         },
         "message": "SUCCESS",
         "description": "成功",

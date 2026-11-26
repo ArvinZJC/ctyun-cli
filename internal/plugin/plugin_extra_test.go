@@ -11,6 +11,8 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"slices"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -272,6 +274,7 @@ func TestValidateOperationsTablesAndWaitersRejectMissingShapes(t *testing.T) {
 	}
 }
 
+// TestCommandMatchingHelpersSupportArgumentsAndPrefixes checks exact, partial and positional paths.
 func TestCommandMatchingHelpersSupportArgumentsAndPrefixes(t *testing.T) {
 	bundle := Bundle{Commands: Commands{Commands: []Command{{
 		ID:    "ims.image.show",
@@ -286,6 +289,18 @@ func TestCommandMatchingHelpersSupportArgumentsAndPrefixes(t *testing.T) {
 	command, args, rest, ok := FindCommandPrefixWithArgs(bundle, []string{"ims", "image", "show", "img-4", "--name", "base"})
 	if !ok || command.ID != "ims.image.show" || args["imageID"] != "img-4" || strings.Join(rest, " ") != "--name base" {
 		t.Fatalf("FindCommandPrefixWithArgs direct path = %#v %#v %#v %v", command, args, rest, ok)
+	}
+	ancestor := Command{ID: "images", Path: []string{"ims", "image"}}
+	leaf := bundle.Commands.Commands[0]
+	for _, ordered := range [][]Command{{ancestor, leaf}, {leaf, ancestor}} {
+		candidates := Bundle{Commands: Commands{Commands: ordered}}
+		for _, suffix := range [][]string{nil, {"--name", "base"}} {
+			path := append([]string{"ims", "image", "show", "-id"}, suffix...)
+			got, values, tail, found := FindCommandPrefixWithArgs(candidates, path)
+			if !found || got.ID != leaf.ID || values["imageID"] != "-id" || !slices.Equal(tail, suffix) {
+				t.Fatalf("matched %v as %q, arguments %v, remaining %v", path, got.ID, values, tail)
+			}
+		}
 	}
 	if _, _, _, ok := FindCommandPrefixWithArgs(bundle, []string{"ims", "image"}); ok {
 		t.Fatal("FindCommandPrefixWithArgs matched incomplete path")
@@ -714,5 +729,16 @@ func closeTestResource(t *testing.T, name string, close func() error) {
 
 	if err := close(); err != nil {
 		t.Fatalf("close %s: %v", name, err)
+	}
+}
+
+// TestWaitIntervalRepresentableSeconds rejects an interval that would cause immediate repolling.
+func TestWaitIntervalRepresentableSeconds(t *testing.T) {
+	n, err := strconv.Atoi("9223372037")
+	if err != nil {
+		t.Skip("platform int is narrower than the duration boundary")
+	}
+	if err := validateWaiters(Waiters{Waiters: map[string]Waiter{"w": {IntervalSeconds: n}}}); err == nil {
+		t.Fatal("accepted overflowing polling interval")
 	}
 }

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.0-beta.2 - 2026-11-26
+
+### Fixed
+
+- Remove the deprecation warning when creating a domain with `ctyun cdn domain create --action 1`. Only modification with `--action 2` is scheduled for shutdown. Use `ctyun cdn domain update` to modify a domain.
+
 ## 0.1.0-beta.1 - 2026-10-10
 
 ### Added

@@ -70,7 +70,7 @@ func TestReviewDraftRejectsInvalidPublishedExample(t *testing.T) {
 	catalog := loadCatalogFixture(t)
 	writeCatalogAndGenerateDraft(t, workspace, "ecs", catalog)
 	commands := readJSONFile[plugin.Commands](t, workspace.ProductPath("ecs", "draft", "commands.json"))
-	commands.Commands[0].Examples[0] = "ctyun ecs instance list --unknown value"
+	commands.Commands[0].Examples = []string{"ctyun ecs instance list --unknown value", "ctyun  ecs instance 'list'"}
 	if err := writeJSON(workspace.ProductPath("ecs", "draft", "commands.json"), commands); err != nil {
 		t.Fatal(err)
 	}
@@ -81,17 +81,43 @@ func TestReviewDraftRejectsInvalidPublishedExample(t *testing.T) {
 	if report.Ready {
 		t.Fatalf("review accepted invalid example: %#v", report)
 	}
-	found := false
-	for _, finding := range report.Findings {
-		if slices.Contains([]string{finding}, "command ecs.instance.list example is invalid: unknown example option --unknown") {
-			found = true
+	for _, want := range []string{
+		"command ecs.instance.list example is invalid: unknown example option --unknown",
+		"command ecs.instance.list example only repeats the command path",
+	} {
+		if !slices.Contains(report.Findings, want) {
+			t.Errorf("missing finding %q in %#v", want, report.Findings)
 		}
-	}
-	if !found {
-		t.Fatalf("review findings = %#v", report.Findings)
 	}
 	if _, err := os.Stat(workspace.ProductPath("ecs", "review.md")); err != nil {
 		t.Fatalf("review report not written: %v", err)
+	}
+}
+
+// TestReviewChecksPublishedDescriptions preserves human edits while checking
+// the descriptions actually rendered by each locale of the draft.
+func TestReviewChecksPublishedDescriptions(t *testing.T) {
+	workspace := Workspace{Root: t.TempDir()}
+	writeCatalogAndGenerateDraft(t, workspace, "ecs", loadCatalogFixture(t))
+	for language, description := range map[string]string{
+		"en-US": "ECS instance list",
+		"en-GB": "List cloud servers in this resource pool",
+		"zh-CN": "",
+	} {
+		path := workspace.ProductPath("ecs", "draft", "i18n", language+".json")
+		entries := readJSONFile[map[string]string](t, path)
+		entries["command.ecs.instance.list.description"] = description
+		if err := writeJSON(path, entries); err != nil {
+			t.Fatal(err)
+		}
+	}
+	report, err := workspace.ReviewDraft("ecs")
+	want := []string{
+		"operation v4.ecs.instance.list description en-US is a title-cased command path",
+		"operation v4.ecs.instance.list description zh-CN is missing",
+	}
+	if err != nil || report.Ready || !slices.Equal(report.Findings, want) {
+		t.Fatalf("review = %#v, %v; want %v", report, err, want)
 	}
 }
 

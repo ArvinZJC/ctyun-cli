@@ -18,7 +18,7 @@ import (
 // TestReviewRejectsExecutionDrift prevents promotion from certifying requests
 // that differ from their tracked source while preserving the accepted baseline.
 func TestReviewRejectsExecutionDrift(t *testing.T) {
-	for _, name := range []string{"path", "method", "binding", "retryable", "accepted status", "missing APIs", "parameter", "endpoint", "JSON fixture", "missing JSON fixture"} {
+	for _, name := range []string{"path", "method", "binding", "retryable", "accepted status", "missing APIs", "parameter", "endpoint", "JSON fixture", "missing JSON fixture", "JSON table row path"} {
 		t.Run(name, func(t *testing.T) {
 			workspace := Workspace{Root: t.TempDir()}
 			writeCatalogAndGenerateDraft(t, workspace, "ecs", loadCatalogFixture(t))
@@ -80,6 +80,16 @@ func TestReviewRejectsExecutionDrift(t *testing.T) {
 				}
 				manifest.API.EndpointURL = "https://unreviewed.example.com"
 				if err := writeJSON(path, manifest); err != nil {
+					t.Fatal(err)
+				}
+			}
+			if name == "JSON table row path" {
+				path := workspace.ProductPath("ecs", "draft", "tables.json")
+				tables := readJSONFile[plugin.Tables](t, path)
+				table := tables.Tables["ecs.instance.list"]
+				table.RowPath = "returnObj.unreviewedRows"
+				tables.Tables["ecs.instance.list"] = table
+				if err := writeJSON(path, tables); err != nil {
 					t.Fatal(err)
 				}
 			}

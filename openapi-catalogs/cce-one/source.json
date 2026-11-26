@@ -4211,16 +4211,16 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "集群服务商/集群具体类型 枚举：serviceProvider",
+          "description": "集群服务商/集群具体类型，枚举：serviceProvider。各取值对应的集群类型见该枚举",
           "descriptions": {
             "en-GB": "Service Provider",
             "en-US": "Service Provider",
-            "zh-CN": "集群服务商/集群具体类型 枚举：serviceProvider"
+            "zh-CN": "集群服务商/集群具体类型，枚举：serviceProvider。各取值对应的集群类型见该枚举"
           },
           "help_descriptions": {
             "en-GB": "Service Provider",
             "en-US": "Service Provider",
-            "zh-CN": "集群服务商/集群具体类型 枚举：serviceProvider"
+            "zh-CN": "集群服务商/集群具体类型，枚举：serviceProvider。各取值对应的集群类型见该枚举"
           },
           "profile": "",
           "argument": "",
@@ -4233,26 +4233,29 @@
           "name": "instLabels",
           "location": "body",
           "required": false,
-          "type": "String",
+          "type": "Map of String",
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "集群标签，格式为[{\\\"key\\\":\\\"key1\\\",\\\"value\\\":\\\"val1\\\"}]",
+          "description": "集群标签，key为标签名，value为标签值",
           "descriptions": {
             "en-GB": "Instance Labels",
             "en-US": "Instance Labels",
-            "zh-CN": "集群标签，格式为[{\\\"key\\\":\\\"key1\\\",\\\"value\\\":\\\"val1\\\"}]"
+            "zh-CN": "集群标签，key为标签名，value为标签值"
           },
           "help_descriptions": {
             "en-GB": "Instance Labels",
             "en-US": "Instance Labels",
-            "zh-CN": "集群标签，格式为[{\\\"key\\\":\\\"key1\\\",\\\"value\\\":\\\"val1\\\"}]"
+            "zh-CN": "集群标签，key为标签名，value为标签值"
           },
           "profile": "",
           "argument": "",
           "cli_name": "inst_labels",
           "cli_flag": "inst-labels",
-          "table_target": ""
+          "table_target": "",
+          "example": {
+            "key1": "val1"
+          }
         },
         {
           "name": "deletionProtection",
@@ -4308,6 +4311,27 @@
           "cli_flag": "project-id",
           "table_target": "",
           "example": "ca5cd2ea34694de08c66cf039c63a333"
+        },
+        {
+          "name": "channelId",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "管控通道ID。仅在创建Anywhere受控模式（instanceType为anywhere且serviceProvider为62）时生效，其他场景请勿填写。可通过查询管控通道接口 GET /v1/clusters/cloudEdgeChannels 获取可用的管控通道ID",
+          "descriptions": {
+            "en-GB": "Channel ID",
+            "en-US": "Channel ID",
+            "zh-CN": "管控通道ID。仅在创建Anywhere受控模式（instanceType为anywhere且serviceProvider为62）时生效，其他场景请勿填写。可通过查询管控通道接口 GET /v1/clusters/cloudEdgeChannels 获取可用的管控通道ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "channel_id",
+          "cli_flag": "channel-id",
+          "table_target": "",
+          "example": "1891792064037486592"
         }
       ],
       "response": {
@@ -4363,7 +4387,6 @@
         "enableApiServerEip": false,
         "enableIpv6": false,
         "fleetId": "1910260480454926336",
-        "instLabels": "[{\"key\":\"key1\",\"value\":\"val1\"}]",
         "instanceType": "thirdcloud",
         "projectId": "ca5cd2ea34694de08c66cf039c63a333",
         "securityGroupUuid": "",
@@ -4637,26 +4660,29 @@
           "name": "instLabels",
           "location": "body",
           "required": false,
-          "type": "String",
+          "type": "Map of String",
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "集群标签，格式为[{\\\"key\\\":\\\"key1\\\",\\\"value\\\":\\\"val1\\\"}]",
+          "description": "集群标签，key为标签名，value为标签值",
           "descriptions": {
             "en-GB": "Instance Labels",
             "en-US": "Instance Labels",
-            "zh-CN": "集群标签，格式为[{\\\"key\\\":\\\"key1\\\",\\\"value\\\":\\\"val1\\\"}]"
+            "zh-CN": "集群标签，key为标签名，value为标签值"
           },
           "help_descriptions": {
             "en-GB": "Instance Labels",
             "en-US": "Instance Labels",
-            "zh-CN": "集群标签，格式为[{\\\"key\\\":\\\"key1\\\",\\\"value\\\":\\\"val1\\\"}]"
+            "zh-CN": "集群标签，key为标签名，value为标签值"
           },
           "profile": "",
           "argument": "",
           "cli_name": "inst_labels",
           "cli_flag": "inst-labels",
-          "table_target": ""
+          "table_target": "",
+          "example": {
+            "key1": "val1"
+          }
         },
         {
           "name": "deletionProtection",
@@ -4795,7 +4821,6 @@
         ],
         "deletionProtection": true,
         "fleetId": "1910260480454926336",
-        "instLabels": "[{\"key\":\"key1\",\"value\":\"val1\"}]",
         "projectId": "ca5cd2ea34694de08c66cf039c63a333"
       },
       "example_response": null
@@ -5042,32 +5067,6 @@
           "example": false
         },
         {
-          "name": "fleetId",
-          "location": "body",
-          "required": false,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "纳管的舰队ID",
-          "descriptions": {
-            "en-GB": "Fleet ID",
-            "en-US": "Fleet ID",
-            "zh-CN": "纳管的舰队ID"
-          },
-          "help_descriptions": {
-            "en-GB": "Fleet ID",
-            "en-US": "Fleet ID",
-            "zh-CN": "纳管的舰队ID"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "fleet_id",
-          "cli_flag": "fleet-id",
-          "table_target": "",
-          "example": "1910260480454926336"
-        },
-        {
           "name": "billMode",
           "location": "body",
           "required": true,
@@ -5097,26 +5096,29 @@
           "name": "instLabels",
           "location": "body",
           "required": false,
-          "type": "String",
+          "type": "Map of String",
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "联邦标签，格式为[{\\\"key\\\":\\\"key1\\\",\\\"value\\\":\\\"val1\\\"}]",
+          "description": "集群标签，key为标签名，value为标签值",
           "descriptions": {
             "en-GB": "Instance Labels",
             "en-US": "Instance Labels",
-            "zh-CN": "联邦标签，格式为[{\\\"key\\\":\\\"key1\\\",\\\"value\\\":\\\"val1\\\"}]"
+            "zh-CN": "集群标签，key为标签名，value为标签值"
           },
           "help_descriptions": {
             "en-GB": "Instance Labels",
             "en-US": "Instance Labels",
-            "zh-CN": "联邦标签，格式为[{\\\"key\\\":\\\"key1\\\",\\\"value\\\":\\\"val1\\\"}]"
+            "zh-CN": "集群标签，key为标签名，value为标签值"
           },
           "profile": "",
           "argument": "",
           "cli_name": "inst_labels",
           "cli_flag": "inst-labels",
-          "table_target": ""
+          "table_target": "",
+          "example": {
+            "key1": "val1"
+          }
         },
         {
           "name": "deletionProtection",
@@ -5172,6 +5174,50 @@
           "cli_flag": "project-id",
           "table_target": "",
           "example": "ca5cd2ea34694de08c66cf039c63a333"
+        },
+        {
+          "name": "enableIpv6",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "是否启用IPv6，默认false。启用时所选子网必须已开启IPv6，否则不允许启用",
+          "descriptions": {
+            "en-GB": "Enable ipv6",
+            "en-US": "Enable ipv6",
+            "zh-CN": "是否启用IPv6，默认false。启用时所选子网必须已开启IPv6，否则不允许启用"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "enable_ipv6",
+          "cli_flag": "enable-ipv6",
+          "table_target": "",
+          "example": false
+        },
+        {
+          "name": "fleetIds",
+          "location": "body",
+          "required": false,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "待纳管的舰队ID列表",
+          "descriptions": {
+            "en-GB": "Fleet IDs",
+            "en-US": "Fleet IDs",
+            "zh-CN": "待纳管的舰队ID列表"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "fleet_ids",
+          "cli_flag": "fleet-ids",
+          "table_target": "",
+          "example": [
+            "1910260480454926336"
+          ]
         }
       ],
       "response": {
@@ -5225,8 +5271,6 @@
         "deletionProtection": true,
         "enableApiServerEip": false,
         "federationName": "cceone-fed-openapi-test",
-        "fleetId": "1910260480454926336",
-        "instLabels": "[{\"key\":\"key1\",\"value\":\"val1\"}]",
         "projectId": "ca5cd2ea34694de08c66cf039c63a333",
         "subnetUuid": "subnet-glroa4frlh",
         "vpcUuid": "vpc-6vevty5k72"

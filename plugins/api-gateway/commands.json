@@ -1429,13 +1429,14 @@
           "flag": "order-detail-json",
           "target": "orderDetailJson",
           "required": true,
+          "value_type": "json",
           "description": "orderDetailJson containing serialized JSON"
         }
       ],
       "fixture_response": "fixtures/api-gateway-order-create.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=81&vid=31&data=31&api=1711&isNormal=1",
       "examples": [
-        "ctyun api-gateway order create --order-detail-json {order_detail_json}"
+        "ctyun api-gateway order create --order-detail-json '{\"value\":\"{order_detail_json}\"}'"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -1473,6 +1474,21 @@
           "target": "agencyReplaceId",
           "required": false,
           "description": "Agency Replace ID"
+        },
+        {
+          "name": "if_return_adjustment_label",
+          "flag": "if-return-adjustment-label",
+          "target": "ifReturnAdjustmentLabel",
+          "required": false,
+          "value_type": "boolean",
+          "description": "If return adjustment label"
+        },
+        {
+          "name": "payment_page",
+          "flag": "payment-page",
+          "target": "paymentPage",
+          "required": false,
+          "description": "Payment page"
         }
       ],
       "fixture_response": "fixtures/api-gateway-order-show.json",
@@ -2036,14 +2052,6 @@
           "target": "masterOrderId",
           "required": true,
           "description": "Master Order ID"
-        },
-        {
-          "name": "custom_info",
-          "flag": "custom-info",
-          "target": "customInfo",
-          "required": false,
-          "value_type": "json",
-          "description": "Customer context as JSON; omit it to use the signed-in customer identity"
         }
       ],
       "fixture_response": "fixtures/api-gateway-order-revoke.json",
@@ -2228,13 +2236,14 @@
           "flag": "order-detail-json",
           "target": "orderDetailJson",
           "required": true,
+          "value_type": "json",
           "description": "orderDetailJson containing serialized JSON"
         }
       ],
       "fixture_response": "fixtures/api-gateway-order-on-demand-create.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=81&vid=31&data=31&api=913&isNormal=1",
       "examples": [
-        "ctyun api-gateway order on-demand create --order-detail-json {order_detail_json}"
+        "ctyun api-gateway order on-demand create --order-detail-json '{\"value\":\"{order_detail_json}\"}'"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -2454,14 +2463,16 @@
           "name": "custom_info",
           "flag": "custom-info",
           "target": "customInfo",
-          "required": false,
+          "required": true,
           "value_type": "json",
           "description": "Customer context as JSON; omit it to use the signed-in customer identity"
         }
       ],
       "fixture_response": "fixtures/api-gateway-account-show.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=81&vid=31&data=31&api=2133&isNormal=1",
-      "examples": null,
+      "examples": [
+        "ctyun api-gateway account show --custom-info '{\"value\":\"{custom_info}\"}'"
+      ],
       "dangerous": {
         "confirm": ""
       }
@@ -2482,13 +2493,14 @@
           "flag": "order-detail-json",
           "target": "orderDetailJson",
           "required": true,
+          "value_type": "json",
           "description": "orderDetailJson containing serialized JSON"
         }
       ],
       "fixture_response": "fixtures/api-gateway-order-trial-create.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=81&vid=31&data=31&api=2131&isNormal=1",
       "examples": [
-        "ctyun api-gateway order trial create --order-detail-json {order_detail_json}"
+        "ctyun api-gateway order trial create --order-detail-json '{\"value\":\"{order_detail_json}\"}'"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -5573,13 +5585,14 @@
           "flag": "order-detail-json",
           "target": "orderDetailJson",
           "required": true,
+          "value_type": "json",
           "description": "Order Detail Json"
         }
       ],
       "fixture_response": "fixtures/api-gateway-order-item-price.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=81&vid=31&data=31&api=3276&isNormal=1",
       "examples": [
-        "ctyun api-gateway order item-price --order-detail-json {order_detail_json}"
+        "ctyun api-gateway order item-price --order-detail-json '{\"value\":\"{order_detail_json}\"}'"
       ],
       "dangerous": {
         "confirm": ""
@@ -5725,13 +5738,14 @@
           "flag": "order-detail-json",
           "target": "orderDetailJson",
           "required": true,
+          "value_type": "json",
           "description": "Order Detail Json"
         }
       ],
       "fixture_response": "fixtures/api-gateway-order-multi-item-upgrade.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=81&vid=31&data=31&api=3285&isNormal=1",
       "examples": [
-        "ctyun api-gateway order multi-item upgrade --order-detail-json {order_detail_json}"
+        "ctyun api-gateway order multi-item upgrade --order-detail-json '{\"value\":\"{order_detail_json}\"}'"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -6769,6 +6783,35 @@
       "fixture_response": "fixtures/api-gateway-security-group-rule-list.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=81&vid=31&data=31&api=1763&isNormal=1",
       "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "api-gateway.vm.order.price",
+      "path": [
+        "api-gateway",
+        "vm",
+        "order",
+        "price"
+      ],
+      "operation": "api-gateway.vm.order.price",
+      "table": "api-gateway.vm.order.price",
+      "parameters": [
+        {
+          "name": "order_detail_json",
+          "flag": "order-detail-json",
+          "target": "orderDetailJson",
+          "required": true,
+          "value_type": "json",
+          "description": "Order details as a JSON object. Use the VMS service tag for self-operated items and select one primary item."
+        }
+      ],
+      "fixture_response": "fixtures/api-gateway-vm-order-price.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=81&vid=31&data=31&api=1984&isNormal=1",
+      "examples": [
+        "ctyun api-gateway vm order price --order-detail-json '{\"value\":\"{order_detail_json}\"}'"
+      ],
       "dangerous": {
         "confirm": ""
       }

@@ -10,6 +10,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -18,14 +19,15 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
-// TestAPIGatewayFormJSONBindings preserves the two published form contracts:
-// already serialized JSON strings and object fields serialized exactly once.
+// TestAPIGatewayFormJSONBindings verifies that form fields carry one JSON
+// document and preserve nested order items and special characters.
 func TestAPIGatewayFormJSONBindings(t *testing.T) {
 	for _, tc := range []struct {
 		name, path, field, value string
 		args                     []string
 	}{
-		{"order string", "/v3/order/placeNewPurchaseOrder", "orderDetailJson", `{"orders":[],"note":"a&b+中文"}`, []string{"order", "create", "--order-detail-json", `{"orders":[],"note":"a&b+中文"}`}},
+		{"order creation", "/v3/order/placeNewPurchaseOrder", "orderDetailJson", `{"orders":[],"note":"a&b+中文"}`, []string{"order", "create", "--order-detail-json", `{"orders":[],"note":"a&b+中文"}`}},
+		{"VM price", "/v4/order/vm/queryNewPurchaseOrderPrice", "orderDetailJson", `{"orders":[{"items":[{"serviceTag":"VMS","master":true}]}]}`, []string{"vm", "order", "price", "--order-detail-json", `{"orders":[{"items":[{"serviceTag":"VMS","master":true}]}]}`}},
 		{"rule object", "/v3/createSecurityGroupRule", "jsonStr", `{"iptype":"IPv4","regionId":"self-operated-test"}`, []string{"security-group", "rule", "create", "--json-str", `{"iptype":"IPv4","regionId":"self-operated-test"}`}},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
@@ -51,18 +53,13 @@ func TestAPIGatewayFormJSONBindings(t *testing.T) {
 				if err := json.Unmarshal([]byte(tc.value), &expected); err != nil {
 					t.Fatal(err)
 				}
-				for key, value := range expected {
-					if key == "orders" {
-						continue
-					}
-					if decoded[key] != value {
-						t.Fatalf("field %s changed: %#v", key, decoded)
-					}
+				if !reflect.DeepEqual(decoded, expected) {
+					t.Fatalf("decoded form field = %#v, want %#v", decoded, expected)
 				}
 				if len(values) != 1 {
 					t.Fatalf("unexpected form fields: %v", values)
 				}
-				return &http.Response{StatusCode: 200, Header: http.Header{"Content-Type": []string{"application/json"}}, Body: io.NopCloser(strings.NewReader(`{"statusCode":800,"returnObj":{"submitted":true}}`))}, nil
+				return &http.Response{StatusCode: 200, Header: http.Header{"Content-Type": []string{"application/json"}}, Body: io.NopCloser(strings.NewReader(`{"statusCode":800,"returnObj":{"submitted":true,"isSucceed":true}}`))}, nil
 			})
 			args := append([]string{"--yes", "api-gateway"}, tc.args...)
 			err := cli.Run(cli.Config{Args: args, Stdout: io.Discard, Stderr: io.Discard, PluginRoot: t.TempDir(), HTTPTransport: transport, Env: func(k string) string { return map[string]string{"CTYUN_AK": "test-ak", "CTYUN_SK": "test-sk"}[k] }})

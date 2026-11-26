@@ -2531,6 +2531,20 @@
           "required": true,
           "value_type": "integer",
           "description": "Execution Timeout"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectId",
+          "required": false,
+          "description": "Project ID"
+        },
+        {
+          "name": "project_name",
+          "flag": "project-name",
+          "target": "projectName",
+          "required": false,
+          "description": "Project name"
         }
       ],
       "fixture_response": "fixtures/cf-workflow-create.json",
@@ -2681,6 +2695,20 @@
           "target": "regionId",
           "required": false,
           "description": "Region ID"
+        },
+        {
+          "name": "label_ids",
+          "flag": "label-ids",
+          "target": "labelIds",
+          "required": false,
+          "description": "Label IDs"
+        },
+        {
+          "name": "project_ids",
+          "flag": "project-ids",
+          "target": "projectIds",
+          "required": false,
+          "description": "Project IDs"
         }
       ],
       "fixture_response": "fixtures/cf-workflow-list.json",
@@ -2727,6 +2755,13 @@
           "target": "input",
           "required": true,
           "description": "Input"
+        },
+        {
+          "name": "qualifier",
+          "flag": "qualifier",
+          "target": "qualifier",
+          "required": false,
+          "description": "Qualifier"
         }
       ],
       "fixture_response": "fixtures/cf-execution-start-sync.json",
@@ -2776,6 +2811,13 @@
           "target": "input",
           "required": true,
           "description": "Input"
+        },
+        {
+          "name": "qualifier",
+          "flag": "qualifier",
+          "target": "qualifier",
+          "required": false,
+          "description": "Qualifier"
         }
       ],
       "fixture_response": "fixtures/cf-execution-start.json",
@@ -3107,6 +3149,293 @@
       "dangerous": {
         "confirm": "yes",
         "message": "stop"
+      }
+    },
+    {
+      "id": "cf.workflow.schedule.list",
+      "path": [
+        "cf",
+        "workflow",
+        "schedule",
+        "list"
+      ],
+      "operation": "cf.workflow.schedule.list",
+      "table": "cf.workflow.schedule.list",
+      "parameters": [
+        {
+          "name": "workflow_id",
+          "flag": "workflow-id",
+          "target": "workflowId",
+          "required": true,
+          "description": "Workflow ID"
+        },
+        {
+          "name": "trigger_name",
+          "flag": "trigger-name",
+          "target": "triggerName",
+          "required": false,
+          "description": "Trigger name"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page num"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page size"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/cf-workflow-schedule-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=53&api=21285&data=42&isNormal=1&vid=40",
+      "examples": [
+        "ctyun cf workflow schedule list --workflow-id {workflow_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cf.workflow.schedule.create",
+      "path": [
+        "cf",
+        "workflow",
+        "schedule",
+        "create"
+      ],
+      "operation": "cf.workflow.schedule.create",
+      "table": "cf.workflow.schedule.create",
+      "parameters": [
+        {
+          "name": "workflow_id",
+          "flag": "workflow-id",
+          "target": "workflowId",
+          "required": true,
+          "description": "Workflow ID"
+        },
+        {
+          "name": "trigger_name",
+          "flag": "trigger-name",
+          "target": "triggerName",
+          "required": true,
+          "description": "Trigger name"
+        },
+        {
+          "name": "trigger_type",
+          "flag": "trigger-type",
+          "target": "triggerType",
+          "required": true,
+          "description": "Trigger type"
+        },
+        {
+          "name": "trigger_config",
+          "flag": "trigger-config",
+          "target": "triggerConfig",
+          "required": true,
+          "description": "Trigger config"
+        },
+        {
+          "name": "enable",
+          "flag": "enable",
+          "target": "enable",
+          "required": false,
+          "value_type": "boolean",
+          "description": "Enable"
+        },
+        {
+          "name": "qualifier",
+          "flag": "qualifier",
+          "target": "qualifier",
+          "required": false,
+          "description": "Qualifier"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/cf-workflow-schedule-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=53&api=21286&data=42&isNormal=1&vid=40",
+      "examples": [
+        "ctyun cf workflow schedule create --workflow-id {{workflowId}} --trigger-name {{triggerName}} --trigger-type schedule --trigger-config '{\"cronExpr\": \"0 0 3 * * *\",\"data\": \"{\\\"key\\\":\\\"value\\\"}\"}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "cf.workflow.schedule.update",
+      "path": [
+        "cf",
+        "workflow",
+        "schedule",
+        "update"
+      ],
+      "operation": "cf.workflow.schedule.update",
+      "table": "cf.workflow.schedule.update",
+      "parameters": [
+        {
+          "name": "workflow_id",
+          "flag": "workflow-id",
+          "target": "workflowId",
+          "required": true,
+          "description": "Workflow ID"
+        },
+        {
+          "name": "trigger_name",
+          "flag": "trigger-name",
+          "target": "triggerName",
+          "required": true,
+          "description": "Trigger name"
+        },
+        {
+          "name": "trigger_type",
+          "flag": "trigger-type",
+          "target": "triggerType",
+          "required": true,
+          "description": "Trigger type"
+        },
+        {
+          "name": "trigger_config",
+          "flag": "trigger-config",
+          "target": "triggerConfig",
+          "required": true,
+          "description": "Trigger config"
+        },
+        {
+          "name": "enable",
+          "flag": "enable",
+          "target": "enable",
+          "required": false,
+          "value_type": "boolean",
+          "description": "Enable"
+        },
+        {
+          "name": "qualifier",
+          "flag": "qualifier",
+          "target": "qualifier",
+          "required": false,
+          "description": "Qualifier"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/cf-workflow-schedule-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=53&api=21287&data=42&isNormal=1&vid=40",
+      "examples": [
+        "ctyun cf workflow schedule update --workflow-id {{workflowId}} --trigger-name gray-trigger-001 --trigger-type schedule --trigger-config '{\"cronExpr\": \"0 0 4 * * *\",\"data\": \"{\\\"key\\\":\\\"value\\\"}\"}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "cf.workflow.schedule.delete",
+      "path": [
+        "cf",
+        "workflow",
+        "schedule",
+        "delete"
+      ],
+      "operation": "cf.workflow.schedule.delete",
+      "table": "cf.workflow.schedule.delete",
+      "parameters": [
+        {
+          "name": "workflow_id",
+          "flag": "workflow-id",
+          "target": "workflowId",
+          "required": true,
+          "description": "Workflow ID"
+        },
+        {
+          "name": "trigger_name",
+          "flag": "trigger-name",
+          "target": "triggerName",
+          "required": true,
+          "description": "Trigger name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/cf-workflow-schedule-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=53&api=21288&data=42&isNormal=1&vid=40",
+      "examples": [
+        "ctyun cf workflow schedule delete --workflow-id {workflow_id} --trigger-name {trigger_name}"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "cf.workflow.schedule.show",
+      "path": [
+        "cf",
+        "workflow",
+        "schedule",
+        "show"
+      ],
+      "operation": "cf.workflow.schedule.show",
+      "table": "cf.workflow.schedule.show",
+      "parameters": [
+        {
+          "name": "workflow_id",
+          "flag": "workflow-id",
+          "target": "workflowId",
+          "required": true,
+          "description": "Workflow ID"
+        },
+        {
+          "name": "trigger_name",
+          "flag": "trigger-name",
+          "target": "triggerName",
+          "required": true,
+          "description": "Trigger name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/cf-workflow-schedule-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=53&api=22224&data=42&isNormal=1&vid=40",
+      "examples": [
+        "ctyun cf workflow schedule show --workflow-id {workflow_id} --trigger-name {trigger_name}"
+      ],
+      "dangerous": {
+        "confirm": ""
       }
     }
   ]

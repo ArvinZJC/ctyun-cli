@@ -39,6 +39,36 @@ func transportFixture(t *testing.T, format, body string, status int) (plugin.Bun
 	return plugin.Bundle{Dir: dir, Manifest: plugin.Manifest{API: plugin.APIInfo{EndpointURL: "https://example.test"}}, APIs: plugin.APIs{Operations: map[string]plugin.Operation{"show": operation}}, Tables: plugin.Tables{Tables: map[string]plugin.Table{"show": table}}}, command
 }
 
+// TestFormRequestUsesSelectedRegion checks the region sent by explicit form commands.
+func TestFormRequestUsesSelectedRegion(t *testing.T) {
+	bundle, command := transportFixture(t, "json", "{}", 200)
+	command.Parameters = []plugin.Parameter{{Name: "region", Flag: "region", Target: "regionId"}}
+	bundle.APIs.Operations[command.Operation] = plugin.Operation{
+		Method: "POST", Path: "/form", Body: map[string]string{"regionId": "$profile.region"},
+		Request: &apicontract.Request{Encoding: "form"},
+	}
+	for _, tc := range []struct{ profile, option, want string }{
+		{"configured", "", "configured"},
+		{"configured", "selected", "selected"},
+		{"", "selected", "selected"},
+	} {
+		transport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
+			if got := req.PostFormValue("regionId"); got != tc.want {
+				t.Errorf("profile=%q option=%q sent regionId=%q, want %q", tc.profile, tc.option, got, tc.want)
+			}
+			if err := req.Body.Close(); err != nil {
+				t.Fatal(err)
+			}
+			return &http.Response{StatusCode: 200, Body: io.NopCloser(strings.NewReader(`{"statusCode":800}`))}, nil
+		})
+		_, err := executeAPICommand(bundle, command, nil, map[string]string{"region": tc.option},
+			coreconfig.Profile{Region: tc.profile}, regionTestCredentials, transport, io.Discard, nil, "en-US")
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+}
+
 // TestTransportFixtureOutput preserves response bytes and validates before file publication.
 func TestTransportFixtureOutput(t *testing.T) {
 	for _, tc := range []struct {
@@ -333,7 +363,7 @@ func TestInstalledTransportCommandDispatch(t *testing.T) {
 	root := t.TempDir()
 	dir := filepath.Join(root, "ims")
 	writeIMSBundleWithoutFixture(t, dir)
-	bundle, err := plugin.LoadBundle(dir, "0.5.1")
+	bundle, err := plugin.LoadBundle(dir, testCoreVersion())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -361,6 +391,12 @@ func TestInstalledTransportCommandDispatch(t *testing.T) {
 	}
 	if got := completeArgs(append(append([]string{}, command.Path...), "--output", ""), root); len(got) != 3 {
 		t.Fatal(got)
+	}
+	for _, prefix := range []string{"", "--over"} {
+		args := append(append([]string{}, command.Path...), "--output-file", "result.txt", prefix)
+		got := completeArgs(args, root)
+		assertHasCompletions(t, got, "--overwrite")
+		assertNoCompletions(t, got, "--output-file")
 	}
 }
 

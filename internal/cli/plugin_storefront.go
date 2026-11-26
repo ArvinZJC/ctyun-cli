@@ -28,7 +28,7 @@ func listAvailablePlugins(stdout io.Writer, root string, source any, channel str
 	if err != nil {
 		return err
 	}
-	rows, err := availablePluginRows(root, idx.Search("", channel))
+	rows, err := availablePluginRows(root, idx.Search("", channel), opts.Language)
 	if err != nil {
 		return err
 	}
@@ -38,11 +38,11 @@ func listAvailablePlugins(stdout io.Writer, root string, source any, channel str
 // listBundledAvailablePlugins renders development bundled plugins with local
 // installation status.
 func listBundledAvailablePlugins(stdout io.Writer, root string, channel string, opts globalOptions) error {
-	idx, err := bundledPluginIndex(opts.Language)
+	idx, err := bundledPluginIndex()
 	if err != nil {
 		return err
 	}
-	rows, err := availablePluginRows(root, idx.Search("", bundledPluginChannel(channel)))
+	rows, err := availablePluginRows(root, idx.Search("", bundledPluginChannel(channel)), opts.Language)
 	if err != nil {
 		return err
 	}
@@ -51,11 +51,11 @@ func listBundledAvailablePlugins(stdout io.Writer, root string, channel string, 
 
 // searchBundledPlugins renders matching development bundled plugins.
 func searchBundledPlugins(stdout io.Writer, root string, channel, query string, opts globalOptions) error {
-	idx, err := bundledPluginIndex(opts.Language)
+	idx, err := bundledPluginIndex()
 	if err != nil {
 		return err
 	}
-	rows, err := availablePluginRows(root, idx.Search(query, bundledPluginChannel(channel)))
+	rows, err := availablePluginRows(root, idx.Search(query, bundledPluginChannel(channel)), opts.Language)
 	if err != nil {
 		return err
 	}
@@ -65,7 +65,7 @@ func searchBundledPlugins(stdout io.Writer, root string, channel, query string, 
 // listBundledPluginUpdates prints available updates from development bundled
 // plugin metadata.
 func listBundledPluginUpdates(stdout io.Writer, root string, channel string, language string) error {
-	idx, err := bundledPluginIndex(language)
+	idx, err := bundledPluginIndex()
 	if err != nil {
 		return err
 	}
@@ -74,26 +74,23 @@ func listBundledPluginUpdates(stdout io.Writer, root string, channel string, lan
 
 // bundledPluginIndex converts repo-local bundled plugins into registry-shaped
 // artifacts for development discovery.
-func bundledPluginIndex(language string) (registry.Index, error) {
+func bundledPluginIndex() (registry.Index, error) {
 	if !version.IsDevelopmentBuild() {
 		return registry.Index{}, diagnostic.New("error.bundled_dev_only")
 	}
-	dirs := pluginDirs(defaultPluginRoot())
+	dirs, err := readPluginDirs(defaultPluginRoot())
+	if err != nil {
+		return registry.Index{}, err
+	}
 	artifacts := make([]registry.Artifact, 0, len(dirs))
 	for _, dir := range dirs {
 		bundle, err := plugin.LoadBundle(dir, version.Version)
 		if err != nil {
 			return registry.Index{}, err
 		}
-		artifacts = append(artifacts, registry.Artifact{
-			Name:        bundle.Manifest.Name,
-			Product:     bundle.Manifest.API.Product,
-			DisplayName: localizedPluginText(bundle, language, "name", bundle.Manifest.Name),
-			Version:     bundle.Manifest.Version,
-			Channel:     bundle.Manifest.Channel,
-			Quality:     bundle.Manifest.Quality,
-			URL:         dir,
-		})
+		artifact := registry.ArtifactFromBundle(bundle)
+		artifact.URL = dir
+		artifacts = append(artifacts, artifact)
 	}
 	return registry.Index{Plugins: artifacts}, nil
 }
@@ -109,7 +106,7 @@ func bundledPluginChannel(channel string) string {
 
 // availablePluginRows converts registry artifacts into output rows and joins
 // installed plugin versions when available.
-func availablePluginRows(root string, artifacts []registry.Artifact) ([]map[string]string, error) {
+func availablePluginRows(root string, artifacts []registry.Artifact, language string) ([]map[string]string, error) {
 	installed, err := installedPluginVersions(root)
 	if err != nil {
 		return nil, err
@@ -118,7 +115,7 @@ func availablePluginRows(root string, artifacts []registry.Artifact) ([]map[stri
 	for _, artifact := range artifacts {
 		installedVersion := installed[artifact.Name]
 		rows = append(rows, map[string]string{
-			"name":              registryDisplayName(artifact),
+			"name":              artifact.LocalizedDisplayName(language),
 			"plugin":            artifact.Name,
 			"product":           registryProduct(artifact),
 			"version":           artifact.Version,
@@ -145,15 +142,6 @@ func installedPluginVersions(root string) (map[string]string, error) {
 		installed[bundle.Manifest.Name] = bundle.Manifest.Version
 	}
 	return installed, nil
-}
-
-// registryDisplayName returns a friendly storefront name with a stable
-// fallback for older registry indexes.
-func registryDisplayName(artifact registry.Artifact) string {
-	if artifact.DisplayName != "" {
-		return artifact.DisplayName
-	}
-	return artifact.Name
 }
 
 // registryProduct returns the CTyun product value with a stable fallback for

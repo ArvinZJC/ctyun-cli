@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.2 - 2026-11-24
+
+- Accept the unit code when retrieving download URLs.
+
 ## 0.1.0-beta.1 - 2026-10-10
 
 ### Added

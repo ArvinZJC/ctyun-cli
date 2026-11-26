@@ -11,6 +11,7 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/hex"
+	"encoding/json"
 	"errors"
 	"io"
 	"net/http"
@@ -25,6 +26,66 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/registry"
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
+
+// TestHostedStorefrontNames checks signed localized discovery and compatibility with old indexes.
+func TestHostedStorefrontNames(t *testing.T) {
+	t.Cleanup(patchVersion(testCoreVersion()))
+	index := []byte(`{"plugins":[
+		{"name":"demo","product":"paint","display_name":"Color Service","display_names":{"en-US":"Color Service","en-GB":"Colour Service","zh-CN":"色彩服务"},"version":"1.0.0","channel":"stable","quality":"reviewed","url":"demo.tar.gz"},
+		{"name":"legacy","display_name":"Legacy Title","version":"1.0.0","channel":"stable","quality":"reviewed","url":"legacy.tar.gz"},
+		{"name":"unnamed","version":"1.0.0","channel":"stable","quality":"reviewed","url":"unnamed.tar.gz"}
+	]}`)
+	key, transport := hostedPluginRegistry(t, index, nil)
+	store := t.TempDir()
+	for _, test := range []struct {
+		language, title, name string
+		args                  []string
+	}{
+		{"zh-CN", "色彩服务", "demo", []string{"list", "--available", "--filter", "名称=色彩服务"}},
+		{"en-GB", "Colour Service", "demo", []string{"list", "--available", "--filter", "name=Colour Service"}},
+		{"en-US", "Color Service", "demo", []string{"search", "色服"}},
+		{"zh-CN", "色彩服务", "demo", []string{"search", "COLOUR"}},
+		{"zh-CN", "Legacy Title", "legacy", []string{"search", "Legacy Title"}},
+		{"en-GB", "unnamed", "unnamed", []string{"search", "unnamed"}},
+	} {
+		t.Run(test.language+"/"+strings.Join(test.args, " "), func(t *testing.T) {
+			var stdout bytes.Buffer
+			args := append([]string{"--lang", test.language, "--output", "json", "plugin"}, test.args...)
+			cfg := Config{Args: args, Config: []byte("{}"), Stdout: &stdout, PluginRoot: store, HTTPTransport: transport, Env: hostedPluginEnv(key)}
+			if err := Run(cfg); err != nil {
+				t.Fatal(err)
+			}
+			var rows []map[string]string
+			if err := json.Unmarshal(stdout.Bytes(), &rows); err != nil {
+				t.Fatal(err)
+			}
+			if len(rows) != 1 || rows[0]["name"] != test.title || rows[0]["plugin"] != test.name {
+				t.Errorf("storefront rows = %v, want %q with title %q", rows, test.name, test.title)
+			}
+		})
+	}
+}
+
+// TestPluginDiscoveryDuringInstall keeps staging directories out of readers and batch targets.
+func TestPluginDiscoveryDuringInstall(t *testing.T) {
+	root := t.TempDir()
+	writeVersionedBundle(t, filepath.Join(root, "demo"), "demo", "0.1.0")
+	if _, err := os.MkdirTemp(root, ".demo-tmp-*"); err != nil {
+		t.Fatal(err)
+	}
+	writeVersionedBundle(t, filepath.Join(root, ".demo-old-1"), "demo", "0.0.1")
+	bundles, err := loadInstalledBundles(root)
+	if err != nil || len(bundles) != 1 {
+		t.Errorf("installed bundles: count=%d, error=%v", len(bundles), err)
+	}
+	targets, err := installedPluginTargets(root, nil, true)
+	if err != nil || len(targets) != 1 || targets[0].Name != "demo" {
+		t.Errorf("batch targets: %d, want just demo", len(targets))
+	}
+	if err := listPluginUpdatesFromIndex(io.Discard, root, registry.Index{}, "stable", "en-US"); err != nil {
+		t.Errorf("update check: %v", err)
+	}
+}
 
 // TestRegistryArtifactHelpersAndHTTPUtilities checks artifact paths, checksums, and HTTP helper failures.
 func TestRegistryArtifactHelpersAndHTTPUtilities(t *testing.T) {
@@ -120,7 +181,7 @@ func TestPluginReinstallBundledErrorPaths(t *testing.T) {
 
 	originalCaller := runtimeCaller
 	t.Cleanup(func() { runtimeCaller = originalCaller })
-	t.Cleanup(patchVersion("0.5.1-dev"))
+	t.Cleanup(patchVersion(testCoreVersion() + "-dev"))
 	missingRepoRoot := t.TempDir()
 	runtimeCaller = func(int) (uintptr, string, int, bool) {
 		return 0, filepath.Join(missingRepoRoot, "internal", "cli", "cli.go"), 1, true
@@ -140,6 +201,14 @@ func TestPluginReinstallBundledErrorPaths(t *testing.T) {
 	}
 	if err := reinstallBundledPlugins(io.Discard, pluginRoot, []string{"ecs"}, false, "en-US"); err == nil {
 		t.Fatal("reinstallBundledPlugins returned nil error for invalid bundled plugin")
+	}
+	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.3.0")
+	mustWrite(t, filepath.Join(bundledRoot, "ecs", "commands.json"), "{")
+	if err := reinstallBundledPlugins(io.Discard, pluginRoot, []string{"ecs"}, false, "en-US"); err == nil {
+		t.Fatal("reinstall accepted a selectable manifest with malformed commands")
+	}
+	if got, err := loadInstalledPluginForTest(pluginRoot, "ecs"); err != nil || got != "0.2.0" {
+		t.Fatalf("failed reinstall changed original version: %q, %v", got, err)
 	}
 }
 
@@ -306,7 +375,7 @@ func TestPluginRegistrySourceEdges(t *testing.T) {
 		t.Fatal("updateAllBundledPlugins returned nil error for file root")
 	}
 
-	restore := patchVersion("0.5.1-dev")
+	restore := patchVersion(testCoreVersion() + "-dev")
 	defer restore()
 	if _, err := bundledPluginSource("../bad"); err == nil {
 		t.Fatal("bundledPluginSource returned nil error for invalid name")
@@ -363,10 +432,10 @@ func TestPluginStorefrontHelperEdges(t *testing.T) {
 	if err := os.Mkdir(filepath.Join(badRoot, "broken"), 0o755); err != nil {
 		t.Fatalf("create broken plugin dir: %v", err)
 	}
-	if _, err := availablePluginRows(badRoot, []registry.Artifact{{Name: "ecs", Version: "0.1.0", Channel: "stable", Quality: "reviewed"}}); err == nil {
+	if _, err := availablePluginRows(badRoot, []registry.Artifact{{Name: "ecs", Version: "0.1.0", Channel: "stable", Quality: "reviewed"}}, "en-US"); err == nil {
 		t.Fatal("availablePluginRows returned nil error for invalid installed bundle")
 	}
-	rows, err := availablePluginRows(root, []registry.Artifact{{Name: "ecs", Version: "0.1.0", Channel: "stable", Quality: "reviewed"}, {Name: "vpc", Version: "0.2.0", Channel: "stable", Quality: "reviewed"}})
+	rows, err := availablePluginRows(root, []registry.Artifact{{Name: "ecs", Version: "0.1.0", Channel: "stable", Quality: "reviewed"}, {Name: "vpc", Version: "0.2.0", Channel: "stable", Quality: "reviewed"}}, "en-US")
 	if err != nil {
 		t.Fatalf("availablePluginRows returned error: %v", err)
 	}
@@ -447,7 +516,7 @@ func TestInstallBundledPluginsAllRequiresDevelopmentBuild(t *testing.T) {
 
 // TestInstallBundledPluginsAllInstallsDevelopmentBundles installs every synthetic development bundle and reports output failures.
 func TestInstallBundledPluginsAllInstallsDevelopmentBundles(t *testing.T) {
-	restoreVersion := patchVersion("0.5.1-dev")
+	restoreVersion := patchVersion(testCoreVersion() + "-dev")
 	defer restoreVersion()
 	repository := t.TempDir()
 	for _, name := range []string{"ecs", "region"} {
@@ -479,7 +548,7 @@ func TestInstallBundledPluginsAllInstallsDevelopmentBundles(t *testing.T) {
 
 // TestInstallBundledPluginsAllReportsBundleAndInstallErrors distinguishes invalid source metadata from destination failures.
 func TestInstallBundledPluginsAllReportsBundleAndInstallErrors(t *testing.T) {
-	restoreVersion := patchVersion("0.5.1-dev")
+	restoreVersion := patchVersion(testCoreVersion() + "-dev")
 	defer restoreVersion()
 
 	cwd, err := os.Getwd()
@@ -513,7 +582,7 @@ func TestInstallBundledPluginsAllReportsBundleAndInstallErrors(t *testing.T) {
 
 // TestPluginBundledUpdateErrorPaths propagates invalid source, destination, and update failures.
 func TestPluginBundledUpdateErrorPaths(t *testing.T) {
-	restore := patchVersion("0.5.1-dev")
+	restore := patchVersion(testCoreVersion() + "-dev")
 	defer restore()
 
 	root := t.TempDir()
@@ -695,7 +764,7 @@ func TestRegistryBundleIdentityMismatchPreservesInstallation(t *testing.T) {
 			case "quality":
 				artifact.Quality = "curated"
 			}
-			err = installVerifiedRegistryArtifact(root, distribution.Source{URL: source}, artifact, nil)
+			err = installVerifiedRegistryArtifact(root, distribution.Source{URL: source}, artifact, nil, "")
 			if err == nil || !strings.Contains(localizedError(err, "en-US"), "mismatch") {
 				t.Fatalf("mismatch error = %v", err)
 			}
@@ -718,7 +787,7 @@ func TestRegistryVerificationStagingFailurePreservesRoot(t *testing.T) {
 	source, root := t.TempDir(), t.TempDir()
 	writeVersionedBundle(t, filepath.Join(source, "bundle"), "ecs", "0.2.0")
 	t.Setenv("TMPDIR", filepath.Join(source, "missing"))
-	err := installVerifiedRegistryArtifact(root, distribution.Source{URL: source}, registry.Artifact{Name: "ecs", Version: "0.2.0", Channel: "stable", Quality: "reviewed", URL: "bundle"}, nil)
+	err := installVerifiedRegistryArtifact(root, distribution.Source{URL: source}, registry.Artifact{Name: "ecs", Version: "0.2.0", Channel: "stable", Quality: "reviewed", URL: "bundle"}, nil, "")
 	if err == nil {
 		t.Fatal("installation succeeded without staging storage")
 	}

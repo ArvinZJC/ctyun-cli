@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.3 - 2026-11-24
+
+- Wait for a network path analysis to finish or report an error on either supported detail query.
+
 ## 0.1.0-beta.2 - 2026-10-10
 
 ### Changed

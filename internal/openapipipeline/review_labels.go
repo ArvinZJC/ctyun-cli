@@ -7,12 +7,13 @@ package openapipipeline
 
 import (
 	"fmt"
+	"reflect"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
-// reviewTableLabels verifies that generated table columns preserve source
-// evidence and expose release-ready labels in every supported language.
+// reviewTableLabels verifies that tables select the source response rows and
+// columns and expose release-ready labels in every supported language.
 func reviewTableLabels(report *ReviewReport, source Catalog, commands plugin.Commands, tables plugin.Tables) {
 	commandsByOperation := make(map[string]plugin.Command, len(commands.Commands))
 	for _, command := range commands.Commands {
@@ -28,35 +29,49 @@ func reviewTableLabels(report *ReviewReport, source Catalog, commands plugin.Com
 			addReviewFinding(report, fmt.Sprintf("operation %s table %s is missing", operation.ID, command.Table))
 			continue
 		}
-		if !sameExecutionJSON(table.XML, operation.Response.XML) {
-			addReviewFinding(report, fmt.Sprintf("operation %s XML table selectors do not match source evidence", operation.ID))
-		}
-		for _, sourceColumn := range operation.Response.Columns {
-			matches := matchingTableColumns(table.Columns, sourceColumn)
-			if len(matches) == 0 {
-				addReviewFinding(report, fmt.Sprintf("operation %s response column %s has no generated table column", operation.ID, sourceColumn.Path))
-				continue
-			}
-			if len(matches) > 1 {
-				addReviewFinding(report, fmt.Sprintf("operation %s response column %s has duplicate generated table columns", operation.ID, sourceColumn.Path))
-				continue
-			}
-			reviewSourceColumnLabels(report, operation.ID, sourceColumn)
-			reviewGeneratedColumnLabels(report, operation.ID, sourceColumn, matches[0])
-		}
+		CheckOperationTable(report, operation, table)
 	}
 }
 
-// matchingTableColumns returns generated columns with the same stable key and
-// response path as one normalized source column.
-func matchingTableColumns(columns []plugin.TableColumn, source Column) []plugin.TableColumn {
-	var matches []plugin.TableColumn
-	for _, column := range columns {
-		if column.Key == source.Key && column.Path == source.Path {
-			matches = append(matches, column)
+// CheckOperationTable compares a draft or promoted table with the source operation's
+// response selectors, deprecation metadata and localized column labels. Column
+// order, default selection and layout may be curated independently.
+func CheckOperationTable(report *ReviewReport, operation Operation, table plugin.Table) {
+	if table.RowPath != operation.Response.RowPath {
+		addReviewFinding(report, fmt.Sprintf("operation %s JSON table row path %q does not match source path %q", operation.ID, table.RowPath, operation.Response.RowPath))
+	}
+	if !sameExecutionJSON(table.XML, operation.Response.XML) {
+		addReviewFinding(report, fmt.Sprintf("operation %s XML table selectors do not match source evidence", operation.ID))
+	}
+	type selector struct{ key, path string }
+	unmatched := make(map[selector][]plugin.TableColumn, len(table.Columns))
+	for _, column := range table.Columns {
+		id := selector{column.Key, column.Path}
+		unmatched[id] = append(unmatched[id], column)
+	}
+	for _, sourceColumn := range operation.Response.Columns {
+		id := selector{sourceColumn.Key, sourceColumn.Path}
+		matches := unmatched[id]
+		delete(unmatched, id)
+		if len(matches) == 0 {
+			addReviewFinding(report, fmt.Sprintf("operation %s response column %s has no generated table column", operation.ID, sourceColumn.Path))
+			continue
+		}
+		if len(matches) > 1 {
+			addReviewFinding(report, fmt.Sprintf("operation %s response column %s has duplicate generated table columns", operation.ID, sourceColumn.Path))
+			continue
+		}
+		if !reflect.DeepEqual(matches[0].Deprecation, generatedColumnDeprecation(sourceColumn, operation.Response.Columns)) {
+			addReviewFinding(report, fmt.Sprintf("operation %s response column %s deprecation does not match source evidence", operation.ID, sourceColumn.Path))
+		}
+		reviewSourceColumnLabels(report, operation.ID, sourceColumn)
+		reviewGeneratedColumnLabels(report, operation.ID, sourceColumn, matches[0])
+	}
+	for _, column := range table.Columns {
+		if _, extra := unmatched[selector{column.Key, column.Path}]; extra {
+			addReviewFinding(report, fmt.Sprintf("operation %s table column %q with path %q has no source column", operation.ID, column.Key, column.Path))
 		}
 	}
-	return matches
 }
 
 // reviewSourceColumnLabels blocks invalid normalized source evidence before a

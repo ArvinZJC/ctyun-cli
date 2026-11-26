@@ -15,7 +15,7 @@
       "token": "ZOS"
     },
     "endpoint_url": "https://zos-global.ctapi.ctyun.cn",
-    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026data=105\u0026vid=99",
+    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&data=105&vid=99",
     "api_scope": {
       "include_uri_prefixes": [
         "/v4/oss/",
@@ -42,7 +42,7 @@
       "method": "POST",
       "path": "/v4/oss/new",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=5514\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5514&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": [
         "ctyun zos service enable --region public --client-token 847b561a-a801-4e26-ae70-e4a1fd58cfd4"
@@ -217,7 +217,7 @@
       "description": {
         "en-GB": "Set a cross-region replication rule for a bucket. Supported region pairs are Shanghai 32 and Hangzhou 2, Shanghai 33 and Central SOE Beijing 1, and Shanghai 7 and Hangzhou 2. A source bucket can replicate to only one same-named destination bucket in one target region.",
         "en-US": "Set a cross-region replication rule for a bucket. Supported region pairs are Shanghai 32 and Hangzhou 2, Shanghai 33 and Central SOE Beijing 1, and Shanghai 7 and Hangzhou 2. A source bucket can replicate to only one same-named destination bucket in one target region.",
-        "zh-CN": "跨域复制用于在不同ZOS数据中心（地域）之间自动异步复制存储桶中的对象。它可以近实时地将源存储桶中对象的创建、更新和删除等操作复制到目标存储桶，从而满足了跨地域容灾和用户数据复制的需求。通过调用该接口可创建跨域复制规则。 支持的线上资源池 ：上海32\u003c-\u003e杭州2、上海33\u003c-\u003e央企北京1、上海7\u003c-\u003e杭州2\n\n对于指定的源桶，目前暂不支持针对多个不同区域的同名目标桶设置跨域复制规则"
+        "zh-CN": "跨域复制用于在不同ZOS数据中心（地域）之间自动异步复制存储桶中的对象。它可以近实时地将源存储桶中对象的创建、更新和删除等操作复制到目标存储桶，从而满足了跨地域容灾和用户数据复制的需求。通过调用该接口可创建跨域复制规则。 支持的线上资源池 ：上海32<->杭州2、上海33<->央企北京1、上海7<->杭州2\n\n对于指定的源桶，目前暂不支持针对多个不同区域的同名目标桶设置跨域复制规则"
       },
       "category": "bucket-replication",
       "command_path": [
@@ -227,7 +227,7 @@
       "method": "POST",
       "path": "/v4/oss/put-bucket-replication",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=5515\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5515&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": [
         "ctyun zos bucket-replication set --bucket bucket1 --destination-bucket bucket2 --destination-region-id 3a585beb-63aa-465e-9028-52e5123866f0 --prefixes '[\"nn_\",\"kk_\"]' --plot true --history true"
@@ -377,16 +377,16 @@
           ],
           "default": "false",
           "pattern": "",
-          "description": "同步策略, 同步时是否允许删除。默认为 false",
+          "description": "同步策略, 同步时是否允许删除。默认为 false； 取值范围：`true` 表示允许，`false`表示不允许；",
           "descriptions": {
             "en-GB": "Plot",
             "en-US": "Plot",
-            "zh-CN": "同步策略, 同步时是否允许删除。默认为 false"
+            "zh-CN": "同步策略, 同步时是否允许删除。默认为 false； 取值范围：`true` 表示允许，`false`表示不允许；"
           },
           "help_descriptions": {
             "en-GB": "Whether source deletions are replicated; default is false.",
             "en-US": "Whether source deletions are replicated; default is false.",
-            "zh-CN": "同步策略, 同步时是否允许删除。默认为 false"
+            "zh-CN": "同步策略, 同步时是否允许删除。默认为 false； 取值范围：`true` 表示允许，`false`表示不允许；"
           },
           "profile": "",
           "argument": "",
@@ -406,16 +406,16 @@
           ],
           "default": "true",
           "pattern": "",
-          "description": "是否同步历史数据, 默认为 true",
+          "description": "是否同步历史数据, 默认为 true； 取值范围：`true` 表示同步，`false`表示不同步；",
           "descriptions": {
             "en-GB": "History",
             "en-US": "History",
-            "zh-CN": "是否同步历史数据, 默认为 true"
+            "zh-CN": "是否同步历史数据, 默认为 true； 取值范围：`true` 表示同步，`false`表示不同步；"
           },
           "help_descriptions": {
             "en-GB": "Whether existing historical objects are replicated; default is true.",
             "en-US": "Whether existing historical objects are replicated; default is true.",
-            "zh-CN": "是否同步历史数据, 默认为 true"
+            "zh-CN": "是否同步历史数据, 默认为 true； 取值范围：`true` 表示同步，`false`表示不同步；"
           },
           "profile": "",
           "argument": "",
@@ -515,7 +515,7 @@
       "description": {
         "en-GB": "List the cross-region replication rules configured for a bucket. Supported region pairs are Shanghai 32 and Hangzhou 2, Shanghai 33 and Central SOE Beijing 1, and Shanghai 7 and Hangzhou 2.",
         "en-US": "List the cross-region replication rules configured for a bucket. Supported region pairs are Shanghai 32 and Hangzhou 2, Shanghai 33 and Central SOE Beijing 1, and Shanghai 7 and Hangzhou 2.",
-        "zh-CN": "获取某个源桶已创建的所有跨域复制规则。 支持的线上资源池 ：上海32\u003c-\u003e杭州2、上海33\u003c-\u003e央企北京1、上海7\u003c-\u003e杭州2"
+        "zh-CN": "获取某个源桶已创建的所有跨域复制规则。 支持的线上资源池 ：上海32<->杭州2、上海33<->央企北京1、上海7<->杭州2"
       },
       "category": "bucket-replication",
       "command_path": [
@@ -525,7 +525,7 @@
       "method": "GET",
       "path": "/v4/oss/get-bucket-replication",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=5516\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5516&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -818,7 +818,7 @@
       "description": {
         "en-GB": "List destination regions available for bucket replication. Supported region pairs are Shanghai 32 and Hangzhou 2, Shanghai 33 and Central SOE Beijing 1, and Shanghai 7 and Hangzhou 2.",
         "en-US": "List destination regions available for bucket replication. Supported region pairs are Shanghai 32 and Hangzhou 2, Shanghai 33 and Central SOE Beijing 1, and Shanghai 7 and Hangzhou 2.",
-        "zh-CN": "获取可复制到的目标桶所在的地域。 支持的线上资源池 ：上海32\u003c-\u003e杭州2、上海33\u003c-\u003e央企北京1、上海7\u003c-\u003e杭州2"
+        "zh-CN": "获取可复制到的目标桶所在的地域。 支持的线上资源池 ：上海32<->杭州2、上海33<->央企北京1、上海7<->杭州2"
       },
       "category": "bucket-replication",
       "command_path": [
@@ -828,7 +828,7 @@
       "method": "GET",
       "path": "/v4/oss/get-bucket-replication-region",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=5518\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5518&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -991,7 +991,7 @@
       "description": {
         "en-GB": "Retrieve the historical-data synchronization progress for a bucket replication rule. Supported region pairs are Shanghai 32 and Hangzhou 2, Shanghai 33 and Central SOE Beijing 1, and Shanghai 7 and Hangzhou 2.",
         "en-US": "Retrieve the historical-data synchronization progress for a bucket replication rule. Supported region pairs are Shanghai 32 and Hangzhou 2, Shanghai 33 and Central SOE Beijing 1, and Shanghai 7 and Hangzhou 2.",
-        "zh-CN": "获取某个跨域复制规则是否完成历史数据的同步。 支持的线上资源池 ：上海32\u003c-\u003e杭州2、上海33\u003c-\u003e央企北京1、上海7\u003c-\u003e杭州2"
+        "zh-CN": "获取某个跨域复制规则是否完成历史数据的同步。 支持的线上资源池 ：上海32<->杭州2、上海33<->央企北京1、上海7<->杭州2"
       },
       "category": "bucket-replication",
       "command_path": [
@@ -1001,7 +1001,7 @@
       "method": "GET",
       "path": "/v4/oss/get-bucket-replication-complete",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=5520\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5520&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -1150,7 +1150,7 @@
       "method": "POST",
       "path": "/v4/oss/put-object-lock-conf",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=5522\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5522&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": [
         "ctyun zos bucket-object-lock set --bucket bucket1 --retention-mode GOVERNANCE --days 30"
@@ -1219,16 +1219,16 @@
           ],
           "default": "",
           "pattern": "",
-          "description": "保留模式，必须为 COMPLIANCE 或 GOVERNANCE",
+          "description": "保留模式，必须为 COMPLIANCE 或 GOVERNANCE； 取值范围：`COMPLIANCE`（合规模式：保留期内任何人都无法删除或缩短保留期，含管理员）、`GOVERNANCE`（治理模式：持有特殊权限者可通过 bypassGovernanceRetention 绕过。",
           "descriptions": {
             "en-GB": "Retention Mode",
             "en-US": "Retention Mode",
-            "zh-CN": "保留模式，必须为 COMPLIANCE 或 GOVERNANCE"
+            "zh-CN": "保留模式，必须为 COMPLIANCE 或 GOVERNANCE； 取值范围：`COMPLIANCE`（合规模式：保留期内任何人都无法删除或缩短保留期，含管理员）、`GOVERNANCE`（治理模式：持有特殊权限者可通过 bypassGovernanceRetention 绕过。"
           },
           "help_descriptions": {
             "en-GB": "Object-lock retention mode.",
             "en-US": "Object-lock retention mode.",
-            "zh-CN": "保留模式，必须为 COMPLIANCE 或 GOVERNANCE"
+            "zh-CN": "保留模式，必须为 COMPLIANCE 或 GOVERNANCE； 取值范围：`COMPLIANCE`（合规模式：保留期内任何人都无法删除或缩短保留期，含管理员）、`GOVERNANCE`（治理模式：持有特殊权限者可通过 bypassGovernanceRetention 绕过。"
           },
           "profile": "",
           "argument": "",
@@ -1384,7 +1384,7 @@
       "method": "GET",
       "path": "/v4/oss/get-object-lock-conf",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=5523\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5523&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -1502,7 +1502,7 @@
       "method": "POST",
       "path": "/v4/oss/put-object-retention",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=5524\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5524&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -1621,16 +1621,16 @@
           ],
           "default": "",
           "pattern": "",
-          "description": "指示此操作是否应绕过Governance模式限制",
+          "description": "指示此操作是否应绕过Governance模式限制 取值范围：`true`=本次请求允许绕过 GOVERNANCE 模式保留限制（需特殊权限）；`false`=不绕过",
           "descriptions": {
             "en-GB": "Bypass Governance Retention",
             "en-US": "Bypass Governance Retention",
-            "zh-CN": "指示此操作是否应绕过Governance模式限制"
+            "zh-CN": "指示此操作是否应绕过Governance模式限制 取值范围：`true`=本次请求允许绕过 GOVERNANCE 模式保留限制（需特殊权限）；`false`=不绕过"
           },
           "help_descriptions": {
             "en-GB": "Whether the operation bypasses Governance-mode retention.",
             "en-US": "Whether the operation bypasses Governance-mode retention.",
-            "zh-CN": "指示此操作是否应绕过Governance模式限制"
+            "zh-CN": "指示此操作是否应绕过Governance模式限制 取值范围：`true`=本次请求允许绕过 GOVERNANCE 模式保留限制（需特殊权限）；`false`=不绕过"
           },
           "profile": "",
           "argument": "",
@@ -1650,16 +1650,16 @@
           ],
           "default": "",
           "pattern": "",
-          "description": "保留模式，必须为 COMPLIANCE 或 GOVERNANCE",
+          "description": "保留模式，必须为 COMPLIANCE 或 GOVERNANCE 取值范围：`COMPLIANCE`（合规保留：保留期内任何人不可删除对象或缩短期限）、`GOVERNANCE`（治理保留：可被 bypassGovernanceRetention=true 的特殊权限用户绕过）",
           "descriptions": {
             "en-GB": "Retention Mode",
             "en-US": "Retention Mode",
-            "zh-CN": "保留模式，必须为 COMPLIANCE 或 GOVERNANCE"
+            "zh-CN": "保留模式，必须为 COMPLIANCE 或 GOVERNANCE 取值范围：`COMPLIANCE`（合规保留：保留期内任何人不可删除对象或缩短期限）、`GOVERNANCE`（治理保留：可被 bypassGovernanceRetention=true 的特殊权限用户绕过）"
           },
           "help_descriptions": {
             "en-GB": "Object-lock retention mode.",
             "en-US": "Object-lock retention mode.",
-            "zh-CN": "保留模式，必须为 COMPLIANCE 或 GOVERNANCE"
+            "zh-CN": "保留模式，必须为 COMPLIANCE 或 GOVERNANCE 取值范围：`COMPLIANCE`（合规保留：保留期内任何人不可删除对象或缩短期限）、`GOVERNANCE`（治理保留：可被 bypassGovernanceRetention=true 的特殊权限用户绕过）"
           },
           "profile": "",
           "argument": "",
@@ -1792,7 +1792,7 @@
       "method": "GET",
       "path": "/v4/oss/get-object-retention",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=5525\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5525&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -1959,7 +1959,7 @@
       "method": "GET",
       "path": "/v4/oss/get-bucket-acl",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=5531\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5531&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -2093,7 +2093,7 @@
       "method": "GET",
       "path": "/v4/oss/get-bucket-lifecycle-conf",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=5534\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5534&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -2240,7 +2240,7 @@
       "method": "GET",
       "path": "/v4/oss/get-bucket-versioning",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=5538\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5538&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -2350,7 +2350,7 @@
       "method": "GET",
       "path": "/v4/oss/get-bucket-policy",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=5542\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5542&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -2460,7 +2460,7 @@
       "method": "GET",
       "path": "/v4/oss/get-bucket-logging",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=5547\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5547&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -2584,7 +2584,7 @@
       "method": "GET",
       "path": "/v4/oss/get-bucket-tagging",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=5555\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5555&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -2713,7 +2713,7 @@
       "method": "POST",
       "path": "/v4/oss/put-bucket-policy",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=5558\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5558&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -2889,7 +2889,7 @@
       "method": "POST",
       "path": "/v4/oss/delete-bucket-policy",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=5560\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5560&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -3038,7 +3038,7 @@
       "method": "POST",
       "path": "/v4/oss/put-bucket-tagging",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=5566\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5566&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -3228,7 +3228,7 @@
       "method": "POST",
       "path": "/v4/oss/delete-bucket-tagging",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=5569\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5569&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -3377,7 +3377,7 @@
       "method": "POST",
       "path": "/v4/oss/delete-bucket-encryption",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=5572\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5572&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -3526,7 +3526,7 @@
       "method": "POST",
       "path": "/v4/oss/put-bucket-encryption",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=5575\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5575&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -3718,7 +3718,7 @@
       "method": "GET",
       "path": "/v4/oss/get-bucket-encryption",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=5579\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5579&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -3837,7 +3837,7 @@
       "method": "POST",
       "path": "/v4/oss/create-bucket",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6246\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6246&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": [
         "ctyun zos bucket create --bucket bucket1 --acl private"
@@ -3987,16 +3987,16 @@
           ],
           "default": "",
           "pattern": "",
-          "description": "加密状态",
+          "description": "加密状态 - `true`：开通桶级服务端加密（KMS 加密），需 KMS 服务已开通；可配合 `cmkUUID` 指定密钥，未指定时使用默认密钥（无默认密钥则自动创建）。 - `false`：创建普通未加密桶。 - 约束：传 `cmkUUID` 时必须 `isEncrypted=true`。",
           "descriptions": {
             "en-GB": "Is Encrypted",
             "en-US": "Is Encrypted",
-            "zh-CN": "加密状态"
+            "zh-CN": "加密状态 - `true`：开通桶级服务端加密（KMS 加密），需 KMS 服务已开通；可配合 `cmkUUID` 指定密钥，未指定时使用默认密钥（无默认密钥则自动创建）。 - `false`：创建普通未加密桶。 - 约束：传 `cmkUUID` 时必须 `isEncrypted=true`。"
           },
           "help_descriptions": {
             "en-GB": "Whether bucket encryption is enabled.",
             "en-US": "Whether bucket encryption is enabled.",
-            "zh-CN": "加密状态"
+            "zh-CN": "加密状态 - `true`：开通桶级服务端加密（KMS 加密），需 KMS 服务已开通；可配合 `cmkUUID` 指定密钥，未指定时使用默认密钥（无默认密钥则自动创建）。 - `false`：创建普通未加密桶。 - 约束：传 `cmkUUID` 时必须 `isEncrypted=true`。"
           },
           "profile": "",
           "argument": "",
@@ -4217,7 +4217,7 @@
       "method": "GET",
       "path": "/v4/oss/list-buckets",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6247\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6247&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": [
         "ctyun zos bucket list --region public --project-id 12334378,345987,476343 --page-size 3 --page-no 1"
@@ -4506,7 +4506,7 @@
       "method": "POST",
       "path": "/v4/oss/delete-bucket",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6249\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6249&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -4655,7 +4655,7 @@
       "method": "GET",
       "path": "/v4/oss/head-bucket",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6251\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6251&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -4804,7 +4804,7 @@
       "method": "GET",
       "path": "/v4/oss/get-bucket-cors",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6253\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6253&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -4927,7 +4927,7 @@
       "method": "POST",
       "path": "/v4/oss/put-bucket-cors",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6254\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6254&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -5147,7 +5147,7 @@
       "method": "POST",
       "path": "/v4/oss/delete-bucket-cors",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6255\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6255&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -5296,7 +5296,7 @@
       "method": "GET",
       "path": "/v4/oss/get-bucket-location",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6258\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6258&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -5406,7 +5406,7 @@
       "method": "POST",
       "path": "/v4/oss/delete-bucket-logging",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6259\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6259&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -5555,7 +5555,7 @@
       "method": "POST",
       "path": "/v4/oss/put-bucket-logging",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6262\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6262&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -5753,7 +5753,7 @@
       "description": {
         "en-GB": "Stop and delete a bucket replication rule. Supported region pairs are Shanghai 32 and Hangzhou 2, Shanghai 33 and Central SOE Beijing 1, and Shanghai 7 and Hangzhou 2.",
         "en-US": "Stop and delete a bucket replication rule. Supported region pairs are Shanghai 32 and Hangzhou 2, Shanghai 33 and Central SOE Beijing 1, and Shanghai 7 and Hangzhou 2.",
-        "zh-CN": "停止指定跨域复制规则并删除该规则。 支持的线上资源池 ：上海32\u003c-\u003e杭州2、上海33\u003c-\u003e央企北京1、上海7\u003c-\u003e杭州2。"
+        "zh-CN": "停止指定跨域复制规则并删除该规则。 支持的线上资源池 ：上海32<->杭州2、上海33<->央企北京1、上海7<->杭州2。"
       },
       "category": "bucket-replication",
       "command_path": [
@@ -5763,7 +5763,7 @@
       "method": "POST",
       "path": "/v4/oss/delete-bucket-replication",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6263\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6263&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -5939,7 +5939,7 @@
       "method": "POST",
       "path": "/v4/oss/put-bucket-acl",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6265\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6265&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": [
         "ctyun zos bucket-acl set --bucket bucket1 --access-control-policy '{\"owner\":{\"displayName\":\"xxx\",\"ID\":\"00000000-0000-0000-0000-000000000000\"},\"grants\":[{\"grantee\":{\"emailAddress\":\"example@ctyun.cn\",\"type\":\"AmazonCustomerByEmail\"},\"permission\":\"READ\"}]}'"
@@ -6174,7 +6174,7 @@
       "method": "POST",
       "path": "/v4/oss/put-bucket-lifecycle-conf",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6266\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6266&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -6428,7 +6428,7 @@
       "method": "POST",
       "path": "/v4/oss/delete-bucket-lifecycle-conf",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6267\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6267&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -6577,7 +6577,7 @@
       "method": "POST",
       "path": "/v4/oss/put-bucket-versioning",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6268\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6268&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -6757,7 +6757,7 @@
       "method": "GET",
       "path": "/v4/oss/get-bucket-info",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6271\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6271&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -7103,7 +7103,7 @@
       "description": {
         "en-GB": "List objects in a bucket. Supported in every Tier 1 resource pool. Set prefix to a directory name to list that directory recursively; adding delimiter=/ limits contents to files in that directory and returns immediate subdirectories in commonPrefixes.",
         "en-US": "List objects in a bucket. Supported in every Tier 1 resource pool. Set prefix to a directory name to list that directory recursively; adding delimiter=/ limits contents to files in that directory and returns immediate subdirectories in commonPrefixes.",
-        "zh-CN": "查询桶内的所有对象。 支持所有一类节点资源池。\n文件夹及文件查询方法：\n可以将 prefix 设为文件夹名，就可以列出该文件夹下递归的所有的文件和子文件夹。文件名在 contents 中列出。 如果再把 delimiter 设置为 “/” 时，返回值就只列出该文件夹下的文件和子文件夹，除文件名在 contents 中列出外，该文件夹下的子文件夹在 commonPrefixes 中列出，子文件夹下递归的文件和文件夹不被显示。假设桶内对象为\nd1/\nf1\nd1/d2/\nd1/f2\nd1/f3\nd1/d2/ff1\nd1/d2/d3/\nd1/dd2/\n需要查询 d1/ 目录下的文件时，传入 prefix=d1/，delimiter=/，返回结果简写如下：\ncontents:[\n\u0026emsp;   {\"key\": \"d1/\"},\n\u0026emsp;   {\"key\": \"d1/f2\"},\n\u0026emsp;   {\"key\": \"d1/f3\"}\n],\ncommonPrefixes:[\n\u0026emsp;   {\"prefix\": \"d1/d2/\"},\n\u0026emsp;   {\"prefix\": \"d1/dd2/\"}\n]\n即，contents 会返回当前目录下的文件，commonPrefixes 返回当前目录下的文件夹"
+        "zh-CN": "查询桶内的所有对象。 支持所有一类节点资源池。\n文件夹及文件查询方法：\n可以将 prefix 设为文件夹名，就可以列出该文件夹下递归的所有的文件和子文件夹。文件名在 contents 中列出。 如果再把 delimiter 设置为 “/” 时，返回值就只列出该文件夹下的文件和子文件夹，除文件名在 contents 中列出外，该文件夹下的子文件夹在 commonPrefixes 中列出，子文件夹下递归的文件和文件夹不被显示。假设桶内对象为\nd1/\nf1\nd1/d2/\nd1/f2\nd1/f3\nd1/d2/ff1\nd1/d2/d3/\nd1/dd2/\n需要查询 d1/ 目录下的文件时，传入 prefix=d1/，delimiter=/，返回结果简写如下：\ncontents:[\n&emsp;   {\"key\": \"d1/\"},\n&emsp;   {\"key\": \"d1/f2\"},\n&emsp;   {\"key\": \"d1/f3\"}\n],\ncommonPrefixes:[\n&emsp;   {\"prefix\": \"d1/d2/\"},\n&emsp;   {\"prefix\": \"d1/dd2/\"}\n]\n即，contents 会返回当前目录下的文件，commonPrefixes 返回当前目录下的文件夹"
       },
       "category": "object",
       "command_path": [
@@ -7113,7 +7113,7 @@
       "method": "GET",
       "path": "/v4/oss/list-objects",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6273\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6273&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -7427,7 +7427,7 @@
       "method": "POST",
       "path": "/v4/oss/delete-object",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6275\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6275&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -7640,7 +7640,7 @@
       "method": "POST",
       "path": "/v4/oss/copy-object",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6277\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6277&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -7851,7 +7851,7 @@
       "method": "POST",
       "path": "/v4/oss/delete-objects",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6278\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6278&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -8048,7 +8048,7 @@
       "method": "POST",
       "path": "/v4/oss/generate-object-download-link",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6281\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6281&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -8266,7 +8266,7 @@
         "regionID": "332232eb-63aa-465e-9028-52e5123866f0"
       },
       "example_response": {
-        "returnObj": "https://zos.ctyun.cn/bucket1/obj1?AWSAccessKeyId={accessKeyId}\u0026Signature={signature}\u0026Expires=3300",
+        "returnObj": "https://zos.ctyun.cn/bucket1/obj1?AWSAccessKeyId={accessKeyId}&Signature={signature}&Expires=3300",
         "message": "SUCCESS",
         "description": "成功",
         "statusCode": 800
@@ -8289,7 +8289,7 @@
       "method": "GET",
       "path": "/v4/oss/head-object",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6282\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6282&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -8752,7 +8752,7 @@
       "method": "POST",
       "path": "/v4/oss/create-multipart-upload",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6284\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6284&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -8847,16 +8847,16 @@
           ],
           "default": "private",
           "pattern": "",
-          "description": "ACL，可选的有 private，public-read，public-read-write，authenticated-read，默认private",
+          "description": "ACL，可选的有 private，public-read，public-read-write，authenticated-read，默认private 取值范围： - `private`：私有（仅 owner 可读写） - `public-read`：公共读 - `public-read-write`：公共读写 - `authenticated-read`：认证用户可读",
           "descriptions": {
             "en-GB": "Acl",
             "en-US": "Acl",
-            "zh-CN": "ACL，可选的有 private，public-read，public-read-write，authenticated-read，默认private"
+            "zh-CN": "ACL，可选的有 private，public-read，public-read-write，authenticated-read，默认private 取值范围： - `private`：私有（仅 owner 可读写） - `public-read`：公共读 - `public-read-write`：公共读写 - `authenticated-read`：认证用户可读"
           },
           "help_descriptions": {
             "en-GB": "Multipart object ACL: private, public-read, public-read-write, or authenticated-read; default is private.",
             "en-US": "Multipart object ACL: private, public-read, public-read-write, or authenticated-read; default is private.",
-            "zh-CN": "ACL，可选的有 private，public-read，public-read-write，authenticated-read，默认private"
+            "zh-CN": "ACL，可选的有 private，public-read，public-read-write，authenticated-read，默认private 取值范围： - `private`：私有（仅 owner 可读写） - `public-read`：公共读 - `public-read-write`：公共读写 - `authenticated-read`：认证用户可读"
           },
           "profile": "",
           "argument": "",
@@ -8877,16 +8877,16 @@
           ],
           "default": "STANDARD",
           "pattern": "",
-          "description": "存储类，可选的有 STANDARD，STANDARD_IA，GLACIER，默认STANDARD",
+          "description": "存储类，可选的有 STANDARD，STANDARD_IA，GLACIER，默认STANDARD 取值范围：`STANDARD`（标准）、`GLACIER`（归档）、`STANDARD_IA`（低频）",
           "descriptions": {
             "en-GB": "Storage Class",
             "en-US": "Storage Class",
-            "zh-CN": "存储类，可选的有 STANDARD，STANDARD_IA，GLACIER，默认STANDARD"
+            "zh-CN": "存储类，可选的有 STANDARD，STANDARD_IA，GLACIER，默认STANDARD 取值范围：`STANDARD`（标准）、`GLACIER`（归档）、`STANDARD_IA`（低频）"
           },
           "help_descriptions": {
             "en-GB": "Multipart object storage class: STANDARD, STANDARD_IA, or GLACIER; default is STANDARD.",
             "en-US": "Multipart object storage class: STANDARD, STANDARD_IA, or GLACIER; default is STANDARD.",
-            "zh-CN": "存储类，可选的有 STANDARD，STANDARD_IA，GLACIER，默认STANDARD"
+            "zh-CN": "存储类，可选的有 STANDARD，STANDARD_IA，GLACIER，默认STANDARD 取值范围：`STANDARD`（标准）、`GLACIER`（归档）、`STANDARD_IA`（低频）"
           },
           "profile": "",
           "argument": "",
@@ -8975,7 +8975,7 @@
       "method": "GET",
       "path": "/v4/oss/list-multipart-uploads",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6286\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6286&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -9267,7 +9267,7 @@
       "method": "POST",
       "path": "/v4/oss/abort-multipart-upload",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6287\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6287&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -9470,7 +9470,7 @@
       "method": "POST",
       "path": "/v4/oss/put-object-acl",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6288\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6288&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": [
         "ctyun zos object-acl set --bucket bucket1 --key obj1 --version-id USzD.sN0vODAsQ84ncdT20oRiY2lFCD --access-control-policy '{\"owner\":{\"displayName\":\"dname1\",\"ID\":\"user1\"},\"grants\":[{\"grantee\":{\"displayName\":\"dname2\",\"emailAddress\":\"example@ctyun.cn\",\"ID\":\"user2\",\"type\":\"CanonicalUser\"},\"permission\":\"FULL_CONTROL\"}]}'"
@@ -9764,7 +9764,7 @@
       "method": "GET",
       "path": "/v4/oss/get-object-acl",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6290\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6290&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -9952,7 +9952,7 @@
       "method": "POST",
       "path": "/v4/oss/put-object-tagging",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6291\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6291&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -10196,7 +10196,7 @@
       "method": "GET",
       "path": "/v4/oss/get-object-tagging",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6292\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6292&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -10379,7 +10379,7 @@
       "method": "POST",
       "path": "/v4/oss/delete-object-tagging",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6293\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6293&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -10581,7 +10581,7 @@
       "method": "POST",
       "path": "/v4/oss/put-object-header",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6298\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6298&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -10790,7 +10790,7 @@
       "method": "GET",
       "path": "/v4/oss/get-keys",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6299\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6299&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": [
         "ctyun zos credential show --region 332232eb-63aa-465e-9028-52e5123866f0"
@@ -10919,7 +10919,7 @@
       "method": "POST",
       "path": "/v4/oss/generate-object-upload-link",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6301\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6301&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -11099,7 +11099,7 @@
       "method": "GET",
       "path": "/v4/oss/list-parts",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6302\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6302&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -11368,7 +11368,7 @@
       "method": "POST",
       "path": "/v4/oss/complete-multipart-upload",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6304\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6304&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -11627,7 +11627,7 @@
       "method": "GET",
       "path": "/v4/oss/list-object-versions",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=6925\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6925&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -11864,7 +11864,7 @@
       "method": "POST",
       "path": "/v4/oss/create-directory",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=7114\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7114&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -12040,7 +12040,7 @@
       "method": "POST",
       "path": "/v4/oss/delete-directory",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=7115\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7115&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -12216,7 +12216,7 @@
       "method": "GET",
       "path": "/v4/oss/list-all-parts",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=7116\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7116&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -12486,7 +12486,7 @@
       "method": "POST",
       "path": "/v4/oss/unfreeze-object",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=7355\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7355&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -12715,7 +12715,7 @@
       "method": "POST",
       "path": "/v4/oss/put-object-storage-type",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=7356\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7356&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -12948,7 +12948,7 @@
       "method": "GET",
       "path": "/v4/oss/get-object-num",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=7357\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7357&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -13058,7 +13058,7 @@
       "method": "GET",
       "path": "/v4/oss/get-fragment-num",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=7358\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7358&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -13168,7 +13168,7 @@
       "method": "GET",
       "path": "/v4/oss/get-endpoint",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=7359\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7359&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": [
         "ctyun zos access-endpoint list --region 332232eb-63aa-465e-9028-52e5123866f0"
@@ -13283,7 +13283,7 @@
       "method": "POST",
       "path": "/v4/oss/put-bucket-quota",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=7902\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7902&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": [
         "ctyun zos bucket-quota set --bucket bucket1 --enabled true --max-size-kb 1024 --max-objects 100"
@@ -13508,7 +13508,7 @@
       "description": {
         "en-GB": "Retrieve usage statistics for one bucket or every bucket. Supported in every Tier 1 resource pool. Statistics cover only the most recent 30 days. For delayed usage aggregation, querying the previous hour at least 30 minutes after the current hour begins improves completeness.",
         "en-US": "Retrieve usage statistics for one bucket or every bucket. Supported in every Tier 1 resource pool. Statistics cover only the most recent 30 days. For delayed usage aggregation, querying the previous hour at least 30 minutes after the current hour begins improves completeness.",
-        "zh-CN": "查询桶统计信息\n1. 传bucket参数，表示查询该桶的统计信息\n2. 不传bucket参数，表示查询所有桶的统计信息，即该用户所有桶的统计信息\n统计项：\n\u0026emsp;1). 每个小时累计的请求次数\n\u0026emsp;2). 每个小时累计的公网流出流量\n\u0026emsp;3). 每个小时累计的数据取回流量，仅在归档、低频存储类型时有此指标，归档的取回指归档对象解冻，低频的取回指低频对象的下载\n\u0026emsp;4). 每个小时累计的数据取回次数，仅在归档、低频存储类型时有此指标，归档的取回指归档对象解冻，低频的取回指低频对象的下载\n\u0026emsp;5). 存储容量在每个整点的值\n\u0026emsp;6). 每个小时累计的跨域复制公网流出流量\n计算方法：\n\u0026emsp;1). 公网流出流量为通过公网调用GetObject接口访问、下载、预览文件或者进行图片处理操作产生的流量总值。\n\u0026emsp;2). 请求次数为读操作API、写操作API和删除操作API的总值，其中，请求次数为公网请求数加内网请求数的总值。 支持所有一类节点资源池。仅支持最近 30 天内的统计信息查询。使用量统计存在时延，如需查询上一小时用量，建议在当前时间 30 分钟后再发起请求。"
+        "zh-CN": "查询桶统计信息\n1. 传bucket参数，表示查询该桶的统计信息\n2. 不传bucket参数，表示查询所有桶的统计信息，即该用户所有桶的统计信息\n统计项：\n&emsp;1). 每个小时累计的请求次数\n&emsp;2). 每个小时累计的公网流出流量\n&emsp;3). 每个小时累计的数据取回流量，仅在归档、低频存储类型时有此指标，归档的取回指归档对象解冻，低频的取回指低频对象的下载\n&emsp;4). 每个小时累计的数据取回次数，仅在归档、低频存储类型时有此指标，归档的取回指归档对象解冻，低频的取回指低频对象的下载\n&emsp;5). 存储容量在每个整点的值\n&emsp;6). 每个小时累计的跨域复制公网流出流量\n计算方法：\n&emsp;1). 公网流出流量为通过公网调用GetObject接口访问、下载、预览文件或者进行图片处理操作产生的流量总值。\n&emsp;2). 请求次数为读操作API、写操作API和删除操作API的总值，其中，请求次数为公网请求数加内网请求数的总值。 支持所有一类节点资源池。仅支持最近 30 天内的统计信息查询。使用量统计存在时延，如需查询上一小时用量，建议在当前时间 30 分钟后再发起请求。"
       },
       "category": "bucket-statistics",
       "command_path": [
@@ -13518,7 +13518,7 @@
       "method": "GET",
       "path": "/v4/oss/get-bucket-statistics",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=7903\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7903&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -13773,7 +13773,7 @@
       "method": "POST",
       "path": "/v4/oss/create-role",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=7904\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7904&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -13991,7 +13991,7 @@
       "method": "POST",
       "path": "/v4/oss/create-policy",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=7905\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7905&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -14203,7 +14203,7 @@
       "method": "POST",
       "path": "/v4/oss/bind-role-policy",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=7906\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7906&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -14379,7 +14379,7 @@
       "method": "GET",
       "path": "/v4/oss/list-roles",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=9013\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=9013&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": [
         "ctyun zos role list --region 332232eb-63aa-465e-9028-52e5123866f0 --keyword ro --page-size 6 --page-no 2"
@@ -14681,7 +14681,7 @@
       "method": "POST",
       "path": "/v4/oss/delete-role",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=9016\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=9016&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -14830,7 +14830,7 @@
       "method": "GET",
       "path": "/v4/oss/role/detail",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=9021\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=9021&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -15028,7 +15028,7 @@
       "method": "GET",
       "path": "/v4/oss/list-policies",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=9022\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=9022&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": [
         "ctyun zos policy list --region 332232eb-63aa-465e-9028-52e5123866f0 --keyword po --page-size 6 --page-no 1"
@@ -15288,7 +15288,7 @@
       "method": "POST",
       "path": "/v4/oss/put-policy",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=9023\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=9023&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -15464,7 +15464,7 @@
       "method": "POST",
       "path": "/v4/oss/delete-policy",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=9024\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=9024&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -15613,7 +15613,7 @@
       "method": "GET",
       "path": "/v4/oss/policy/detail",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=9025\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=9025&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -15764,7 +15764,7 @@
       "method": "POST",
       "path": "/v4/oss/delete-role-policy",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=9026\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=9026&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -15940,7 +15940,7 @@
       "method": "GET",
       "path": "/v4/oss/get-oss-service-status",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=9262\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=9262&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": [
         "ctyun zos service show-status --region 332232eb-63aa-465e-9028-52e5123866f0"
@@ -16025,7 +16025,7 @@
       "method": "POST",
       "path": "/v4/oss/new-order/query-price",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=9845\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=9845&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -16377,7 +16377,7 @@
       "method": "GET",
       "path": "/v4/oss/list-regions",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=14102\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=14102&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": [
         "ctyun zos region list"
@@ -16468,7 +16468,7 @@
       "method": "POST",
       "path": "/v4/oss/put-bucket-event-bridge",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=16485\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=16485&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -16647,7 +16647,7 @@
       "method": "POST",
       "path": "/v4/zms/create-evaluation",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=17820\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17820&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -16853,7 +16853,7 @@
       "method": "GET",
       "path": "/v4/zms/list-evaluation",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=17821\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17821&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": [
         "ctyun zos assessment list --region 81f77286xxxx0800155d307d5b --search-name my --page-no 2 --page-size 3"
@@ -17120,7 +17120,7 @@
       "method": "GET",
       "path": "/v4/zms/get-evaluation-detail",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=17822\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17822&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -17320,7 +17320,7 @@
       "method": "POST",
       "path": "/v4/zms/start-evaluation",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=17823\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17823&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -17443,7 +17443,7 @@
       "method": "POST",
       "path": "/v4/zms/stop-evaluation",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=17824\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17824&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -17566,7 +17566,7 @@
       "method": "POST",
       "path": "/v4/zms/restore-evaluation",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=17825\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17825&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -17689,7 +17689,7 @@
       "method": "POST",
       "path": "/v4/zms/delete-evaluation",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=17826\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17826&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -17812,7 +17812,7 @@
       "method": "POST",
       "path": "/v4/zms/create-migration",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=17827\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17827&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": [
         "ctyun zos migration create --region 81f7728xxxxx0155d307d5b --migration-name aanjyy --migration-mode semi-managed --migration-agent 111_agt_76f7dc8b012xxxxf6ed082db55d08 --source-info '[{\"sourceType\":\"ZOS\",\"sourceEndpoint\":\"http://xxx\",\"sourceBucket\":\"cxx-hkpblz-bbt\",\"sourceAccessKey\":\"xxx\",\"sourceSecretKey\":\"xxx\",\"sourceBucketType\":\"Prefix\",\"migrateFolder\":[],\"migrateFiles\":[],\"migratePrefix\":[\"ajy\"]}]' --destination-info '[{\"destinationType\":\"ZOS\",\"destinationEndpoint\":\"http://xxx\",\"destinationBucket\":\"bucket-xxx\",\"destinationAccessKey\":\"xxx\",\"destinationSecretKey\":\"xxx\"}]' --storage-type STANDARD --acl-conf match-resource --conflict-mode IGNORE --migrate-start-time '2017-12-31 23:59:59' --migrate-end-time '2027-12-31 23:59:59'"
@@ -18384,7 +18384,7 @@
       "method": "GET",
       "path": "/v4/zms/list-migration",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=17828\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17828&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": [
         "ctyun zos migration list --region 81f7728xxxxx0155d307d5b --migration-mode fully-managed --migration-status waiting --agent-id 222_agt_80c60304b992616be45d76402 --search-name my --page-no 2 --page-size 3"
@@ -18784,7 +18784,7 @@
       "method": "GET",
       "path": "/v4/zms/get-migration-detail",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=17829\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17829&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -19142,7 +19142,7 @@
       "method": "GET",
       "path": "/v4/zms/list-migration-failed-detail",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=17831\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17831&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -19330,7 +19330,7 @@
       "method": "POST",
       "path": "/v4/zms/retry-migration",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=17833\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17833&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -19453,7 +19453,7 @@
       "method": "POST",
       "path": "/v4/zms/stop-migration",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=17836\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17836&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -19576,7 +19576,7 @@
       "method": "POST",
       "path": "/v4/zms/restore-migration",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=17837\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17837&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -19699,7 +19699,7 @@
       "method": "POST",
       "path": "/v4/zms/delete-migration",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=17838\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17838&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -19822,7 +19822,7 @@
       "method": "GET",
       "path": "/v4/oss/get-user-event-bridge",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=17881\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17881&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": [
         "ctyun zos user-event-bridge show --region 332232eb-63aa-465e-9028-52e5123866f0"
@@ -19907,7 +19907,7 @@
       "method": "POST",
       "path": "/v4/oss/put-user-event-bridge",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=17882\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17882&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -20059,7 +20059,7 @@
       "method": "POST",
       "path": "/v4/zms/start-migration",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=19872\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=19872&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -20182,7 +20182,7 @@
       "method": "GET",
       "path": "/v4/zms/get-migration-history",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=19873\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=19873&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -20532,7 +20532,7 @@
       "method": "POST",
       "path": "/v4/zms/create-agent",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=22332\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=22332&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -20667,7 +20667,7 @@
       "method": "POST",
       "path": "/v4/zms/delete-agent",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=22333\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=22333&data=105&isNormal=1&vid=99",
       "retryable": false,
       "examples": null,
       "parameters": [
@@ -20790,7 +20790,7 @@
       "method": "GET",
       "path": "/v4/zms/list-agent",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=22334\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=22334&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": [
         "ctyun zos migration-agent list --region 81f7728xxxxx0155d307d5b --search-name my --agent-status unregistered --page-no 2 --page-size 3"
@@ -21149,7 +21149,7 @@
       "method": "GET",
       "path": "/v4/zms/get-agent-registrationcode",
       "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=22335\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=22335&data=105&isNormal=1&vid=99",
       "retryable": true,
       "examples": null,
       "parameters": [
@@ -21291,7 +21291,7 @@
       "success": "finished",
       "max_attempts": 60,
       "interval_seconds": 5,
-      "evidence": "v4.zos.assessment.show response.columns.evaluationStatus: finished means completed, failed means failed; waiting/executing/stopped remain pending. Captured returnObj.results is a nested OBJECT, not an array. https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=17822\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "evidence": "v4.zos.assessment.show response.columns.evaluationStatus: finished means completed, failed means failed; waiting/executing/stopped remain pending. Captured returnObj.results is a nested OBJECT, not an array. https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17822&data=105&isNormal=1&vid=99",
       "failure": "failed"
     },
     "zos.migration.completed": {
@@ -21302,7 +21302,7 @@
       "success": "finished",
       "max_attempts": 60,
       "interval_seconds": 5,
-      "evidence": "v4.zos.migration.show response.columns.migrationStatus: finished completed; failed interrupted, create_failed creation failed, finished_error completed with failed objects. Other states including stopped, agent_lost, restoring and retrying remain bounded pending; agent_lost is not documented terminal. Captured returnObj.result is a nested OBJECT. https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=17829\u0026data=105\u0026isNormal=1\u0026vid=99",
+      "evidence": "v4.zos.migration.show response.columns.migrationStatus: finished completed; failed interrupted, create_failed creation failed, finished_error completed with failed objects. Other states including stopped, agent_lost, restoring and retrying remain bounded pending; agent_lost is not documented terminal. Captured returnObj.result is a nested OBJECT. https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17829&data=105&isNormal=1&vid=99",
       "failure": "failed",
       "failure_values": [
         "create_failed",
@@ -21316,7 +21316,7 @@
       "path": "returnObj.complete",
       "success": "1",
       "failure": "",
-      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9\u0026api=5520\u0026data=105\u0026isNormal=1\u0026vid=99; v4.zos.bucket-replication.show-progress documents complete 1 finished, 0 unfinished; only 1 succeeds, with no documented failure state.",
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5520&data=105&isNormal=1&vid=99; v4.zos.bucket-replication.show-progress documents complete 1 finished, 0 unfinished; only 1 succeeds, with no documented failure state.",
       "max_attempts": 60,
       "interval_seconds": 5
     }

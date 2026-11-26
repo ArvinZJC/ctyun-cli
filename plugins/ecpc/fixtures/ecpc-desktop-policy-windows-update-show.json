@@ -1,0 +1,40 @@
+{
+  "statusCode": 800,
+  "message": "OK.",
+  "returnObj": {
+    "strategyOid": "dsy-xxxxxx",
+    "windowsUpdatePolicy": {
+      "mode": "CUSTOM_WSUS",
+      "customWsus": {
+        "name": "企业WSUS策略",
+        "description": "办公网终端更新策略",
+        "updateService": {
+          "useWuServer": "ENABLED",
+          "updateServerUrl": "https://wsus.example.com/update",
+          "statisticsServerUrl": "https://wsus.example.com/statistics",
+          "alternateDownloadServerUrl": "https://download.example.com/windows",
+          "fillEmptyContentUrlsEnable": true
+        },
+        "automaticUpdates": "ENABLED",
+        "updateMode": "AUTO_DOWNLOAD_SCHEDULE_INSTALL",
+        "installDay": "MONDAY",
+        "installTime": {
+          "mode": "FIXED_HOUR",
+          "hour": 2
+        },
+        "automaticMaintenanceEnable": true,
+        "detectionFrequency": {
+          "state": "ENABLED",
+          "hours": 6
+        },
+        "targetGroup": {
+          "state": "ENABLED",
+          "name": "OFFICE-DESKTOPS"
+        },
+        "autoInstallMinorUpdates": "ENABLED",
+        "elevateNonAdmins": "DISABLED",
+        "noAutoRebootWithLoggedOnUsers": "ENABLED"
+      }
+    }
+  }
+}

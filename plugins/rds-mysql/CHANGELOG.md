@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.3 - 2026-11-24
+
+- Refresh metric selection guidance and the host type requirement for instance creation.
+
 ## 0.1.0-beta.2 - 2026-10-10
 
 ### Changed

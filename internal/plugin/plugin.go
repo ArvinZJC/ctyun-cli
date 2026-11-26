@@ -17,6 +17,7 @@ import (
 
 	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
+	"github.com/ArvinZJC/ctyun-cli/internal/durationlimit"
 	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
 	"github.com/ArvinZJC/ctyun-cli/internal/waiter"
 )
@@ -29,6 +30,14 @@ type Manifest struct {
 	Quality  string       `json:"quality"`
 	Requires Requirements `json:"requires"`
 	API      APIInfo      `json:"api"`
+}
+
+// ValidateDirectoryName checks that a bundle in a managed inventory is stored under its manifest name.
+func (manifest Manifest) ValidateDirectoryName(name string) error {
+	if name != manifest.Name {
+		return diagnostic.New("error.registry_bundle_mismatch", name, "name", name, manifest.Name)
+	}
+	return nil
 }
 
 // Requirements declares core ctyun compatibility for a plugin bundle.
@@ -243,17 +252,22 @@ type Bundle struct {
 	I18N     map[string]map[string]string
 }
 
+// LoadManifest reads and validates the metadata used to select a bundled plugin.
+func LoadManifest(dir string) (Manifest, error) {
+	var manifest Manifest
+	if err := readJSON(filepath.Join(dir, "plugin.json"), &manifest); err != nil {
+		return Manifest{}, err
+	}
+	return manifest, validateManifest(manifest)
+}
+
 // LoadBundle reads and validates a plugin bundle for the supplied core version.
 func LoadBundle(dir, coreVersion string) (Bundle, error) {
-	var bundle Bundle
-	bundle.Dir = dir
-
-	if err := readJSON(filepath.Join(dir, "plugin.json"), &bundle.Manifest); err != nil {
+	manifest, err := LoadManifest(dir)
+	if err != nil {
 		return Bundle{}, err
 	}
-	if err := validateManifest(bundle.Manifest); err != nil {
-		return Bundle{}, err
-	}
+	bundle := Bundle{Dir: dir, Manifest: manifest}
 	if err := readJSON(filepath.Join(dir, "commands.json"), &bundle.Commands); err != nil {
 		return Bundle{}, err
 	}
@@ -702,6 +716,9 @@ func validateWaiters(waiters Waiters) error {
 		if spec.MaxAttempts < 0 {
 			return diagnostic.New("error.waiter_negative_max_attempts", id)
 		}
+		if err := durationlimit.CheckSeconds(spec.IntervalSeconds, "interval_seconds"); err != nil {
+			return err
+		}
 		if spec.IntervalSeconds < 0 {
 			return diagnostic.New("error.waiter_negative_interval_seconds", id)
 		}
@@ -729,12 +746,21 @@ func FindCommandWithArgs(bundle Bundle, path []string) (Command, map[string]stri
 // FindCommandPrefixWithArgs matches the longest command prefix and returns any
 // remaining path segments for command-specific option parsing.
 func FindCommandPrefixWithArgs(bundle Bundle, path []string) (Command, map[string]string, []string, bool) {
+	var best Command
+	var bestArgs map[string]string
+	var bestRest []string
 	for _, command := range bundle.Commands.Commands {
+		if len(command.Path) <= len(best.Path) {
+			continue
+		}
 		if args, rest, ok := matchPathPrefix(command.Path, path); ok {
-			return command, args, rest, true
+			best, bestArgs, bestRest = command, args, rest
+			if len(rest) == 0 {
+				break
+			}
 		}
 	}
-	return Command{}, nil, nil, false
+	return best, bestArgs, bestRest, best.Path != nil
 }
 
 // FindCommandMissingPathArgs matches an incomplete command path whose remaining
@@ -746,6 +772,16 @@ func FindCommandMissingPathArgs(bundle Bundle, path []string) (Command, []string
 		}
 	}
 	return Command{}, nil, false
+}
+
+// MatchedPathLength counts leading tokens matching literal command words or declared positional arguments.
+func MatchedPathLength(pattern, tokens []string) int {
+	for i := range min(len(pattern), len(tokens)) {
+		if !isPathPlaceholder(pattern[i]) && pattern[i] != tokens[i] {
+			return i
+		}
+	}
+	return min(len(pattern), len(tokens))
 }
 
 // matchPathPrefix matches a command path prefix and returns remaining tokens.
@@ -762,16 +798,8 @@ func matchPathPrefix(pattern, path []string) (map[string]string, []string, bool)
 
 // matchMissingPathArgs reports missing placeholder names after a static prefix.
 func matchMissingPathArgs(pattern, path []string) ([]string, bool) {
-	if len(path) >= len(pattern) {
+	if len(path) >= len(pattern) || MatchedPathLength(pattern, path) != len(path) {
 		return nil, false
-	}
-	for i := range path {
-		if isPathPlaceholder(pattern[i]) {
-			continue
-		}
-		if pattern[i] != path[i] {
-			return nil, false
-		}
 	}
 	missing := make([]string, 0, len(pattern)-len(path))
 	for _, segment := range pattern[len(path):] {
@@ -785,17 +813,13 @@ func matchMissingPathArgs(pattern, path []string) ([]string, bool) {
 
 // matchPath matches a full command path and captures placeholder arguments.
 func matchPath(pattern, path []string) (map[string]string, bool) {
-	if len(pattern) != len(path) {
+	if len(pattern) != len(path) || MatchedPathLength(pattern, path) != len(path) {
 		return nil, false
 	}
 	args := make(map[string]string)
 	for i := range pattern {
 		if isPathPlaceholder(pattern[i]) {
 			args[pathPlaceholderName(pattern[i])] = path[i]
-			continue
-		}
-		if pattern[i] != path[i] {
-			return nil, false
 		}
 	}
 	return args, true

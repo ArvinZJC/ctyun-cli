@@ -65484,6 +65484,537 @@
         "status": 200,
         "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICLmiJDlip8iLCAicmV0dXJuT2JqIjogeyJvcmRlcklkIjogIk9SREVSMjAyNjA4MTEwMDAxIiwgIm9yZGVyTm8iOiAiTk8yMDI2MDgxMTAwMDEifX0="
       }
+    },
+    {
+      "id": "cce.node.flavor.list",
+      "api_id": "24128",
+      "title": "查询节点规格列表",
+      "description": {
+        "en-GB": "List node flavor",
+        "en-US": "List node flavor",
+        "zh-CN": "查询节点规格列表"
+      },
+      "category": "node",
+      "command_path": [
+        "node",
+        "flavor",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v2/cce/getnodeflavorlist",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=43&api=24128&data=128&isNormal=1&vid=121",
+      "retryable": true,
+      "dangerous": false,
+      "parameters": [
+        {
+          "name": "flavorFamily",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "c",
+            "hc",
+            "s",
+            "hs",
+            "m",
+            "hm",
+            "g",
+            "p",
+            "hne",
+            "kc",
+            "fc",
+            "ks",
+            "fs",
+            "km",
+            "fm",
+            "kne",
+            "physical_cpu",
+            "physical_gpu"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "规格族： X86计算架构：c:计算增强型，hc:海光计算增强型，s:通用型，hs:海光通用型，m:内存优化型，hm:海光内存优化型，g:GPU图形加速基础型，p:GPU计算加速型，hne:海光网络增强型； ARM计算架构：kc:鲲鹏计算增强型，fc:飞腾计算增强型，ks:鲲鹏通用型，fs:飞腾通用型，km:鲲鹏内存优化型，fm:飞腾内存优化型，kne:鲲鹏网络增强型； 裸金属架构：physical_cpu:CPU型裸金属，physical_gpu:GPU型裸金属。",
+          "descriptions": {
+            "en-GB": "Flavor family",
+            "en-US": "Flavor family",
+            "zh-CN": "规格族： X86计算架构：c:计算增强型，hc:海光计算增强型，s:通用型，hs:海光通用型，m:内存优化型，hm:海光内存优化型，g:GPU图形加速基础型，p:GPU计算加速型，hne:海光网络增强型； ARM计算架构：kc:鲲鹏计算增强型，fc:飞腾计算增强型，ks:鲲鹏通用型，fs:飞腾通用型，km:鲲鹏内存优化型，fm:飞腾内存优化型，kne:鲲鹏网络增强型； 裸金属架构：physical_cpu:CPU型裸金属，physical_gpu:GPU型裸金属。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "flavor_family",
+          "cli_flag": "flavor-family",
+          "table_target": "",
+          "example": "c",
+          "help_descriptions": {
+            "en-GB": "Flavor family",
+            "en-US": "Flavor family",
+            "zh-CN": "规格族： X86计算架构：c:计算增强型，hc:海光计算增强型，s:通用型，hs:海光通用型，m:内存优化型，hm:海光内存优化型，g:GPU图形加速基础型，p:GPU计算加速型，hne:海光网络增强型； ARM计算架构：kc:鲲鹏计算增强型，fc:飞腾计算增强型，ks:鲲鹏通用型，fs:飞腾通用型，km:鲲鹏内存优化型，fm:飞腾内存优化型，kne:鲲鹏网络增强型； 裸金属架构：physical_cpu:CPU型裸金属，physical_gpu:GPU型裸金属。"
+          }
+        },
+        {
+          "name": "clusterType",
+          "location": "query",
+          "required": true,
+          "type": "Integer",
+          "enum": [
+            "0",
+            "2",
+            "4"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "集群类型，表示如下 0：专有版 2：托管版 4：智算版",
+          "descriptions": {
+            "en-GB": "Cluster type",
+            "en-US": "Cluster type",
+            "zh-CN": "集群类型，表示如下 0：专有版 2：托管版 4：智算版"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cluster_type",
+          "cli_flag": "cluster-type",
+          "table_target": "",
+          "example": 0,
+          "help_descriptions": {
+            "en-GB": "Cluster type",
+            "en-US": "Cluster type",
+            "zh-CN": "集群类型，表示如下 0：专有版 2：托管版 4：智算版"
+          }
+        },
+        {
+          "name": "regionId",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 云容器引擎资源池 另外您通过 地域和可用区 来了解资源池 获取： 查 资源池列表查询",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池ID，您可以查看 云容器引擎资源池 另外您通过 地域和可用区 来了解资源池 获取： 查 资源池列表查询"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "b342b77ef26b11ecb0ac0242ac110002",
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池ID，您可以查看 云容器引擎资源池 另外您通过 地域和可用区 来了解资源池 获取： 查 资源池列表查询"
+          }
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 云容器引擎资源池 另外您通过 地域和可用区 来了解资源池 获取： 查 资源池列表查询",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池ID，您可以查看 云容器引擎资源池 另外您通过 地域和可用区 来了解资源池 获取： 查 资源池列表查询"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002",
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池ID，您可以查看 云容器引擎资源池 另外您通过 地域和可用区 来了解资源池 获取： 查 资源池列表查询"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "ebm_records",
+            "path": "ebmRecords",
+            "label_en": "Ebm Records",
+            "label_zh": "物理机规格列表"
+          },
+          {
+            "key": "ecs_records",
+            "path": "ecsRecords",
+            "label_en": "ECS Records",
+            "label_zh": "云主机规格列表"
+          }
+        ],
+        "default_columns": [
+          "ebm_records",
+          "ecs_records"
+        ],
+        "layout": "vertical"
+      },
+      "examples": [],
+      "example_response": {
+        "code": 0,
+        "requestId": "844adbaa-060f-4ae4-9093-8a0633aba18d",
+        "statusCode": 800,
+        "message": "查询节点规格列表成功",
+        "returnObj": {
+          "ebmRecords": null,
+          "ecsRecords": {
+            "master": [
+              {
+                "flavorName": "c7.xlarge.2",
+                "cpuArch": "x86",
+                "flavorFamily": "c7",
+                "flavorCPU": 4,
+                "flavorRAM": 8,
+                "bandwidthBase": 1.6,
+                "bandwidthMax": 8,
+                "multiQueue": 2,
+                "eni": 4,
+                "pps": 80,
+                "flavorGroup": 10,
+                "azList": [
+                  "cn-huadong1-jsnj1A-public-ctcloud",
+                  "cn-huadong1-jsnj3A-public-ctcloud",
+                  "cn-huadong1-jsnj2A-public-ctcloud"
+                ],
+                "azAvailableMap": {
+                  "cn-huadong1-jsnj1A-public-ctcloud": true,
+                  "cn-huadong1-jsnj3A-public-ctcloud": true,
+                  "cn-huadong1-jsnj2A-public-ctcloud": true
+                },
+                "diskCount": 8
+              },
+              {
+                "flavorName": "c7.xlarge.4",
+                "cpuArch": "x86",
+                "flavorFamily": "c7",
+                "flavorCPU": 4,
+                "flavorRAM": 16,
+                "bandwidthBase": 1.6,
+                "bandwidthMax": 8,
+                "multiQueue": 2,
+                "eni": 4,
+                "pps": 80,
+                "flavorGroup": 10,
+                "azList": [
+                  "cn-huadong1-jsnj1A-public-ctcloud",
+                  "cn-huadong1-jsnj3A-public-ctcloud",
+                  "cn-huadong1-jsnj2A-public-ctcloud"
+                ],
+                "azAvailableMap": {
+                  "cn-huadong1-jsnj1A-public-ctcloud": true,
+                  "cn-huadong1-jsnj3A-public-ctcloud": true,
+                  "cn-huadong1-jsnj2A-public-ctcloud": true
+                },
+                "diskCount": 8
+              }
+            ],
+            "worker": [
+              {
+                "flavorName": "c7.24xlarge.2",
+                "cpuArch": "x86",
+                "flavorFamily": "c7",
+                "flavorCPU": 96,
+                "flavorRAM": 192,
+                "bandwidthBase": 36,
+                "bandwidthMax": 40,
+                "multiQueue": 32,
+                "eni": 15,
+                "pps": 1100,
+                "flavorGroup": 10,
+                "azList": [
+                  "cn-huadong1-jsnj1A-public-ctcloud",
+                  "cn-huadong1-jsnj3A-public-ctcloud",
+                  "cn-huadong1-jsnj2A-public-ctcloud"
+                ],
+                "azAvailableMap": {
+                  "cn-huadong1-jsnj1A-public-ctcloud": true,
+                  "cn-huadong1-jsnj3A-public-ctcloud": true,
+                  "cn-huadong1-jsnj2A-public-ctcloud": true
+                },
+                "diskCount": 8
+              },
+              {
+                "flavorName": "c7.24xlarge.4",
+                "cpuArch": "x86",
+                "flavorFamily": "c7",
+                "flavorCPU": 96,
+                "flavorRAM": 384,
+                "bandwidthBase": 36,
+                "bandwidthMax": 40,
+                "multiQueue": 32,
+                "eni": 15,
+                "pps": 1100,
+                "flavorGroup": 10,
+                "azList": [
+                  "cn-huadong1-jsnj1A-public-ctcloud",
+                  "cn-huadong1-jsnj3A-public-ctcloud",
+                  "cn-huadong1-jsnj2A-public-ctcloud"
+                ],
+                "azAvailableMap": {
+                  "cn-huadong1-jsnj1A-public-ctcloud": true,
+                  "cn-huadong1-jsnj3A-public-ctcloud": true,
+                  "cn-huadong1-jsnj2A-public-ctcloud": true
+                },
+                "diskCount": 8
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "cce.node.flavor.disk-type.list",
+      "api_id": "24129",
+      "title": "根据规格查询可支持的数据盘类型",
+      "description": {
+        "en-GB": "List node flavor disk type",
+        "en-US": "List node flavor disk type",
+        "zh-CN": "根据规格查询可支持的数据盘类型"
+      },
+      "category": "node",
+      "command_path": [
+        "node",
+        "flavor",
+        "disk-type",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v2/cce/getnodeflavordisktypelist",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=43&api=24129&data=128&isNormal=1&vid=121",
+      "retryable": true,
+      "dangerous": false,
+      "parameters": [
+        {
+          "name": "flavorName",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "规格名称",
+          "descriptions": {
+            "en-GB": "Flavor name",
+            "en-US": "Flavor name",
+            "zh-CN": "规格名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "flavor_name",
+          "cli_flag": "flavor-name",
+          "table_target": "",
+          "example": "s3.2xlarge.2",
+          "help_descriptions": {
+            "en-GB": "Flavor name",
+            "en-US": "Flavor name",
+            "zh-CN": "规格名称"
+          }
+        },
+        {
+          "name": "regionId",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 云容器引擎资源池 另外您通过 地域和可用区 来了解资源池获取： 查 资源池列表查询",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池ID，您可以查看 云容器引擎资源池 另外您通过 地域和可用区 来了解资源池获取： 查 资源池列表查询"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002",
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池ID，您可以查看 云容器引擎资源池 另外您通过 地域和可用区 来了解资源池获取： 查 资源池列表查询"
+          }
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 云容器引擎资源池 另外您通过 地域和可用区 来了解资源池获取： 查 资源池列表查询",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池ID，您可以查看 云容器引擎资源池 另外您通过 地域和可用区 来了解资源池获取： 查 资源池列表查询"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002",
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池ID，您可以查看 云容器引擎资源池 另外您通过 地域和可用区 来了解资源池获取： 查 资源池列表查询"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "system_disk_types",
+            "path": "systemDiskTypes",
+            "label_en": "System Disk Types",
+            "label_zh": "支持的系统盘类型列表"
+          },
+          {
+            "key": "data_disk_types",
+            "path": "dataDiskTypes",
+            "label_en": "Data Disk Types",
+            "label_zh": "支持的数据盘类型列表"
+          }
+        ],
+        "default_columns": [
+          "system_disk_types",
+          "data_disk_types"
+        ],
+        "layout": "vertical"
+      },
+      "examples": [],
+      "example_response": {
+        "code": 0,
+        "requestId": "b1313c4e-b7ef-4cf6-9407-2af085da1526",
+        "statusCode": 800,
+        "message": "查询可支持的数据盘类型成功",
+        "returnObj": {
+          "systemDiskTypes": [
+            {
+              "azName": "cn-huadong1-jsnj1A-public-ctcloud",
+              "diskTypes": [
+                {
+                  "diskType": "SSD-genric"
+                },
+                {
+                  "diskType": "SSD"
+                },
+                {
+                  "diskType": "SATA"
+                },
+                {
+                  "diskType": "SAS"
+                }
+              ]
+            },
+            {
+              "azName": "cn-huadong1-jsnj2A-public-ctcloud",
+              "diskTypes": [
+                {
+                  "diskType": "SSD-genric"
+                },
+                {
+                  "diskType": "SSD"
+                },
+                {
+                  "diskType": "SATA"
+                },
+                {
+                  "diskType": "SAS"
+                }
+              ]
+            },
+            {
+              "azName": "cn-huadong1-jsnj3A-public-ctcloud",
+              "diskTypes": [
+                {
+                  "diskType": "SSD-genric"
+                },
+                {
+                  "diskType": "SSD"
+                },
+                {
+                  "diskType": "SATA"
+                },
+                {
+                  "diskType": "SAS"
+                }
+              ]
+            }
+          ],
+          "dataDiskTypes": [
+            {
+              "azName": "cn-huadong1-jsnj1A-public-ctcloud",
+              "diskTypes": [
+                {
+                  "diskType": "SSD-genric"
+                },
+                {
+                  "diskType": "SSD"
+                },
+                {
+                  "diskType": "SATA"
+                },
+                {
+                  "diskType": "SAS"
+                }
+              ]
+            },
+            {
+              "azName": "cn-huadong1-jsnj2A-public-ctcloud",
+              "diskTypes": [
+                {
+                  "diskType": "SSD-genric"
+                },
+                {
+                  "diskType": "SSD"
+                },
+                {
+                  "diskType": "SATA"
+                },
+                {
+                  "diskType": "SAS"
+                }
+              ]
+            },
+            {
+              "azName": "cn-huadong1-jsnj3A-public-ctcloud",
+              "diskTypes": [
+                {
+                  "diskType": "SSD-genric"
+                },
+                {
+                  "diskType": "SSD"
+                },
+                {
+                  "diskType": "SATA"
+                },
+                {
+                  "diskType": "SAS"
+                }
+              ]
+            }
+          ]
+        }
+      }
     }
   ],
   "waiters": {

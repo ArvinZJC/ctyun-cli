@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.1.0-beta.2 - 2026-11-26
+
+### Added
+
+- Add `ctyun api-gateway vm order price` to look up the purchase price of a self-operated VM.
+
+### Changed
+
+- Encode structured order details as JSON in form requests. Update the order options and the fields shown in order and resource results.
+
+### Fixed
+
+- Remove incorrect deprecation markers and warnings from the status and availability-zone columns in `ctyun api-gateway flavor list`. The value `abandon` describes availability.
+
 ## 0.1.0-beta.1 - 2026-10-10
 
 ### Added

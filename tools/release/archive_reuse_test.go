@@ -26,7 +26,7 @@ func TestPluginArchivePreservesEquivalentCompressedBytes(t *testing.T) {
 		t.Fatal(err)
 	}
 	archive := filepath.Join(root, "plugin.tar.gz")
-	if err := writeDirectoryArchive(archive, source, "example"); err != nil {
+	if _, err := writeDirectoryArchive(archive, source, "example", archive); err != nil {
 		t.Fatal(err)
 	}
 	raw, err := os.ReadFile(archive)
@@ -56,7 +56,7 @@ func TestPluginArchivePreservesEquivalentCompressedBytes(t *testing.T) {
 	if err := os.WriteFile(archive, previous.Bytes(), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if err := writeDirectoryArchive(archive, source, "example"); err != nil {
+	if _, err := writeDirectoryArchive(archive, source, "example", archive); err != nil {
 		t.Fatal(err)
 	}
 	retained, err := os.ReadFile(archive)
@@ -66,7 +66,7 @@ func TestPluginArchivePreservesEquivalentCompressedBytes(t *testing.T) {
 	if err := os.WriteFile(file, []byte(`{"version":"0.2.0"}`), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if err := writeDirectoryArchive(archive, source, "example"); err != nil {
+	if _, err := writeDirectoryArchive(archive, source, "example", archive); err != nil {
 		t.Fatal(err)
 	}
 	updated, err := os.ReadFile(archive)

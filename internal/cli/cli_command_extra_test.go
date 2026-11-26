@@ -16,6 +16,7 @@ import (
 	"testing"
 
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
+	"github.com/ArvinZJC/ctyun-cli/internal/output"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
@@ -789,4 +790,89 @@ type failingWriter struct{}
 // Write returns a deterministic output failure for propagation tests.
 func (failingWriter) Write([]byte) (int, error) {
 	return 0, errors.New("write failed")
+}
+
+// TestDevelopmentDiscoveryWithoutReadableInstalledRoot keeps worktree commands available during installed-store failures.
+func TestDevelopmentDiscoveryWithoutReadableInstalledRoot(t *testing.T) {
+	chdirSyntheticPluginRootForTest(t)
+	t.Cleanup(patchVersion(testCoreVersion() + "-dev"))
+	root := t.TempDir()
+	if err := os.Chmod(root, 0); err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = os.Chmod(root, 0700) })
+	if _, err := os.ReadDir(root); err == nil {
+		t.Skip("this account can read the restricted directory")
+	}
+	bundles, err := loadBundles(root)
+	if err != nil || len(bundles) != 1 || bundles[0].Manifest.Name != "ecs" {
+		t.Fatalf("worktree bundle unavailable: bundles=%d error=%v", len(bundles), err)
+	}
+}
+
+// TestDevelopmentDiscoveryReportsInvalidWorktreeBundle keeps broken bundled metadata visible to developers.
+func TestDevelopmentDiscoveryReportsInvalidWorktreeBundle(t *testing.T) {
+	chdirSyntheticPluginRootForTest(t)
+	t.Cleanup(patchVersion(testCoreVersion() + "-dev"))
+	mustWrite(t, filepath.Join("plugins", "ecs", "commands.json"), "{")
+	if _, err := loadBundles(t.TempDir()); err == nil {
+		t.Fatal("accepted malformed worktree commands")
+	}
+}
+
+// TestTableLabelsIdentifyTheirOwnColumns checks help, examples and all three
+// table controls when translated labels duplicate another label or stable key.
+func TestTableLabelsIdentifyTheirOwnColumns(t *testing.T) {
+	table := plugin.Table{}
+	for _, pair := range [][2]string{{"zone_name", "Zone"}, {"zone_alias", "Zone"}, {"reserved", "Zone (zone_alias)"}, {"shadow", "zone_name"}, {"normal", "normal"}} {
+		table.Columns = append(table.Columns, plugin.TableColumn{Key: pair[0], Labels: map[string]string{"en-US": pair[1]}})
+	}
+	columns := tableColumns(table, "en-US")
+	helpLabels := make(map[string]bool)
+	for _, row := range tableSelectorHelpRows(table, "en-US") {
+		helpLabels[row.Name] = true
+	}
+	for _, column := range columns {
+		if !helpLabels[column.Label] {
+			t.Errorf("help omitted visible label %q", column.Label)
+		}
+		for _, selector := range []string{column.Label, column.Key} {
+			keys, err := output.ResolveColumnSelectors(columns, []string{selector})
+			if err != nil || len(keys) != 1 || keys[0] != column.Key {
+				t.Errorf("column selector %q resolved to %v, %v; want %q", selector, keys, err, column.Key)
+			}
+			filter, err := output.ResolveFilterExpression(columns, selector+"=value")
+			if err != nil || filter != column.Key+"=value" {
+				t.Errorf("filter for %q resolved to %q, %v", column.Key, filter, err)
+			}
+			order, err := output.ResolveSortExpression(columns, "-"+selector)
+			if err != nil || order != "-"+column.Key {
+				t.Errorf("sort for %q resolved to %q, %v", column.Key, order, err)
+			}
+		}
+		example := localizedExampleSelectors("ctyun sample list --cols "+column.Key, columns)
+		if !strings.Contains(example, column.Label) {
+			t.Errorf("example %q omitted %q", example, column.Label)
+		}
+	}
+	if _, err := output.ResolveColumnSelectors(columns, []string{"Zone"}); err == nil {
+		t.Error("ambiguous label Zone unexpectedly selected a column")
+	}
+}
+
+// TestTableSelectorsWithDelimiters preserves option syntax inside declared column labels.
+func TestTableSelectorsWithDelimiters(t *testing.T) {
+	columns := []output.Column{{Key: "zone", Label: "Zone, where assigned"}, {Key: "type", Label: "OS=type"}, {Key: "id", Label: "ID"}}
+	opts, _, err := parseGlobalOptions([]string{"--cols", "ID,Zone, where assigned,type", "--filter", "OS=type!=abc=def"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	keys, err := output.ResolveColumnSelectors(columns, opts.Columns)
+	if err != nil || strings.Join(keys, ",") != "id,zone,type" {
+		t.Errorf("resolved columns %v, %v", keys, err)
+	}
+	filter, err := output.ResolveFilterExpression(columns, opts.Filter)
+	if err != nil || filter != "type!=abc=def" {
+		t.Errorf("resolved filter %q, %v", filter, err)
+	}
 }

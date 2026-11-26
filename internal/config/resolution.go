@@ -7,6 +7,7 @@ package config
 
 import (
 	"strconv"
+	"strings"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/i18n"
@@ -262,7 +263,7 @@ func credentialCandidate(environment, environmentName string, profileAvailable b
 
 // warningSetting resolves one boolean warning control with its provenance.
 func warningSetting(key, environmentName string, getenv func(string) string, profileAvailable bool, profileValue, configValue *bool, profileName string) Setting {
-	if value := getenv(environmentName); value != "" {
+	if value := strings.TrimSpace(getenv(environmentName)); value != "" {
 		return settingFromCandidate(key, candidate{value: strconv.FormatBool(parseWarningBool(value, true)), source: Source{Kind: SourceEnvironment, Name: environmentName}})
 	}
 	if profileAvailable && profileValue != nil {

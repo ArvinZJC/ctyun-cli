@@ -1,5 +1,34 @@
 {
   "operations": {
+    "clickhouse.cluster.database.table.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v2/user-open-api/cluster/db-tables",
+      "content_type": "application/json",
+      "query": {
+        "clusterName": "$param.cluster_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
     "clickhouse.cluster.list": {
       "response": {
         "variants": [

@@ -8,12 +8,15 @@ package cli
 import (
 	"bytes"
 	"errors"
+	"io"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"testing"
 
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
+	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
 // TestConfigPathPrintsResolvedPath prints the selected config file path without loading its contents.
@@ -30,6 +33,32 @@ func TestConfigPathPrintsResolvedPath(t *testing.T) {
 	}
 	if got := strings.TrimSpace(stdout.String()); got != configPath {
 		t.Fatalf("config path = %q, want %q", got, configPath)
+	}
+}
+
+// TestConfigPathDoesNotRequireReadableContents prints the chosen path even when it points to a directory.
+func TestConfigPathDoesNotRequireReadableContents(t *testing.T) {
+	path := t.TempDir()
+	var stdout bytes.Buffer
+	err := Run(Config{Args: []string{"--config", path, "config", "path"}, Stdout: &stdout, Stderr: io.Discard})
+	if err != nil || strings.TrimSpace(stdout.String()) != path {
+		t.Fatalf("config path: %q, %v", stdout.String(), err)
+	}
+}
+
+// TestConfigResetCancelsOnInterruptedConfirmation keeps the config intact when only an affirmative prefix arrived.
+func TestConfigResetCancelsOnInterruptedConfirmation(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "config.json")
+	const raw = `{"profiles":{"work":{"region":"test-region"}}}`
+	mustWrite(t, path, raw)
+	stdin := io.MultiReader(strings.NewReader("y"), configFailingReader{})
+	err := Run(Config{Args: []string{"config", "reset"}, ConfigPath: path, Stdin: stdin, Stdout: io.Discard, Stderr: io.Discard})
+	got, readErr := os.ReadFile(path)
+	if err == nil || readErr != nil || string(got) != raw {
+		t.Fatalf("reset = %v, config = %q, read = %v", err, got, readErr)
+	}
+	if _, err := os.Stat(path + ".bak"); !os.IsNotExist(err) {
+		t.Fatalf("unexpected config backup after failed confirmation: %v", err)
 	}
 }
 
@@ -353,12 +382,10 @@ func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 		t.Fatalf("config profile set-secret help output = %q", output)
 	}
 	handled, err = printCoreHelp(ioDiscardForConfigTest{}, []string{"config", "extra"}, "en-US")
-	if err != nil {
-		t.Fatalf("printCoreHelp unknown config subcommand returned error: %v", err)
+	if !handled {
+		t.Fatal("core help did not diagnose its unknown subcommand")
 	}
-	if handled {
-		t.Fatal("printCoreHelp handled unknown config subcommand")
-	}
+	requireDiagnosticKey(t, err, "error.unknown_command")
 	handled, err = printConfigHelp(ioDiscardForConfigTest{}, nil, "en-US")
 	if err != nil {
 		t.Fatalf("printConfigHelp empty args returned error: %v", err)
@@ -377,21 +404,19 @@ func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 	}
 	requireDiagnosticKey(t, err, "error.unexpected_argument")
 	handled, err = printConfigProfileHelp(ioDiscardForConfigTest{}, []string{"config", "profile", "missing"}, "en-US")
-	if err != nil {
-		t.Fatalf("printConfigProfileHelp missing subcommand returned error: %v", err)
+	if !handled {
+		t.Fatal("core help did not diagnose its unknown subcommand")
 	}
-	if handled {
-		t.Fatal("printConfigProfileHelp handled unknown profile subcommand")
-	}
+	requireDiagnosticKey(t, err, "error.unknown_command")
 	if !subcommandMatches(configSubcommandSummaries()[5], "profiles") {
 		t.Fatal("subcommandMatches did not match profiles alias")
 	}
 	assertEqualCompletions(t, commandCompletions([]string{"config"}, completionContext{}), []string{"explain", "path", "profile", "profiles", "reset", "set", "show", "unset"})
-	assertEqualCompletions(t, configCommandCompletions([]string{"config", "profile"}), []string{"list", "reset", "set", "set-secret", "unset", "use"})
-	assertEqualCompletions(t, configCommandCompletions([]string{"config", "profile", "set-secret", "prod"}), []string{"ak", "sk"})
-	assertEqualCompletions(t, configCommandCompletions([]string{"config", "profile", "set-secret", "prod", "ak"}), nil)
-	assertEqualCompletions(t, configCommandCompletions([]string{"config", "show"}), nil)
-	assertEqualCompletions(t, configCommandCompletions([]string{"config", "path", "extra"}), nil)
+	assertEqualCompletions(t, configCommandCompletions([]string{"config", "profile"}, false), []string{"list", "reset", "set", "set-secret", "unset", "use"})
+	assertEqualCompletions(t, configCommandCompletions([]string{"config", "profile", "set-secret", "prod"}, false), []string{"ak", "sk"})
+	assertEqualCompletions(t, configCommandCompletions([]string{"config", "profile", "set-secret", "prod", "ak"}, false), nil)
+	assertEqualCompletions(t, configCommandCompletions([]string{"config", "show"}, false), nil)
+	assertEqualCompletions(t, configCommandCompletions([]string{"config", "path", "extra"}, false), nil)
 	assertHasCompletions(t, allCompletionWords(t.TempDir()), "ak", "sk", "--from-stdin", "set-secret")
 	if got := globalCompletionOptionValues("--wait")(completionContext{}); got != nil {
 		t.Fatalf("wait completions without command = %v, want nil", got)
@@ -638,17 +663,17 @@ func TestConfigSetSecretAndResetBranches(t *testing.T) {
 	if err := runConfigProfileReset(failingWriter{}, ioDiscardForConfigTest{}, strings.NewReader(""), nil, configPath, globalOptions{Yes: true}, []string{"prod"}); err == nil {
 		t.Fatal("profile reset failing writer returned nil")
 	}
-	if err := runConfigReset(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, strings.NewReader(""), "", globalOptions{Yes: true}); err == nil {
+	if err := runConfigReset(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, strings.NewReader(""), nil, "", globalOptions{Yes: true}); err == nil {
 		t.Fatal("config reset empty path returned nil")
 	}
-	if err := runConfigReset(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, strings.NewReader(""), string([]byte{0}), globalOptions{Yes: true}); err == nil {
+	if err := runConfigReset(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, strings.NewReader(""), nil, string([]byte{0}), globalOptions{Yes: true}); err == nil {
 		t.Fatal("config reset invalid path returned nil")
 	}
-	if err := runConfigReset(failingWriter{}, ioDiscardForConfigTest{}, strings.NewReader(""), filepath.Join(t.TempDir(), "missing.json"), globalOptions{Yes: true}); err == nil {
+	if err := runConfigReset(failingWriter{}, ioDiscardForConfigTest{}, strings.NewReader(""), nil, filepath.Join(t.TempDir(), "missing.json"), globalOptions{Yes: true}); err == nil {
 		t.Fatal("config reset missing file with failing writer returned nil")
 	}
 	dirPath := t.TempDir()
-	if err := runConfigReset(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, strings.NewReader(""), dirPath, globalOptions{Yes: true}); err == nil {
+	if err := runConfigReset(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, strings.NewReader(""), nil, dirPath, globalOptions{Yes: true}); err == nil {
 		t.Fatal("config reset directory path returned nil")
 	}
 }
@@ -706,15 +731,15 @@ func TestConfigValueHelpersCoverSupportedKeys(t *testing.T) {
 
 // TestConfigFileHelpersCoverFilesystemErrors propagates config filesystem failures instead of reporting success.
 func TestConfigFileHelpersCoverFilesystemErrors(t *testing.T) {
-	if err := writeConfigFile("", coreconfig.Config{}); err == nil {
+	if err := writeConfigFile("", coreconfig.Config{}, nil); err == nil {
 		t.Fatal("writeConfigFile empty path returned nil error")
 	}
 	parentFile := filepath.Join(t.TempDir(), "parent")
 	mustWrite(t, parentFile, "")
-	if err := writeConfigFile(filepath.Join(parentFile, "config.json"), coreconfig.Config{}); err == nil {
+	if err := writeConfigFile(filepath.Join(parentFile, "config.json"), coreconfig.Config{}, nil); err == nil {
 		t.Fatal("writeConfigFile under file parent returned nil error")
 	}
-	if _, err := backupConfigFile(filepath.Join(t.TempDir(), "missing.json")); err == nil {
+	if _, err := backupConfigFile(filepath.Join(t.TempDir(), "missing", "config.json"), nil); err == nil {
 		t.Fatal("backupConfigFile missing path returned nil error")
 	}
 	noWriteDir := t.TempDir()
@@ -726,14 +751,14 @@ func TestConfigFileHelpersCoverFilesystemErrors(t *testing.T) {
 	t.Cleanup(func() {
 		_ = os.Chmod(noWriteDir, 0o700)
 	})
-	if _, err := backupConfigFile(noWriteConfig); err == nil {
+	if _, err := backupConfigFile(noWriteConfig, []byte("{}")); err == nil {
 		t.Fatal("backupConfigFile in no-write dir returned nil error")
 	}
 	dir := t.TempDir()
 	configPath := filepath.Join(dir, "config.json")
 	mustWrite(t, configPath, "{}")
 	mustWrite(t, configPath+".bak", "{}")
-	backupPath, err := backupConfigFile(configPath)
+	backupPath, err := backupConfigFile(configPath, []byte("{}"))
 	if err != nil {
 		t.Fatalf("backupConfigFile with existing backup returned error: %v", err)
 	}
@@ -755,7 +780,7 @@ func TestConfigWriteValidatesBeforePersisting(t *testing.T) {
 			"prod": {Region: "cn"},
 		},
 	}
-	if err := writeConfigFile(configPath, invalid); err == nil {
+	if err := writeConfigFile(configPath, invalid, nil); err == nil {
 		t.Fatal("writeConfigFile accepted invalid active_profile")
 	}
 	raw, err := os.ReadFile(configPath)
@@ -767,7 +792,7 @@ func TestConfigWriteValidatesBeforePersisting(t *testing.T) {
 	}
 
 	nestedPath := filepath.Join(dir, "missing-parent", "config.json")
-	if err := writeConfigFile(nestedPath, invalid); err == nil {
+	if err := writeConfigFile(nestedPath, invalid, nil); err == nil {
 		t.Fatal("writeConfigFile accepted invalid config for missing parent")
 	}
 	if _, err := os.Stat(filepath.Dir(nestedPath)); !os.IsNotExist(err) {
@@ -775,17 +800,17 @@ func TestConfigWriteValidatesBeforePersisting(t *testing.T) {
 	}
 
 	badLanguage := coreconfig.Config{Profiles: map[string]coreconfig.Profile{"prod": {Language: "fr-FR"}}}
-	if err := writeConfigFile(configPath, badLanguage); err == nil {
+	if err := writeConfigFile(configPath, badLanguage, nil); err == nil {
 		t.Fatal("writeConfigFile accepted unsupported profile language")
 	}
 
 	emptyProfile := coreconfig.Config{Profiles: map[string]coreconfig.Profile{"": {Region: "cn"}}}
-	if err := writeConfigFile(configPath, emptyProfile); err == nil {
+	if err := writeConfigFile(configPath, emptyProfile, nil); err == nil {
 		t.Fatal("writeConfigFile accepted empty profile name")
 	}
 
 	negativeTimeout := coreconfig.Config{Profiles: map[string]coreconfig.Profile{"prod": {TimeoutSeconds: -1}}}
-	if err := writeConfigFile(configPath, negativeTimeout); err == nil {
+	if err := writeConfigFile(configPath, negativeTimeout, nil); err == nil {
 		t.Fatal("writeConfigFile accepted negative timeout_seconds")
 	}
 
@@ -844,4 +869,78 @@ type ioDiscardForConfigTest struct{}
 // Write reports every supplied byte as written.
 func (ioDiscardForConfigTest) Write(p []byte) (int, error) {
 	return len(p), nil
+}
+
+// TestBackupConfigReservesUniqueNames checks concurrent backups of one configuration.
+func TestBackupConfigReservesUniqueNames(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "config.json")
+	mustWrite(t, path, "original")
+	const workers = 32
+	start := make(chan struct{})
+	results := make(chan string, workers)
+	for range workers {
+		go func() {
+			<-start
+			p, err := backupConfigFile(path, []byte("original"))
+			if err != nil {
+				t.Errorf("backup: %v", err)
+			}
+			results <- p
+		}()
+	}
+	close(start)
+	paths := map[string]bool{}
+	for range workers {
+		paths[<-results] = true
+	}
+	if len(paths) != workers {
+		t.Fatalf("%d backups produced %d distinct paths", workers, len(paths))
+	}
+}
+
+// TestTimeoutRepresentableSeconds checks the duration conversion boundary before request execution.
+func TestTimeoutRepresentableSeconds(t *testing.T) {
+	const maxSeconds = "9223372036"
+	const tooLarge = "9223372037"
+	if _, err := strconv.Atoi(maxSeconds); err != nil {
+		t.Skip("platform int is narrower than the duration boundary")
+	}
+	if _, _, err := parseGlobalOptions([]string{"--timeout", maxSeconds}); err != nil {
+		t.Fatal(err)
+	}
+	if _, _, err := parseGlobalOptions([]string{"--timeout", tooLarge}); err == nil {
+		t.Error("accepted timeout that overflows time.Duration")
+	}
+	seconds, _ := strconv.Atoi(tooLarge)
+	p := coreconfig.Profile{TimeoutSeconds: seconds}
+	if err := validateConfigForWrite(coreconfig.Config{Profiles: map[string]coreconfig.Profile{"test": p}}); err == nil {
+		t.Error("stored overflowing profile timeout")
+	}
+	b := plugin.Bundle{Manifest: plugin.Manifest{API: plugin.APIInfo{EndpointURL: "https://example.test"}}, APIs: plugin.APIs{Operations: map[string]plugin.Operation{"list": {Method: "GET", Path: "/list"}}}}
+	if _, err := buildAPIRequest(b, plugin.Command{Operation: "list"}, nil, nil, p, regionTestCredentials, io.Discard, nil, "en-US"); err == nil {
+		t.Error("built request with an overflowing timeout")
+	}
+}
+
+// TestBackupConfigDiscardsPartialCopy keeps the source when a backup cannot finish.
+func TestBackupConfigDiscardsPartialCopy(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "config.json")
+	mustWrite(t, path, "original")
+	original := writeConfigBackup
+	t.Cleanup(func() { writeConfigBackup = original })
+	writeConfigBackup = func(file *os.File, data []byte) error {
+		if _, err := file.Write(data[:1]); err != nil {
+			t.Fatal(err)
+		}
+		return errors.Join(io.ErrShortWrite, file.Close())
+	}
+	if _, err := backupConfigFile(path, []byte("original")); !errors.Is(err, io.ErrShortWrite) {
+		t.Fatal(err)
+	}
+	if _, err := os.Stat(path + ".bak"); !os.IsNotExist(err) {
+		t.Fatalf("partial backup remains: %v", err)
+	}
+	if data, err := os.ReadFile(path); err != nil || string(data) != "original" {
+		t.Fatalf("original=%q error=%v", data, err)
+	}
 }

@@ -13,6 +13,20 @@ import (
 	"github.com/mattn/go-runewidth"
 )
 
+// TestRenderTableUsesWidestPhysicalLine checks natural widths of multiline labels and values.
+func TestRenderTableUsesWidestPhysicalLine(t *testing.T) {
+	rows := []map[string]string{{"region": "华东\n上海", "id": "r1"}}
+	columns := []Column{{Key: "region", Label: "区\n域"}, {Key: "id", Label: "ID"}}
+	got, err := RenderTable(rows, columns, TableOptions{Style: "plain"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	const want = "+------+----+\n| 区   | ID |\n| 域   |    |\n+------+----+\n| 华东 | r1 |\n| 上海 |    |\n+------+----+\n"
+	if got != want {
+		t.Errorf("multiline table:\n%swant:\n%s", got, want)
+	}
+}
+
 func TestRenderTableUsesSelectedColumnsAndLabels(t *testing.T) {
 	rows := []map[string]string{
 		{"instance_id": "ins-1", "name": "web", "status": "running", "private_ip": "10.0.0.2"},
@@ -455,5 +469,68 @@ func TestWriteCompactLineHandlesFinalColumnWithoutPadding(t *testing.T) {
 
 	if got := b.String(); got != "api\n" {
 		t.Fatalf("compact line = %q, want no trailing padding for final column", got)
+	}
+}
+
+// TestRenderTableKeepsCombiningMarksOnSeparators checks that a preferred line
+// break keeps an accent on the punctuation that it modifies.
+func TestRenderTableKeepsCombiningMarksOnSeparators(t *testing.T) {
+	const token = "a-\u0301bcdef"
+	for _, style := range []string{"compact", "plain", "bordered"} {
+		width := 4
+		if style != "compact" {
+			width += 4
+		}
+		got, err := RenderTable([]map[string]string{{"x": token}}, []Column{{Key: "x", Label: "X"}}, TableOptions{Style: style, MaxWidth: width})
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !strings.Contains(got, "-\u0301") {
+			t.Errorf("%s split the accented hyphen across table lines:\n%s", style, got)
+		}
+	}
+}
+
+// TestTableWrapWhitespace checks the continuation after plain or accented spacing.
+func TestTableWrapWhitespace(t *testing.T) {
+	for _, test := range []struct {
+		text string
+		want string
+	}{
+		{"abcd    ", "abcd\n"},
+		{"abcd \u0301ef", "abcd\n \u0301ef"},
+	} {
+		if got := strings.Join(wrapDisplayText(test.text, 4), "\n"); got != test.want {
+			t.Errorf("wrapDisplayText(%q, 4) = %q, want %q", test.text, got, test.want)
+		}
+	}
+}
+
+// TestCompoundColumnLabels exercises comma lists and filters with operators in the label or value.
+func TestCompoundColumnLabels(t *testing.T) {
+	columns := []Column{{"id", "ID"}, {"short", "Area, Zone"}, {"long", "Area, Zone, Name"}, {"state", "=State"}, {"prefix", ",Units"}}
+	keys, err := ResolveColumnSelectors(columns, []string{" ID , Area, Zone, Name, ,Units ,, "})
+	if err != nil || strings.Join(keys, ",") != "id,long,prefix" {
+		t.Errorf("column list = %v, %v", keys, err)
+	}
+	for expression, want := range map[string]string{"=State!=a=b": "state!=a=b", "id=a=b": "id=a=b"} {
+		got, err := ResolveFilterExpression(columns, expression)
+		if err != nil || got != want {
+			t.Errorf("filter %q = %q, %v; want %q", expression, got, err, want)
+		}
+	}
+}
+
+// TestCompoundLabelsWithAStableKeyPrefix preserves unambiguous labels and existing lists of stable keys.
+func TestCompoundLabelsWithAStableKeyPrefix(t *testing.T) {
+	columns := []Column{{"id", "ID"}, {"region", "Region"}, {"detail", "id, with detail"}, {"list", "id,region"}}
+	for spec, want := range map[string]string{
+		"id, with detail,region": "detail,region",
+		"id,region":              "id,region",
+	} {
+		keys, err := ResolveColumnSelectors(columns, []string{spec})
+		if err != nil || strings.Join(keys, ",") != want {
+			t.Errorf("ResolveColumnSelectors(%q) = %v, %v; want %s", spec, keys, err, want)
+		}
 	}
 }

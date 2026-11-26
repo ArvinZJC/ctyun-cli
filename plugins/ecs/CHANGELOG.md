@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.1.0-beta.7 - 2026-11-26
+
+### Changed
+
+- Remove the unsupported `--flavor-arch` option from `ctyun ecs flavor list` and expose local disk type, size, and count in its table.
+- Accept the documented string representation of policy IDs in `ctyun ecs remote-attestation policy list`. Point the ECS CPU history help to `ctyun cm metric history list`.
+
+### Fixed
+
+- Correct the resource IDs in 22 command help examples using the documented requests and parameter tables. Return the documented key pair ID in the key pair update fixture.
+- Describe the `--disk-name` option in `ctyun ecs volume update` as a disk name.
+
 ## 0.1.0-beta.6 - 2026-10-10
 
 ### Changed

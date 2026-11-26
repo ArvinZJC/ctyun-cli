@@ -22149,9 +22149,9 @@
       "api_id": "18562",
       "title": "故障演练请求详情",
       "description": {
-        "en-GB": "Show a fault drill request",
-        "en-US": "Show a fault drill request",
-        "zh-CN": "故障演练请求详情"
+        "en-GB": "Show a fault drill request. The current Kafka API directory no longer lists this operation. Service availability is unconfirmed.",
+        "en-US": "Show a fault drill request. The current Kafka API directory no longer lists this operation. Service availability is unconfirmed.",
+        "zh-CN": "故障演练请求详情。当前 Kafka API 目录已移除此接口，服务可用性待确认。"
       },
       "category": "fault-drill",
       "command_path": [
@@ -22339,9 +22339,9 @@
       "api_id": "18561",
       "title": "故障演练注销",
       "description": {
-        "en-GB": "Cancel a fault drill",
-        "en-US": "Cancel a fault drill",
-        "zh-CN": "故障演练注销"
+        "en-GB": "Cancel a fault drill. The current Kafka API directory no longer lists this operation. Service availability is unconfirmed.",
+        "en-US": "Cancel a fault drill. The current Kafka API directory no longer lists this operation. Service availability is unconfirmed.",
+        "zh-CN": "故障演练注销。当前 Kafka API 目录已移除此接口，服务可用性待确认。"
       },
       "category": "fault-drill",
       "command_path": [
@@ -22514,9 +22514,9 @@
       "api_id": "18560",
       "title": "故障演练注入",
       "description": {
-        "en-GB": "Inject a fault drill",
-        "en-US": "Inject a fault drill",
-        "zh-CN": "故障演练注入"
+        "en-GB": "Inject a fault drill. The current Kafka API directory no longer lists this operation. Service availability is unconfirmed.",
+        "en-US": "Inject a fault drill. The current Kafka API directory no longer lists this operation. Service availability is unconfirmed.",
+        "zh-CN": "故障演练注入。当前 Kafka API 目录已移除此接口，服务可用性待确认。"
       },
       "category": "fault-drill",
       "command_path": [
@@ -22699,9 +22699,9 @@
       "api_id": "18559",
       "title": "故障演练任务列表",
       "description": {
-        "en-GB": "List fault drills",
-        "en-US": "List fault drills",
-        "zh-CN": "故障演练任务列表"
+        "en-GB": "List fault drills. The current Kafka API directory no longer lists this operation. Service availability is unconfirmed.",
+        "en-US": "List fault drills. The current Kafka API directory no longer lists this operation. Service availability is unconfirmed.",
+        "zh-CN": "故障演练任务列表。当前 Kafka API 目录已移除此接口，服务可用性待确认。"
       },
       "category": "fault-drill",
       "command_path": [
@@ -26831,6 +26831,440 @@
       },
       "dangerous": false,
       "example_response": null
+    },
+    {
+      "id": "kafka.instance.capacity.check",
+      "api_id": "24272",
+      "title": "检查资源是否售罄",
+      "description": {
+        "en-GB": "Check whether the requested Kafka instance capacity is available",
+        "en-US": "Check whether the requested Kafka instance capacity is available",
+        "zh-CN": "检查资源是否售罄"
+      },
+      "category": "instance",
+      "command_path": [
+        "instance",
+        "capacity",
+        "check"
+      ],
+      "method": "POST",
+      "path": "/v3/instances/checkResourceSoldOut",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=48&api=24272&data=83&isNormal=1&vid=330",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "deployMode",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "1"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "部署模式。 1：标准模式",
+          "descriptions": {
+            "en-GB": "Deploy mode",
+            "en-US": "Deploy mode",
+            "zh-CN": "部署模式。 1：标准模式"
+          },
+          "help_descriptions": {
+            "en-GB": "Deployment mode (1 for standard deployment)",
+            "en-US": "Deployment mode (1 for standard deployment)",
+            "zh-CN": "部署模式。 1：标准模式"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "deploy_mode",
+          "cli_flag": "deploy-mode",
+          "table_target": "",
+          "example": "1"
+        },
+        {
+          "name": "azInfo",
+          "location": "body",
+          "required": true,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可用区信息列表。可用区信息可调用 资源池可用区查询 API接口查询。单可用区传入1个元素，多可用区传入3个元素。",
+          "descriptions": {
+            "en-GB": "AZ info",
+            "en-US": "AZ info",
+            "zh-CN": "可用区信息列表。可用区信息可调用 资源池可用区查询 API接口查询。单可用区传入1个元素，多可用区传入3个元素。"
+          },
+          "help_descriptions": {
+            "en-GB": "Availability zone IDs, one for single-zone or three for multi-zone deployment",
+            "en-US": "Availability zone IDs, one for single-zone or three for multi-zone deployment",
+            "zh-CN": "可用区信息列表。可用区信息可调用 资源池可用区查询 API接口查询。单可用区传入1个元素，多可用区传入3个元素。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "az_info",
+          "cli_flag": "az-info",
+          "table_target": "",
+          "example": [
+            "cn-huadong1-jsnj1A-public-ctcloud"
+          ]
+        },
+        {
+          "name": "specName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "规格名称。资源池所具备的规格可通过 查询产品规格 API接口查询。示例： kafka.2u4g.cluster kafka.8u16g.cluster kafka.2u4g.single",
+          "descriptions": {
+            "en-GB": "Spec name",
+            "en-US": "Spec name",
+            "zh-CN": "规格名称。资源池所具备的规格可通过 查询产品规格 API接口查询。示例： kafka.2u4g.cluster kafka.8u16g.cluster kafka.2u4g.single"
+          },
+          "help_descriptions": {
+            "en-GB": "Kafka instance flavor available in the resource pool",
+            "en-US": "Kafka instance flavor available in the resource pool",
+            "zh-CN": "规格名称。资源池所具备的规格可通过 查询产品规格 API接口查询。示例： kafka.2u4g.cluster kafka.8u16g.cluster kafka.2u4g.single"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "spec_name",
+          "cli_flag": "spec-name",
+          "table_target": "",
+          "example": "kafka.8u16g.cluster"
+        },
+        {
+          "name": "hostType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "主机类型。",
+          "descriptions": {
+            "en-GB": "Host type",
+            "en-US": "Host type",
+            "zh-CN": "主机类型。"
+          },
+          "help_descriptions": {
+            "en-GB": "Host type for the requested capacity",
+            "en-US": "Host type for the requested capacity",
+            "zh-CN": "主机类型。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "host_type",
+          "cli_flag": "host-type",
+          "table_target": "",
+          "example": "C"
+        },
+        {
+          "name": "selectHostType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "选择规格族。",
+          "descriptions": {
+            "en-GB": "Select host type",
+            "en-US": "Select host type",
+            "zh-CN": "选择规格族。"
+          },
+          "help_descriptions": {
+            "en-GB": "Preferred host flavor family",
+            "en-US": "Preferred host flavor family",
+            "zh-CN": "选择规格族。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "select_host_type",
+          "cli_flag": "select-host-type",
+          "table_target": "",
+          "example": "C7"
+        },
+        {
+          "name": "nodeNum",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "节点数量。单机版取值1，集群版取值3~50。",
+          "descriptions": {
+            "en-GB": "Node num",
+            "en-US": "Node num",
+            "zh-CN": "节点数量。单机版取值1，集群版取值3~50。"
+          },
+          "help_descriptions": {
+            "en-GB": "Number of nodes, one for standalone instances or 3 to 50 for clusters",
+            "en-US": "Number of nodes, one for standalone instances or 3 to 50 for clusters",
+            "zh-CN": "节点数量。单机版取值1，集群版取值3~50。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "node_num",
+          "cli_flag": "node-num",
+          "table_target": "",
+          "example": 3
+        },
+        {
+          "name": "dataDiskType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "数据盘类型。资源池所具备的磁盘类型可通过 查询产品规格 API接口查询，默认取值： SAS：高IO SSD：超高IO FAST-SSD：极速型SSD",
+          "descriptions": {
+            "en-GB": "Data disk type",
+            "en-US": "Data disk type",
+            "zh-CN": "数据盘类型。资源池所具备的磁盘类型可通过 查询产品规格 API接口查询，默认取值： SAS：高IO SSD：超高IO FAST-SSD：极速型SSD"
+          },
+          "help_descriptions": {
+            "en-GB": "Data disk type available in the resource pool",
+            "en-US": "Data disk type available in the resource pool",
+            "zh-CN": "数据盘类型。资源池所具备的磁盘类型可通过 查询产品规格 API接口查询，默认取值： SAS：高IO SSD：超高IO FAST-SSD：极速型SSD"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "data_disk_type",
+          "cli_flag": "data-disk-type",
+          "table_target": "",
+          "example": "SSD"
+        },
+        {
+          "name": "dataDiskSize",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "^[0-9]+$",
+          "description": "数据盘大小，单位GB。弹性存储场景可为空，非空时必须为纯数字字符串。",
+          "descriptions": {
+            "en-GB": "Data disk size",
+            "en-US": "Data disk size",
+            "zh-CN": "数据盘大小，单位GB。弹性存储场景可为空，非空时必须为纯数字字符串。"
+          },
+          "help_descriptions": {
+            "en-GB": "Data disk size in GB as a string of digits. Omit for elastic storage",
+            "en-US": "Data disk size in GB as a string of digits. Omit for elastic storage",
+            "zh-CN": "数据盘大小，单位GB。弹性存储场景可为空，非空时必须为纯数字字符串。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "data_disk_size",
+          "cli_flag": "data-disk-size",
+          "table_target": "",
+          "example": "300"
+        },
+        {
+          "name": "vpcUuid",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "VPC网络UUID，用于 IP 资源检查。获取方法如下： 方法一：登录网络控制台界面，在虚拟私有云的详情页面查找VPC ID。 方法二：您可以通过 查询VPC列表 vpcID字段获取。",
+          "descriptions": {
+            "en-GB": "VPC uuid",
+            "en-US": "VPC uuid",
+            "zh-CN": "VPC网络UUID，用于 IP 资源检查。获取方法如下： 方法一：登录网络控制台界面，在虚拟私有云的详情页面查找VPC ID。 方法二：您可以通过 查询VPC列表 vpcID字段获取。"
+          },
+          "help_descriptions": {
+            "en-GB": "VPC UUID for the IP capacity check",
+            "en-US": "VPC UUID for the IP capacity check",
+            "zh-CN": "VPC网络UUID，用于 IP 资源检查。获取方法如下： 方法一：登录网络控制台界面，在虚拟私有云的详情页面查找VPC ID。 方法二：您可以通过 查询VPC列表 vpcID字段获取。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "vpc_uuid",
+          "cli_flag": "vpc-uuid",
+          "table_target": "",
+          "example": "vpc-grqvu4741a"
+        },
+        {
+          "name": "subnetUuid",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "VPC子网UUID，用于 IP 资源检查。获取方法如下： 方法一：登录网络控制台界面，单击VPC下的子网，进入子网详情页面，查找子网ID。 方法二：您可以通过 查询子网列表 subnetID字段获取。",
+          "descriptions": {
+            "en-GB": "Subnet uuid",
+            "en-US": "Subnet uuid",
+            "zh-CN": "VPC子网UUID，用于 IP 资源检查。获取方法如下： 方法一：登录网络控制台界面，单击VPC下的子网，进入子网详情页面，查找子网ID。 方法二：您可以通过 查询子网列表 subnetID字段获取。"
+          },
+          "help_descriptions": {
+            "en-GB": "Subnet UUID for the IP capacity check",
+            "en-US": "Subnet UUID for the IP capacity check",
+            "zh-CN": "VPC子网UUID，用于 IP 资源检查。获取方法如下： 方法一：登录网络控制台界面，单击VPC下的子网，进入子网详情页面，查找子网ID。 方法二：您可以通过 查询子网列表 subnetID字段获取。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "subnet_uuid",
+          "cli_flag": "subnet-uuid",
+          "table_target": "",
+          "example": "subnet-gr36jdeyt0"
+        },
+        {
+          "name": "clusterNum",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "1",
+          "pattern": "",
+          "description": "集群数量，默认取值1。购买数量取值范围1~100。",
+          "descriptions": {
+            "en-GB": "Cluster num",
+            "en-US": "Cluster num",
+            "zh-CN": "集群数量，默认取值1。购买数量取值范围1~100。"
+          },
+          "help_descriptions": {
+            "en-GB": "Number of clusters to check, from 1 to 100",
+            "en-US": "Number of clusters to check, from 1 to 100",
+            "zh-CN": "集群数量，默认取值1。购买数量取值范围1~100。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cluster_num",
+          "cli_flag": "cluster-num",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例的资源池ID。 获取方法如下： 方法一：通过查询 分布式消息服务Kafka资源池附录文档 。 方法二：通过调用 查询可用的资源池 API接口查。",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "实例的资源池ID。 获取方法如下： 方法一：通过查询 分布式消息服务Kafka资源池附录文档 。 方法二：通过调用 查询可用的资源池 API接口查。"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool in which to check capacity",
+            "en-US": "Resource pool in which to check capacity",
+            "zh-CN": "实例的资源池ID。 获取方法如下： 方法一：通过查询 分布式消息服务Kafka资源池附录文档 。 方法二：通过调用 查询可用的资源池 API接口查。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002"
+        },
+        {
+          "name": "projectId",
+          "location": "header",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "0",
+          "pattern": "",
+          "description": "企业项目ID(默认值：0)。您可以通过 查看企业项目资源 获取企业项目ID。",
+          "descriptions": {
+            "en-GB": "Project ID",
+            "en-US": "Project ID",
+            "zh-CN": "企业项目ID(默认值：0)。您可以通过 查看企业项目资源 获取企业项目ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Enterprise project for the capacity check",
+            "en-US": "Enterprise project for the capacity check",
+            "zh-CN": "企业项目ID(默认值：0)。您可以通过 查看企业项目资源 获取企业项目ID。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "project_id",
+          "cli_flag": "project-id",
+          "table_target": "",
+          "example": "0"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "sold_out",
+          "message",
+          "no_enough_type",
+          "data"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "sold_out",
+            "path": "soldOut",
+            "label_en": "Sold Out",
+            "label_zh": "是否售罄"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Capacity Check Result",
+            "label_zh": "容量检查结果"
+          },
+          {
+            "key": "no_enough_type",
+            "path": "noEnoughType",
+            "label_en": "Insufficient Resource Type",
+            "label_zh": "余量不足的资源类型"
+          },
+          {
+            "key": "data",
+            "path": "data",
+            "label_en": "Resource Details",
+            "label_zh": "资源详情"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "azInfo": [
+          "cn-huadong1-jsnj1A-public-ctcloud"
+        ],
+        "clusterNum": 1,
+        "dataDiskSize": "300",
+        "dataDiskType": "SSD",
+        "deployMode": "1",
+        "hostType": "C",
+        "nodeNum": 3,
+        "selectHostType": "C7",
+        "specName": "kafka.8u16g.cluster",
+        "subnetUuid": "subnet-gr36jdeyt0",
+        "vpcUuid": "vpc-grqvu4741a"
+      },
+      "example_response": {
+        "returnObj": {
+          "soldOut": false,
+          "message": "资源可用",
+          "noEnoughType": "",
+          "data": {
+            "result": true,
+            "msg": ""
+          }
+        },
+        "message": "success",
+        "statusCode": "800"
+      }
     }
   ]
 }

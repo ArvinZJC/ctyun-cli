@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.2 - 2026-11-24
+
+- Remove network name inputs from application creation after their removal from the request contract.
+
 ## 0.1.0-beta.1 - 2026-10-10
 
 ### Added

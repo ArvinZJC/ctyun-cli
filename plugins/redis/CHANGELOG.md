@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.2 - 2026-11-24
+
+- Use node names for the updated node operation and refresh audit download help and flavor result fields.
+
 ## 0.1.0-beta.1 - 2026-10-10
 
 ### Added

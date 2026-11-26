@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.2 - 2026-11-24
+
+- Support asynchronous and batch repository deletion. Expose namespace and repository states and add bounded waits for ACTIVE on image and chart detail commands.
+
 ## 0.1.0-beta.1 - 2026-10-10
 
 ### Added

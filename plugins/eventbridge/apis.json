@@ -1,0 +1,269 @@
+{
+  "operations": {
+    "eventbridge.bus.create": {
+      "method": "POST",
+      "path": "/v1/bus/create",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desc": "$param.desc",
+        "eventBusName": "$param.event_bus_name"
+      },
+      "retryable": false
+    },
+    "eventbridge.bus.delete": {
+      "method": "POST",
+      "path": "/v1/bus/delete",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "eventBusName": "$param.event_bus_name"
+      },
+      "retryable": false
+    },
+    "eventbridge.bus.list": {
+      "method": "GET",
+      "path": "/v1/bus/list",
+      "content_type": "",
+      "query": {
+        "eventBusName": "$param.event_bus_name",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "eventbridge.bus.show": {
+      "method": "GET",
+      "path": "/v1/bus/detail",
+      "content_type": "",
+      "query": {
+        "eventBusName": "$param.event_bus_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "eventbridge.rule.create": {
+      "method": "POST",
+      "path": "/v1/busRule/create",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desc": "$param.desc",
+        "eventBusName": "$param.event_bus_name",
+        "eventRuleName": "$param.event_rule_name",
+        "eventTargets": "$param.event_targets",
+        "filterPattern": "$param.filter_pattern"
+      },
+      "retryable": false
+    },
+    "eventbridge.rule.delete": {
+      "method": "POST",
+      "path": "/v1/busRule/delete",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "eventBusName": "$param.event_bus_name",
+        "eventRuleName": "$param.event_rule_name"
+      },
+      "retryable": false
+    },
+    "eventbridge.rule.disable": {
+      "method": "POST",
+      "path": "/v1/busRule/disable",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "eventBusName": "$param.event_bus_name",
+        "eventRuleName": "$param.event_rule_name"
+      },
+      "retryable": false
+    },
+    "eventbridge.rule.enable": {
+      "method": "POST",
+      "path": "/v1/busRule/enable",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "eventBusName": "$param.event_bus_name",
+        "eventRuleName": "$param.event_rule_name"
+      },
+      "retryable": false
+    },
+    "eventbridge.rule.list": {
+      "method": "GET",
+      "path": "/v1/busRule/list",
+      "content_type": "",
+      "query": {
+        "eventBusName": "$param.event_bus_name",
+        "eventRuleName": "$param.event_rule_name",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "eventbridge.rule.show": {
+      "method": "GET",
+      "path": "/v1/busRule/detail",
+      "content_type": "",
+      "query": {
+        "eventBusName": "$param.event_bus_name",
+        "eventRuleName": "$param.event_rule_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "eventbridge.rule.update": {
+      "method": "POST",
+      "path": "/v1/busRule/update",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desc": "$param.desc",
+        "eventBusName": "$param.event_bus_name",
+        "eventRuleName": "$param.event_rule_name",
+        "eventTargets": "$param.event_targets",
+        "filterPattern": "$param.filter_pattern"
+      },
+      "retryable": false
+    },
+    "eventbridge.source.create": {
+      "method": "POST",
+      "path": "/v1/busSource/create",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desc": "$param.desc",
+        "eventBusName": "$param.event_bus_name",
+        "eventSourceName": "$param.event_source_name",
+        "eventSourceParams": "$param.event_source_params",
+        "type": "$param.type"
+      },
+      "retryable": false
+    },
+    "eventbridge.source.delete": {
+      "method": "POST",
+      "path": "/v1/busSource/delete",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "eventBusName": "$param.event_bus_name",
+        "eventSourceName": "$param.event_source_name"
+      },
+      "retryable": false
+    },
+    "eventbridge.source.list": {
+      "method": "GET",
+      "path": "/v1/busSource/list",
+      "content_type": "",
+      "query": {
+        "eventBusName": "$param.event_bus_name",
+        "eventSourceName": "$param.event_source_name",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "eventbridge.source.official.list": {
+      "method": "GET",
+      "path": "/v1/busSource/list/official",
+      "content_type": "",
+      "query": {
+        "eventSourceName": "$param.event_source_name",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "eventbridge.source.show": {
+      "method": "GET",
+      "path": "/v1/busSource/detail",
+      "content_type": "",
+      "query": {
+        "eventBusName": "$param.event_bus_name",
+        "eventSourceName": "$param.event_source_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "eventbridge.stream.create": {
+      "method": "POST",
+      "path": "/v1/stream/create",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desc": "$param.desc",
+        "eventStreamName": "$param.event_stream_name",
+        "filterPattern": "$param.filter_pattern",
+        "streamSink": "$param.stream_sink",
+        "streamSource": "$param.stream_source",
+        "transform": "$param.transform"
+      },
+      "retryable": false
+    },
+    "eventbridge.stream.delete": {
+      "method": "POST",
+      "path": "/v1/stream/delete",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "eventStreamName": "$param.event_stream_name"
+      },
+      "retryable": false
+    },
+    "eventbridge.stream.list": {
+      "method": "GET",
+      "path": "/v1/stream/list",
+      "content_type": "",
+      "query": {
+        "eventStreamName": "$param.event_stream_name",
+        "eventStreamNamePrefix": "$param.event_stream_name_prefix",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    }
+  }
+}

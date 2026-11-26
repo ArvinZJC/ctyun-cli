@@ -20,6 +20,36 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
+// TestHostedInstallPreservesPluginInstalledDuringDownload reproduces a competing install and a repeated target.
+func TestHostedInstallPreservesPluginInstalledDuringDownload(t *testing.T) {
+	root := t.TempDir()
+	artifact, data, checksum := hostedPluginArtifact(t, "demo", "0.1.0")
+	index := []byte(`{"plugins":[{"name":"demo","version":"0.1.0","channel":"stable","quality":"reviewed","url":"` + artifact + `","sha256":"` + checksum + `"}]}`)
+	key, base := hostedPluginRegistry(t, index, map[string][]byte{artifact: data})
+	downloads := 0
+	transport := roundTripFunc(func(request *http.Request) (*http.Response, error) {
+		if strings.HasSuffix(request.URL.Path, "/"+artifact) {
+			downloads++
+			if downloads == 1 {
+				writeVersionedBundle(t, filepath.Join(root, "demo"), "demo", "0.2.0")
+			}
+		}
+		return base.RoundTrip(request)
+	})
+	var out bytes.Buffer
+	err := Run(Config{Args: []string{"plugin", "install", "demo", "demo", "--source", "github"}, Stdout: &out, Stderr: io.Discard,
+		PluginRoot: root, HTTPTransport: transport, Env: hostedPluginEnv(key)})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if installedVersion, err := loadInstalledPluginForTest(root, "demo"); err != nil || installedVersion != "0.2.0" {
+		t.Errorf("installed version=%q, error=%v; want competing install preserved", installedVersion, err)
+	}
+	if got := strings.TrimSpace(out.String()); got != "Plugin install complete: installed 0; already installed 2; failed 0." || downloads != 1 {
+		t.Errorf("downloads=%d, summary=%q", downloads, got)
+	}
+}
+
 // TestPluginInstallSkipsInstalledPluginBeforeRegistryRead avoids registry access when the explicit target is already installed.
 func TestPluginInstallSkipsInstalledPluginBeforeRegistryRead(t *testing.T) {
 	pluginRoot := t.TempDir()
@@ -98,7 +128,7 @@ func TestPluginBundledInstallSkipsInstalledPlugin(t *testing.T) {
 	bundledRoot, pluginRoot := prepareBundledPluginRoots(t)
 	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.2.0")
 	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.1.0")
-	t.Cleanup(patchVersion("0.5.1-dev"))
+	t.Cleanup(patchVersion(testCoreVersion() + "-dev"))
 
 	var stdout bytes.Buffer
 	if err := Run(Config{
@@ -187,7 +217,7 @@ func TestPluginReinstallCanDowngradeSelectedChannel(t *testing.T) {
 // TestPluginBundledReinstallRejectsMissingTarget requires an installed target before bundled reinstall.
 func TestPluginBundledReinstallRejectsMissingTarget(t *testing.T) {
 	prepareBundledPluginRoots(t)
-	t.Cleanup(patchVersion("0.5.1-dev"))
+	t.Cleanup(patchVersion(testCoreVersion() + "-dev"))
 	var stdout, stderr bytes.Buffer
 	err := Run(Config{
 		Args:       []string{"plugin", "reinstall", "ecs", "--bundled"},
@@ -301,7 +331,7 @@ func TestPluginOperationPrecheckAndBundleErrors(t *testing.T) {
 		t.Fatal(err)
 	}
 	mustWrite(t, filepath.Join(bundledRoot, "ecs", "plugin.json"), `{`)
-	t.Cleanup(patchVersion("0.5.1-dev"))
+	t.Cleanup(patchVersion(testCoreVersion() + "-dev"))
 	if err := installBundledPlugins(io.Discard, pluginRoot, []string{"ecs"}, false, "en-US"); err == nil {
 		t.Fatal("bundled install accepted invalid source bundle")
 	}
@@ -344,4 +374,40 @@ func loadInstalledPluginForTest(root, name string) (string, error) {
 		return "", err
 	}
 	return bundle.Manifest.Version, nil
+}
+
+// TestPluginReplacementKeepsConcurrentChanges exercises changes made while the verified archive is downloading.
+func TestPluginReplacementKeepsConcurrentChanges(t *testing.T) {
+	artifact, data, checksum := hostedPluginArtifact(t, "demo", "0.2.0")
+	index := []byte(`{"plugins":[{"name":"demo","version":"0.2.0","channel":"stable","quality":"reviewed","url":"` + artifact + `","sha256":"` + checksum + `"}]}`)
+	key, base := hostedPluginRegistry(t, index, map[string][]byte{artifact: data})
+	for _, tc := range []struct{ command, intervening string }{
+		{"update", "0.3.0"}, {"update", ""}, {"reinstall", ""},
+	} {
+		t.Run(tc.command+"_"+tc.intervening, func(t *testing.T) {
+			root := t.TempDir()
+			dest := filepath.Join(root, "demo")
+			writeVersionedBundle(t, dest, "demo", "0.1.0")
+			transport := roundTripFunc(func(request *http.Request) (*http.Response, error) {
+				if strings.HasSuffix(request.URL.Path, "/"+artifact) {
+					if err := os.RemoveAll(dest); err != nil {
+						t.Fatal(err)
+					}
+					if tc.intervening != "" {
+						writeVersionedBundle(t, dest, "demo", tc.intervening)
+					}
+				}
+				return base.RoundTrip(request)
+			})
+			err := Run(Config{Args: []string{"plugin", tc.command, "demo", "--source", "github"}, Stdout: io.Discard, Stderr: io.Discard,
+				PluginRoot: root, HTTPTransport: transport, Env: hostedPluginEnv(key)})
+			if tc.intervening == "" {
+				if _, statErr := os.Stat(dest); !os.IsNotExist(statErr) || err == nil {
+					t.Fatalf("removed target was reinstalled: stat=%v command=%v", statErr, err)
+				}
+			} else if got, loadErr := loadInstalledPluginForTest(root, "demo"); loadErr != nil || got != tc.intervening {
+				t.Fatalf("competing update lost: got %q, load=%v command=%v", got, loadErr, err)
+			}
+		})
+	}
 }

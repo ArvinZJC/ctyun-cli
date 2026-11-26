@@ -28,7 +28,7 @@
           "name": "mobile_phone",
           "flag": "mobile-phone",
           "target": "mobilePhone",
-          "required": true,
+          "required": false,
           "description": "Mobile Phone"
         },
         {
@@ -103,7 +103,7 @@
       "fixture_response": "fixtures/iam-user-create.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=8135&isNormal=1",
       "examples": [
-        "ctyun iam user create --mobile-phone '131****990' --user-name TEST4"
+        "ctyun iam user create --user-name TEST4"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -180,7 +180,7 @@
           "name": "mobile_phone",
           "flag": "mobile-phone",
           "target": "mobilePhone",
-          "required": true,
+          "required": false,
           "description": "Mobile Phone"
         },
         {
@@ -202,14 +202,13 @@
           "flag": "prohibit",
           "target": "prohibit",
           "required": true,
-          "value_type": "integer",
           "description": "Prohibit"
         }
       ],
       "fixture_response": "fixtures/iam-user-update.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&vid=107&data=114&api=9148&isNormal=1",
       "examples": [
-        "ctyun iam user update --user-id '06a4d*******f75f7f8187c' --mobile-phone '135****3156' --user-name 1 --prohibit 0"
+        "ctyun iam user update --user-id '06a4d*******f75f7f8187c' --user-name 1 --prohibit {prohibit}"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -409,6 +408,13 @@
           "target": "consoleAccess",
           "required": true,
           "description": "Console Access"
+        },
+        {
+          "name": "api_access",
+          "flag": "api-access",
+          "target": "apiAccess",
+          "required": false,
+          "description": "Api access"
         }
       ],
       "fixture_response": "fixtures/iam-user-access-control-set.json",
@@ -3374,6 +3380,258 @@
       ],
       "dangerous": {
         "confirm": ""
+      }
+    },
+    {
+      "id": "iam.permission.subject.revoke",
+      "path": [
+        "iam",
+        "permission",
+        "subject",
+        "revoke"
+      ],
+      "operation": "iam.permission.subject.revoke",
+      "table": "iam.permission.subject.revoke",
+      "parameters": [
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyId",
+          "required": true,
+          "description": "Policy ID"
+        },
+        {
+          "name": "auth_subject_id",
+          "flag": "auth-subject-id",
+          "target": "authSubjectId",
+          "required": true,
+          "description": "Auth subject ID"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "allowed_values": [
+            "GLOBAL",
+            "RESOURCE_POOL",
+            "ENTERPRISE_PROJECT"
+          ],
+          "description": "Type"
+        },
+        {
+          "name": "auth_subject_type",
+          "flag": "auth-subject-type",
+          "target": "authSubjectType",
+          "required": true,
+          "allowed_values": [
+            "USER",
+            "USER_GROUP",
+            "DELEGATE"
+          ],
+          "description": "Auth subject type"
+        }
+      ],
+      "fixture_response": "fixtures/iam-permission-subject-revoke.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&api=24069&data=114&isNormal=1&vid=107",
+      "examples": [
+        "ctyun iam permission subject revoke --policy-id 2f234523e6e34xxxx03dd221b1ecff99 --auth-subject-id 580a3c14197xxxx093e0034164e88836 --type RESOURCE_POOL --auth-subject-type USER"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "revoke"
+      }
+    },
+    {
+      "id": "iam.permission.subject.list",
+      "path": [
+        "iam",
+        "permission",
+        "subject",
+        "list"
+      ],
+      "operation": "iam.permission.subject.list",
+      "table": "iam.permission.subject.list",
+      "parameters": [
+        {
+          "name": "account_id",
+          "flag": "account-id",
+          "target": "accountId",
+          "required": false,
+          "description": "Account ID"
+        },
+        {
+          "name": "search_field",
+          "flag": "search-field",
+          "target": "searchField",
+          "required": false,
+          "allowed_values": [
+            "POLICY_NAME",
+            "POLICY_DESC",
+            "AUTH_SUBJECT"
+          ],
+          "description": "Search field"
+        },
+        {
+          "name": "auth_subject_id",
+          "flag": "auth-subject-id",
+          "target": "authSubjectId",
+          "required": true,
+          "description": "Auth subject ID"
+        },
+        {
+          "name": "policy_type",
+          "flag": "policy-type",
+          "target": "policyType",
+          "required": false,
+          "allowed_values": [
+            "CUSTOM",
+            "SYSTEM"
+          ],
+          "description": "Policy type"
+        },
+        {
+          "name": "policy_attribute",
+          "flag": "policy-attribute",
+          "target": "policyAttribute",
+          "required": false,
+          "allowed_values": [
+            "GLOBAL",
+            "RESOURCE_POOL",
+            "ENTERPRISE_PROJECT"
+          ],
+          "description": "Policy attribute"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page size"
+        },
+        {
+          "name": "auth_type",
+          "flag": "auth-type",
+          "target": "authType",
+          "required": false,
+          "allowed_values": [
+            "IAM",
+            "ENTERPRISE_PROJECT"
+          ],
+          "description": "Auth type"
+        },
+        {
+          "name": "search_value",
+          "flag": "search-value",
+          "target": "searchValue",
+          "required": false,
+          "description": "Search value"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page num"
+        },
+        {
+          "name": "auth_subject_type",
+          "flag": "auth-subject-type",
+          "target": "authSubjectType",
+          "required": false,
+          "allowed_values": [
+            "USER",
+            "USER_GROUP",
+            "DELEGATE"
+          ],
+          "description": "Auth subject type"
+        }
+      ],
+      "fixture_response": "fixtures/iam-permission-subject-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&api=24070&data=114&isNormal=1&vid=107",
+      "examples": [
+        "ctyun iam permission subject list --auth-subject-id 03093e00341xxxx8836580a3c1419707"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "iam.enterprise-project.access.grant",
+      "path": [
+        "iam",
+        "enterprise-project",
+        "access",
+        "grant"
+      ],
+      "operation": "iam.enterprise-project.access.grant",
+      "table": "iam.enterprise-project.access.grant",
+      "parameters": [
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": false,
+          "description": "ID"
+        },
+        {
+          "name": "ploy_ids",
+          "flag": "ploy-ids",
+          "target": "ployIds",
+          "required": false,
+          "description": "Ploy IDs"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectId",
+          "required": false,
+          "description": "Project ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-enterprise-project-access-grant.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&api=24071&data=114&isNormal=1&vid=107",
+      "examples": null,
+      "dangerous": {
+        "confirm": "yes",
+        "message": "grant"
+      }
+    },
+    {
+      "id": "iam.enterprise-project.access.revoke",
+      "path": [
+        "iam",
+        "enterprise-project",
+        "access",
+        "revoke"
+      ],
+      "operation": "iam.enterprise-project.access.revoke",
+      "table": "iam.enterprise-project.access.revoke",
+      "parameters": [
+        {
+          "name": "privilege_ids",
+          "flag": "privilege-ids",
+          "target": "privilegeIds",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Privilege IDs"
+        },
+        {
+          "name": "account_id",
+          "flag": "account-id",
+          "target": "accountId",
+          "required": false,
+          "description": "Account ID"
+        }
+      ],
+      "fixture_response": "fixtures/iam-enterprise-project-access-revoke.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=77&api=24100&data=114&isNormal=1&vid=107",
+      "examples": null,
+      "dangerous": {
+        "confirm": "yes",
+        "message": "revoke"
       }
     }
   ]

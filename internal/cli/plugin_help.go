@@ -129,7 +129,7 @@ func printPluginHelp(stdout io.Writer, args []string, language string) (bool, er
 			return true, writer.Err()
 		}
 	}
-	return false, nil
+	return true, commandBoundaryError(args[:2])
 }
 
 // pluginOverviewUsageLines returns command-group usage forms for the plugin

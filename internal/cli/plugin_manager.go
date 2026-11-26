@@ -6,6 +6,7 @@
 package cli
 
 import (
+	"errors"
 	"io"
 	"net/http"
 	"os"
@@ -44,7 +45,7 @@ func runPluginWithOptions(stdout, stderr io.Writer, stdin io.Reader, root, group
 			return diagnostic.New("error.plugin_install_name")
 		}
 		if opts.Bundled {
-			return installBundledPluginsWithProgress(stdout, stderr, root, opts.Names, opts.All, global.Language)
+			return installBundledPluginsWithProgress(stdout, stderr, root, opts.Names, opts.All, opts.Channel, global.Language)
 		}
 		source, err := resolvePluginSource(opts.Source, getenv)
 		if err != nil {
@@ -57,7 +58,7 @@ func runPluginWithOptions(stdout, stderr io.Writer, stdin io.Reader, root, group
 			return err
 		}
 		if opts.Bundled {
-			return reinstallBundledPluginsWithProgress(stdout, stderr, root, opts.Names, opts.All, global.Language)
+			return reinstallBundledPluginsWithProgress(stdout, stderr, root, opts.Names, opts.All, opts.Channel, global.Language)
 		}
 		source, err := resolvePluginSource(opts.Source, getenv)
 		if err != nil {
@@ -128,10 +129,10 @@ func runPluginWithOptions(stdout, stderr io.Writer, stdin io.Reader, root, group
 		}
 		if opts.Bundled {
 			if opts.All {
-				return updateBundledPluginsWithProgress(stdout, stderr, root, nil, true, global.Language)
+				return updateBundledPluginsWithProgress(stdout, stderr, root, nil, true, opts.Channel, global.Language)
 			}
 			if opts.Name != "" {
-				return updateBundledPluginsWithProgress(stdout, stderr, root, []string{opts.Name}, false, global.Language)
+				return updateBundledPluginsWithProgress(stdout, stderr, root, []string{opts.Name}, false, opts.Channel, global.Language)
 			}
 			return diagnostic.New("error.plugin_bundled_update_target")
 		}
@@ -147,7 +148,7 @@ func runPluginWithOptions(stdout, stderr io.Writer, stdin io.Reader, root, group
 		}
 		return diagnostic.New("error.plugin_update_target")
 	default:
-		return commandBoundaryError(append([]string{group}, args...))
+		return commandBoundaryError([]string{group, args[0]})
 	}
 }
 
@@ -187,18 +188,25 @@ type pluginNameSourceOptions struct {
 // pluginInstallOptions captures plugin install flags and source.
 type pluginInstallOptions = pluginNameSourceOptions
 
+// parsePluginCommandTokens uses the declared public options and the supported development-only switches.
+func parsePluginCommandTokens(name string, args []string) (parsedCommandTokens, error) {
+	var options []commandOption
+	for _, command := range pluginSubcommandSummaries() {
+		if command.Name == name {
+			options = command.tokenOptions()
+			if command.Name != "remove" && version.IsDevelopmentBuild() {
+				options = append(options, commandOption{Name: "bundled"})
+			}
+			break
+		}
+	}
+	return parseCommandTokens(args, options)
+}
+
 // parsePluginNameSourceOptions parses shared plugin target and source flags.
 func parsePluginNameSourceOptions(args []string) (pluginNameSourceOptions, error) {
 	var opts pluginNameSourceOptions
-	options := []commandOption{
-		{Name: "all"},
-		{Name: "source", TakesValue: true},
-		{Name: "channel", TakesValue: true},
-	}
-	if version.IsDevelopmentBuild() {
-		options = append(options, commandOption{Name: "bundled"})
-	}
-	parsed, err := parseCommandTokens(args, options)
+	parsed, err := parsePluginCommandTokens("install", args)
 	if err != nil {
 		return opts, err
 	}
@@ -286,14 +294,7 @@ var removeAll = os.RemoveAll
 // parsePluginSearchOptions parses plugin search arguments.
 func parsePluginSearchOptions(args []string) (pluginSearchOptions, error) {
 	var opts pluginSearchOptions
-	options := []commandOption{
-		{Name: "source", TakesValue: true},
-		{Name: "channel", TakesValue: true},
-	}
-	if version.IsDevelopmentBuild() {
-		options = append(options, commandOption{Name: "bundled"})
-	}
-	parsed, err := parseCommandTokens(args, options)
+	parsed, err := parsePluginCommandTokens("search", args)
 	if err != nil {
 		return opts, err
 	}
@@ -322,7 +323,7 @@ func parsePluginSearchOptions(args []string) (pluginSearchOptions, error) {
 // parsePluginRemoveOptions parses plugin remove arguments.
 func parsePluginRemoveOptions(args []string) (pluginRemoveOptions, error) {
 	var opts pluginRemoveOptions
-	parsed, err := parseCommandTokens(args, []commandOption{{Name: "all"}})
+	parsed, err := parsePluginCommandTokens("remove", args)
 	if err != nil {
 		return opts, err
 	}
@@ -349,7 +350,10 @@ func removePlugins(stdout, stderr io.Writer, stdin io.Reader, root string, opts 
 	}
 	names := opts.Names
 	if opts.All {
-		dirs := pluginDirs(root)
+		dirs, err := managementPluginDirs(root)
+		if err != nil {
+			return err
+		}
 		names = make([]string, 0, len(dirs))
 		for _, dir := range dirs {
 			names = append(names, filepath.Base(dir))
@@ -364,10 +368,18 @@ func removePlugins(stdout, stderr io.Writer, stdin io.Reader, root string, opts 
 				if !plugin.ValidName(name) {
 					return operationResult{Target: name, Err: diagnostic.New("error.plugin_name", name)}
 				}
-				if err := removeAll(filepath.Join(root, name)); err != nil {
-					return operationResult{Target: name, Err: err}
-				}
-				return operationResult{Target: name, Outcome: operationChanged}
+				outcome := operationUnchanged
+				err := plugin.WithStoreLock(root, true, func() error {
+					path := filepath.Join(root, name)
+					if _, err := os.Lstat(path); os.IsNotExist(err) {
+						return nil
+					} else if err != nil {
+						return err
+					}
+					outcome = operationChanged
+					return removeAll(path)
+				})
+				return operationResult{Target: name, Outcome: outcome, Err: err}
 			},
 		})
 	}
@@ -377,15 +389,7 @@ func removePlugins(stdout, stderr io.Writer, stdin io.Reader, root string, opts 
 // parsePluginUpdateOptions parses plugin update or upgrade arguments.
 func parsePluginUpdateOptions(args []string) (pluginUpdateOptions, error) {
 	var opts pluginUpdateOptions
-	options := []commandOption{
-		{Name: "all"},
-		{Name: "source", TakesValue: true},
-		{Name: "channel", TakesValue: true},
-	}
-	if version.IsDevelopmentBuild() {
-		options = append(options, commandOption{Name: "bundled"})
-	}
-	parsed, err := parseCommandTokens(args, options)
+	parsed, err := parsePluginCommandTokens("update", args)
 	if err != nil {
 		return opts, err
 	}
@@ -426,16 +430,7 @@ type pluginListOptions struct {
 // parsePluginListOptions parses plugin list arguments.
 func parsePluginListOptions(args []string) (pluginListOptions, error) {
 	var opts pluginListOptions
-	options := []commandOption{
-		{Name: "updates"},
-		{Name: "available"},
-		{Name: "source", TakesValue: true},
-		{Name: "channel", TakesValue: true},
-	}
-	if version.IsDevelopmentBuild() {
-		options = append(options, commandOption{Name: "bundled"})
-	}
-	parsed, err := parseCommandTokens(args, options)
+	parsed, err := parsePluginCommandTokens("list", args)
 	if err != nil {
 		return opts, err
 	}
@@ -516,16 +511,16 @@ func listPlugins(stdout io.Writer, root string, opts globalOptions) error {
 
 // loadInstalledBundles loads every plugin bundle in the user plugin root.
 func loadInstalledBundles(root string) ([]plugin.Bundle, error) {
-	dirs := pluginDirs(root)
-	bundles := make([]plugin.Bundle, 0, len(dirs))
-	for _, dir := range dirs {
-		bundle, err := plugin.LoadBundle(dir, version.Version)
+	var bundles []plugin.Bundle
+	err := plugin.WithStoreLock(root, false, func() error {
+		dirs, err := readPluginDirs(root)
 		if err != nil {
-			return nil, err
+			return err
 		}
-		bundles = append(bundles, bundle)
-	}
-	return bundles, nil
+		bundles, err = readBundleMetadata(dirs)
+		return err
+	})
+	return bundles, err
 }
 
 // validatePluginRootForList verifies that an existing plugin root is a
@@ -560,26 +555,32 @@ func pluginListColumns(language string) []output.Column {
 // installBundledPlugins installs development bundled plugins by name or all
 // bundled plugin directories.
 func installBundledPlugins(stdout io.Writer, root string, names []string, all bool, language string) error {
-	return installBundledPluginsWithProgress(stdout, io.Discard, root, names, all, language)
+	return installBundledPluginsWithProgress(stdout, io.Discard, root, names, all, "", language)
 }
 
 // installBundledPluginsWithProgress installs only absent bundled plugins and
 // reports one structured batch result.
-func installBundledPluginsWithProgress(stdout, stderr io.Writer, root string, names []string, all bool, language string) error {
-	var targets []string
+func installBundledPluginsWithProgress(stdout, stderr io.Writer, root string, names []string, all bool, channel, language string) error {
+	targets := names
+	bundled := make(map[string]registry.Artifact)
 	if all {
 		if !version.IsDevelopmentBuild() {
 			return diagnostic.New("error.bundled_dev_only")
 		}
-		for _, dir := range pluginDirs(defaultPluginRoot()) {
-			bundle, err := plugin.LoadBundle(dir, version.Version)
+		dirs, err := readPluginDirs(defaultPluginRoot())
+		if err != nil {
+			return err
+		}
+		for _, dir := range dirs {
+			artifact, err := bundledArtifact(dir, channel)
 			if err != nil {
 				return err
 			}
-			targets = append(targets, bundle.Manifest.Name)
+			if artifact.Name != "" {
+				targets = append(targets, artifact.Name)
+				bundled[artifact.Name] = artifact
+			}
 		}
-	} else {
-		targets = names
 	}
 
 	tasks := make([]operationTask, 0, len(targets))
@@ -595,23 +596,50 @@ func installBundledPluginsWithProgress(stdout, stderr io.Writer, root string, na
 				if installed {
 					return operationResult{Target: name, Outcome: operationSkipped}
 				}
-				source, err := bundledPluginSource(name)
-				if err != nil {
-					return operationResult{Target: name, Err: err}
+				artifact := bundled[name]
+				if !all {
+					artifact, err = findBundledArtifact(name, channel)
+					if err != nil {
+						return operationResult{Target: name, Err: err}
+					}
 				}
-				if _, err := plugin.InstallVerifiedLocalBundle(source, root, version.Version); err != nil {
-					return operationResult{Target: name, Err: err}
+				if artifact.Name == "" {
+					return operationResult{Target: name, Err: diagnostic.New("error.bundled_plugin_unavailable", name, bundledPluginChannel(channel))}
 				}
-				return operationResult{Target: name, Outcome: operationChanged}
+				_, err = plugin.InstallNewVerifiedLocalBundle(artifact.URL, root, version.Version)
+				return pluginInstallResult(name, err)
 			},
 		})
 	}
 	return executeAndReportOperationTasks(stdout, stderr, tasks, language, pluginInstallSummary)
 }
 
+// pluginInstallResult counts a competing successful installation as an already-installed target.
+func pluginInstallResult(name string, err error) operationResult {
+	if errors.Is(err, plugin.ErrAlreadyInstalled) {
+		return operationResult{Target: name, Outcome: operationSkipped}
+	}
+	if err != nil {
+		return operationResult{Target: name, Err: err}
+	}
+	return operationResult{Target: name, Outcome: operationChanged}
+}
+
 // loadInstalledPlugin loads one valid installed plugin and distinguishes an
 // absent target from corrupt installed state.
 func loadInstalledPlugin(root, name string) (plugin.Bundle, bool, error) {
+	var bundle plugin.Bundle
+	var installed bool
+	err := plugin.WithStoreLock(root, false, func() error {
+		var err error
+		bundle, installed, err = readInstalledPlugin(root, name)
+		return err
+	})
+	return bundle, installed, err
+}
+
+// readInstalledPlugin resolves one named bundle while the caller holds the store lock.
+func readInstalledPlugin(root, name string) (plugin.Bundle, bool, error) {
 	if !plugin.ValidName(name) {
 		return plugin.Bundle{}, false, diagnostic.New("error.plugin_name", name)
 	}
@@ -630,19 +658,25 @@ func loadInstalledPlugin(root, name string) (plugin.Bundle, bool, error) {
 	if err != nil {
 		return plugin.Bundle{}, false, err
 	}
+	if err := bundle.Manifest.ValidateDirectoryName(name); err != nil {
+		return plugin.Bundle{}, false, err
+	}
 	return bundle, true, nil
 }
 
 // reinstallBundledPlugins reinstalls selected installed plugins from bundled
 // development metadata without comparing versions.
 func reinstallBundledPlugins(stdout io.Writer, root string, names []string, all bool, language string) error {
-	return reinstallBundledPluginsWithProgress(stdout, io.Discard, root, names, all, language)
+	return reinstallBundledPluginsWithProgress(stdout, io.Discard, root, names, all, "", language)
 }
 
 // reinstallBundledPluginsWithProgress replaces selected installed plugins
 // from bundled development metadata and reports one batch result.
-func reinstallBundledPluginsWithProgress(stdout, stderr io.Writer, root string, names []string, all bool, language string) error {
-	targets := installedPluginTargets(root, names, all)
+func reinstallBundledPluginsWithProgress(stdout, stderr io.Writer, root string, names []string, all bool, channel, language string) error {
+	targets, err := installedPluginTargets(root, names, all)
+	if err != nil {
+		return err
+	}
 	tasks := make([]operationTask, 0, len(targets))
 	for _, target := range targets {
 		tasks = append(tasks, operationTask{
@@ -652,11 +686,15 @@ func reinstallBundledPluginsWithProgress(stdout, stderr io.Writer, root string, 
 				if target.Err != nil {
 					return operationResult{Target: target.Name, Err: target.Err}
 				}
-				source, err := bundledPluginSource(target.Name)
+				artifact, err := findBundledArtifact(target.Name, channel)
 				if err != nil {
 					return operationResult{Target: target.Name, Err: err}
 				}
-				if _, err := plugin.InstallVerifiedLocalBundle(source, root, version.Version); err != nil {
+				if artifact.Name == "" {
+					return operationResult{Target: target.Name, Err: diagnostic.New("error.bundled_plugin_unavailable", target.Name, bundledPluginChannel(channel))}
+				}
+				source := artifact.URL
+				if _, err := plugin.ReplaceInstalledBundle(source, root, version.Version, target.Bundle.Manifest.Version); err != nil {
 					return operationResult{Target: target.Name, Err: err}
 				}
 				return operationResult{Target: target.Name, Outcome: operationChanged}
@@ -675,10 +713,14 @@ type installedPluginTarget struct {
 
 // installedPluginTargets resolves explicit names or every installed directory
 // while preserving explicit order and stable directory order.
-func installedPluginTargets(root string, names []string, all bool) []installedPluginTarget {
+func installedPluginTargets(root string, names []string, all bool) ([]installedPluginTarget, error) {
 	if all {
-		names = make([]string, 0)
-		for _, dir := range pluginDirs(root) {
+		dirs, err := managementPluginDirs(root)
+		if err != nil {
+			return nil, err
+		}
+		names = make([]string, 0, len(dirs))
+		for _, dir := range dirs {
 			names = append(names, filepath.Base(dir))
 		}
 	}
@@ -695,7 +737,46 @@ func installedPluginTargets(root string, names []string, all bool) []installedPl
 		}
 		targets = append(targets, installedPluginTarget{Name: bundle.Manifest.Name, Bundle: bundle})
 	}
-	return targets
+	return targets, nil
+}
+
+// managementPluginDirs enumerates installed names under a shared store lock.
+func managementPluginDirs(root string) ([]string, error) {
+	var dirs []string
+	err := plugin.WithStoreLock(root, false, func() error {
+		var err error
+		dirs, err = readPluginDirs(root)
+		return err
+	})
+	return dirs, err
+}
+
+// findBundledArtifact resolves a named development source. An empty artifact indicates no eligible release.
+func findBundledArtifact(name, channel string) (registry.Artifact, error) {
+	source, err := bundledPluginSource(name)
+	if os.IsNotExist(err) {
+		return registry.Artifact{}, nil
+	}
+	if err != nil {
+		return registry.Artifact{}, err
+	}
+	return bundledArtifact(source, channel)
+}
+
+// bundledArtifact reads release selection metadata before a selected installation validates the complete bundle.
+func bundledArtifact(dir, channel string) (registry.Artifact, error) {
+	manifest, err := plugin.LoadManifest(dir)
+	if err != nil {
+		return registry.Artifact{}, err
+	}
+	if err := manifest.ValidateDirectoryName(filepath.Base(dir)); err != nil {
+		return registry.Artifact{}, err
+	}
+	artifact := registry.Artifact{Name: manifest.Name, Channel: manifest.Channel, Quality: manifest.Quality, Version: manifest.Version, URL: dir}
+	if !artifact.MatchesChannel(channel) {
+		return registry.Artifact{}, nil
+	}
+	return artifact, nil
 }
 
 // bundledPluginSource resolves a bundled plugin name for development installs.
@@ -715,23 +796,26 @@ func bundledPluginSource(name string) (string, error) {
 
 // updateOneBundledPlugin updates one installed plugin from bundled metadata.
 func updateOneBundledPlugin(stdout io.Writer, root, name string, language string) error {
-	return updateBundledPluginsWithProgress(stdout, io.Discard, root, []string{name}, false, language)
+	return updateBundledPluginsWithProgress(stdout, io.Discard, root, []string{name}, false, "", language)
 }
 
 // updateAllBundledPlugins updates installed plugins from bundled metadata.
 func updateAllBundledPlugins(stdout io.Writer, root string, language string) error {
-	return updateBundledPluginsWithProgress(stdout, io.Discard, root, nil, true, language)
+	return updateBundledPluginsWithProgress(stdout, io.Discard, root, nil, true, "", language)
 }
 
 // updateBundledPluginsWithProgress updates installed plugins only when bundled
 // metadata has a strictly newer semantic version.
-func updateBundledPluginsWithProgress(stdout, stderr io.Writer, root string, names []string, all bool, language string) error {
+func updateBundledPluginsWithProgress(stdout, stderr io.Writer, root string, names []string, all bool, channel, language string) error {
 	if all {
 		if err := validatePluginRootForList(root); err != nil {
 			return err
 		}
 	}
-	targets := installedPluginTargets(root, names, all)
+	targets, err := installedPluginTargets(root, names, all)
+	if err != nil {
+		return err
+	}
 	tasks := make([]operationTask, 0, len(targets))
 	for _, target := range targets {
 		tasks = append(tasks, operationTask{
@@ -741,21 +825,24 @@ func updateBundledPluginsWithProgress(stdout, stderr io.Writer, root string, nam
 				if target.Err != nil {
 					return operationResult{Target: target.Name, Err: target.Err}
 				}
-				source, err := bundledPluginSource(target.Name)
+				artifact, err := findBundledArtifact(target.Name, channel)
 				if err != nil {
 					return operationResult{Target: target.Name, Err: err}
 				}
-				bundled, err := plugin.LoadBundle(source, version.Version)
-				if err != nil {
+				if artifact.Name == "" {
+					if all {
+						return operationResult{Target: target.Name, Outcome: operationUnchanged, OldVersion: target.Bundle.Manifest.Version}
+					}
+					return operationResult{Target: target.Name, Err: diagnostic.New("error.bundled_plugin_unavailable", target.Name, bundledPluginChannel(channel))}
+				}
+				if version.CompareSemanticVersions(artifact.Version, target.Bundle.Manifest.Version) <= 0 {
+					return operationResult{Target: target.Name, Outcome: operationUnchanged, OldVersion: target.Bundle.Manifest.Version, NewVersion: artifact.Version}
+				}
+				source := artifact.URL
+				if _, err := plugin.ReplaceInstalledBundle(source, root, version.Version, target.Bundle.Manifest.Version); err != nil {
 					return operationResult{Target: target.Name, Err: err}
 				}
-				if version.CompareSemanticVersions(bundled.Manifest.Version, target.Bundle.Manifest.Version) <= 0 {
-					return operationResult{Target: target.Name, Outcome: operationUnchanged, OldVersion: target.Bundle.Manifest.Version, NewVersion: bundled.Manifest.Version}
-				}
-				if _, err := plugin.InstallVerifiedLocalBundle(source, root, version.Version); err != nil {
-					return operationResult{Target: target.Name, Err: err}
-				}
-				return operationResult{Target: target.Name, Outcome: operationChanged, OldVersion: target.Bundle.Manifest.Version, NewVersion: bundled.Manifest.Version}
+				return operationResult{Target: target.Name, Outcome: operationChanged, OldVersion: target.Bundle.Manifest.Version, NewVersion: artifact.Version}
 			},
 		})
 	}

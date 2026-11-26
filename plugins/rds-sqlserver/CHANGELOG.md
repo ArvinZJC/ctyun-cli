@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.3 - 2026-11-24
+
+- Expose the instance creation ID input and add labels, time zone, enterprise project and VPC fields to instance listing.
+
 ## 0.1.0-beta.2 - 2026-10-10
 
 ### Added

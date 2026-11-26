@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.2 - 2026-11-24
+
+- Accept cluster label maps and update fleet, IPv6 and channel inputs.
+
 ## 0.1.0-beta.1 - 2026-10-10
 
 ### Added

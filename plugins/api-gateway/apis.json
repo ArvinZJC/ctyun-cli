@@ -3078,7 +3078,10 @@
     },
     "api-gateway.order.create": {
       "request": {
-        "encoding": "form"
+        "encoding": "form",
+        "json_fields": [
+          "orderDetailJson"
+        ]
       },
       "response": {
         "variants": [
@@ -3169,7 +3172,10 @@
     },
     "api-gateway.order.item-price": {
       "request": {
-        "encoding": "form"
+        "encoding": "form",
+        "json_fields": [
+          "orderDetailJson"
+        ]
       },
       "response": {
         "variants": [
@@ -3251,7 +3257,10 @@
     },
     "api-gateway.order.multi-item.upgrade": {
       "request": {
-        "encoding": "form"
+        "encoding": "form",
+        "json_fields": [
+          "orderDetailJson"
+        ]
       },
       "response": {
         "variants": [
@@ -3597,10 +3606,7 @@
     },
     "api-gateway.order.revoke": {
       "request": {
-        "encoding": "form",
-        "json_fields": [
-          "customInfo"
-        ]
+        "encoding": "form"
       },
       "response": {
         "variants": [
@@ -3622,7 +3628,6 @@
       "path": "/v3/order/abandonOrder",
       "content_type": "application/x-www-form-urlencoded",
       "body": {
-        "customInfo": "$param.custom_info",
         "masterOrderId": "$param.master_order_id"
       },
       "retryable": false
@@ -3650,7 +3655,9 @@
       "headers": {
         "agencyReplaceId": "$param.agency_replace_id",
         "customInfo": "$param.custom_info",
-        "masterOrderId": "$param.master_order_id"
+        "ifReturnAdjustmentLabel": "$param.if_return_adjustment_label",
+        "masterOrderId": "$param.master_order_id",
+        "paymentPage": "$param.payment_page"
       },
       "retryable": true
     },
@@ -3695,7 +3702,10 @@
     },
     "api-gateway.order.trial.create": {
       "request": {
-        "encoding": "form"
+        "encoding": "form",
+        "json_fields": [
+          "orderDetailJson"
+        ]
       },
       "response": {
         "variants": [
@@ -4718,6 +4728,43 @@
         "orderDetailJson": "$param.order_detail_json"
       },
       "retryable": false
+    },
+    "api-gateway.vm.order.price": {
+      "request": {
+        "encoding": "form",
+        "json_fields": [
+          "orderDetailJson"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          },
+          {
+            "path": "returnObj.isSucceed",
+            "values": [
+              "true"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/order/vm/queryNewPurchaseOrderPrice",
+      "content_type": "application/x-www-form-urlencoded",
+      "body": {
+        "orderDetailJson": "$param.order_detail_json"
+      },
+      "retryable": true
     },
     "api-gateway.vpc.create": {
       "request": {

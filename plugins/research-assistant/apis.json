@@ -308,6 +308,40 @@
       },
       "retryable": false
     },
+    "research-assistant.development-machine.storage.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          },
+          {
+            "path": "returnObj.status.code",
+            "values": [
+              "ok"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/api/bc/v2/updateIdeVolume",
+      "content_type": "application/json",
+      "body": {
+        "ideId": "$param.ide_id",
+        "localStorageConfirmDelete": "$param.local_storage_confirm_delete",
+        "localStorageInfo": "$param.local_storage_info",
+        "researchStorageInfo": "$param.research_storage_info"
+      },
+      "retryable": false
+    },
     "research-assistant.image.custom.delete": {
       "response": {
         "variants": [
@@ -532,6 +566,7 @@
         "projectId": "$param.project_id",
         "queueId": "$param.queue_id",
         "regionName": "$param.region_name",
+        "sshConfig": "$param.ssh_config",
         "storageConfigs": "$param.storage_configs",
         "trainingMode": "$param.training_mode"
       },

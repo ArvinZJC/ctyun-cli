@@ -309,17 +309,18 @@ func operationHasSourceCommandExample(operation Operation, command plugin.Comman
 	return false
 }
 
-// commandExampleAddsInformation reports whether an example shows more than
-// the visible command path already rendered by Usage.
+// commandExampleAddsInformation compares shell tokens with the path shown in
+// Usage. Malformed examples are kept for the syntax checker to diagnose.
 func commandExampleAddsInformation(example string, command plugin.Command) bool {
-	trimmed := strings.TrimSpace(example)
-	return trimmed != "" && trimmed != "ctyun "+strings.Join(command.Path, " ")
+	tokens, err := plugin.ParseCommandExample(example)
+	return err != nil || len(tokens) > 0 && !slices.Equal(tokens, append([]string{"ctyun"}, command.Path...))
 }
 
 // shellQuoteExampleValue quotes values only when they contain characters that
 // would otherwise be interpreted by a POSIX shell.
 func shellQuoteExampleValue(value string) string {
-	if value != "" && strings.IndexFunc(value, func(char rune) bool {
+	braceExpansion := strings.Contains(value, "{") && (strings.Contains(value, ",") || strings.Contains(value, ".."))
+	if value != "" && !braceExpansion && strings.IndexFunc(value, func(char rune) bool {
 		return !unicode.IsLetter(char) && !unicode.IsDigit(char) && !strings.ContainsRune("-._:/@%+=,{}", char)
 	}) == -1 {
 		return value

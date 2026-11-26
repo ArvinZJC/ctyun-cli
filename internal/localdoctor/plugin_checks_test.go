@@ -17,9 +17,10 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
+// TestPluginChecksInspectBundlesIndependentlyInStableOrder keeps installation scratch directories out of the report.
 func TestPluginChecksInspectBundlesIndependentlyInStableOrder(t *testing.T) {
 	root := t.TempDir()
-	for _, name := range []string{"healthy", "broken"} {
+	for _, name := range []string{"healthy", "broken", ".healthy-tmp-1245", ".healthy-old-1234"} {
 		if err := os.Mkdir(filepath.Join(root, name), 0o700); err != nil {
 			t.Fatal(err)
 		}
@@ -37,6 +38,9 @@ func TestPluginChecksInspectBundlesIndependentlyInStableOrder(t *testing.T) {
 	report := Run(Input{UseInjectedConfig: true, Getenv: completeEnvironment, PluginRoot: root, CoreVersion: "1.0.0"}, deps)
 	assertFindingStatus(t, report, CheckPluginDirectory, doctor.StatusPassed)
 	plugins := pluginFindings(report.Findings)
+	if len(plugins) != 2 {
+		t.Fatalf("expected only installed plugin findings; got %v", plugins)
+	}
 	if got := []string{plugins[0].Target, plugins[1].Target}; !slices.Equal(got, []string{"broken", "healthy"}) {
 		t.Fatalf("plugin targets = %v", got)
 	}
@@ -89,4 +93,16 @@ func pluginFindings(findings []Finding) []Finding {
 		}
 	}
 	return plugins
+}
+
+// TestPluginStoreInspectionFailure reports a filesystem failure if a parent prevents opening the directory.
+func TestPluginStoreInspectionFailure(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "file")
+	if err := os.WriteFile(path, nil, 0600); err != nil {
+		t.Fatal(err)
+	}
+	findings := evaluatePlugins(Input{PluginRoot: filepath.Join(path, "child")}, DefaultDependencies())
+	if len(findings) != 1 || findings[0].Category != FailureFilesystem || findings[0].Status != doctor.StatusFailed {
+		t.Fatalf("unexpected findings: %+v", findings)
+	}
 }

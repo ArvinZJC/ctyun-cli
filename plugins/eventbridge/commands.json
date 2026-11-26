@@ -1,0 +1,966 @@
+{
+  "commands": [
+    {
+      "id": "eventbridge.rule.list",
+      "path": [
+        "eventbridge",
+        "rule",
+        "list"
+      ],
+      "operation": "eventbridge.rule.list",
+      "table": "eventbridge.rule.list",
+      "parameters": [
+        {
+          "name": "event_bus_name",
+          "flag": "event-bus-name",
+          "target": "eventBusName",
+          "required": true,
+          "description": "Name of the event bus"
+        },
+        {
+          "name": "event_rule_name",
+          "flag": "event-rule-name",
+          "target": "eventRuleName",
+          "required": false,
+          "description": "Name of the event rule (supports partial matches)"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number, starting at 1"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of results per page"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Resource pool for the EventBridge request"
+        }
+      ],
+      "fixture_response": "fixtures/eventbridge-rule-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=16524&data=219&isNormal=1&vid=298",
+      "examples": [
+        "ctyun eventbridge rule list --event-bus-name bus1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "eventbridge.rule.create",
+      "path": [
+        "eventbridge",
+        "rule",
+        "create"
+      ],
+      "operation": "eventbridge.rule.create",
+      "table": "eventbridge.rule.create",
+      "parameters": [
+        {
+          "name": "event_bus_name",
+          "flag": "event-bus-name",
+          "target": "eventBusName",
+          "required": true,
+          "description": "Name of the event bus"
+        },
+        {
+          "name": "event_rule_name",
+          "flag": "event-rule-name",
+          "target": "eventRuleName",
+          "required": true,
+          "description": "Name of the event rule (2–63 lowercase letters, digits or hyphens, starting with a letter)"
+        },
+        {
+          "name": "desc",
+          "flag": "desc",
+          "target": "desc",
+          "required": false,
+          "description": "Resource description, fewer than 256 characters"
+        },
+        {
+          "name": "filter_pattern",
+          "flag": "filter-pattern",
+          "target": "filterPattern",
+          "required": true,
+          "description": "Event matching pattern as a JSON string"
+        },
+        {
+          "name": "event_targets",
+          "flag": "event-targets",
+          "target": "eventTargets",
+          "required": true,
+          "value_type": "object_array",
+          "description": "JSON array of delivery targets and their parameters"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Resource pool for the EventBridge request"
+        }
+      ],
+      "fixture_response": "fixtures/eventbridge-rule-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=16525&data=219&isNormal=1&vid=298",
+      "examples": [
+        "ctyun eventbridge rule create --event-bus-name test0723 --event-rule-name r123 --filter-pattern {} --event-targets '[{\"type\":\"kafka\",\"eventTargetName\":\"_C56pT3570g0X6prTQVPI\",\"params\":[{\"resourceKey\":\"instanceId\",\"value\":\"356b3496b87xxxxxxdccfe7deef7fe35\",\"form\":\"CONSTANT\"},{\"resourceKey\":\"topic\",\"value\":\"test2\",\"form\":\"CONSTANT\"},{\"resourceKey\":\"value\",\"value\":\"\",\"form\":\"ORIGINAL\"},{\"resourceKey\":\"key\",\"value\":\"\",\"form\":\"EMPTY\"}]}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "eventbridge.rule.update",
+      "path": [
+        "eventbridge",
+        "rule",
+        "update"
+      ],
+      "operation": "eventbridge.rule.update",
+      "table": "eventbridge.rule.update",
+      "parameters": [
+        {
+          "name": "event_bus_name",
+          "flag": "event-bus-name",
+          "target": "eventBusName",
+          "required": true,
+          "description": "Name of the event bus"
+        },
+        {
+          "name": "event_rule_name",
+          "flag": "event-rule-name",
+          "target": "eventRuleName",
+          "required": true,
+          "description": "Name of the event rule (2–63 lowercase letters, digits or hyphens, starting with a letter)"
+        },
+        {
+          "name": "desc",
+          "flag": "desc",
+          "target": "desc",
+          "required": false,
+          "description": "Resource description, fewer than 256 characters"
+        },
+        {
+          "name": "filter_pattern",
+          "flag": "filter-pattern",
+          "target": "filterPattern",
+          "required": true,
+          "description": "Event matching pattern as a JSON string"
+        },
+        {
+          "name": "event_targets",
+          "flag": "event-targets",
+          "target": "eventTargets",
+          "required": true,
+          "value_type": "object_array",
+          "description": "JSON array of delivery targets and their parameters"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Resource pool for the EventBridge request"
+        }
+      ],
+      "fixture_response": "fixtures/eventbridge-rule-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=16526&data=219&isNormal=1&vid=298",
+      "examples": [
+        "ctyun eventbridge rule update --event-bus-name test0723 --event-rule-name r123 --filter-pattern {} --event-targets '[{\"type\":\"kafka\",\"eventTargetName\":\"_C56pT3570g0X6prTQVPI\",\"params\":[{\"resourceKey\":\"instanceId\",\"value\":\"356b3496b87xxxxxxdccfe7deef7fe35\",\"form\":\"CONSTANT\"},{\"resourceKey\":\"topic\",\"value\":\"test2\",\"form\":\"CONSTANT\"},{\"resourceKey\":\"value\",\"value\":\"\",\"form\":\"ORIGINAL\"},{\"resourceKey\":\"key\",\"value\":\"\",\"form\":\"EMPTY\"}]}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "eventbridge.rule.delete",
+      "path": [
+        "eventbridge",
+        "rule",
+        "delete"
+      ],
+      "operation": "eventbridge.rule.delete",
+      "table": "eventbridge.rule.delete",
+      "parameters": [
+        {
+          "name": "event_bus_name",
+          "flag": "event-bus-name",
+          "target": "eventBusName",
+          "required": true,
+          "description": "Name of the event bus"
+        },
+        {
+          "name": "event_rule_name",
+          "flag": "event-rule-name",
+          "target": "eventRuleName",
+          "required": true,
+          "description": "Name of the event rule"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Resource pool for the EventBridge request"
+        }
+      ],
+      "fixture_response": "fixtures/eventbridge-rule-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=16527&data=219&isNormal=1&vid=298",
+      "examples": [
+        "ctyun eventbridge rule delete --event-bus-name testbus --event-rule-name testrule"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "eventbridge.bus.show",
+      "path": [
+        "eventbridge",
+        "bus",
+        "show"
+      ],
+      "operation": "eventbridge.bus.show",
+      "table": "eventbridge.bus.show",
+      "parameters": [
+        {
+          "name": "event_bus_name",
+          "flag": "event-bus-name",
+          "target": "eventBusName",
+          "required": true,
+          "description": "Name of the event bus (2–63 lowercase letters, digits or hyphens, starting with a letter)"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Resource pool for the EventBridge request"
+        }
+      ],
+      "fixture_response": "fixtures/eventbridge-bus-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18566&data=219&isNormal=1&vid=298",
+      "examples": [
+        "ctyun eventbridge bus show --event-bus-name bus1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "eventbridge.bus.list",
+      "path": [
+        "eventbridge",
+        "bus",
+        "list"
+      ],
+      "operation": "eventbridge.bus.list",
+      "table": "eventbridge.bus.list",
+      "parameters": [
+        {
+          "name": "event_bus_name",
+          "flag": "event-bus-name",
+          "target": "eventBusName",
+          "required": false,
+          "description": "Name of the event bus (supports partial matches)"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number, starting at 1"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of results per page"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Resource pool for the EventBridge request"
+        }
+      ],
+      "fixture_response": "fixtures/eventbridge-bus-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18567&data=219&isNormal=1&vid=298",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "eventbridge.bus.delete",
+      "path": [
+        "eventbridge",
+        "bus",
+        "delete"
+      ],
+      "operation": "eventbridge.bus.delete",
+      "table": "eventbridge.bus.delete",
+      "parameters": [
+        {
+          "name": "event_bus_name",
+          "flag": "event-bus-name",
+          "target": "eventBusName",
+          "required": true,
+          "description": "Name of the event bus"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Resource pool for the EventBridge request"
+        }
+      ],
+      "fixture_response": "fixtures/eventbridge-bus-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18568&data=219&isNormal=1&vid=298",
+      "examples": [
+        "ctyun eventbridge bus delete --event-bus-name test"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "eventbridge.bus.create",
+      "path": [
+        "eventbridge",
+        "bus",
+        "create"
+      ],
+      "operation": "eventbridge.bus.create",
+      "table": "eventbridge.bus.create",
+      "parameters": [
+        {
+          "name": "event_bus_name",
+          "flag": "event-bus-name",
+          "target": "eventBusName",
+          "required": true,
+          "description": "Name of the event bus (2–63 lowercase letters, digits or hyphens, starting with a letter)"
+        },
+        {
+          "name": "desc",
+          "flag": "desc",
+          "target": "desc",
+          "required": false,
+          "description": "Resource description, fewer than 256 characters"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Resource pool for the EventBridge request"
+        }
+      ],
+      "fixture_response": "fixtures/eventbridge-bus-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18569&data=219&isNormal=1&vid=298",
+      "examples": [
+        "ctyun eventbridge bus create --event-bus-name test"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "eventbridge.source.show",
+      "path": [
+        "eventbridge",
+        "source",
+        "show"
+      ],
+      "operation": "eventbridge.source.show",
+      "table": "eventbridge.source.show",
+      "parameters": [
+        {
+          "name": "event_bus_name",
+          "flag": "event-bus-name",
+          "target": "eventBusName",
+          "required": true,
+          "description": "Name of the event bus"
+        },
+        {
+          "name": "event_source_name",
+          "flag": "event-source-name",
+          "target": "eventSourceName",
+          "required": true,
+          "description": "Name of the event source"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Resource pool for the EventBridge request"
+        }
+      ],
+      "fixture_response": "fixtures/eventbridge-source-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18570&data=219&isNormal=1&vid=298",
+      "examples": [
+        "ctyun eventbridge source show --event-bus-name bus1 --event-source-name source1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "eventbridge.source.official.list",
+      "path": [
+        "eventbridge",
+        "source",
+        "official",
+        "list"
+      ],
+      "operation": "eventbridge.source.official.list",
+      "table": "eventbridge.source.official.list",
+      "parameters": [
+        {
+          "name": "event_source_name",
+          "flag": "event-source-name",
+          "target": "eventSourceName",
+          "required": false,
+          "description": "Name of the event source (supports partial matches)"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number, starting at 1"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of results per page"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Resource pool for the EventBridge request"
+        }
+      ],
+      "fixture_response": "fixtures/eventbridge-source-official-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18571&data=219&isNormal=1&vid=298",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "eventbridge.source.list",
+      "path": [
+        "eventbridge",
+        "source",
+        "list"
+      ],
+      "operation": "eventbridge.source.list",
+      "table": "eventbridge.source.list",
+      "parameters": [
+        {
+          "name": "event_bus_name",
+          "flag": "event-bus-name",
+          "target": "eventBusName",
+          "required": true,
+          "description": "Name of the event bus"
+        },
+        {
+          "name": "event_source_name",
+          "flag": "event-source-name",
+          "target": "eventSourceName",
+          "required": false,
+          "description": "Name of the event source (supports partial matches)"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number, starting at 1"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of results per page"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Resource pool for the EventBridge request"
+        }
+      ],
+      "fixture_response": "fixtures/eventbridge-source-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18572&data=219&isNormal=1&vid=298",
+      "examples": [
+        "ctyun eventbridge source list --event-bus-name bus1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "eventbridge.source.delete",
+      "path": [
+        "eventbridge",
+        "source",
+        "delete"
+      ],
+      "operation": "eventbridge.source.delete",
+      "table": "eventbridge.source.delete",
+      "parameters": [
+        {
+          "name": "event_source_name",
+          "flag": "event-source-name",
+          "target": "eventSourceName",
+          "required": true,
+          "description": "Name of the event source"
+        },
+        {
+          "name": "event_bus_name",
+          "flag": "event-bus-name",
+          "target": "eventBusName",
+          "required": true,
+          "description": "Name of the event bus"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Resource pool for the EventBridge request"
+        }
+      ],
+      "fixture_response": "fixtures/eventbridge-source-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18573&data=219&isNormal=1&vid=298",
+      "examples": [
+        "ctyun eventbridge source delete --event-source-name test1 --event-bus-name test0723"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "eventbridge.source.create",
+      "path": [
+        "eventbridge",
+        "source",
+        "create"
+      ],
+      "operation": "eventbridge.source.create",
+      "table": "eventbridge.source.create",
+      "parameters": [
+        {
+          "name": "event_source_name",
+          "flag": "event-source-name",
+          "target": "eventSourceName",
+          "required": true,
+          "description": "Name of the event source (2–63 lowercase letters, digits or hyphens, starting with a letter)"
+        },
+        {
+          "name": "event_bus_name",
+          "flag": "event-bus-name",
+          "target": "eventBusName",
+          "required": true,
+          "description": "Name of the event bus"
+        },
+        {
+          "name": "desc",
+          "flag": "desc",
+          "target": "desc",
+          "required": false,
+          "description": "Resource description, fewer than 256 characters"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "allowed_values": [
+            "simple",
+            "kafka",
+            "rocketmq",
+            "rabbitmq",
+            "mqtt",
+            "schedule"
+          ],
+          "description": "Custom event source provider type"
+        },
+        {
+          "name": "event_source_params",
+          "flag": "event-source-params",
+          "target": "eventSourceParams",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Provider configuration as a JSON array"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Resource pool for the EventBridge request"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "type",
+            "in": [
+              "kafka",
+              "rocketmq",
+              "rabbitmq",
+              "mqtt",
+              "schedule"
+            ]
+          },
+          "required": [
+            "event_source_params"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/eventbridge-source-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18574&data=219&isNormal=1&vid=298",
+      "examples": [
+        "ctyun eventbridge source create --event-source-name test1 --event-bus-name test0723 --type simple"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "eventbridge.rule.enable",
+      "path": [
+        "eventbridge",
+        "rule",
+        "enable"
+      ],
+      "operation": "eventbridge.rule.enable",
+      "table": "eventbridge.rule.enable",
+      "parameters": [
+        {
+          "name": "event_bus_name",
+          "flag": "event-bus-name",
+          "target": "eventBusName",
+          "required": true,
+          "description": "Name of the event bus"
+        },
+        {
+          "name": "event_rule_name",
+          "flag": "event-rule-name",
+          "target": "eventRuleName",
+          "required": true,
+          "description": "Name of the event rule"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Resource pool for the EventBridge request"
+        }
+      ],
+      "fixture_response": "fixtures/eventbridge-rule-enable.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18575&data=219&isNormal=1&vid=298",
+      "examples": [
+        "ctyun eventbridge rule enable --event-bus-name testbus --event-rule-name testrule"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "enable"
+      }
+    },
+    {
+      "id": "eventbridge.rule.disable",
+      "path": [
+        "eventbridge",
+        "rule",
+        "disable"
+      ],
+      "operation": "eventbridge.rule.disable",
+      "table": "eventbridge.rule.disable",
+      "parameters": [
+        {
+          "name": "event_bus_name",
+          "flag": "event-bus-name",
+          "target": "eventBusName",
+          "required": true,
+          "description": "Name of the event bus"
+        },
+        {
+          "name": "event_rule_name",
+          "flag": "event-rule-name",
+          "target": "eventRuleName",
+          "required": true,
+          "description": "Name of the event rule"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Resource pool for the EventBridge request"
+        }
+      ],
+      "fixture_response": "fixtures/eventbridge-rule-disable.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18576&data=219&isNormal=1&vid=298",
+      "examples": [
+        "ctyun eventbridge rule disable --event-bus-name testbus --event-rule-name testrule"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "disable"
+      }
+    },
+    {
+      "id": "eventbridge.rule.show",
+      "path": [
+        "eventbridge",
+        "rule",
+        "show"
+      ],
+      "operation": "eventbridge.rule.show",
+      "table": "eventbridge.rule.show",
+      "parameters": [
+        {
+          "name": "event_bus_name",
+          "flag": "event-bus-name",
+          "target": "eventBusName",
+          "required": true,
+          "description": "Name of the event bus"
+        },
+        {
+          "name": "event_rule_name",
+          "flag": "event-rule-name",
+          "target": "eventRuleName",
+          "required": true,
+          "description": "Name of the event rule"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Resource pool for the EventBridge request"
+        }
+      ],
+      "fixture_response": "fixtures/eventbridge-rule-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18577&data=219&isNormal=1&vid=298",
+      "examples": [
+        "ctyun eventbridge rule show --event-bus-name bus1 --event-rule-name rule1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "eventbridge.stream.delete",
+      "path": [
+        "eventbridge",
+        "stream",
+        "delete"
+      ],
+      "operation": "eventbridge.stream.delete",
+      "table": "eventbridge.stream.delete",
+      "parameters": [
+        {
+          "name": "event_stream_name",
+          "flag": "event-stream-name",
+          "target": "eventStreamName",
+          "required": true,
+          "description": "Name of the event stream"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Resource pool for the EventBridge request"
+        }
+      ],
+      "fixture_response": "fixtures/eventbridge-stream-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18578&data=219&isNormal=1&vid=298",
+      "examples": [
+        "ctyun eventbridge stream delete --event-stream-name testflow"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "eventbridge.stream.create",
+      "path": [
+        "eventbridge",
+        "stream",
+        "create"
+      ],
+      "operation": "eventbridge.stream.create",
+      "table": "eventbridge.stream.create",
+      "parameters": [
+        {
+          "name": "event_stream_name",
+          "flag": "event-stream-name",
+          "target": "eventStreamName",
+          "required": true,
+          "description": "Name of the event stream (2–63 lowercase letters, digits or hyphens, starting with a letter)"
+        },
+        {
+          "name": "desc",
+          "flag": "desc",
+          "target": "desc",
+          "required": false,
+          "description": "Resource description, fewer than 256 characters"
+        },
+        {
+          "name": "stream_source",
+          "flag": "stream-source",
+          "target": "streamSource",
+          "required": true,
+          "value_type": "json",
+          "description": "Stream source and its parameters as a JSON object"
+        },
+        {
+          "name": "filter_pattern",
+          "flag": "filter-pattern",
+          "target": "filterPattern",
+          "required": true,
+          "description": "Event matching pattern as a JSON string"
+        },
+        {
+          "name": "transform",
+          "flag": "transform",
+          "target": "transform",
+          "required": true,
+          "value_type": "json",
+          "description": "Event transformation configuration as a JSON object"
+        },
+        {
+          "name": "stream_sink",
+          "flag": "stream-sink",
+          "target": "streamSink",
+          "required": true,
+          "value_type": "json",
+          "description": "Delivery target and its parameters as a JSON object"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Resource pool for the EventBridge request"
+        }
+      ],
+      "fixture_response": "fixtures/eventbridge-stream-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18579&data=219&isNormal=1&vid=298",
+      "examples": [
+        "ctyun eventbridge stream create --event-stream-name stream1 --stream-source '{\"type\":\"kafka\",\"params\":[{\"resourceKey\":\"instanceId\",\"value\":\"356b3496b87713542dccfe7deef7fe35\",\"form\":\"CONSTANT\"},{\"resourceKey\":\"topic\",\"value\":\"test\",\"form\":\"CONSTANT\"},{\"resourceKey\":\"groupName\",\"value\":\"GID_EVENTBRIDGE_1753432067956\",\"form\":\"CONSTANT\"},{\"resourceKey\":\"initialOffset\",\"value\":\"latest\",\"form\":\"CONSTANT\"},{\"resourceKey\":\"dataFormat\",\"value\":\"JSON\",\"form\":\"CONSTANT\"}]}' --filter-pattern {} --transform '{\"type\":\"faas\",\"params\":[{\"resourceKey\":\"functionName\",\"value\":\"testgo4\",\"form\":\"CONSTANT\"},{\"resourceKey\":\"functionVersion\",\"value\":\"LATEST\",\"form\":\"CONSTANT\"}]}' --stream-sink '{\"type\":\"kafka\",\"params\":[{\"resourceKey\":\"instanceId\",\"value\":\"356b3496b87713542dccfe7deef7fe35\",\"form\":\"CONSTANT\"},{\"resourceKey\":\"topic\",\"value\":\"test2\",\"form\":\"CONSTANT\"},{\"resourceKey\":\"value\",\"value\":\"\",\"form\":\"ORIGINAL\"},{\"resourceKey\":\"key\",\"value\":\"\",\"form\":\"EMPTY\"}]}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "eventbridge.stream.list",
+      "path": [
+        "eventbridge",
+        "stream",
+        "list"
+      ],
+      "operation": "eventbridge.stream.list",
+      "table": "eventbridge.stream.list",
+      "parameters": [
+        {
+          "name": "event_stream_name",
+          "flag": "event-stream-name",
+          "target": "eventStreamName",
+          "required": false,
+          "description": "Name of the event stream (supports partial matches)"
+        },
+        {
+          "name": "event_stream_name_prefix",
+          "flag": "event-stream-name-prefix",
+          "target": "eventStreamNamePrefix",
+          "required": false,
+          "description": "Filter streams by name prefix"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number, starting at 1"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of results per page"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Resource pool for the EventBridge request"
+        }
+      ],
+      "fixture_response": "fixtures/eventbridge-stream-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=173&api=18580&data=219&isNormal=1&vid=298",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    }
+  ]
+}

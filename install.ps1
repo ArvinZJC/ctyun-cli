@@ -1,5 +1,9 @@
 $ErrorActionPreference = "Stop"
 
+if ([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT) {
+    throw "ctyun install: install.ps1 requires Windows. On macOS, Linux, or WSL, use the Bash installation command in the README."
+}
+
 $GitHubRoot = "https://github.com/ArvinZJC/ctyun-cli/releases/download/core"
 $GiteeRoot = "https://gitee.com/ArvinZJC/ctyun-cli/releases/download/core"
 $Channel = if ($env:CTYUN_INSTALL_CHANNEL) { $env:CTYUN_INSTALL_CHANNEL } else { "" }
@@ -11,7 +15,13 @@ function Fail($Message) {
 }
 
 function Get-Download($Uri, $OutFile) {
-    Invoke-WebRequest -Uri $Uri -OutFile $OutFile -UseBasicParsing
+    # Windows PowerShell interprets brackets in -OutFile as wildcard characters.
+    Push-Location -LiteralPath ([IO.Path]::GetDirectoryName($OutFile))
+    try {
+        Invoke-WebRequest -Uri $Uri -OutFile ([IO.Path]::GetFileName($OutFile)) -UseBasicParsing
+    } finally {
+        Pop-Location
+    }
 }
 
 function Join-DownloadUrl($Root, $Path) {
@@ -52,7 +62,7 @@ try {
             break
         } catch {
             if ($Candidate -eq $Roots[-1]) {
-                throw
+                Fail "could not download core-index.json. Check your connection and CTYUN_INSTALL_SOURCE, then rerun the installer. $($_.Exception.Message)"
             }
         }
     }
@@ -60,7 +70,7 @@ try {
         Fail "could not download core-index.json"
     }
 
-    $Index = Get-Content -Raw -Path $IndexPath | ConvertFrom-Json
+    $Index = Get-Content -Raw -LiteralPath $IndexPath | ConvertFrom-Json
     $Release = $null
     $Artifact = $null
     $ChannelOrder = if ($Channel) { @($Channel) } else { @("stable", "beta", "alpha") }
@@ -82,32 +92,54 @@ try {
     }
     if (-not $Artifact) {
         $ChannelLabel = if ($Channel) { "channel $Channel" } else { "any channel" }
-        Fail "no ctyun release found for $GoOS/$GoArch on $ChannelLabel"
+        Fail "no ctyun release found for $GoOS/$GoArch on $ChannelLabel. If you pinned a channel, run Remove-Item Env:CTYUN_INSTALL_CHANNEL and retry."
     }
 
     $ArchivePath = Join-Path $TempRoot "ctyun.tar.gz"
-    Get-Download (Join-DownloadUrl $ResolvedRoot $Artifact.url) $ArchivePath
-    $ActualSHA = (Get-FileHash -Algorithm SHA256 -Path $ArchivePath).Hash.ToLowerInvariant()
+    Write-Host "Downloading ctyun $($Release.version) ($($Release.channel), $GoOS/$GoArch)..."
+    try {
+        Get-Download (Join-DownloadUrl $ResolvedRoot $Artifact.url) $ArchivePath
+    } catch {
+        Fail "could not download $($Artifact.url). Check your connection to the release source and retry. $($_.Exception.Message)"
+    }
+    $ActualSHA = (Get-FileHash -Algorithm SHA256 -LiteralPath $ArchivePath).Hash.ToLowerInvariant()
     if ($ActualSHA -ne $Artifact.sha256) {
-        Fail "checksum mismatch for $($Artifact.url)"
+        Fail "checksum mismatch for $($Artifact.url). Retry from a trusted release source. If it fails again, report the version and source."
     }
 
     $ExtractDir = Join-Path $TempRoot "extract"
     New-Item -ItemType Directory -Path $ExtractDir | Out-Null
+    if (-not (Get-Command tar.exe -CommandType Application -ErrorAction SilentlyContinue)) {
+        Fail "tar.exe is required. Make it available on PATH, open a new PowerShell window, and retry."
+    }
     tar.exe -xzf $ArchivePath -C $ExtractDir
+    if ($LASTEXITCODE -ne 0) {
+        Fail "could not extract archive (tar exit code $LASTEXITCODE). Check the tar diagnostic and free space in the temporary directory, then retry."
+    }
     $BinaryPath = Join-Path $ExtractDir "ctyun.exe"
-    if (-not (Test-Path -LiteralPath $BinaryPath)) {
+    if (-not (Test-Path -LiteralPath $BinaryPath -PathType Leaf)) {
         Fail "archive does not contain ctyun.exe"
     }
 
     New-Item -ItemType Directory -Path $InstallDir -Force | Out-Null
     $Target = Join-Path $InstallDir "ctyun.exe"
+    if (Test-Path -LiteralPath $Target -PathType Container) {
+        Fail "install target is a directory: $Target. Set CTYUN_INSTALL_DIR to another writable directory and retry."
+    }
     Copy-Item -LiteralPath $BinaryPath -Destination $Target -Force
     Write-Host "Installed ctyun $($Release.version) to $Target"
-    $PathParts = ($env:PATH -split ";") | Where-Object { $_ }
-    if ($PathParts -notcontains $InstallDir) {
-        Write-Host "Add $InstallDir to PATH before running ctyun from a new shell."
+    $InstalledFile = Get-Item -LiteralPath $Target
+    $Command = Get-Command ctyun -ErrorAction SilentlyContinue
+    if ($Command.Path -ne $InstalledFile.FullName) {
+        $QuotedDir = [System.Management.Automation.Language.CodeGeneration]::EscapeSingleQuotedStringContent($InstalledFile.DirectoryName)
+        Write-Host "For this PowerShell session, run the command below. For future sessions, add the installation directory to your user Path in Environment Variables."
+        Write-Host "  `$env:PATH = '$QuotedDir' + [IO.Path]::PathSeparator + `$env:PATH"
     }
+    Write-Host "Verify the installation and view the available commands:"
+    Write-Host "  ctyun --version"
+    Write-Host "  ctyun --help"
+    Write-Host "To browse product plugins in all release channels, run:"
+    Write-Host "  ctyun plugin list --available --channel all"
 } finally {
     Remove-Item -LiteralPath $TempRoot -Recurse -Force -ErrorAction SilentlyContinue
 }

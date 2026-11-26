@@ -1862,6 +1862,416 @@
       "dangerous": {
         "confirm": ""
       }
+    },
+    {
+      "id": "oceanfs.subdirectory.quota.create",
+      "path": [
+        "oceanfs",
+        "subdirectory",
+        "quota",
+        "create"
+      ],
+      "operation": "oceanfs.subdirectory.quota.create",
+      "table": "oceanfs.subdirectory.quota.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool containing the file system"
+        },
+        {
+          "name": "sfs_uid",
+          "flag": "sfs-uid",
+          "target": "sfsUID",
+          "required": true,
+          "description": "ID of the target OceanFS file system"
+        },
+        {
+          "name": "subdir_path",
+          "flag": "subdir-path",
+          "target": "subdirPath",
+          "required": true,
+          "description": "Absolute path to an existing subdirectory. Omit the trailing slash"
+        },
+        {
+          "name": "size_quota",
+          "flag": "size-quota",
+          "target": "sizeQuota",
+          "required": false,
+          "value_type": "integer",
+          "description": "Maximum storage in GB. Omit for unlimited storage"
+        },
+        {
+          "name": "file_count_quota",
+          "flag": "file-count-quota",
+          "target": "fileCountQuota",
+          "required": false,
+          "value_type": "integer",
+          "description": "Maximum file count including the directory itself. Omit for unlimited files"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "always": true
+          },
+          "any_of": [
+            "size_quota",
+            "file_count_quota"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/oceanfs-subdirectory-quota-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=145&api=21766&data=200&isNormal=1&vid=279",
+      "examples": [
+        "ctyun oceanfs subdirectory quota create --sfs-uid 68209584-b16b-5df2-b028-7f86c99a1bab --subdir-path /test/dir1 --size-quota 50"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "oceanfs.subdirectory.quota.update",
+      "path": [
+        "oceanfs",
+        "subdirectory",
+        "quota",
+        "update"
+      ],
+      "operation": "oceanfs.subdirectory.quota.update",
+      "table": "oceanfs.subdirectory.quota.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool containing the file system"
+        },
+        {
+          "name": "sfs_uid",
+          "flag": "sfs-uid",
+          "target": "sfsUID",
+          "required": true,
+          "description": "ID of the target OceanFS file system"
+        },
+        {
+          "name": "subdir_path",
+          "flag": "subdir-path",
+          "target": "subdirPath",
+          "required": true,
+          "description": "Absolute path to an existing subdirectory. Omit the trailing slash"
+        },
+        {
+          "name": "size_quota",
+          "flag": "size-quota",
+          "target": "sizeQuota",
+          "required": false,
+          "value_type": "integer",
+          "description": "Maximum storage in GB. Set to zero to remove the limit"
+        },
+        {
+          "name": "file_count_quota",
+          "flag": "file-count-quota",
+          "target": "fileCountQuota",
+          "required": false,
+          "value_type": "integer",
+          "description": "Maximum file count including the directory itself. Set to zero to remove the limit"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "always": true
+          },
+          "any_of": [
+            "size_quota",
+            "file_count_quota"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/oceanfs-subdirectory-quota-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=145&api=21767&data=200&isNormal=1&vid=279",
+      "examples": [
+        "ctyun oceanfs subdirectory quota update --sfs-uid 68209584-b16b-5df2-b028-7f86c99a1bab --subdir-path /test/dir1 --size-quota 50"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "oceanfs.subdirectory.quota.delete",
+      "path": [
+        "oceanfs",
+        "subdirectory",
+        "quota",
+        "delete"
+      ],
+      "operation": "oceanfs.subdirectory.quota.delete",
+      "table": "oceanfs.subdirectory.quota.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool containing the file system"
+        },
+        {
+          "name": "sfs_uid",
+          "flag": "sfs-uid",
+          "target": "sfsUID",
+          "required": true,
+          "description": "ID of the target OceanFS file system"
+        },
+        {
+          "name": "subdir_path",
+          "flag": "subdir-path",
+          "target": "subdirPath",
+          "required": true,
+          "description": "Absolute path to an existing subdirectory. Omit the trailing slash"
+        }
+      ],
+      "fixture_response": "fixtures/oceanfs-subdirectory-quota-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=145&api=21768&data=200&isNormal=1&vid=279",
+      "examples": [
+        "ctyun oceanfs subdirectory quota delete --sfs-uid 68209584-b16b-5df2-b028-7f86c99a1bab --subdir-path /test/dir1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "oceanfs.subdirectory.quota.list",
+      "path": [
+        "oceanfs",
+        "subdirectory",
+        "quota",
+        "list"
+      ],
+      "operation": "oceanfs.subdirectory.quota.list",
+      "table": "oceanfs.subdirectory.quota.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool containing the file system"
+        },
+        {
+          "name": "sfs_uid",
+          "flag": "sfs-uid",
+          "target": "sfsUID",
+          "required": true,
+          "description": "ID of the target OceanFS file system"
+        },
+        {
+          "name": "subdir_path",
+          "flag": "subdir-path",
+          "target": "subdirPath",
+          "required": false,
+          "description": "Absolute path to an existing subdirectory. Omit the trailing slash"
+        },
+        {
+          "name": "subdir_quota_status",
+          "flag": "subdir-quota-status",
+          "target": "subdirQuotaStatus",
+          "required": false,
+          "allowed_values": [
+            "available",
+            "unusable"
+          ],
+          "description": "Return quotas with the specified activation state"
+        },
+        {
+          "name": "exact_search",
+          "flag": "exact-search",
+          "target": "exactSearch",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Match the entire subdirectory path instead of using fuzzy matching"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Number of records per page, from 1 to 50"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page to retrieve, starting at 1"
+        }
+      ],
+      "fixture_response": "fixtures/oceanfs-subdirectory-quota-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=145&api=21769&data=200&isNormal=1&vid=279",
+      "examples": [
+        "ctyun oceanfs subdirectory quota list --sfs-uid a2d4b927-9511-5a9b-b1de-cfe55779c1ea"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "oceanfs.file-system.tag.update",
+      "path": [
+        "oceanfs",
+        "file-system",
+        "tag",
+        "update"
+      ],
+      "operation": "oceanfs.file-system.tag.update",
+      "table": "oceanfs.file-system.tag.update",
+      "parameters": [
+        {
+          "name": "sfs_uid",
+          "flag": "sfs-uid",
+          "target": "sfsUID",
+          "required": true,
+          "description": "ID of the target OceanFS file system"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool containing the file system"
+        },
+        {
+          "name": "label_list",
+          "flag": "label-list",
+          "target": "labelList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Tags to bind or unbind on the file system (up to ten bound tags)"
+        }
+      ],
+      "fixture_response": "fixtures/oceanfs-file-system-tag-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=145&api=21770&data=200&isNormal=1&vid=279",
+      "examples": [
+        "ctyun oceanfs file-system tag update --sfs-uid 0b55feb9-1331-5934-bf66-9155b7371731 --label-list '[{\"key\":\"hezzzzzz\",\"value\":\"llllll\",\"operateType\":\"BIND\"},{\"key\":\"test_key2\",\"value\":\"test_value2\",\"operateType\":\"UNBIND\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "oceanfs.file-system.tag.list",
+      "path": [
+        "oceanfs",
+        "file-system",
+        "tag",
+        "list"
+      ],
+      "operation": "oceanfs.file-system.tag.list",
+      "table": "oceanfs.file-system.tag.list",
+      "parameters": [
+        {
+          "name": "sfs_uid",
+          "flag": "sfs-uid",
+          "target": "sfsUID",
+          "required": true,
+          "description": "ID of the target OceanFS file system"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool containing the file system"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page to retrieve, starting at 1"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Number of records per page, from 1 to 50"
+        }
+      ],
+      "fixture_response": "fixtures/oceanfs-file-system-tag-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=145&api=21771&data=200&isNormal=1&vid=279",
+      "examples": [
+        "ctyun oceanfs file-system tag list --sfs-uid a9c7a4d6-515f-5b98-986c-c1405956957c"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "oceanfs.file-system.list-by-tag",
+      "path": [
+        "oceanfs",
+        "file-system",
+        "list-by-tag"
+      ],
+      "operation": "oceanfs.file-system.list-by-tag",
+      "table": "oceanfs.file-system.list-by-tag",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool containing the file system"
+        },
+        {
+          "name": "label_list",
+          "flag": "label-list",
+          "target": "labelList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Tags to match when listing file systems"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Number of records per page, from 1 to 50"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page to retrieve, starting at 1"
+        }
+      ],
+      "fixture_response": "fixtures/oceanfs-file-system-list-by-tag.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=145&api=21772&data=200&isNormal=1&vid=279",
+      "examples": [
+        "ctyun oceanfs file-system list-by-tag --label-list '[{\"key\":\"hezzzzzz\",\"value\":\"llllll\"},{\"key\":\"test_key2\",\"value\":\"test_value2\"}]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
     }
   ]
 }

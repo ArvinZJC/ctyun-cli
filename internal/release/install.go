@@ -9,15 +9,21 @@ import (
 	"archive/tar"
 	"compress/gzip"
 	"errors"
-	"fmt"
 	"io"
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 )
+
+// openArchiveOutput isolates archive destination writes for deterministic storage-failure tests.
+var openArchiveOutput = func(path string, flag int, mode os.FileMode) (io.WriteCloser, error) {
+	return os.OpenFile(path, flag, mode)
+}
+
+// chmodInstalledBinary isolates executable permission changes for installation-failure tests.
+var chmodInstalledBinary = os.Chmod
 
 // InstallOptions controls replacement of the current ctyun executable.
 type InstallOptions struct {
@@ -71,7 +77,7 @@ func ExtractBinary(archivePath, destDir, binaryName string) (binaryPath string, 
 				return "", err
 			}
 			if err := func() (err error) {
-				out, err := os.OpenFile(target, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, os.FileMode(header.Mode))
+				out, err := openArchiveOutput(target, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, os.FileMode(header.Mode))
 				if err != nil {
 					return err
 				}
@@ -98,7 +104,7 @@ func ExtractBinary(archivePath, destDir, binaryName string) (binaryPath string, 
 }
 
 // InstallArtifact extracts an artifact archive and replaces the current
-// executable, restoring the old binary if final replacement fails.
+// executable. If replacement fails, it attempts to restore the backup and reports any restoration error.
 func InstallArtifact(opts InstallOptions) error {
 	if opts.CurrentExecutable == "" {
 		return diagnostic.New("error.current_executable_required")
@@ -126,7 +132,7 @@ func InstallArtifact(opts InstallOptions) error {
 	if err != nil {
 		return err
 	}
-	if err := os.Chmod(newBinary, 0o755); err != nil {
+	if err := chmodInstalledBinary(newBinary, 0o755); err != nil {
 		return err
 	}
 
@@ -134,15 +140,18 @@ func InstallArtifact(opts InstallOptions) error {
 	if renamePath == nil {
 		renamePath = os.Rename
 	}
-	backup := opts.CurrentExecutable + ".old-" + fmt.Sprint(time.Now().UnixNano())
-	if err := renamePath(opts.CurrentExecutable, backup); err != nil {
+	return publishExecutable(opts.CurrentExecutable, newBinary, renamePath)
+}
+
+// replaceWithBackup moves the current image aside and restores it if publication fails.
+func replaceWithBackup(current, staged, backup string, renamePath func(string, string) error) error {
+	if err := renamePath(current, backup); err != nil {
 		return err
 	}
-	if err := renamePath(newBinary, opts.CurrentExecutable); err != nil {
-		_ = renamePath(backup, opts.CurrentExecutable)
-		return err
+	if err := renamePath(staged, current); err != nil {
+		return errors.Join(err, renamePath(backup, current))
 	}
-	return os.Remove(backup)
+	return nil
 }
 
 // closeWithError preserves the primary error unless closing also fails.

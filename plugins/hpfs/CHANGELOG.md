@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.3 - 2026-11-24
+
+- Make the fuzzy file-system name filter optional and update cluster list output for the current response envelope.
+
 ## 0.1.0-beta.2 - 2026-09-23
 
 ### Added

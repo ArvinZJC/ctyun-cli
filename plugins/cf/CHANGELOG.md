@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.5 - 2026-11-24
+
+- Add workflow schedule creation, retrieval, listing, updates and deletion. Support enterprise-project filters and workflow qualifiers, and read execution lists from the current response envelope.
+
 ## 0.1.0-beta.4 - 2026-10-10
 
 ### Changed

@@ -8,7 +8,6 @@ package cli
 import (
 	"io"
 	"net/http"
-	"path/filepath"
 	"runtime"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
@@ -94,7 +93,7 @@ func runUpgrade(stdout, stderr io.Writer, args []string, getenv func(string) str
 		if err := release.InstallArtifact(release.InstallOptions{
 			CurrentExecutable: executable,
 			ArchivePath:       artifactPath,
-			BinaryName:        upgradeBinaryName(executable),
+			BinaryName:        release.ArchiveBinaryName(runtime.GOOS),
 		}); err != nil {
 			return reportCoreUpgradeFailure(stdout, stderr, display, result, err, language)
 		}
@@ -185,17 +184,4 @@ func upgradeChannel(value string) string {
 		return version.Channel
 	}
 	return "stable"
-}
-
-// upgradeBinaryName returns the binary name expected inside release archives.
-func upgradeBinaryName(executable string) string {
-	return upgradeBinaryNameForGOOS(executable, runtime.GOOS)
-}
-
-// upgradeBinaryNameForGOOS returns the release archive binary name for goos.
-func upgradeBinaryNameForGOOS(executable, goos string) string {
-	if goos == "windows" {
-		return "ctyun.exe"
-	}
-	return filepath.Base(executable)
 }

@@ -2584,7 +2584,7 @@
           "name": "restore_name",
           "flag": "restore-name",
           "target": "restoreName",
-          "required": false,
+          "required": true,
           "description": "Restore Name"
         },
         {
@@ -2598,7 +2598,7 @@
       "fixture_response": "fixtures/redis-backup-task-list.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=49&vid=270&data=81&api=7773&isNormal=1",
       "examples": [
-        "ctyun redis backup task list --prod-inst-id a0784f6c27cf0139e79e055f89f03f1d"
+        "ctyun redis backup task list --prod-inst-id a0784f6c27cf0139e79e055f89f03f1d --restore-name 20220831170700"
       ],
       "dangerous": {
         "confirm": ""
@@ -3595,31 +3595,24 @@
           "description": "Database instance ID"
         },
         {
-          "name": "ip",
-          "flag": "ip",
-          "target": "ip",
-          "required": true,
-          "description": "IP"
-        },
-        {
-          "name": "port",
-          "flag": "port",
-          "target": "port",
-          "required": true,
-          "description": "Port"
-        },
-        {
           "name": "region",
           "flag": "region",
           "target": "regionId",
           "required": false,
           "description": "Region ID"
+        },
+        {
+          "name": "node_name",
+          "flag": "node-name",
+          "target": "nodeName",
+          "required": true,
+          "description": "Node name"
         }
       ],
       "fixture_response": "fixtures/redis-node-memory-show.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=49&vid=270&data=81&api=7750&isNormal=1",
       "examples": [
-        "ctyun redis node memory show --prod-inst-id 873894303586321408 --ip 10.50.208.7 --port 25436"
+        "ctyun redis node memory show --prod-inst-id 873894303586321408 --node-name redis_6379_59889"
       ],
       "dangerous": {
         "confirm": ""
@@ -9773,17 +9766,24 @@
           "description": "Database instance ID"
         },
         {
-          "name": "master_node_ip",
-          "flag": "master-node-ip",
-          "target": "masterNodeIp",
+          "name": "master_node_name",
+          "flag": "master-node-name",
+          "target": "masterNodeName",
           "required": true,
-          "description": "Master Node IP"
+          "description": "Master node name"
+        },
+        {
+          "name": "new_master_node_name",
+          "flag": "new-master-node-name",
+          "target": "newMasterNodeName",
+          "required": false,
+          "description": "New master node name"
         }
       ],
       "fixture_response": "fixtures/redis-instance-failover.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=49&vid=270&data=81&api=7746&isNormal=1",
       "examples": [
-        "ctyun redis instance failover --prod-inst-id 873894303586321408 --master-node-ip 10.50.208.7:25436"
+        "ctyun redis instance failover --prod-inst-id 873894303586321408 --master-node-name redis_6379_59889"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -9850,18 +9850,18 @@
           "description": "Database instance ID"
         },
         {
-          "name": "vpc_ips",
-          "flag": "vpc-ips",
-          "target": "vpcIps",
-          "required": true,
+          "name": "node_names",
+          "flag": "node-names",
+          "target": "nodeNames",
+          "required": false,
           "value_type": "string_array",
-          "description": "VPC Ips as a JSON array"
+          "description": "Node names"
         }
       ],
       "fixture_response": "fixtures/redis-node-recover.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=49&vid=270&data=81&api=17927&isNormal=1",
       "examples": [
-        "ctyun redis node recover --prod-inst-id b5fcacfc2e7069553759558b9a4eb27a --vpc-ips '[\"192.168.0.46\"]'"
+        "ctyun redis node recover --prod-inst-id b5fcacfc2e7069553759558b9a4eb27a"
       ],
       "dangerous": {
         "confirm": "yes",

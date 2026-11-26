@@ -48,6 +48,7 @@ func (workspace Workspace) ReviewDraft(product string) (ReviewReport, error) {
 	if err != nil {
 		return ReviewReport{}, err
 	}
+	report := ReviewReport{Product: product, Quality: manifest.Quality, Ready: true}
 	draftI18N := make(map[string]map[string]string, 3)
 	for _, language := range []string{"en-US", "en-GB", "zh-CN"} {
 		entries, err := readDraftJSON[map[string]string](filepath.Join(draftDir, "i18n", language+".json"))
@@ -55,19 +56,20 @@ func (workspace Workspace) ReviewDraft(product string) (ReviewReport, error) {
 			return ReviewReport{}, err
 		}
 		draftI18N[language] = entries
+		if title, want := entries["name"], source.Product.DisplayName[language]; title != want {
+			addReviewFinding(&report, fmt.Sprintf("product display name %s %q does not match source name %q", language, title, want))
+		}
 	}
 	catalogs, err := workspace.readTrackedCatalogs()
 	if err != nil {
 		return ReviewReport{}, err
 	}
-	report := ReviewReport{Product: product, Quality: manifest.Quality, Ready: true}
 	reviewExecutionContract(&report, source, draftDir, manifest, commands)
-	if len(source.Waiters) > 0 && minimumCoreRequirement(manifest.Requires.Ctyun, "0.5.0") != manifest.Requires.Ctyun {
-		addReviewFinding(&report, "catalog waiters require core >=0.5.0")
+	minimum := generatedCoreMinimum(source)
+	if minimumCoreRequirement(manifest.Requires.Ctyun, minimum) != manifest.Requires.Ctyun {
+		addReviewFinding(&report, fmt.Sprintf("catalog metadata requires core >=%s", minimum))
 	}
-	if catalogNeedsBindingIsolation(source) && minimumCoreRequirement(manifest.Requires.Ctyun, "0.5.1") != manifest.Requires.Ctyun {
-		addReviewFinding(&report, "independent request bindings require core >=0.5.1")
-	}
+
 	if !reflect.DeepEqual(draftWaiters, buildWaiters(source)) {
 		addReviewFinding(&report, "draft waiters do not match reviewed source definitions")
 	}
@@ -103,9 +105,14 @@ func (workspace Workspace) ReviewDraft(product string) (ReviewReport, error) {
 		if operation.Response.RowPath != "" && command.Table == "" {
 			addReviewFinding(&report, fmt.Sprintf("operation %s has response rows but no table", operation.ID))
 		}
-		for _, language := range []string{"en-US", "en-GB"} {
-			if finding := descriptionQualityFinding(source, operation, command, operation.Description[language]); finding != "" {
-				addReviewFinding(&report, fmt.Sprintf("operation %s description %s %s", operation.ID, language, finding))
+		for _, language := range []string{"en-US", "en-GB", "zh-CN"} {
+			description := draftI18N[language]["command."+command.ID+".description"]
+			if strings.TrimSpace(description) == "" {
+				addReviewFinding(&report, fmt.Sprintf("operation %s description %s is missing", operation.ID, language))
+			} else if language != "zh-CN" {
+				if finding := descriptionQualityFinding(source, operation, command, description); finding != "" {
+					addReviewFinding(&report, fmt.Sprintf("operation %s description %s %s", operation.ID, language, finding))
+				}
 			}
 		}
 		if len(command.Examples) == 0 && (commandNeedsExample(operation, command) || operationHasSourceCommandExample(operation, command)) {
@@ -114,6 +121,8 @@ func (workspace Workspace) ReviewDraft(product string) (ReviewReport, error) {
 		for _, example := range command.Examples {
 			if err := plugin.ValidateCommandExample(command, example); err != nil {
 				addReviewFinding(&report, fmt.Sprintf("command %s example is invalid: %v", command.ID, err))
+			} else if !commandExampleAddsInformation(example, command) {
+				addReviewFinding(&report, fmt.Sprintf("command %s example only repeats the command path", command.ID))
 			}
 		}
 		for _, name := range operationMissingExampleEvidence(operation, command) {

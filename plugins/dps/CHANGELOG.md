@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.5 - 2026-11-24
+
+- Add enterprise-project filtering and project IDs to image listing and refresh instance input descriptions.
+
 ## 0.1.0-beta.4 - 2026-10-10
 
 ### Added

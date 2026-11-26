@@ -1,5 +1,92 @@
 {
   "operations": {
+    "oceanfs.file-system.list-by-tag": {
+      "method": "POST",
+      "path": "/v4/oceanfs/list-sfs-by-label",
+      "content_type": "application/json",
+      "body": {
+        "labelList": "$param.label_list",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "oceanfs.file-system.tag.list": {
+      "method": "GET",
+      "path": "/v4/oceanfs/list-label-by-sfs",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "oceanfs.file-system.tag.update": {
+      "method": "POST",
+      "path": "/v4/oceanfs/update-label",
+      "content_type": "application/json",
+      "body": {
+        "labelList": "$param.label_list",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "oceanfs.subdirectory.quota.create": {
+      "method": "POST",
+      "path": "/v4/oceanfs/new-subdir-quota",
+      "content_type": "application/json",
+      "body": {
+        "fileCountQuota": "$param.file_count_quota",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid",
+        "sizeQuota": "$param.size_quota",
+        "subdirPath": "$param.subdir_path"
+      },
+      "retryable": false
+    },
+    "oceanfs.subdirectory.quota.delete": {
+      "method": "POST",
+      "path": "/v4/oceanfs/delete-subdir-quota",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid",
+        "subdirPath": "$param.subdir_path"
+      },
+      "retryable": false
+    },
+    "oceanfs.subdirectory.quota.list": {
+      "method": "POST",
+      "path": "/v4/oceanfs/list-subdir-quota",
+      "content_type": "application/json",
+      "body": {
+        "exactSearch": "$param.exact_search",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid",
+        "subdirPath": "$param.subdir_path",
+        "subdirQuotaStatus": "$param.subdir_quota_status"
+      },
+      "retryable": true
+    },
+    "oceanfs.subdirectory.quota.update": {
+      "method": "POST",
+      "path": "/v4/oceanfs/update-subdir-quota",
+      "content_type": "application/json",
+      "body": {
+        "fileCountQuota": "$param.file_count_quota",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid",
+        "sizeQuota": "$param.size_quota",
+        "subdirPath": "$param.subdir_path"
+      },
+      "retryable": false
+    },
     "v4.oceanfs.file-system-vpc.bind": {
       "method": "POST",
       "path": "/v4/oceanfs/vpc-bind-permission",

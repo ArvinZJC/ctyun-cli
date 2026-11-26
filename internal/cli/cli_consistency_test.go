@@ -131,6 +131,119 @@ func TestCommandBoundariesClassifyOptionsAndWordsConsistently(t *testing.T) {
 	}
 }
 
+// TestCoreGroupErrorsStopAtUnresolvedChild checks that later tokens cannot change the diagnosis.
+func TestCoreGroupErrorsStopAtUnresolvedChild(t *testing.T) {
+	t.Cleanup(patchVersion(testCoreVersion()))
+	root := t.TempDir()
+	for _, group := range [][]string{{"config"}, {"config", "profile"}, {"config", "profiles"}, {"doctor"}, {"plugin"}, {"plugins"}} {
+		for _, tail := range [][]string{{"--bundled", "value"}, {"unknown-child", "--offline"}} {
+			path := append(append([]string{}, group...), tail...)
+			want := "Error: unknown option \"--bundled\""
+			if tail[0] == "unknown-child" {
+				want = "Error: unknown command \"" + strings.Join(path[:len(group)+1], " ") + "\""
+			}
+			for _, args := range [][]string{path, append([]string{"help"}, path...), append([]string{"--help"}, path...)} {
+				t.Run(strings.Join(args, "_"), func(t *testing.T) {
+					err := Run(Config{PluginRoot: root, Args: args, Stdout: io.Discard, Stderr: io.Discard})
+					if err == nil || formatError(err, "en-US") != want {
+						t.Errorf("got %v, want %s", err, want)
+					}
+				})
+			}
+		}
+	}
+}
+
+// TestProductCommandAcceptsOptionShapedPathValue preserves positional data in dispatch and help.
+func TestProductCommandAcceptsOptionShapedPathValue(t *testing.T) {
+	root := t.TempDir()
+	writeArgumentBundle(t, filepath.Join(root, "ims"))
+	path := []string{"ims", "image", "show", "--example-id"}
+	_, _, args, _, found, err := findPluginCommand(path, root, "en-US")
+	if err != nil || !found || args["image_id"] != "--example-id" {
+		t.Fatalf("product path arguments: %v, found=%t, err=%v", args, found, err)
+	}
+	var stdout bytes.Buffer
+	err = Run(Config{PluginRoot: root, Args: append([]string{"help"}, path...), Stdout: &stdout, Stderr: io.Discard})
+	if err != nil || !strings.Contains(stdout.String(), "{image_id}") {
+		t.Fatalf("product help with an option-shaped argument: %q, %v", stdout.String(), err)
+	}
+}
+
+// TestProductBoundaryTokenMatrix exercises the first unresolved token at every visible group depth.
+func TestProductBoundaryTokenMatrix(t *testing.T) {
+	t.Setenv("LC_ALL", "en_US.UTF-8")
+	t.Cleanup(patchVersion(testCoreVersion()))
+	root := t.TempDir()
+	dir := filepath.Join(root, "demo")
+	writeVersionedBundle(t, dir, "demo", "1.0.0")
+	mustWrite(t, filepath.Join(dir, "tables.json"), `{"tables":{"rows":{"row_path":"returnObj","columns":[{"key":"id","path":"id","labels":{"en-US":"ID","en-GB":"ID","zh-CN":"ID"}}]}}}`)
+	mustWrite(t, filepath.Join(dir, "commands.json"), `{"commands":[
+		{"id":"list","path":["demo","pool","list"],"table":"rows"},
+		{"id":"details","path":["demo","pool","list","details"],"table":"rows"},
+		{"id":"taglist","path":["demo","pool","list","tags","list"],"table":"rows"},
+		{"id":"tag","path":["demo","resource","{rid}","tags","show","{id}"],"table":"rows"}
+	]}`)
+	invoke := func(args []string) (string, error) {
+		var out bytes.Buffer
+		err := Run(Config{Config: []byte("{}"), PluginRoot: root, Args: args, Stdout: &out, Stderr: io.Discard})
+		return out.String(), err
+	}
+	groups := []string{"", "demo", "demo pool", "demo pool list tags", "demo resource --selected", "demo resource --selected tags"}
+	for _, group := range groups {
+		for _, first := range []string{"absent", "--bundled", "-x", "--other=1"} {
+			prefix := append(strings.Fields(group), first)
+			want := "Error: unknown command \"" + strings.Join(prefix, " ") + "\""
+			if strings.HasPrefix(first, "-") {
+				want = "Error: unknown option \"" + first + "\""
+			}
+			for _, tail := range [][]string{nil, {"later"}, {"--offline", "later"}, {"later", "--fixture"}} {
+				path := append(append([]string{}, prefix...), tail...)
+				for _, mode := range [][]string{nil, {"help"}, {"--help"}} {
+					args := append(append([]string{}, mode...), path...)
+					_, err := invoke(args)
+					if err == nil || formatError(err, "en-US") != want {
+						t.Errorf("%v: got %v, want %s", args, err, want)
+					}
+				}
+			}
+		}
+	}
+	for _, mode := range [][]string{nil, {"help"}, {"--help"}} {
+		for _, group := range groups[1:] {
+			args := append(append([]string{}, mode...), strings.Fields(group)...)
+			if out, err := invoke(args); err != nil || !strings.Contains(out, "Usage:") {
+				t.Errorf("group %v: %q, %v", args, out, err)
+			}
+		}
+	}
+	path := strings.Fields("demo resource --selected tags show")
+	_, err := invoke(path)
+	requireDiagnosticKey(t, err, "error.missing_path_argument")
+	path = append(path, "-id")
+	_, command, values, _, found, err := findPluginCommand(path, root, "en-US")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !found || command.ID != "tag" || values["rid"] != "--selected" || values["id"] != "-id" {
+		t.Fatalf("full product path: id=%q, values=%v, found=%t", command.ID, values, found)
+	}
+	_, command, _, _, found, err = findPluginCommand(strings.Fields("demo pool list details"), root, "en-US")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !found || command.ID != "details" {
+		t.Errorf("longer complete command: id=%q, found=%t", command.ID, found)
+	}
+	for _, tc := range []struct{ token, key string }{{"--oops", "error.unknown_option"}, {"extra", "error.unexpected_argument"}} {
+		for _, mode := range [][]string{nil, {"help"}, {"--help"}} {
+			args := append(append(append([]string{}, mode...), path...), tc.token)
+			_, err := invoke(args)
+			requireDiagnosticKey(t, err, tc.key)
+		}
+	}
+}
+
 // TestHelpLeafInputUsesGenericDiagnostics applies normal leaf argument validation while rendering help.
 func TestHelpLeafInputUsesGenericDiagnostics(t *testing.T) {
 	pluginRoot := t.TempDir()
@@ -263,11 +376,10 @@ func TestHelpCompletionTraversesCoreCommandGroups(t *testing.T) {
 	assertHasCompletions(t, completeArgs([]string{"help", "config", "profile", ""}, root), "list", "set", "use")
 	assertHasCompletions(t, completeArgs([]string{"help", "doctor", ""}, root), "network")
 	assertHasCompletions(t, completeArgs([]string{"help", "plugin", ""}, root), "install", "list", "update")
-	if got := completeArgs([]string{"help", "doctor", "network", ""}, root); len(got) != 0 {
-		t.Fatalf("completion below doctor network = %v, want none", got)
-	}
-	if got := completeArgs([]string{"help", "plugin", "list", ""}, root); len(got) != 0 {
-		t.Fatalf("completion below plugin list = %v, want none", got)
+	for _, path := range [][]string{{"help", "doctor", "network", ""}, {"help", "plugin", "list", ""}} {
+		got := completeArgs(path, root)
+		assertHasCompletions(t, got, "--help", "--lang")
+		assertNoCompletions(t, got, "network", "local", "list", "--available", "--source")
 	}
 }
 
@@ -334,7 +446,7 @@ func TestUnknownOptionWordingIsConsistentAcrossLanguages(t *testing.T) {
 func TestReleasedBuildDevelopmentOptionsAreUnknown(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeValidationBundle(t, filepath.Join(pluginRoot, "ecs"))
-	restoreVersion := patchVersion("0.5.1")
+	restoreVersion := patchVersion(testCoreVersion())
 	t.Cleanup(restoreVersion)
 	for _, args := range [][]string{
 		{"ecs", "instance", "list", "--offline"},
@@ -348,13 +460,13 @@ func TestReleasedBuildDevelopmentOptionsAreUnknown(t *testing.T) {
 
 // TestBundledHelpersRejectReleasedBuilds rejects repository bundle access from released builds.
 func TestBundledHelpersRejectReleasedBuilds(t *testing.T) {
-	restoreVersion := patchVersion("0.5.1")
+	restoreVersion := patchVersion(testCoreVersion())
 	t.Cleanup(restoreVersion)
 
 	if _, err := bundledPluginSource("ecs"); err == nil {
 		t.Fatal("bundledPluginSource returned nil error in a released build")
 	}
-	if _, err := bundledPluginIndex("en-US"); err == nil {
+	if _, err := bundledPluginIndex(); err == nil {
 		t.Fatal("bundledPluginIndex returned nil error in a released build")
 	}
 	if err := listBundledAvailablePlugins(io.Discard, t.TempDir(), "", globalOptions{Language: "en-US"}); err == nil {
@@ -363,7 +475,7 @@ func TestBundledHelpersRejectReleasedBuilds(t *testing.T) {
 	if err := listBundledPluginUpdates(io.Discard, t.TempDir(), "", "en-US"); err == nil {
 		t.Fatal("listBundledPluginUpdates returned nil error in a released build")
 	}
-	if err := installBundledPluginsWithProgress(io.Discard, io.Discard, t.TempDir(), []string{"ecs"}, false, "en-US"); err == nil {
+	if err := installBundledPluginsWithProgress(io.Discard, io.Discard, t.TempDir(), []string{"ecs"}, false, "", "en-US"); err == nil {
 		t.Fatal("installBundledPluginsWithProgress returned nil error in a released build")
 	}
 }

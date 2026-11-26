@@ -164,6 +164,48 @@ func TestGeneratedExamplesPreferCompleteCapturedRequiredExample(t *testing.T) {
 	}
 }
 
+// TestCapturedExampleArgumentsUseInputEvidence checks existing templates and
+// newly composed examples against the same request, parameter and response order.
+func TestCapturedExampleArgumentsUseInputEvidence(t *testing.T) {
+	command := plugin.Command{Path: []string{"demo", "show", "{id}"}}
+	operation := Operation{
+		Examples:        []string{"ctyun demo show {id}"},
+		Parameters:      []Parameter{{Name: "itemID", Argument: "id", Example: json.RawMessage(`"parameter-id"`)}},
+		RequestExample:  map[string]json.RawMessage{"itemID": json.RawMessage(`"request id"`)},
+		ExampleResponse: json.RawMessage(`{"itemID":"response-id"}`),
+	}
+	for _, want := range []string{"ctyun demo show 'request id'", "ctyun demo show parameter-id", "ctyun demo show response-id"} {
+		if got := generatedCommandExamples(operation, command); !slices.Equal(got, []string{want}) {
+			t.Errorf("generated examples = %q, want %q", got, want)
+		}
+		if operation.RequestExample != nil {
+			operation.RequestExample = nil
+		} else {
+			operation.Parameters[0].Example = nil
+		}
+	}
+}
+
+// TestConcreteExamplesKeepLiteralOptions limits substitution to positional
+// operands and leaves complete or malformed source examples available for review.
+func TestConcreteExamplesKeepLiteralOptions(t *testing.T) {
+	operation := Operation{
+		Parameters: []Parameter{{Name: "id", Argument: "id", Example: json.RawMessage(`"two words"`)}},
+		Examples: []string{
+			"ctyun demo show '{id}' --description '{id}'",
+			"ctyun demo show already-captured --description '{id}'",
+			"ctyun demo show {id} --description '{cold,warm}'",
+			"ctyun demo show '{id}",
+		},
+	}
+	want := slices.Clone(operation.Examples)
+	want[0] = "ctyun demo show 'two words' --description {id}"
+	want[2] = "ctyun demo show 'two words' --description '{cold,warm}'"
+	if got := concreteExamples(operation); !slices.Equal(got, want) {
+		t.Fatalf("concrete examples = %q, want %q", got, want)
+	}
+}
+
 // TestGeneratedExamplesOmitBareCommandPaths verifies that a command without
 // source examples or required user input does not publish its own invocation
 // as a redundant example.
@@ -182,6 +224,7 @@ func TestGeneratedExamplesOmitCapturedBareCommandPaths(t *testing.T) {
 		"ctyun region list",
 		"ctyun region list --name 华东1",
 		"  ctyun region list  ",
+		"ctyun  region 'list'",
 	}}
 	command := plugin.Command{Path: []string{"region", "list"}}
 	want := []string{"ctyun region list --name 华东1"}

@@ -22,11 +22,11 @@
 
 - **Relationship to the official CLI:** CTyun released the official `ctyun-cli` on 2 July 2026. This project is an independently maintained unofficial implementation.
 
-  The public entry point for CTyun's official `ctyun-cli` is the [official CLI docs](https://www.ctyun.cn/document/11095072). As of now, it does not have a separate official product home page. The official tool uses the `ctyun-cli` command name, while this project uses `ctyun`, so the two binaries do not conflict and can both be present in one shell environment. Both tools use `CTYUN_AK` / `CTYUN_SK` for AK/SK environment variables; if you use them side by side, remember that this credential pair is shared by both tools.
+  You can install both tools in the same shell. Run `ctyun-cli` for the official tool and `ctyun` for this project. Both can read credentials from `CTYUN_AK` and `CTYUN_SK`. See the [official CLI guide](https://www.ctyun.cn/document/11095072/11096343).
 
-  CTyun's official Go SDK is named `ctyun-go-sdk`, but it has limited product coverage and is not publicly released. Users who need the official SDK can submit a CTyun work order. This project is not an SDK; it is a command-line tool for user workflows.
+  For Go applications, consult the SDK documentation for the product you need. For example, CTyun publishes `ctyun-go-sdk.zip` in its [RDS for MySQL SDK reference](https://www.ctyun.cn/document/10033813/11065649).
 
-  This project will keep iterating as an unofficial alternative to the official CLI. We will continue exploring and implementing capabilities expected from a modern cloud CLI, while keeping a better terminal experience, script friendliness, composable output, and maintainable extension paths in mind. Once the official CLI is robust, stable, flexible, capable, and polished enough for the same workflows, we can reassess this project's role and lifecycle.
+  Development focuses on interactive terminal use, output that scripts can combine, and independently maintained plugins. We will reassess the project's role when the official CLI reliably supports the same workflows.
 
 - Activate the service you want to manage and prepare an AK/SK credential pair with the required permissions.
 
@@ -36,18 +36,24 @@
 
 ## Installation
 
-Install the native `ctyun` binary with the installation scripts below. By default, the script selects the first available channel in `stable`, `beta`, then `alpha` order; set `CTYUN_INSTALL_CHANNEL` to pin a channel. If GitHub access is unreliable, replace `github.com` in the URL with `gitee.com`.
+The scripts below install the native `ctyun` binary. They select the first channel with a build for your platform, checking `stable`, `beta`, then `alpha`. Set `CTYUN_INSTALL_CHANNEL` to select a specific channel. To download both the installer and the release from Gitee, replace `github.com` in the installer URL with `gitee.com` and set `CTYUN_INSTALL_SOURCE` to `gitee` before running it.
 
 macOS, Linux, and WSL:
 
 ```sh
-curl -fsSL https://github.com/ArvinZJC/ctyun-cli/releases/download/core/install.sh | bash
+(
+  installer=$(mktemp) || exit 1
+  trap 'rm -f "$installer"' EXIT
+  curl -fsSL https://github.com/ArvinZJC/ctyun-cli/releases/download/core/install.sh -o "$installer" && bash "$installer"
+)
 ```
 
 Windows PowerShell:
 
 ```powershell
-irm https://github.com/ArvinZJC/ctyun-cli/releases/download/core/install.ps1 | iex
+& {
+    Invoke-RestMethod https://github.com/ArvinZJC/ctyun-cli/releases/download/core/install.ps1 -ErrorAction Stop | Invoke-Expression
+}
 ```
 
 If you are not sure whether the current terminal is PowerShell, open Windows PowerShell from the Start menu or the Windows Terminal tab menu, then run `$PSVersionTable.PSVersion` to confirm. After it prints version information, run the installation command above in the same window.
@@ -62,6 +68,32 @@ The installation scripts support these environment variables:
 | `CTYUN_INSTALL_SOURCE`  | Pin the installation source to `auto`, `github`, or `gitee`                                                                                      |
 | `CTYUN_INSTALL_DIR`     | Override the installation directory; defaults to `$HOME/.local/bin` on macOS, Linux, and WSL, and `%LOCALAPPDATA%\Programs\ctyun-cli` on Windows |
 
+### After installation
+
+If the installer prints a `PATH` command, copy it into the terminal where you want to use `ctyun`. It uses the directory you actually installed to, including a custom `CTYUN_INSTALL_DIR`. For future terminals, add the printed `export` line to `~/.zshrc` (Zsh) or your Bash startup file. On Windows, add the installation directory to your **user** Path in Environment Variables, then open a new PowerShell window.
+
+Check that the version matches the installer’s success message and open the command overview. Both commands work without credentials or network access.
+
+```sh
+ctyun --version
+ctyun --help
+```
+
+Product commands come from separately installed plugins. To browse the online registry, install the Region plugin, and read its command help, run:
+
+```sh
+ctyun plugin list --available --channel all
+ctyun plugin install region
+ctyun region list --help
+```
+
+### Troubleshooting installation
+
+- **Command unavailable or wrong version.** Run `type -a ctyun` in Bash or Zsh, or `Get-Command ctyun -All` in PowerShell. Compare the first match with the path printed by the installer. You can also run the installed executable directly using its full path. In PowerShell, use the call operator `&` before a quoted executable path.
+- **Release unavailable.** Check the reported OS, architecture, and channel. To restore automatic channel selection, run `unset CTYUN_INSTALL_CHANNEL` in Bash or Zsh, or `Remove-Item Env:CTYUN_INSTALL_CHANNEL -ErrorAction SilentlyContinue` in PowerShell, then rerun the installer.
+- **Download or checksum failure.** Check access to the selected release source and retry. To use the other official mirror, change the hostname in the installation command above and set `CTYUN_INSTALL_SOURCE` to the corresponding source. If the checksum still fails, report the version and source before installing.
+- **Destination unavailable.** If copying fails, check free space in the installation directory. The Bash installer keeps the previous executable until the replacement is ready. If the directory is unwritable or the executable name is already a directory, choose another install location. For example, run `export CTYUN_INSTALL_DIR="$HOME/ctyun-bin"` in Bash or Zsh, or `$env:CTYUN_INSTALL_DIR = Join-Path $HOME 'ctyun-bin'` in PowerShell, then rerun the installer.
+
 ## Authentication, config, and language
 
 Live requests prefer AK/SK from the process environment:
@@ -71,11 +103,13 @@ export CTYUN_AK=...
 export CTYUN_SK=...
 ```
 
-When `CTYUN_AK` or `CTYUN_SK` is missing, `ctyun` falls back to `ak`/`sk` in the active profile, then top-level config. A live command that actually uses config AK/SK writes a warning to stderr; disable it by setting the `CTYUN_WARN_CONFIG_CREDENTIALS=0` environment variable or running `ctyun config set warn_config_credentials false`.
+For each missing environment value, `ctyun` reads the corresponding `ak` or `sk` from the selected profile, then from the top-level config. If a live request uses either stored credential, `ctyun` warns on stderr. Set `CTYUN_WARN_CONFIG_CREDENTIALS=0` to suppress the warning for the process. To disable it by default, run `ctyun config set warn_config_credentials false`. If a profile enables the warning, add `--profile <name>` to change the setting in that profile.
 
 ### Configuration and profiles
 
-The config file is selected by `--config`, then `CTYUN_CONFIG`, then `~/.ctyun/config.json`. `--profile` overrides `active_profile`. Other settings use command-line options first, then environment variables, the active profile, and supported top-level defaults.
+The config file is selected by `--config`, then `CTYUN_CONFIG`, then `~/.ctyun/config.json`. `--profile` overrides `active_profile`. With neither set, the CLI selects the only configured profile. If several profiles exist, choose one with `--profile` or set an active profile.
+
+The base region, endpoint override, and request timeout come from the selected profile. To see which source supplies a setting, run `ctyun config explain {key}`.
 
 Common environment variables:
 
@@ -127,7 +161,9 @@ printf '%s\n' "$CTYUN_SK" | ctyun config profile set-secret prod sk --from-stdin
 
 Use `ctyun doctor local` to check configuration, credentials, resource pool settings, and installed plugins without network requests or local changes. It reports all independent findings and exits with status 1 if any check fails; warnings and skipped checks exit with status 0. Use `ctyun doctor network` for online source and API endpoint diagnostics.
 
-`ctyun config reset` prompts for confirmation, then creates a backup before deleting the current config file. Scripts can use `--yes` or `-y` to skip the prompt.
+After confirmation, `ctyun config reset` backs up the configuration beside the original file, then deletes the original. It uses the first available suffix starting with `.bak`, then `.bak.2`, `.bak.3`, and so on. Scripts can use `--yes` or `-y` to skip the prompt.
+
+If another `ctyun` process changes the configuration during a save or reset, the command can report a conflict. Check the current settings with `ctyun config show` before retrying.
 
 ### Language
 
@@ -135,10 +171,10 @@ Supported languages are `zh-CN`, `en-US`, and `en-GB`. Language resolution is `-
 
 ## Plugins
 
-A fresh `ctyun` installation includes only core commands; product plugins are not preinstalled. Product commands come from plugin bundles. After setting up authentication, config, and language preferences, install the plugins you need:
+A fresh `ctyun` installation includes the core commands. You can browse and install product plugins before configuring cloud credentials.
 
 ```sh
-ctyun plugin search ecs --source auto
+ctyun plugin search ecs --source auto --channel beta
 ctyun plugin list --available --source auto
 ctyun plugin list --available --cols Plugin,Quality,Status --filter Status=available --source auto
 ctyun plugin install region --source auto
@@ -156,7 +192,7 @@ ctyun plugin list
 | Agent Engine                                                        | `agent-engine`               | `agent-engine`               | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27agent-engine%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)               | `beta`   | `generated` |       11 |         11 |
 | AI Capability Platform                                              | `ai-capability`              | `ai-capability`              | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27ai-capability%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)              | `beta`   | `generated` |       41 |         41 |
 | AI Security                                                         | `ai-security`                | `ai-security`                | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27ai-security%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                | `beta`   | `generated` |        5 |          5 |
-| API Gateway                                                         | `api-gateway`                | `api-gateway`                | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27api-gateway%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                | `beta`   | `generated` |      161 |        161 |
+| API Gateway                                                         | `api-gateway`                | `api-gateway`                | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27api-gateway%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                | `beta`   | `generated` |      162 |        162 |
 | Application Performance Monitoring                                  | `apm`                        | `apm`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27apm%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |       63 |         63 |
 | Application Acceleration                                            | `application-acceleration`   | `application-acceleration`   | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27application-acceleration%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)   | `beta`   | `generated` |       12 |         12 |
 | Application High Availability                                       | `application-ha`             | `application-ha`             | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27application-ha%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)             | `beta`   | `generated` |       43 |         43 |
@@ -164,20 +200,20 @@ ctyun plugin list
 | Billing                                                             | `billing`                    | `billing`                    | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27billing%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                    | `beta`   | `generated` |       16 |         16 |
 | Cloud Application Engine                                            | `cae`                        | `cae`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27cae%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |       44 |         44 |
 | Cloud Backup and Recovery                                           | `cbr`                        | `cbr`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27cbr%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |       22 |         22 |
-| Cloud Container Engine                                              | `cce`                        | `cce`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27cce%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |      306 |        306 |
+| Cloud Container Engine                                              | `cce`                        | `cce`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27cce%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |      308 |        308 |
 | CCE One                                                             | `cce-one`                    | `cce-one`                    | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27cce-one%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                    | `beta`   | `generated` |       41 |         41 |
 | Cloud Dedicated Access                                              | `cda`                        | `cda`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27cda%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |       61 |         61 |
 | Content Delivery Network Acceleration                               | `cdn`                        | `cdn`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27cdn%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |       92 |         92 |
 | Cloud Disaster Recovery                                             | `cdr`                        | `cdr`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27cdr%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |       31 |         31 |
 | Certificate Management Service                                      | `certificate`                | `certificate`                | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27certificate%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                | `beta`   | `generated` |       14 |         14 |
-| Cloud Function                                                      | `cf`                         | `cf`                         | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27cf%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                         | `beta`   | `generated` |       62 |         62 |
+| Cloud Function                                                      | `cf`                         | `cf`                         | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27cf%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                         | `beta`   | `generated` |       67 |         67 |
 | Classic Object Storage Type I                                       | `classic-object-storage`     | `classic-object-storage`     | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27classic-object-storage%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)     | `beta`   | `generated` |      219 |        219 |
-| ClickHouse                                                          | `clickhouse`                 | `clickhouse`                 | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27clickhouse%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                 | `beta`   | `generated` |       54 |         54 |
+| ClickHouse                                                          | `clickhouse`                 | `clickhouse`                 | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27clickhouse%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                 | `beta`   | `generated` |       55 |         55 |
 | Cloud Assistant                                                     | `cloud-assistant`            | `cloud-assistant`            | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27cloud-assistant%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)            | `beta`   | `generated` |       11 |         11 |
 | Cloud Audit                                                         | `cloud-audit`                | `cloud-audit`                | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27cloud-audit%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                | `beta`   | `generated` |       13 |         13 |
 | Cloud Native API Gateway                                            | `cloud-native-api-gateway`   | `cloud-native-api-gateway`   | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27cloud-native-api-gateway%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)   | `beta`   | `generated` |      186 |        186 |
 | Cloud Search Service                                                | `cloud-search`               | `cloud-search`               | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27cloud-search%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)               | `beta`   | `generated` |        7 |          7 |
-| Cloud Monitoring Service                                            | `cm`                         | `cm`                         | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27cm%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                         | `beta`   | `generated` |      169 |        169 |
+| Cloud Monitoring Service                                            | `cm`                         | `cm`                         | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27cm%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                         | `beta`   | `generated` |      173 |        173 |
 | Common                                                              | `common`                     | `common`                     | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27common%27%5D.stable&label=release&color=blue)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                     | `stable` | `curated`   |        1 |          1 |
 | Container Registry Service                                          | `crs`                        | `crs`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27crs%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |      269 |        269 |
 | Dedicated Cloud (Dedicated Computing)                               | `dec`                        | `dec`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27dec%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |        9 |          9 |
@@ -187,7 +223,7 @@ ctyun plugin list
 | Data Transmission Service                                           | `dts`                        | `dts`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27dts%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |       72 |         72 |
 | Express Connect (Standard Edition)                                  | `ec`                         | `ec`                         | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27ec%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                         | `beta`   | `generated` |       51 |         51 |
 | Elastic Container Instances                                         | `eci`                        | `eci`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27eci%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |       37 |         37 |
-| CTyun Cloud Computer (Enterprise Edition)                           | `ecpc`                       | `ecpc`                       | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27ecpc%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                       | `beta`   | `generated` |      303 |        303 |
+| CTyun Cloud Computer (Enterprise Edition)                           | `ecpc`                       | `ecpc`                       | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27ecpc%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                       | `beta`   | `generated` |      371 |        371 |
 | Elastic Cloud Server                                                | `ecs`                        | `ecs`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27ecs%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |      209 |        209 |
 | Intelligent Edge Cloud                                              | `ecx`                        | `ecx`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27ecx%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |      252 |        252 |
 | DDoS Protection (Edge Cloud Edition)                                | `edge-ddos`                  | `edge-ddos`                  | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27edge-ddos%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                  | `beta`   | `generated` |       39 |         39 |
@@ -197,16 +233,17 @@ ctyun plugin list
 | Elastic IP                                                          | `eip`                        | `eip`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27eip%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |       57 |         57 |
 | Elastic Load Balancing                                              | `elb`                        | `elb`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27elb%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |      114 |        114 |
 | MapReduce                                                           | `emr`                        | `emr`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27emr%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |       13 |         13 |
+| EventBridge                                                         | `eventbridge`                | `eventbridge`                | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27eventbridge%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                      | `beta`   | `reviewed`  |      19 |      19 |
 | Elastic Volume Service                                              | `evs`                        | `evs`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27evs%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |       36 |         36 |
 | Global Traffic Management                                           | `gtm`                        | `gtm`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27gtm%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |       21 |         21 |
 | High Performance File Storage                                       | `hpfs`                       | `hpfs`                       | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27hpfs%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                       | `beta`   | `generated` |       40 |         40 |
 | Distributed Hybrid Transactional and Analytical Processing Database | `htap`                       | `htap`                       | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27htap%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                       | `beta`   | `generated` |       47 |         47 |
 | Huiju Integrated Intelligent Computing Service Platform             | `huiju`                      | `huiju`                      | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27huiju%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                      | `beta`   | `generated` |       86 |         86 |
-| Identity and Access Management                                      | `iam`                        | `iam`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27iam%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |       87 |         87 |
+| Identity and Access Management                                      | `iam`                        | `iam`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27iam%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |       91 |         91 |
 | Image Management Service                                            | `ims`                        | `ims`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27ims%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |       27 |         27 |
 | Influx                                                              | `influxdb`                   | `influxdb`                   | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27influxdb%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                   | `beta`   | `generated` |       48 |         48 |
 | Job                                                                 | `job`                        | `job`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27job%27%5D.stable&label=release&color=blue)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `stable` | `curated`   |        1 |          1 |
-| Kafka                                                               | `kafka`                      | `kafka`                      | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27kafka%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                      | `beta`   | `generated` |      124 |        124 |
+| Kafka                                                               | `kafka`                      | `kafka`                      | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27kafka%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                      | `beta`   | `generated` |      125 |        125 |
 | Key Management                                                      | `kms`                        | `kms`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27kms%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |       82 |         82 |
 | Live Streaming                                                      | `live-streaming`             | `live-streaming`             | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27live-streaming%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)             | `beta`   | `generated` |       90 |         90 |
 | Log Service                                                         | `lts`                        | `lts`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27lts%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |      171 |        171 |
@@ -218,7 +255,7 @@ ctyun plugin list
 | Microservice Engine                                                 | `mse`                        | `mse`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27mse%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |      243 |        243 |
 | NAT Gateway                                                         | `nat`                        | `nat`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27nat%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |       22 |         22 |
 | Cloud Firewall (Native Edition)                                     | `native-firewall`            | `native-firewall`            | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27native-firewall%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)            | `beta`   | `generated` |      104 |        104 |
-| OceanFS                                                             | `oceanfs`                    | `oceanfs`                    | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27oceanfs%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                    | `beta`   | `generated` |       34 |         34 |
+| OceanFS                                                             | `oceanfs`                    | `oceanfs`                    | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27oceanfs%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                    | `beta`   | `generated` |       41 |         41 |
 | Order                                                               | `order`                      | `order`                      | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27order%27%5D.stable&label=release&color=blue)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                      | `stable` | `curated`   |        7 |          7 |
 | Private DNS                                                         | `private-dns`                | `private-dns`                | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27private-dns%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                | `beta`   | `generated` |       40 |         40 |
 | Private NAT Gateway                                                 | `private-nat`                | `private-nat`                | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27private-nat%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                | `beta`   | `generated` |       21 |         21 |
@@ -228,7 +265,7 @@ ctyun plugin list
 | SQL Server                                                          | `rds-sqlserver`              | `rds-sqlserver`              | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27rds-sqlserver%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)              | `beta`   | `generated` |      116 |        116 |
 | Distributed Cache Service for Redis                                 | `redis`                      | `redis`                      | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27redis%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                      | `beta`   | `generated` |      207 |        207 |
 | Region                                                              | `region`                     | `region`                     | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27region%27%5D.stable&label=release&color=blue)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                     | `stable` | `curated`   |        7 |          7 |
-| Research Assistant                                                  | `research-assistant`         | `research-assistant`         | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27research-assistant%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)         | `beta`   | `generated` |       47 |         47 |
+| Research Assistant                                                  | `research-assistant`         | `research-assistant`         | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27research-assistant%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)         | `beta`   | `generated` |       48 |         48 |
 | RocketMQ                                                            | `rocketmq`                   | `rocketmq`                   | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27rocketmq%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                   | `beta`   | `generated` |       46 |         46 |
 | Resource Orchestration Service                                      | `ros`                        | `ros`                        | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27ros%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                        | `beta`   | `generated` |       40 |         40 |
 | SD-WAN                                                              | `sdwan`                      | `sdwan`                      | [![Release version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FArvinZJC%2Fctyun-cli%2Freleases%2Fdownload%2Fplugins%2Findex.json&query=%24.versions%5B%27sdwan%27%5D.beta&label=release&color=orange)](https://github.com/ArvinZJC/ctyun-cli/releases/tag/plugins)                      | `beta`   | `generated` |      138 |        138 |
@@ -253,9 +290,9 @@ The quality field describes plugin metadata maturity: `generated` is a tool-gene
 
 </details>
 
-The CLI provides 96 plugins and 7,638 commands for customer-side APIs in self-operated resource pools. Some products or APIs remain unsupported because their public endpoints or request and response contracts cannot be verified. Joint-operation pools and other out-of-scope APIs are excluded. Coverage is based on verified official documentation and does not imply that every API has been tested against a live cloud environment.
+The CLI provides 97 plugins and 7,751 commands for customer-side APIs in self-operated resource pools. Some products or APIs remain unsupported because their public endpoints or request and response contracts cannot be verified. Joint-operation pools and other out-of-scope APIs are excluded. Coverage is based on verified official documentation and does not imply that every API has been tested against a live cloud environment.
 
-The milestone targets core `0.5.1`, which supports all plugins listed above; 45 plugins require at least this version. Plugin versions and release channels remain independent of the core version.
+Core `0.5.2` supports all plugins listed above. Of these, 46 require core `0.5.1` or later. Plugin versions and release channels remain independent of the core version.
 
 When using the following plugins, note their scope, configuration requirements, and limitations:
 
@@ -276,14 +313,13 @@ Plugin management commands share these behaviours:
 - Install, reinstall, update, and update checks select the `stable` channel by default; choose prerelease plugins explicitly with `--channel beta` or `--channel alpha`.
 - `ctyun plugin search` supports fuzzy matching and follows the table/JSON output controls.
 - `ctyun plugin install` installs only absent plugins; it skips an installed plugin and never upgrades, downgrades, or replaces it through installation.
-- `ctyun plugin reinstall` operates only on installed plugins and refreshes them from the selected source; reinstall may replace the same version or explicitly move to a lower version from the selected channel.
+- `ctyun plugin reinstall` replaces an installed plugin with the version from the selected source and channel, even if that version is the same or older. With `--all`, it attempts to reinstall every installed plugin and reports a failure for each one missing from that channel. If your plugins come from different channels, name the plugins to reinstall in each channel.
 - `ctyun plugin update` installs only versions with higher SemVer precedence.
 - Install, reinstall, update, removal, and core upgrade show progress on stderr in an interactive terminal, then write one summary to stdout; redirected and piped runs emit no progress control sequences.
 
 ```sh
 ctyun plugin reinstall region --source auto
 ctyun plugin reinstall ecs --source auto --channel beta
-ctyun plugin reinstall --all --source auto
 ctyun plugin update --all --source auto
 ctyun plugin update --all --source auto --channel beta
 ctyun plugin remove ecs region --yes
@@ -320,8 +356,8 @@ ctyun ecs instance show c5a7966a-88e7-362b-6e11-c2d8fbfc07ca
 
 ### Output and filtering
 
-- `--cols`, `--filter`, and `--sort` accept the column labels shown in the table, while stable column keys remain supported.
-- Quote values only when the shell would split them, such as English column labels with spaces.
+- `--cols`, `--filter`, and `--sort` accept the column labels shown in the table, while stable column keys remain supported. When labels overlap, use the qualified label shown in help or the stable key.
+- Quote column labels that contain spaces and filter expressions that contain shell metacharacters. For example, `--filter 'Name=*'` matches a displayed name whose literal value is `*`.
 
 ```sh
 ctyun ecs instance list --output json
@@ -345,13 +381,15 @@ ctyun evs snapshot list --snapshot-id <snapshot_id> --wait evs.snapshot.availabl
 ctyun ims image show {image_id} --wait ims.image.active
 ```
 
-For waits on a collection, provide the resource identifier required by command help. Each response must contain an exact match: a missing resource stays pending, and duplicate matches are rejected.
+For waits on a collection, provide the resource identifier required by command help. On each poll, the waiter checks the state of the one resource with that exact identifier. It keeps polling if no resource matches and reports an error if multiple resources match.
 
-Each waiter defines `max_attempts` (including the first request) and `interval_seconds`; these are separate from the HTTP request timeout. Null and unknown values stay pending until the limit. Failure and timeout are printed as final waiter states; they currently do not change the command exit status. JSON output remains the initial response on stdout, with the waiter status on stderr.
+Each waiter defines `max_attempts`, which includes the first request, and `interval_seconds`, the delay between requests. The HTTP timeout applies to each individual request. Both the polling interval and the request timeout support up to 9,223,372,036 whole seconds on 64-bit platforms. Null and unknown values stay pending until the limit. Failure and timeout are printed as final waiter states; they currently do not change the command exit status. JSON output remains the initial response on stdout, with the waiter status on stderr.
 
 ## Core updates
 
-Use `ctyun update` or `ctyun upgrade` to check for and install core updates. Choose `auto`, `github`, or `gitee` with `--source`; `auto` tries GitHub first and falls back to Gitee. Updates verify index signatures and archive SHA-256 hashes. Use `--channel` to select `stable`, `beta`, or `alpha`.
+Use `ctyun update --check` to check for a core update or `ctyun upgrade` to install it. With `--source auto`, the CLI tries GitHub first and tries Gitee if it cannot fetch the index and signature or verify the signature. It downloads the archive referenced by the selected index and verifies its SHA-256 checksum. To choose the download source explicitly, use `--source github` or `--source gitee`. If an archive download fails, rerun with the other source. Use `--channel` to select `stable`, `beta`, or `alpha`.
+
+On Windows, a successful upgrade keeps the previous executable beside `ctyun.exe` in `.ctyun.exe.previous`. The next upgrade verifies that copy before replacing it. If it is still running, close the older process and retry. If the backup directory contains unrecognized files, move them aside before retrying.
 
 ```sh
 ctyun update --check --source auto
@@ -369,23 +407,26 @@ ctyun plugin remove ecs region
 ctyun plugin remove --all --yes
 ```
 
-To clean up the config file, run:
+To remove the active configuration and keep a backup beside it, run:
 
 ```sh
 ctyun config reset
 ```
 
-On macOS, Linux, and WSL, use `command -v` to locate the `ctyun` binary on the current `PATH`, then remove it. The default installation path is `$HOME/.local/bin/ctyun`:
+On macOS, Linux, and WSL, the installer places `ctyun` in `$HOME/.local/bin` by default. If you chose another directory, set `CTYUN_INSTALL_DIR` to its absolute path before running the removal command.
 
 ```sh
-ctyun_path="$(command -v ctyun)" && rm -f "$ctyun_path"
+rm -f -- "${CTYUN_INSTALL_DIR:-$HOME/.local/bin}/ctyun"
 ```
 
 Windows PowerShell installs to `%LOCALAPPDATA%\Programs\ctyun-cli\ctyun.exe` by default. If you set `CTYUN_INSTALL_DIR` during installation, use the same directory:
 
 ```powershell
 $InstallDir = if ($env:CTYUN_INSTALL_DIR) { $env:CTYUN_INSTALL_DIR } else { Join-Path $env:LOCALAPPDATA "Programs\ctyun-cli" }
-Remove-Item -Force (Join-Path $InstallDir "ctyun.exe") -ErrorAction SilentlyContinue
+$Target = Join-Path $InstallDir "ctyun.exe"
+if (Test-Path -LiteralPath $Target -PathType Leaf) {
+    Remove-Item -LiteralPath $Target -Force -ErrorAction Stop
+}
 ```
 
 ## Storage authentication and file transfers
@@ -402,7 +443,7 @@ For `ctyun media-storage object post {bucket_name}`, provide `--key` and `--file
 
 ### File input and output
 
-Use `--file` or `--document-file` only on commands that declare file inputs; ordinary values beginning with `@` are not read as files. Native uploads offer `--content-type` and, where supported, `--metadata` as a JSON map of metadata names to string values. Uploads require temporary disk space. Structured responses and XML documents are limited to 16 MiB. Command help lists available output formats: `--output raw` writes exact response bytes and cannot be combined with table controls or waiters; downloads also offer `--output-file` and `--overwrite`.
+Use `--file` or `--document-file` only on commands that declare file inputs; ordinary values beginning with `@` are not read as files. Native uploads offer `--content-type` and, where supported, `--metadata` as a JSON map of metadata names to string values. Uploads require temporary disk space. The CLI limits XML input documents and responses decoded under an explicit transport policy to 16 MiB. Binary downloads stream to their destination. Command help lists available output formats: `--output raw` writes exact response bytes and cannot be combined with table controls or waiters; downloads also offer `--output-file` and `--overwrite`.
 
 ### Pagination and waiters
 
@@ -410,7 +451,7 @@ Media native pagination is explicit: read continuation markers with `--output ra
 
 ## Developer and contributor workflow
 
-Development and builds require Go 1.26.0 or later to meet the minimum requirement of the current dependencies.
+The minimum Go version for development and builds is 1.26.0.
 
 The project follows the [upstream Go support window](https://go.dev/doc/devel/release#policy) by default, supporting the two latest Go release families and normally using the older family's `.0` release as the minimum. Language features, standard-library APIs, dependencies, or necessary compiler/runtime fixes may require a higher minimum; outdated dependencies should not be retained indefinitely to support end-of-life Go versions. The `go` directive in `go.mod` records the minimum requirement; development and release builds use the latest patch of the latest stable Go release. A local toolchain upgrade alone does not require raising the minimum or adding a `toolchain` directive.
 
@@ -432,17 +473,17 @@ go run ./cmd/ctyun --debug <plugin-command> --offline
 
 `--offline` and `--fixture` both enable bundled plugin fixtures and do not call live CTyun APIs. They are long-only product-command options for development builds, must follow the complete product command path, and are not global options. Release builds neither recognize nor expose these development options.
 
-Development builds can use `--bundled` to search, list, install, reinstall, or update plugins from in-tree plugin metadata. Product command execution in development builds also prefers in-tree bundled plugins, so local metadata changes remain visible even when a released plugin with the same name is installed. Like `--fixture`, `--bundled` is for development and test workflows and is omitted from regular help.
+Development builds can use `--bundled` to search, list, install, reinstall, or update plugins from in-tree plugin metadata. The default channel is `stable`. The ECS examples below select `beta`, the channel declared in its manifest. Product command execution in development builds also prefers in-tree bundled plugins, so local metadata changes remain visible even when a released plugin with the same name is installed. Like `--fixture`, `--bundled` is for development and test workflows and is omitted from regular help.
 
 ```sh
-go run ./cmd/ctyun plugin list --available --bundled
-go run ./cmd/ctyun plugin search <name> --bundled
-go run ./cmd/ctyun plugin install <name> --bundled
-go run ./cmd/ctyun plugin reinstall <name> --bundled
-go run ./cmd/ctyun plugin update <name> --bundled
+go run ./cmd/ctyun plugin list --available --channel all --bundled
+go run ./cmd/ctyun plugin search ecs --channel beta --bundled
+go run ./cmd/ctyun plugin install ecs --channel beta --bundled
+go run ./cmd/ctyun plugin reinstall ecs --channel beta --bundled
+go run ./cmd/ctyun plugin update ecs --channel beta --bundled
 ```
 
-Testing:
+Run the test suite as an unprivileged user. Several tests rely on the operating system denying writes to read-only files or directories.
 
 ```sh
 git ls-files -co --exclude-standard '*.go' | sort -u | xargs gofmt -w
@@ -454,7 +495,9 @@ go test -timeout=30m ./tools/plugincheck
 go run ./tools/coverage
 ```
 
-After plugin changes, verify according to the affected area. Lint the changed plugin first, then run the matching offline command. If the change affects generic plugin loading, command parsing, or table rendering, add the related Go tests.
+The coverage gate requires 100% statement coverage of the unfiltered profile at `.cache/coverage/raw.out` for the current Go platform. It checks execution counts directly, with no file or line exclusions and no rounding allowance. Tests include the command entry points, maintenance tools, archive helpers, and filesystem failure paths.
+
+After plugin changes, verify according to the affected area. Lint the changed plugin first, then run the matching offline command. For changes to shared plugin loading, command parsing, or table rendering, also run the corresponding Go package tests.
 
 ```sh
 go run ./cmd/ctyun plugin lint ./plugins/<name>
@@ -507,8 +550,9 @@ Use `diff`, `generate` and `review` to rebuild the local outputs. `normalize-lab
 Review the runnable draft, not just the source catalog. Check the API contract, command bindings, help, examples and fixtures:
 
 - Ordinary JSON fixtures and HTTP response fixtures must match captured source evidence. Missing or changed fixture data blocks review.
+- Keep table row selectors, column keys and paths, and column deprecation metadata consistent with the source catalog. You can change the layout and default columns during review.
 - Examples must add something beyond the Usage line: concrete arguments, meaningful options, structured values or other behaviour. Examples that only repeat the command path, including unresolved path placeholders, are rejected.
-- Fix mechanically assembled English descriptions, missing required options, undeclared options and values that do not match their parameter types.
+- Check that the draft includes a command description in each supported language. Rewrite mechanically assembled English descriptions. Check examples for missing required options, undeclared options and values that do not match their parameter types.
 - Generate recommendation help only when the target resolves to a tracked, promoted CLI command. Otherwise, retain the unresolved evidence in `source.json`. Cross-plugin references are soft dependencies at load time, but release checks require an exact, non-deprecated target and reject recommendation cycles.
 
 If an API has a clear response contract but no usable successful response example, set `fixture_unavailable` with the reason. Keep the command, response validation and original evidence; do not invent a success fixture. The command cannot use `--offline` or `--fixture`, and the missing example cannot serve as waiter evidence. For downloads, declare the documented success `media_type` on the response variant so an HTTP-200 error envelope is not saved as a file.
@@ -541,10 +585,12 @@ Before promotion, confirm that review passes and the declared quality (`generate
 
 Generation derives `source_fingerprint` from `source.json`. For existing plugins, it preserves the promoted version, channel, quality and core compatibility range, raising the minimum core version when required:
 
-| Metadata feature                                    | Minimum core version |
-|-----------------------------------------------------|----------------------|
-| Waiters                                             | `0.5.0`              |
-| Independent request-header, query and body bindings | `0.5.1`              |
+| Metadata feature | Minimum core version |
+|------------------|----------------------|
+| Basic generated bundle | `0.3.1` |
+| Non-string request-body parameters | `0.4.0` |
+| Waiters, explicit transport policies, native storage, downloads or XML response tables | `0.5.0` |
+| Independent request-header, query and body bindings | `0.5.1` |
 
 Regeneration must not lower an existing compatibility requirement or reset the plugin version, channel or quality. Promotion updates plugin metadata and advances `baseline.json` to the accepted source:
 
@@ -554,13 +600,15 @@ go run ./tools/openapi promote <name>
 
 ### Packaging and releases
 
-The release packaging tool writes core binary archives, `core-index.json`, `core-index.sig`, installation scripts, plugin archives, `index.json`, and `index.sig`. Development tests use fake HTTP sources to verify signature and download behaviour before public assets exist; real release assets serve the installation, core update, and plugin update flows above.
+The release packaging tool writes core binary archives, `core-index.json`, `core-index.sig`, installation scripts, plugin archives, `index.json`, and `index.sig`. Tests use local HTTP sources to verify signature and download behaviour. The published assets support installation, core updates, and plugin updates.
 
 - The fixed `core` and `plugins` tags are the repository's only two GitHub Release pages and built-artefact roots: `core` stores core installation and update artefacts, while `plugins` stores plugin installation and update artefacts.
 - Ordinary version tags continue to be created, but they do not receive separate GitHub Release pages or uploaded artefacts.
 - The Gitee `core` Release keeps the same layout. Because Gitee limits attachments per Release, its fixed `plugins` Release stores only `index.json` and `index.sig`; each plugin archive is uploaded to an immutable Gitee Release for its existing `releases/plugins/<name>/<version>` tag. The signed Gitee index uses absolute URLs for those archives, so clients still download only the selected plugin.
 - Actual versions and channels are selected by the signed `core-index.json` and `index.json`; version-specific change history is recorded in the canonical root and plugin changelogs.
-- When the tool runs against an existing output directory, it preserves existing entries for other channels, replaces the rebuilt core channel or plugin name/channel assets, and signs the merged indexes again; if the same core version is being completed with more platform archives, those platform assets are merged.
+- When reusing an output directory, the packager advances each core operating system and architecture pair independently within its channel. A partial release keeps the previous build available for each omitted platform until its replacement is published. The signed core index lists releases in descending SemVer order so installers select the newest available build for their platform. When two versions differ only in build metadata, the newly published build takes precedence for the platforms it supplies.
+- Rebuilding an indexed core or plugin version refreshes that entry. A previously unindexed older core version can supply a platform that has no newer build. Packaging an older plugin version preserves the newer version advertised for that plugin and channel. Other channels keep their own entries.
+- Each core version and each version of a given plugin belongs to one channel. The packager rejects a merged index that assigns the same version tag to multiple channels.
 - Reuse an output directory containing the current published indexes and plugin archives. When a plugin's archive contents are unchanged, packaging retains its existing compressed bytes and checksum across Go toolchain updates.
 - After updating fixed release assets, keep archives referenced by the current signed indexes, index signatures, and core installation scripts, and remove old archives that are no longer referenced; prerelease channel archives should stay when the index still advertises them.
 
@@ -578,11 +626,13 @@ Developer and test environment variables:
 | `CTYUN_RELEASE_PRIVATE_KEY` | Private key used by the release packaging tool to sign indexes                                                             |
 | `CTYUN_RELEASE_PUBLIC_KEY`  | Public key used by development builds or private distribution validation for core update and plugin index signature checks |
 
+For a local rehearsal, generate a temporary signing key and package the current platform into a fresh directory. The packager derives the public key from the private key and embeds it in the binary. For an existing distribution, use the private key whose public key is already trusted by installed clients.
+
 ```sh
 go run ./tools/release --generate-key
-export CTYUN_RELEASE_PRIVATE_KEY="<private key from previous output>"
-export CTYUN_RELEASE_PUBLIC_KEY="<public key from previous output>"
-go run ./tools/release --version 0.5.1 --channel stable --out ./dist/releases --gitee-plugin-download-root "https://gitee.com/ArvinZJC/ctyun-cli/releases/download" --platform "$(go env GOOS)/$(go env GOARCH)"
+release_dir=$(mktemp -d) &&
+  CTYUN_RELEASE_PRIVATE_KEY="<private key from previous output>" \
+  go run ./tools/release --version 0.5.2 --channel stable --out "$release_dir" --gitee-plugin-download-root "https://gitee.com/ArvinZJC/ctyun-cli/releases/download" --platform "$(go env GOOS)/$(go env GOARCH)"
 ```
 
 For real releases, GitHub remains the canonical source and CI artifact authority, while Gitee is the synchronised mirror for more reliable access from mainland China. The installed `ctyun` verifies hosted core and plugin indexes using the signing public key and checks archive SHA-256 hashes; the bootstrap scripts use the installation trust model described above.

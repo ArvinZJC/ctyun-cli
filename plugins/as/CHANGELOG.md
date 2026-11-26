@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.5 - 2026-11-24
+
+- Refresh documented filters and group configuration inputs.
+
 ## 0.1.0-beta.4 - 2026-10-10
 
 ### Fixed

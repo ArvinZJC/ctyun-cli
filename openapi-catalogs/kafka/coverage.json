@@ -1,9 +1,9 @@
 {
-  "captured_at": "2026-09-25",
+  "captured_at": "2026-11-23",
   "service_id": 83,
   "version_id": 330,
-  "published_api_count": 124,
-  "implemented_api_count": 124,
+  "published_api_count": 121,
+  "implemented_api_count": 125,
   "blocked": [],
   "fixtures_unavailable": [
     {
@@ -181,5 +181,41 @@
   "response_notes": [
     "The malformed quota examples omit the explicitly documented returnObj.data key before true; restore that key, retaining the original evidence, and reject data=false even under a successful outer status.",
     "Six schema-only or absent examples do not become fabricated offline fixtures."
-  ]
+  ],
+  "retained_unlisted_api_ids": [
+    "18559",
+    "18560",
+    "18561",
+    "18562"
+  ],
+  "published_versions": [
+    {
+      "version_id": 330,
+      "count": 119,
+      "menu_url": "https://eop.ctyun.cn/ebp/ctapiDocumOut/openApiMenu/83?versionId=330"
+    },
+    {
+      "version_id": 77,
+      "count": 2,
+      "menu_url": "https://eop.ctyun.cn/ebp/ctapiDocumOut/openApiMenu/83?versionId=77",
+      "api_ids": [
+        "4052",
+        "4043"
+      ]
+    }
+  ],
+  "retained_operation_review": {
+    "checked_on": "2026-11-23",
+    "finding": "Four historical fault-drill routes are absent from both version menus. Their detail URLs returned successful responses with empty data objects. The Application High Availability guide documents Kafka drills through that product, without establishing the availability or retirement of these four Kafka routes.",
+    "related_official_guide": "https://www.ctyun.cn/document/10838259/11087328",
+    "decision": "Keep the historical commands with help notices. The two v2 operations are published in version 77."
+  },
+  "published_contract_review": {
+    "operation_count": 121,
+    "top_level_request_fields": 600,
+    "method_uri_and_field_locations": "All published methods, URIs, and path, query, body and header field names match the plugin bindings.",
+    "required_fields": "All required markers match the published tables.",
+    "type_normalizations": "The catalog represents 30 Long fields as Integer. API 18414 uses a JSON object to preserve the documented arrays of broker IDs in partitionBrokers.",
+    "capacity_check": "API 24272 is a read-only POST. A successful response may report returnObj.soldOut=true."
+  }
 }

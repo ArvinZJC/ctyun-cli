@@ -130,6 +130,89 @@ func TestReviewDraftRejectsSourceLabelDisagreement(t *testing.T) {
 	}
 }
 
+// TestReviewRejectsLostColumnDeprecation keeps the documented warning attached
+// to its source column even when the draft's labels and paths still match.
+func TestReviewRejectsLostColumnDeprecation(t *testing.T) {
+	workspace := Workspace{Root: t.TempDir()}
+	catalog := loadCatalogFixture(t)
+	catalog.Operations[0].Response.Columns[0].Description = "Deprecated field"
+	writeCatalogAndGenerateDraft(t, workspace, "ecs", catalog)
+	path := workspace.ProductPath("ecs", "draft", "tables.json")
+	tables := readJSONFile[plugin.Tables](t, path)
+	column := &tables.Tables["ecs.instance.list"].Columns[0]
+	if !column.Deprecation.Active() {
+		t.Fatal("generated column is missing the source deprecation")
+	}
+	column.Deprecation = nil
+	if err := writeJSON(path, tables); err != nil {
+		t.Fatal(err)
+	}
+	report, err := workspace.ReviewDraft("ecs")
+	if err != nil || report.Ready || !slices.Contains(report.Findings, "operation v4.ecs.instance.list response column instanceID deprecation does not match source evidence") {
+		t.Fatalf("review = %#v, %v", report, err)
+	}
+}
+
+// TestReviewDraftKeepsOfficialProductNames checks every locale against its
+// catalog title, including a removed name that would fall back to the plugin ID.
+func TestReviewDraftKeepsOfficialProductNames(t *testing.T) {
+	for _, language := range []string{"en-US", "en-GB", "zh-CN"} {
+		t.Run(language, func(t *testing.T) {
+			workspace := Workspace{Root: t.TempDir()}
+			writeCatalogAndGenerateDraft(t, workspace, "ecs", loadCatalogFixture(t))
+			path := workspace.ProductPath("ecs", "draft", "i18n", language+".json")
+			entries := readJSONFile[map[string]string](t, path)
+			for _, name := range []string{"Different product", ""} {
+				entries["name"] = name
+				if name == "" {
+					delete(entries, "name")
+				}
+				if err := writeJSON(path, entries); err != nil {
+					t.Fatal(err)
+				}
+				report, err := workspace.ReviewDraft("ecs")
+				if err != nil || report.Ready || !strings.Contains(report.Markdown(), "product display name "+language) {
+					t.Errorf("review of %q title in %s = %+v, %v", name, language, report, err)
+				}
+			}
+		})
+	}
+}
+
+// TestReviewDraftChecksExactColumnInventory exercises both added selectors
+// and renamed source keys without imposing the source's presentation order.
+func TestReviewDraftChecksExactColumnInventory(t *testing.T) {
+	for _, change := range []string{"added", "renamed", "presentation"} {
+		t.Run(change, func(t *testing.T) {
+			workspace := Workspace{Root: t.TempDir()}
+			writeCatalogAndGenerateDraft(t, workspace, "ecs", loadCatalogFixture(t))
+			path := workspace.ProductPath("ecs", "draft", "tables.json")
+			tables := readJSONFile[plugin.Tables](t, path)
+			table := tables.Tables["ecs.instance.list"]
+			switch change {
+			case "added":
+				extra := table.Columns[0]
+				extra.Key, extra.Path = "undeclared", "undeclaredField"
+				table.Columns = append(table.Columns, extra)
+			case "renamed":
+				table.Columns[0].Key = "different_key"
+			case "presentation":
+				slices.Reverse(table.Columns)
+				table.DefaultColumns = []string{table.Columns[0].Key}
+				table.Layout = "vertical"
+			}
+			tables.Tables["ecs.instance.list"] = table
+			if err := writeJSON(path, tables); err != nil {
+				t.Fatal(err)
+			}
+			report, err := workspace.ReviewDraft("ecs")
+			if err != nil || report.Ready != (change == "presentation") {
+				t.Fatalf("review after %s = %+v, %v", change, report, err)
+			}
+		})
+	}
+}
+
 // TestReviewTableLabelsRejectsStructuralDrift verifies missing tables, missing
 // columns, and duplicate columns are independently review-blocking.
 func TestReviewTableLabelsRejectsStructuralDrift(t *testing.T) {

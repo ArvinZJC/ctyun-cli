@@ -8,6 +8,7 @@ package plugincheck
 import (
 	"encoding/json"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -23,6 +24,7 @@ func TestProductDisplayNamesStayAligned(t *testing.T) {
 	readmeZH := readRepoText(t, "README.md")
 	readmeEN := readRepoText(t, "README-EN.md")
 	catalogRoot := repoPath(t, "openapi-catalogs")
+	pluginsRoot := repoPath(t, "plugins")
 	entries, err := os.ReadDir(catalogRoot)
 	if err != nil {
 		t.Fatalf("read catalog root: %v", err)
@@ -33,13 +35,16 @@ func TestProductDisplayNamesStayAligned(t *testing.T) {
 		}
 		product := entry.Name()
 		t.Run(product, func(t *testing.T) {
-			source := readProductCatalog(t, filepath.Join(catalogRoot, product, "source.json"))
-			baseline := readProductCatalog(t, filepath.Join(catalogRoot, product, "baseline.json"))
-			if source.Product.DisplayNamePolicy != baseline.Product.DisplayNamePolicy {
-				t.Fatalf("source display-name policy = %#v, baseline = %#v", source.Product.DisplayNamePolicy, baseline.Product.DisplayNamePolicy)
+			readProductCatalog(t, filepath.Join(catalogRoot, product, "source.json"))
+			baselinePath := filepath.Join(catalogRoot, product, "baseline.json")
+			pluginDir := filepath.Join(pluginsRoot, product)
+			_, baselineErr := os.Stat(baselinePath)
+			_, pluginErr := os.Stat(pluginDir)
+			if os.IsNotExist(baselineErr) && os.IsNotExist(pluginErr) {
+				return // Harvested source awaiting its first promotion.
 			}
-
-			bundle, err := plugin.LoadBundle(repoPath(t, filepath.Join("plugins", product)), version.Version)
+			baseline := readProductCatalog(t, baselinePath)
+			bundle, err := plugin.LoadBundle(pluginDir, version.Version)
 			if err != nil {
 				t.Fatalf("load plugin: %v", err)
 			}
@@ -53,6 +58,69 @@ func TestProductDisplayNamesStayAligned(t *testing.T) {
 			assertREADMEProductName(t, readmeEN, baseline.Product.DisplayName["en-US"], product)
 		})
 	}
+}
+
+// TestProductDisplayNameReviewLifecycle runs the release gate in an isolated
+// repository through first harvest, pending title changes and missing records.
+func TestProductDisplayNameReviewLifecycle(t *testing.T) {
+	root := t.TempDir()
+	testBinary, err := os.Executable()
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, name := range []string{"README.md", "README-EN.md"} {
+		if err := os.WriteFile(filepath.Join(root, name), []byte(readRepoText(t, name)), 0o600); err != nil {
+			t.Fatal(err)
+		}
+	}
+	catalogDir := filepath.Join(root, "openapi-catalogs", "region")
+	pluginDir := filepath.Join(root, "plugins", "region")
+	if err := os.MkdirAll(catalogDir, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Mkdir(filepath.Dir(pluginDir), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	baseline, err := os.ReadFile(repoPath(t, "openapi-catalogs/region/baseline.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var pending openapipipeline.Catalog
+	if err := json.Unmarshal(baseline, &pending); err != nil {
+		t.Fatal(err)
+	}
+	pending.Product.DisplayNamePolicy = openapipipeline.DisplayNamePolicy{Kind: "brand", Token: "Region"}
+	pending.Product.DisplayName = map[string]string{"en-US": "Region", "en-GB": "Region", "zh-CN": "资源池 Region"}
+	source, err := json.Marshal(pending)
+	if err != nil {
+		t.Fatal(err)
+	}
+	sourcePath := filepath.Join(catalogDir, "source.json")
+	if err := os.WriteFile(sourcePath, source, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	check := func(stage string, success bool) {
+		t.Helper()
+		cmd := exec.Command(testBinary, "-test.run=^TestProductDisplayNamesStayAligned$/^region$")
+		cmd.Dir = root
+		output, err := cmd.CombinedOutput()
+		if (err == nil) != success {
+			t.Errorf("%s: %v\n%s", stage, err, output)
+		}
+	}
+	check("source awaiting its first promotion", true)
+	if err := os.CopyFS(pluginDir, os.DirFS(repoPath(t, "plugins/region"))); err != nil {
+		t.Fatal(err)
+	}
+	check("published plugin missing baseline", false)
+	if err := os.WriteFile(filepath.Join(catalogDir, "baseline.json"), baseline, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	check("changed source policy awaiting promotion", true)
+	if err := os.Remove(sourcePath); err != nil {
+		t.Fatal(err)
+	}
+	check("published plugin missing source", false)
 }
 
 // readProductCatalog reads and validates one repository catalog snapshot.
