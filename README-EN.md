@@ -22,11 +22,11 @@
 
 - **Relationship to the official CLI:** CTyun released the official `ctyun-cli` on 2 July 2026. This project is an independently maintained unofficial implementation.
 
-  The public entry point for CTyun's official `ctyun-cli` is the [official CLI docs](https://www.ctyun.cn/document/11095072). As of now, it does not have a separate official product home page. The official tool uses the `ctyun-cli` command name, while this project uses `ctyun`, so the two binaries do not conflict and can both be present in one shell environment. Both tools use `CTYUN_AK` / `CTYUN_SK` for AK/SK environment variables; if you use them side by side, remember that this credential pair is shared by both tools.
+  You can install both tools in the same shell. Run `ctyun-cli` for the official tool and `ctyun` for this project. Both can read credentials from `CTYUN_AK` and `CTYUN_SK`. See the [official CLI guide](https://www.ctyun.cn/document/11095072/11096343).
 
-  CTyun's official Go SDK is named `ctyun-go-sdk`, but it has limited product coverage and is not publicly released. Users who need the official SDK can submit a CTyun work order. This project is not an SDK; it is a command-line tool for user workflows.
+  For Go applications, consult the SDK documentation for the product you need. For example, CTyun publishes `ctyun-go-sdk.zip` in its [RDS for MySQL SDK reference](https://www.ctyun.cn/document/10033813/11065649).
 
-  This project will keep iterating as an unofficial alternative to the official CLI. We will continue exploring and implementing capabilities expected from a modern cloud CLI, while keeping a better terminal experience, script friendliness, composable output, and maintainable extension paths in mind. Once the official CLI is robust, stable, flexible, capable, and polished enough for the same workflows, we can reassess this project's role and lifecycle.
+  Development focuses on interactive terminal use, output that scripts can combine, and independently maintained plugins. We will reassess the project's role when the official CLI reliably supports the same workflows.
 
 - Activate the service you want to manage and prepare an AK/SK credential pair with the required permissions.
 
@@ -36,7 +36,7 @@
 
 ## Installation
 
-Install the native `ctyun` binary with the installation scripts below. By default, the script selects the first available channel in `stable`, `beta`, then `alpha` order; set `CTYUN_INSTALL_CHANNEL` to pin a channel. If GitHub access is unreliable, replace `github.com` in the URL with `gitee.com`.
+The scripts below install the native `ctyun` binary. They select the first channel with a build for your platform, checking `stable`, `beta`, then `alpha`. Set `CTYUN_INSTALL_CHANNEL` to select a specific channel. To download both the installer and the release from Gitee, replace `github.com` in the installer URL with `gitee.com` and set `CTYUN_INSTALL_SOURCE` to `gitee` before running it.
 
 macOS, Linux, and WSL:
 
@@ -103,7 +103,7 @@ export CTYUN_AK=...
 export CTYUN_SK=...
 ```
 
-When `CTYUN_AK` or `CTYUN_SK` is missing, `ctyun` falls back to `ak`/`sk` in the active profile, then top-level config. A live command that actually uses config AK/SK writes a warning to stderr; disable it by setting the `CTYUN_WARN_CONFIG_CREDENTIALS=0` environment variable or running `ctyun config set warn_config_credentials false`.
+For each missing environment value, `ctyun` reads the corresponding `ak` or `sk` from the selected profile, then from the top-level config. If a live request uses either stored credential, `ctyun` warns on stderr. Set `CTYUN_WARN_CONFIG_CREDENTIALS=0` to suppress the warning for the process. To disable it by default, run `ctyun config set warn_config_credentials false`. If a profile enables the warning, add `--profile <name>` to change the setting in that profile.
 
 ### Configuration and profiles
 
@@ -163,16 +163,18 @@ Use `ctyun doctor local` to check configuration, credentials, resource pool sett
 
 After confirmation, `ctyun config reset` backs up the configuration beside the original file, then deletes the original. It uses the first available suffix starting with `.bak`, then `.bak.2`, `.bak.3`, and so on. Scripts can use `--yes` or `-y` to skip the prompt.
 
+If another `ctyun` process changes the configuration during a save or reset, the command can report a conflict. Check the current settings with `ctyun config show` before retrying.
+
 ### Language
 
 Supported languages are `zh-CN`, `en-US`, and `en-GB`. Language resolution is `--lang`, then `CTYUN_LANGUAGE`, then profile `language`, then the OS locale. If nothing matches, `zh-CN` is used.
 
 ## Plugins
 
-A fresh `ctyun` installation includes only core commands; product plugins are not preinstalled. Product commands come from plugin bundles. After setting up authentication, config, and language preferences, install the plugins you need:
+A fresh `ctyun` installation includes the core commands. You can browse and install product plugins before configuring cloud credentials.
 
 ```sh
-ctyun plugin search ecs --source auto
+ctyun plugin search ecs --source auto --channel beta
 ctyun plugin list --available --source auto
 ctyun plugin list --available --cols Plugin,Quality,Status --filter Status=available --source auto
 ctyun plugin install region --source auto
@@ -311,14 +313,13 @@ Plugin management commands share these behaviours:
 - Install, reinstall, update, and update checks select the `stable` channel by default; choose prerelease plugins explicitly with `--channel beta` or `--channel alpha`.
 - `ctyun plugin search` supports fuzzy matching and follows the table/JSON output controls.
 - `ctyun plugin install` installs only absent plugins; it skips an installed plugin and never upgrades, downgrades, or replaces it through installation.
-- `ctyun plugin reinstall` operates only on installed plugins and refreshes them from the selected source; reinstall may replace the same version or explicitly move to a lower version from the selected channel.
+- `ctyun plugin reinstall` replaces an installed plugin with the version from the selected source and channel, even if that version is the same or older. With `--all`, it attempts to reinstall every installed plugin and reports a failure for each one missing from that channel. If your plugins come from different channels, name the plugins to reinstall in each channel.
 - `ctyun plugin update` installs only versions with higher SemVer precedence.
 - Install, reinstall, update, removal, and core upgrade show progress on stderr in an interactive terminal, then write one summary to stdout; redirected and piped runs emit no progress control sequences.
 
 ```sh
 ctyun plugin reinstall region --source auto
 ctyun plugin reinstall ecs --source auto --channel beta
-ctyun plugin reinstall --all --source auto
 ctyun plugin update --all --source auto
 ctyun plugin update --all --source auto --channel beta
 ctyun plugin remove ecs region --yes
@@ -355,7 +356,7 @@ ctyun ecs instance show c5a7966a-88e7-362b-6e11-c2d8fbfc07ca
 
 ### Output and filtering
 
-- `--cols`, `--filter`, and `--sort` accept the column labels shown in the table, while stable column keys remain supported.
+- `--cols`, `--filter`, and `--sort` accept the column labels shown in the table, while stable column keys remain supported. When labels overlap, use the qualified label shown in help or the stable key.
 - Quote column labels that contain spaces and filter expressions that contain shell metacharacters. For example, `--filter 'Name=*'` matches a displayed name whose literal value is `*`.
 
 ```sh
@@ -387,6 +388,8 @@ Each waiter defines `max_attempts`, which includes the first request, and `inter
 ## Core updates
 
 Use `ctyun update --check` to check for a core update or `ctyun upgrade` to install it. With `--source auto`, the CLI tries GitHub first and tries Gitee if it cannot fetch the index and signature or verify the signature. It downloads the archive referenced by the selected index and verifies its SHA-256 checksum. To choose the download source explicitly, use `--source github` or `--source gitee`. If an archive download fails, rerun with the other source. Use `--channel` to select `stable`, `beta`, or `alpha`.
+
+On Windows, a successful upgrade keeps the previous executable beside `ctyun.exe` in `.ctyun.exe.previous`. The next upgrade verifies that copy before replacing it. If it is still running, close the older process and retry. If the backup directory contains unrecognized files, move them aside before retrying.
 
 ```sh
 ctyun update --check --source auto
@@ -470,17 +473,17 @@ go run ./cmd/ctyun --debug <plugin-command> --offline
 
 `--offline` and `--fixture` both enable bundled plugin fixtures and do not call live CTyun APIs. They are long-only product-command options for development builds, must follow the complete product command path, and are not global options. Release builds neither recognize nor expose these development options.
 
-Development builds can use `--bundled` to search, list, install, reinstall, or update plugins from in-tree plugin metadata. Product command execution in development builds also prefers in-tree bundled plugins, so local metadata changes remain visible even when a released plugin with the same name is installed. Like `--fixture`, `--bundled` is for development and test workflows and is omitted from regular help.
+Development builds can use `--bundled` to search, list, install, reinstall, or update plugins from in-tree plugin metadata. The default channel is `stable`. The ECS examples below select `beta`, the channel declared in its manifest. Product command execution in development builds also prefers in-tree bundled plugins, so local metadata changes remain visible even when a released plugin with the same name is installed. Like `--fixture`, `--bundled` is for development and test workflows and is omitted from regular help.
 
 ```sh
-go run ./cmd/ctyun plugin list --available --bundled
-go run ./cmd/ctyun plugin search <name> --bundled
-go run ./cmd/ctyun plugin install <name> --bundled
-go run ./cmd/ctyun plugin reinstall <name> --bundled
-go run ./cmd/ctyun plugin update <name> --bundled
+go run ./cmd/ctyun plugin list --available --channel all --bundled
+go run ./cmd/ctyun plugin search ecs --channel beta --bundled
+go run ./cmd/ctyun plugin install ecs --channel beta --bundled
+go run ./cmd/ctyun plugin reinstall ecs --channel beta --bundled
+go run ./cmd/ctyun plugin update ecs --channel beta --bundled
 ```
 
-Testing:
+Run the test suite as an unprivileged user. Several tests rely on the operating system denying writes to read-only files or directories.
 
 ```sh
 git ls-files -co --exclude-standard '*.go' | sort -u | xargs gofmt -w
@@ -547,8 +550,9 @@ Use `diff`, `generate` and `review` to rebuild the local outputs. `normalize-lab
 Review the runnable draft, not just the source catalog. Check the API contract, command bindings, help, examples and fixtures:
 
 - Ordinary JSON fixtures and HTTP response fixtures must match captured source evidence. Missing or changed fixture data blocks review.
+- Keep table row selectors, column keys and paths, and column deprecation metadata consistent with the source catalog. You can change the layout and default columns during review.
 - Examples must add something beyond the Usage line: concrete arguments, meaningful options, structured values or other behaviour. Examples that only repeat the command path, including unresolved path placeholders, are rejected.
-- Fix mechanically assembled English descriptions, missing required options, undeclared options and values that do not match their parameter types.
+- Check that the draft includes a command description in each supported language. Rewrite mechanically assembled English descriptions. Check examples for missing required options, undeclared options and values that do not match their parameter types.
 - Generate recommendation help only when the target resolves to a tracked, promoted CLI command. Otherwise, retain the unresolved evidence in `source.json`. Cross-plugin references are soft dependencies at load time, but release checks require an exact, non-deprecated target and reject recommendation cycles.
 
 If an API has a clear response contract but no usable successful response example, set `fixture_unavailable` with the reason. Keep the command, response validation and original evidence; do not invent a success fixture. The command cannot use `--offline` or `--fixture`, and the missing example cannot serve as waiter evidence. For downloads, declare the documented success `media_type` on the response variant so an HTTP-200 error envelope is not saved as a file.
@@ -581,10 +585,12 @@ Before promotion, confirm that review passes and the declared quality (`generate
 
 Generation derives `source_fingerprint` from `source.json`. For existing plugins, it preserves the promoted version, channel, quality and core compatibility range, raising the minimum core version when required:
 
-| Metadata feature                                    | Minimum core version |
-|-----------------------------------------------------|----------------------|
-| Waiters                                             | `0.5.0`              |
-| Independent request-header, query and body bindings | `0.5.1`              |
+| Metadata feature | Minimum core version |
+|------------------|----------------------|
+| Basic generated bundle | `0.3.1` |
+| Non-string request-body parameters | `0.4.0` |
+| Waiters, explicit transport policies, native storage, downloads or XML response tables | `0.5.0` |
+| Independent request-header, query and body bindings | `0.5.1` |
 
 Regeneration must not lower an existing compatibility requirement or reset the plugin version, channel or quality. Promotion updates plugin metadata and advances `baseline.json` to the accepted source:
 
@@ -600,7 +606,9 @@ The release packaging tool writes core binary archives, `core-index.json`, `core
 - Ordinary version tags continue to be created, but they do not receive separate GitHub Release pages or uploaded artefacts.
 - The Gitee `core` Release keeps the same layout. Because Gitee limits attachments per Release, its fixed `plugins` Release stores only `index.json` and `index.sig`; each plugin archive is uploaded to an immutable Gitee Release for its existing `releases/plugins/<name>/<version>` tag. The signed Gitee index uses absolute URLs for those archives, so clients still download only the selected plugin.
 - Actual versions and channels are selected by the signed `core-index.json` and `index.json`; version-specific change history is recorded in the canonical root and plugin changelogs.
-- When reusing an output directory, the packager updates the index entries for the selected core channel and each packaged plugin’s channel, preserves other channels, and signs the merged indexes. Rebuilding the same core version keeps one entry per operating system and architecture pair. Rebuilt platforms use the new archives, and other platforms retain their existing entries.
+- When reusing an output directory, the packager advances each core operating system and architecture pair independently within its channel. A partial release keeps the previous build available for each omitted platform until its replacement is published. The signed core index lists releases in descending SemVer order so installers select the newest available build for their platform. When two versions differ only in build metadata, the newly published build takes precedence for the platforms it supplies.
+- Rebuilding an indexed core or plugin version refreshes that entry. A previously unindexed older core version can supply a platform that has no newer build. Packaging an older plugin version preserves the newer version advertised for that plugin and channel. Other channels keep their own entries.
+- Each core version and each version of a given plugin belongs to one channel. The packager rejects a merged index that assigns the same version tag to multiple channels.
 - Reuse an output directory containing the current published indexes and plugin archives. When a plugin's archive contents are unchanged, packaging retains its existing compressed bytes and checksum across Go toolchain updates.
 - After updating fixed release assets, keep archives referenced by the current signed indexes, index signatures, and core installation scripts, and remove old archives that are no longer referenced; prerelease channel archives should stay when the index still advertises them.
 
@@ -618,13 +626,13 @@ Developer and test environment variables:
 | `CTYUN_RELEASE_PRIVATE_KEY` | Private key used by the release packaging tool to sign indexes                                                             |
 | `CTYUN_RELEASE_PUBLIC_KEY`  | Public key used by development builds or private distribution validation for core update and plugin index signature checks |
 
-The example below creates a signing key for a local packaging rehearsal. When publishing to an existing distribution, use the release private key whose public key is trusted by installed clients. Packaging embeds the corresponding public key in the new binary. Existing clients will reject indexes signed with an unrelated key.
+For a local rehearsal, generate a temporary signing key and package the current platform into a fresh directory. The packager derives the public key from the private key and embeds it in the binary. For an existing distribution, use the private key whose public key is already trusted by installed clients.
 
 ```sh
 go run ./tools/release --generate-key
-export CTYUN_RELEASE_PRIVATE_KEY="<private key from previous output>"
-export CTYUN_RELEASE_PUBLIC_KEY="<public key from previous output>"
-go run ./tools/release --version 0.5.2 --channel stable --out ./dist/releases --gitee-plugin-download-root "https://gitee.com/ArvinZJC/ctyun-cli/releases/download" --platform "$(go env GOOS)/$(go env GOARCH)"
+release_dir=$(mktemp -d) &&
+  CTYUN_RELEASE_PRIVATE_KEY="<private key from previous output>" \
+  go run ./tools/release --version 0.5.2 --channel stable --out "$release_dir" --gitee-plugin-download-root "https://gitee.com/ArvinZJC/ctyun-cli/releases/download" --platform "$(go env GOOS)/$(go env GOARCH)"
 ```
 
 For real releases, GitHub remains the canonical source and CI artifact authority, while Gitee is the synchronised mirror for more reliable access from mainland China. The installed `ctyun` verifies hosted core and plugin indexes using the signing public key and checks archive SHA-256 hashes; the bootstrap scripts use the installation trust model described above.

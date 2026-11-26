@@ -20,13 +20,13 @@
 
 ## 使用前须知
 
-- **与官方 CLI 的关系：** 天翼云已于 2026 年 7 月 2 日发布官方 `ctyun-cli`。本项目是独立维护的非官方实现。
+- **与官方 CLI 的关系**：天翼云已于 2026 年 7 月 2 日发布官方 `ctyun-cli`。本项目是独立维护的非官方实现。
 
-  天翼云官方 `ctyun-cli` 的公开入口是：[官方 CLI 文档](https://www.ctyun.cn/document/11095072)。截至目前，它没有独立的官方产品主页。官方工具命令名是 `ctyun-cli`，本项目命令名是 `ctyun`，两者不会发生二进制命名冲突，可以同时出现在同一个 shell 环境中。两者都使用 `CTYUN_AK` / `CTYUN_SK` 作为 AK/SK 环境变量；如果同时使用，请留意这组凭据会被两个工具共享。
+  两个工具可以安装在同一个 Shell 环境中。运行 `ctyun-cli` 调用官方工具，运行 `ctyun` 调用本项目。两者均可从环境变量 `CTYUN_AK` 和 `CTYUN_SK` 读取凭据。详见[官方 CLI 指南](https://www.ctyun.cn/document/11095072/11096343)。
 
-  天翼云官方 Go SDK 名为 `ctyun-go-sdk`，但产品覆盖有限，且未公开发布；如需官方 SDK，可向天翼云提交工单获取。本项目不是 SDK，而是面向用户操作流程的命令行工具。
+  如需在 Go 程序中调用 API，请查阅对应云产品的 SDK 文档。例如，天翼云在[关系数据库 MySQL 版的 SDK 参考](https://www.ctyun.cn/document/10033813/11065649)中提供了 `ctyun-go-sdk.zip` 下载。
 
-  本项目会继续迭代，作为官方 CLI 之外的非官方选择。我们会继续探索和实现现代云 CLI 需要的能力，并把更好的终端体验、脚本友好性、可组合输出和可维护扩展方式放在重要位置；当官方 CLI 在稳定性、灵活性、能力深度和使用体验上足够成熟后，再重新评估本项目的定位与生命周期。
+  本项目重点维护终端交互、便于脚本组合处理的输出，以及可独立维护的插件。待官方 CLI 能够稳定支持这些工作流程时，我们会重新评估本项目的定位。
 
 - 开通要管理的服务，并准备具有相应权限的 AK/SK 凭据。
 
@@ -36,7 +36,7 @@
 
 ## 安装
 
-可通过安装脚本安装原生 `ctyun` 二进制。默认脚本按 `stable`、`beta`、`alpha` 的顺序选择第一个可用通道；如需固定通道，可设置 `CTYUN_INSTALL_CHANNEL`。如果 GitHub 访问不稳定，可把 URL 中的 `github.com` 替换为 `gitee.com`。
+以下脚本可安装原生 `ctyun` 可执行文件。脚本依次检查 `stable`、`beta`、`alpha` 三个通道，选择第一个提供当前平台安装包的通道。要指定通道，可设置 `CTYUN_INSTALL_CHANNEL`。要从 Gitee 下载安装脚本和发布包，请将脚本 URL 中的 `github.com` 替换为 `gitee.com`，并在运行脚本前将 `CTYUN_INSTALL_SOURCE` 设为 `gitee`。
 
 macOS、Linux 和 WSL：
 
@@ -103,7 +103,7 @@ export CTYUN_AK=...
 export CTYUN_SK=...
 ```
 
-如果 `CTYUN_AK` 或 `CTYUN_SK` 缺失，`ctyun` 会按当前配置档案、全局配置的顺序读取 `ak`/`sk`。当实时命令实际使用配置中的 AK/SK 时，会向标准错误输出（stderr）写入提醒；可设置环境变量 `CTYUN_WARN_CONFIG_CREDENTIALS=0`，或运行 `ctyun config set warn_config_credentials false` 关闭。
+如果某个凭据环境变量缺失，`ctyun` 会先从所选配置档案读取对应的 `ak` 或 `sk`，再回退到全局配置。实时请求只要使用了配置中的任一凭据，`ctyun` 就会向标准错误输出（stderr）写入提醒。设置 `CTYUN_WARN_CONFIG_CREDENTIALS=0` 可关闭当前进程的提醒。要默认关闭提醒，请运行 `ctyun config set warn_config_credentials false`。如果某个配置档案显式开启了提醒，可在该命令末尾加上 `--profile <name>` 来修改该档案的设置。
 
 ### 配置与配置档案
 
@@ -163,16 +163,18 @@ printf '%s\n' "$CTYUN_SK" | ctyun config profile set-secret prod sk --from-stdin
 
 确认后，`ctyun config reset` 会在配置文件所在目录创建备份，再删除原文件。备份依次尝试 `.bak`、`.bak.2`、`.bak.3` 等后缀，使用第一个未被占用的名称。脚本中可使用 `--yes` 或 `-y` 跳过提示。
 
+如果另一个 `ctyun` 进程在保存或重置期间修改了配置，命令可能会提示冲突。请先运行 `ctyun config show` 查看当前配置，再决定是否重试。
+
 ### 语言
 
 支持的语言为 `zh-CN`、`en-US` 和 `en-GB`。语言选择顺序为 `--lang`、`CTYUN_LANGUAGE`、配置档案中的 `language`、系统语言；无法匹配时默认 `zh-CN`。
 
 ## 插件
 
-新安装的 `ctyun` 只包含核心命令，不会预装产品插件。产品命令来自插件包；完成鉴权、配置和语言设置后，请先安装所需插件：
+新安装的 `ctyun` 包含核心命令。你可以在配置云凭据之前浏览并安装所需的产品插件。
 
 ```sh
-ctyun plugin search ecs --source auto
+ctyun plugin search ecs --source auto --channel beta
 ctyun plugin list --available --source auto
 ctyun plugin list --available --cols 插件,质量,状态 --filter 状态=可安装 --source auto
 ctyun plugin install region --source auto
@@ -311,14 +313,13 @@ ctyun plugin list
 - 安装、重装、更新和更新检查默认选择 `stable` 通道；如需选择预发布插件，请显式指定 `--channel beta` 或 `--channel alpha`。
 - `ctyun plugin search` 支持模糊搜索，并遵循表格/JSON 输出控制。
 - `ctyun plugin install` 只安装尚未安装的插件；如果插件已安装，则跳过，不会通过 install 升级、降级或覆盖现有版本。
-- `ctyun plugin reinstall` 只处理已安装插件，并会按指定源刷新插件；重装允许覆盖相同版本，也允许显式切换到所选通道中的较低版本。
+- `ctyun plugin reinstall` 使用所选来源和通道中的版本重装已安装的插件，即使该版本与当前版本相同或更低。指定 `--all` 时，命令会尝试重装所有已安装插件，在所选通道中找不到的插件会逐个计为失败。如果已安装的插件来自不同通道，请按通道分别指定要重装的插件名。
 - `ctyun plugin update` 只安装 SemVer 优先级更高的版本。
 - 安装、重装、更新、删除和核心升级在交互式终端中通过 stderr 显示进度，完成后只向 stdout 输出一条汇总；重定向或管道场景不会输出进度控制字符。
 
 ```sh
 ctyun plugin reinstall region --source auto
 ctyun plugin reinstall ecs --source auto --channel beta
-ctyun plugin reinstall --all --source auto
 ctyun plugin update --all --source auto
 ctyun plugin update --all --source auto --channel beta
 ctyun plugin remove ecs region --yes
@@ -355,7 +356,7 @@ ctyun ecs instance show c5a7966a-88e7-362b-6e11-c2d8fbfc07ca
 
 ### 输出与筛选
 
-- `--cols`、`--filter` 和 `--sort` 可使用表格中看到的列名，也兼容稳定列键。
+- `--cols`、`--filter` 和 `--sort` 可使用表格中看到的列名，也兼容稳定列键。列名有歧义时，可使用帮助中显示的完整列名或稳定列键。
 - 列名含空格或筛选表达式含 shell 特殊字符时，请加引号。例如，`--filter '名称=*'` 匹配名称显示值为字面字符 `*` 的行。
 
 ```sh
@@ -382,11 +383,13 @@ ctyun ims image show {image_id} --wait ims.image.active
 
 等待集合中的单个资源时，必须提供命令帮助要求的资源标识。每次响应都按该标识精确匹配：找不到资源时继续等待，匹配到多个资源时报告错误。
 
-每个等待器定义 `max_attempts`（包含首次请求）和 `interval_seconds`，两者与 HTTP 请求超时独立。空值和未知值保持等待，直到达到轮询上限。失败和超时会作为最终等待器状态输出，目前不会改变命令退出状态。JSON 模式仍将首次响应写入标准输出，将等待器状态写入标准错误。 在 64 位平台上，轮询间隔和单次请求超时均支持最多 9,223,372,036 个整秒。
+每个等待器通过 `max_attempts` 限制请求总数（含首次请求），通过 `interval_seconds` 设置两次请求之间的等待秒数。HTTP 超时对每次请求单独生效。在 64 位平台上，轮询间隔和单次请求超时的上限均为 9,223,372,036 秒。状态值为空或未知时会继续等待，直到达到轮询上限。等待器会输出失败或超时状态，命令退出码保持不变。JSON 模式下，首次响应写入标准输出，等待器状态写入标准错误。
 
 ## 核心更新
 
 使用 `ctyun update --check` 检查核心更新，使用 `ctyun upgrade` 安装更新。指定 `--source auto` 时，CLI 先访问 GitHub；如果无法获取索引或签名，或者签名验证失败，则尝试 Gitee。CLI 下载所选索引引用的归档并验证其 SHA-256 校验和。可用 `--source github` 或 `--source gitee` 明确指定下载源。如果归档下载失败，可指定另一个源重新运行命令。通过 `--channel` 选择 `stable`、`beta` 或 `alpha` 通道。
+
+在 Windows 上，升级成功后，`ctyun.exe` 同级目录下的 `.ctyun.exe.previous` 会保留上一版可执行文件。下次升级时，CLI 会先校验这份备份再替换它。如果旧进程仍在运行，请关闭后重试。如果备份目录内有无法识别的文件，请先将其移出再重试。
 
 ```sh
 ctyun update --check --source auto
@@ -470,17 +473,17 @@ go run ./cmd/ctyun --debug <插件命令> --offline
 
 `--offline` 和 `--fixture` 都启用插件内置示例数据，不访问真实天翼云接口，适合本地调试命令形态、表格输出和参数映射。它们是仅供开发版使用的产品命令长选项，必须放在完整产品命令路径之后，不是全局选项，也没有短选项。发布版不会识别或暴露这些开发选项。
 
-开发版可用 `--bundled` 从仓库内置插件元数据搜索、列出、安装、重新安装或更新插件。开发版执行产品命令时也会优先使用仓库内置插件；这样即使同名发布插件已经安装，本地元数据改动也能直接验证。和 `--fixture` 一样，`--bundled` 面向开发和测试场景，不会出现在常规帮助中。
+开发版可用 `--bundled` 从仓库内置插件元数据搜索、列出、安装、重新安装或更新插件。默认渠道为 `stable`。下方 ECS 示例选择其插件清单声明的 `beta` 渠道。开发版执行产品命令时也会优先使用仓库内置插件；这样即使同名发布插件已经安装，本地元数据改动也能直接验证。和 `--fixture` 一样，`--bundled` 面向开发和测试场景，不会出现在常规帮助中。
 
 ```sh
-go run ./cmd/ctyun plugin list --available --bundled
-go run ./cmd/ctyun plugin search <name> --bundled
-go run ./cmd/ctyun plugin install <name> --bundled
-go run ./cmd/ctyun plugin reinstall <name> --bundled
-go run ./cmd/ctyun plugin update <name> --bundled
+go run ./cmd/ctyun plugin list --available --channel all --bundled
+go run ./cmd/ctyun plugin search ecs --channel beta --bundled
+go run ./cmd/ctyun plugin install ecs --channel beta --bundled
+go run ./cmd/ctyun plugin reinstall ecs --channel beta --bundled
+go run ./cmd/ctyun plugin update ecs --channel beta --bundled
 ```
 
-测试：
+请使用普通用户权限运行测试。部分用例需要操作系统拒绝对只读文件或目录的写入。
 
 ```sh
 git ls-files -co --exclude-standard '*.go' | sort -u | xargs gofmt -w
@@ -547,8 +550,9 @@ go run ./tools/openapi review <name>
 复核对象是可运行的插件草稿，而不只是来源目录。检查 API 契约、命令绑定、帮助、示例和响应夹具：
 
 - 普通 JSON 夹具和 HTTP 响应夹具必须与已采集的来源证据一致。数据缺失或被改动会阻止复核通过。
+- 表格的行选择器、列键、列取值路径和列弃用信息须与来源目录一致。复核时可以调整布局和默认显示的列。
 - 示例必须比 Usage 行提供更多信息，例如具体参数、有意义的选项、结构化值或其他行为。只重复命令路径的示例，包括未解析的路径占位符形式，都会被拒绝。
-- 修正机械拼接的英文描述、缺少必填选项的示例、未声明的选项，以及不符合参数类型的值。
+- 检查草稿中的每条命令是否提供了所有支持语言的描述，改写机械拼接的英文描述。检查示例是否缺少必填选项、使用了未声明的选项，或提供了与参数类型不符的值。
 - 只有推荐目标能解析到已跟踪且已纳入插件的 CLI 命令时，才生成推荐帮助；否则在 `source.json` 中保留未解析的证据。插件加载时，跨插件引用是软依赖；发布检查则要求目标精确匹配、未被弃用，并且不存在推荐循环。
 
 如果 API 的响应契约明确，但没有可用的成功响应示例，用 `fixture_unavailable` 记录原因。保留命令、响应校验和原始证据，不编造成功夹具。该命令不能使用 `--offline` 或 `--fixture`，缺失的示例也不能作为等待器证据。下载接口应在响应分支声明文档规定的成功 `media_type`，避免把 HTTP 200 错误响应保存为文件。
@@ -581,10 +585,12 @@ go run ./tools/openapi review <name>
 
 生成过程根据 `source.json` 计算 `source_fingerprint`。对于已有插件，保留已提升清单中的版本、通道、质量和核心兼容范围，并在需要时提高核心最低版本：
 
-| 元数据功能                         | 核心最低版本 |
-|------------------------------------|--------------|
-| 等待器                             | `0.5.0`      |
-| 独立的请求头、查询参数和请求体绑定 | `0.5.1`      |
+| 元数据功能 | 核心最低版本 |
+|------------|--------------|
+| 基础生成插件包 | `0.3.1` |
+| 非字符串类型的请求体参数 | `0.4.0` |
+| 等待器、显式传输策略、原生存储、文件下载或 XML 响应表格 | `0.5.0` |
+| 独立的请求头、查询参数和请求体绑定 | `0.5.1` |
 
 重新生成不能降低已有的兼容要求，也不能重置插件版本、通道或质量。提升操作会更新插件元数据，并将 `baseline.json` 推进到已接受的来源快照：
 
@@ -600,7 +606,9 @@ go run ./tools/openapi promote <name>
 - 普通版本标签照常创建，但不为其创建单独的 GitHub 发布页，也不在其下上传构建产物。
 - Gitee 的 `core` 发布页保持相同结构；受单个发布页附件数量限制，Gitee 的固定 `plugins` 发布页只存放 `index.json` 和 `index.sig`，每个插件归档则上传到其已有 `releases/plugins/<name>/<version>` 标签对应的不可变 Gitee 发布页。Gitee 签名索引使用这些归档的绝对下载 URL，仍然只下载用户选择的插件。
 - 实际版本和通道分别由签名的 `core-index.json` 与 `index.json` 决定；版本级变更历史记录在根目录及各插件的规范变更日志中。
-- 复用输出目录时，打包工具会更新所选核心通道以及各插件对应通道的索引条目，保留其他通道的条目，并重新签名索引。为同一核心版本再次打包时，每个操作系统和架构组合只保留一个条目。重新构建的平台使用新归档，其他平台保留原条目。
+- 复用输出目录时，打包工具按核心发布通道分别更新各操作系统和架构组合。新版本只发布部分平台时，其余平台仍可安装原版本，直到各自的新构建发布。签名核心索引按语义版本从高到低排列，安装脚本据此选择适合当前平台的最新版本。两个版本若仅构建元数据不同，新发布的构建在其覆盖的平台上优先。
+- 重新打包已列入索引的核心或插件版本时，会更新该版本的条目。尚未列入索引的核心旧版本可以补充没有更高版本构建的平台。打包较旧的插件版本时，该插件在同一通道已发布的更高版本仍然保留。其他通道继续使用各自的条目。
+- 每个核心版本以及每个插件的各个版本都只属于一个通道。合并后的索引若将同一版本标签分配到多个通道，打包工具会报错。
 - 请复用包含当前已发布索引和插件归档的输出目录。插件归档内容未变时，打包会保留已有压缩字节和校验和，避免 Go 工具链更新改变同一版本的归档。
 - 更新固定发布资产后，应保留当前签名索引引用的归档、索引签名以及核心安装脚本，并移除不再被索引引用的旧归档；仍在索引中提供的预发布通道归档应继续保留。
 
@@ -618,13 +626,13 @@ go run ./tools/openapi promote <name>
 | `CTYUN_RELEASE_PRIVATE_KEY` | 发布打包工具签名索引使用的私钥                           |
 | `CTYUN_RELEASE_PUBLIC_KEY`  | 开发构建或私有分发验证中用于核心更新和插件索引验签的公钥 |
 
-以下示例生成一对签名密钥，供本地打包演练使用。为已有发布渠道打包时，请使用已安装客户端所信任公钥对应的发布私钥。打包工具会将对应的公钥嵌入新版本的二进制文件。现有客户端会拒绝由其他密钥签名的索引。
+本地演练时，可生成临时签名密钥，将当前平台的发布包写入新建的临时目录。打包工具会从私钥派生公钥，并将公钥嵌入二进制文件。为已有发布渠道打包时，请使用已安装客户端所信任公钥对应的发布私钥。
 
 ```sh
 go run ./tools/release --generate-key
-export CTYUN_RELEASE_PRIVATE_KEY="<上一步输出的私钥>"
-export CTYUN_RELEASE_PUBLIC_KEY="<上一步输出的公钥>"
-go run ./tools/release --version 0.5.2 --channel stable --out ./dist/releases --gitee-plugin-download-root "https://gitee.com/ArvinZJC/ctyun-cli/releases/download" --platform "$(go env GOOS)/$(go env GOARCH)"
+release_dir=$(mktemp -d) &&
+  CTYUN_RELEASE_PRIVATE_KEY="<上一步输出的私钥>" \
+  go run ./tools/release --version 0.5.2 --channel stable --out "$release_dir" --gitee-plugin-download-root "https://gitee.com/ArvinZJC/ctyun-cli/releases/download" --platform "$(go env GOOS)/$(go env GOARCH)"
 ```
 
 正式发布时，GitHub 仍是源码和 CI 产物的权威来源，Gitee 作为同步镜像提供更稳的国内访问路径。已安装的 `ctyun` 使用签名公钥验证托管的核心及插件索引，并检查归档 SHA-256；引导安装脚本采用前文安装章节说明的信任方式。
