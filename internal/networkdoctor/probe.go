@@ -145,8 +145,9 @@ func classifyProbeError(err error, check Check) FailureCategory {
 	}
 	var unknownAuthority x509.UnknownAuthorityError
 	var certificateInvalid x509.CertificateInvalidError
+	var hostnameMismatch x509.HostnameError
 	var recordHeader tls.RecordHeaderError
-	if errors.As(err, &unknownAuthority) || errors.As(err, &certificateInvalid) || errors.As(err, &recordHeader) {
+	if errors.As(err, &unknownAuthority) || errors.As(err, &certificateInvalid) || errors.As(err, &hostnameMismatch) || errors.As(err, &recordHeader) {
 		return FailureTLS
 	}
 	if check.Kind == CheckRoute && check.Role == "proxy" {

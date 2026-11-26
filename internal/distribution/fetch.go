@@ -115,27 +115,30 @@ var createArtifactFile = func() (artifactFile, error) {
 	return os.CreateTemp("", "ctyun-artifact-*.tar.gz")
 }
 
-// DownloadArtifact downloads a hosted artifact into a temporary file.
+// DownloadArtifact streams a hosted artifact to disk and removes partial files on failure.
 func DownloadArtifact(rawURL string, transport http.RoundTripper) (string, func(), error) {
-	data, err := HTTPGetBytes(rawURL, transport)
-	if err != nil {
-		return "", func() {}, err
+	ctx, cancel := context.WithTimeout(context.Background(), hostedFetchTimeout)
+	defer cancel()
+	var path string
+	cleanup := func() {
+		if path != "" {
+			_ = os.Remove(path)
+		}
 	}
-	file, err := createArtifactFile()
+	err := readHTTPBody(ctx, rawURL, transport, func(body io.Reader) error {
+		file, err := createArtifactFile()
+		if err != nil {
+			return err
+		}
+		path = file.Name()
+		_, err = io.Copy(file, body)
+		return closeWithError(err, file.Close)
+	})
 	if err != nil {
-		return "", func() {}, err
-	}
-	cleanup := func() { _ = os.Remove(file.Name()) }
-	if _, err := file.Write(data); err != nil {
-		_ = file.Close()
 		cleanup()
 		return "", func() {}, err
 	}
-	if err := file.Close(); err != nil {
-		cleanup()
-		return "", func() {}, err
-	}
-	return file.Name(), cleanup, nil
+	return path, cleanup, nil
 }
 
 // VerifySHA256 checks that path matches the expected lowercase hex digest.
@@ -162,9 +165,26 @@ func VerifySHA256(path, want string) (err error) {
 // HTTPGetBytesContext reads one HTTP(S) URL with a context and optional byte
 // limit and requires a 2xx response.
 func HTTPGetBytesContext(ctx context.Context, rawURL string, transport http.RoundTripper, maxBytes int64) (data []byte, err error) {
+	err = readHTTPBody(ctx, rawURL, transport, func(body io.Reader) error {
+		if maxBytes > 0 {
+			body = io.LimitReader(body, maxBytes+1)
+		}
+		var readErr error
+		data, readErr = io.ReadAll(body)
+		if readErr == nil && maxBytes > 0 && int64(len(data)) > maxBytes {
+			data = nil
+			return diagnostic.New("error.http_response_too_large", rawURL, maxBytes)
+		}
+		return readErr
+	})
+	return data, err
+}
+
+// readHTTPBody applies the hosted redirect and status policy and closes the response after consume returns.
+func readHTTPBody(ctx context.Context, rawURL string, transport http.RoundTripper, consume func(io.Reader) error) (err error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, rawURL, nil)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	client := &http.Client{Transport: transport}
 	if transport == nil {
@@ -181,22 +201,15 @@ func HTTPGetBytesContext(ctx context.Context, rawURL string, transport http.Roun
 	}
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	defer func() {
 		err = closeWithError(err, resp.Body.Close)
 	}()
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return nil, diagnostic.New("error.http_get_status", rawURL, resp.Status)
+		return diagnostic.New("error.http_get_status", rawURL, resp.Status)
 	}
-	if maxBytes <= 0 {
-		return io.ReadAll(resp.Body)
-	}
-	data, err = io.ReadAll(io.LimitReader(resp.Body, maxBytes+1))
-	if err == nil && int64(len(data)) > maxBytes {
-		return nil, diagnostic.New("error.http_response_too_large", rawURL, maxBytes)
-	}
-	return data, err
+	return consume(resp.Body)
 }
 
 // HTTPGetBytes reads one HTTP(S) URL within the hosted fetch timeout and requires

@@ -20,6 +20,41 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
+// TestGlobalParseErrorLanguage honors successfully parsed language and profile flags.
+func TestGlobalParseErrorLanguage(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "config.json")
+	mustWrite(t, path, `{"profiles":{"en":{"language":"en-GB"},"zh":{"language":"zh-CN"}}}`)
+	for _, tc := range []struct {
+		name string
+		args []string
+		env  string
+		want string
+	}{
+		{"explicit", []string{"--lang=en-US", "--sort"}, "zh-CN", "Error: --sort requires a value"},
+		{"selected profile", []string{"--config", path, "--profile", "en", "--sort"}, "", "Error: --sort requires a value"},
+		{"environment wins", []string{"--config", path, "--profile", "en", "--sort"}, "zh-CN", "错误：--sort 需要一个值"},
+		{"invalid language", []string{"--lang", "fr-FR", "--sort"}, "zh-CN", "错误：--sort 需要一个值"},
+		{"later language", []string{"--timeout", "bad", "--lang", "en-US"}, "zh-CN", "错误：--timeout 需要正整数秒数"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			getenv := func(key string) string {
+				if key == "CTYUN_LANGUAGE" {
+					return tc.env
+				}
+				if key == "LC_ALL" {
+					return "zh_CN.UTF-8"
+				}
+				return ""
+			}
+			var stderr bytes.Buffer
+			code := Execute(Config{Args: tc.args, Env: getenv, Stdout: io.Discard, Stderr: &stderr})
+			if code != 1 || strings.TrimSpace(stderr.String()) != tc.want {
+				t.Fatalf("exit %d, stderr %q; want exit 1 and %q", code, stderr.String(), tc.want)
+			}
+		})
+	}
+}
+
 // TestExecuteSuccessAndErrorLanguageFallbacks checks language fallback and localized support guidance for API errors.
 func TestExecuteSuccessAndErrorLanguageFallbacks(t *testing.T) {
 	var stdout, stderr bytes.Buffer
@@ -303,7 +338,7 @@ func TestErrorCredentialsFallsBackToEnvWhenResolutionCannotContinue(t *testing.T
 		cfg  Config
 	}{
 		{name: "invalid option", cfg: Config{Args: []string{"--config"}}},
-		{name: "config load error", cfg: Config{Args: []string{"--config", t.TempDir()}}},
+		{name: "config load error", cfg: Config{Args: []string{"--config", filepath.Join(t.TempDir(), "missing")}}},
 		{name: "active profile error", cfg: Config{Config: []byte(`{"profiles":{"dev":{},"prod":{}}}`)}},
 		{name: "missing resolved credentials", cfg: Config{Config: []byte(`{"active_profile":"default","profiles":{"default":{}}}`)}},
 	}
@@ -443,12 +478,10 @@ func TestHelpHelpersCoverCoreAndFallbackText(t *testing.T) {
 	}
 	requireDiagnosticKey(t, err, "error.unexpected_argument")
 	handled, err = printCoreHelp(io.Discard, []string{"plugin", "missing"}, "en-US")
-	if err != nil {
-		t.Fatalf("printCoreHelp missing plugin returned error: %v", err)
+	if !handled {
+		t.Fatal("core help did not diagnose its unknown subcommand")
 	}
-	if handled {
-		t.Fatal("printCoreHelp handled unknown plugin subcommand")
-	}
+	requireDiagnosticKey(t, err, "error.unknown_command")
 	if got := helpText("missing.key", "en-US"); got != "missing.key" {
 		t.Fatalf("missing helpText = %q", got)
 	}
@@ -478,12 +511,6 @@ func TestHelpHelpersCoverCoreAndFallbackText(t *testing.T) {
 	}
 	if !strings.Contains(stdout.String(), "ctyun plugin list") || !strings.Contains(stdout.String(), "ctyun help <plugin>") {
 		t.Fatalf("printPluginCommandHints output = %q", stdout.String())
-	}
-	if pathHasPrefix([]string{"ecs"}, nil) {
-		t.Fatal("pathHasPrefix matched an empty prefix")
-	}
-	if pathHasPrefix([]string{"ecs"}, []string{"ecs"}) {
-		t.Fatal("pathHasPrefix matched a complete command path")
 	}
 
 	argumentBundle := plugin.Bundle{
@@ -559,20 +586,20 @@ func lastHelpRune(text string) rune {
 
 // TestRunHelpErrorsForInvalidOrUnknownPluginCommands rejects malformed bundles and unknown visible help paths.
 func TestRunHelpErrorsForInvalidOrUnknownPluginCommands(t *testing.T) {
-	if err := runHelp(failingWriter{}, nil, t.TempDir(), "en-US"); err == nil {
+	if err := runHelp(failingWriter{}, nil, t.TempDir(), "en-US", false); err == nil {
 		t.Fatal("runHelp returned nil error for main help writer failure")
 	}
-	if err := runHelp(failingWriter{}, []string{"completion"}, t.TempDir(), "en-US"); err == nil {
+	if err := runHelp(failingWriter{}, []string{"completion"}, t.TempDir(), "en-US", false); err == nil {
 		t.Fatal("runHelp returned nil error for core help writer failure")
 	}
 	badRoot := t.TempDir()
 	if err := os.Mkdir(filepath.Join(badRoot, "bad"), 0o755); err != nil {
 		t.Fatalf("create bad plugin dir: %v", err)
 	}
-	if err := runHelp(io.Discard, []string{"bad"}, badRoot, "en-US"); err == nil {
+	if err := runHelp(io.Discard, []string{"bad"}, badRoot, "en-US", false); err == nil {
 		t.Fatal("runHelp returned nil error for invalid plugin root")
 	}
-	if err := runHelp(io.Discard, []string{"missing"}, t.TempDir(), "en-US"); err == nil {
+	if err := runHelp(io.Discard, []string{"missing"}, t.TempDir(), "en-US", false); err == nil {
 		t.Fatal("runHelp returned nil error for unknown command")
 	}
 }
@@ -597,7 +624,7 @@ func TestRunHelpShowsRequiredParameters(t *testing.T) {
   ]
 }`)
 	var stdout bytes.Buffer
-	if err := runHelp(&stdout, []string{"ecs", "instance", "list"}, root, "en-US"); err != nil {
+	if err := runHelp(&stdout, []string{"ecs", "instance", "list"}, root, "en-US", false); err != nil {
 		t.Fatalf("runHelp returned error: %v", err)
 	}
 	if !strings.Contains(stdout.String(), "(required)") {

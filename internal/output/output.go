@@ -10,10 +10,10 @@ import (
 	"encoding/json"
 	"slices"
 	"strings"
-	"unicode"
 	"unicode/utf8"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
+	"github.com/clipperhouse/uax29/v2/graphemes"
 	"github.com/mattn/go-runewidth"
 )
 
@@ -157,12 +157,24 @@ func ResolveColumnSelectors(columns []Column, requested []string) ([]string, err
 		return requested, nil
 	}
 	resolved := make([]string, 0, len(requested))
-	for _, selector := range requested {
-		key, ok := resolveColumnSelector(columns, selector)
-		if !ok {
-			return nil, diagnostic.New("error.unknown_column", selector)
+	for _, list := range requested {
+		for text := strings.TrimSpace(list); text != ""; {
+			item, rest, more := strings.Cut(text, ",")
+			selector := strings.TrimSpace(item)
+			key, ok := resolveColumnSelector(columns, selector)
+			if more {
+				if compound, suffix := matchCompoundLabel(columns, text, ","); compound != "" {
+					key, ok, rest = compound, true, strings.TrimPrefix(suffix, ",")
+				}
+			}
+			if ok || selector != "" {
+				if !ok {
+					return nil, diagnostic.New("error.unknown_column", selector)
+				}
+				resolved = append(resolved, key)
+			}
+			text = strings.TrimSpace(rest)
 		}
-		resolved = append(resolved, key)
 	}
 	return resolved, nil
 }
@@ -175,15 +187,50 @@ func ResolveFilterExpression(columns []Column, expression string) (string, error
 		return "", nil
 	}
 	key, operator, value, err := parseFilterExpression(expression)
+	resolved, ok := resolveColumnSelector(columns, key)
+	if !ok || resolved != key {
+		if compound, suffix := matchCompoundLabel(columns, expression, "="); compound != "" && suffix != "" {
+			return compound + suffix, nil
+		}
+	}
 	if err != nil {
 		return "", err
 	}
-
-	resolved, ok := resolveColumnSelector(columns, key)
 	if !ok {
 		return "", diagnostic.New("error.unknown_filter_key", key)
 	}
 	return resolved + operator + value, nil
+}
+
+// matchCompoundLabel finds the longest visible label containing an option delimiter,
+// leaving the next list separator or comparison operator for the caller.
+func matchCompoundLabel(columns []Column, text, delimiter string) (key, suffix string) {
+	longest := 0
+	for _, column := range columns {
+		if len(column.Label) <= longest || !strings.Contains(column.Label, delimiter) {
+			continue
+		}
+		rest, ok := strings.CutPrefix(text, column.Label)
+		rest = strings.TrimSpace(rest)
+		if ok && (rest == "" || strings.HasPrefix(rest, delimiter) || delimiter == "=" && strings.HasPrefix(rest, "!=")) {
+			if delimiter == "," && isColumnList(columns, column.Label) {
+				continue
+			}
+			longest, key, suffix = len(column.Label), column.Key, rest
+		}
+	}
+	return key, suffix
+}
+
+// isColumnList reports whether reading a compound label as separate selectors already succeeds.
+// An existing column list keeps its meaning when a new label has the same spelling.
+func isColumnList(columns []Column, label string) bool {
+	for part := range strings.SplitSeq(label, ",") {
+		if _, ok := resolveColumnSelector(columns, part); !ok {
+			return false
+		}
+	}
+	return true
 }
 
 // parseFilterExpression separates the first comparison operator from its value,
@@ -261,18 +308,25 @@ func selectColumns(columns []Column, requested []string) []Column {
 	return selected
 }
 
-// tableWidths calculates display widths for labels and row values.
+// tableWidths fits each column to the widest physical line in its label or values.
 func tableWidths(rows []map[string]string, columns []Column) []int {
 	widths := make([]int, len(columns))
 	for i, col := range columns {
-		widths[i] = displayWidth(col.Label)
+		widths[i] = widestCellLine(col.Label)
 		for _, row := range rows {
-			if width := displayWidth(row[col.Key]); width > widths[i] {
-				widths[i] = width
-			}
+			widths[i] = max(widths[i], widestCellLine(row[col.Key]))
 		}
 	}
 	return widths
+}
+
+// widestCellLine measures each newline-delimited line independently.
+func widestCellLine(cell string) int {
+	width := 0
+	for line := range strings.SplitSeq(cell, "\n") {
+		width = max(width, displayWidth(line))
+	}
+	return width
 }
 
 // constrainTableWidths shrinks the widest columns until the rendered table
@@ -419,59 +473,65 @@ func wrapDisplayText(value string, width int) []string {
 	}
 	var lines []string
 	for segment := range strings.SplitSeq(value, "\n") {
-		remaining := segment
-		for displayWidth(remaining) > width {
-			prefix := runewidth.Truncate(remaining, width, "")
-			line := ""
-			consumed := 0
-			if suffix := remaining[len(prefix):]; suffix != "" {
-				next, _ := utf8.DecodeRuneInString(suffix)
-				if unicode.IsSpace(next) {
-					line = prefix
-					consumed = len(prefix)
-				}
-			}
-			if consumed == 0 {
-				line, consumed = preferredWrapBreak(prefix)
-			}
-			if consumed == 0 {
-				line = prefix
-				consumed = len(prefix)
-			}
-			lines = append(lines, line)
-			remaining = strings.TrimLeftFunc(remaining[consumed:], unicode.IsSpace)
+		if displayWidth(segment) <= width {
+			lines = append(lines, segment)
+			continue
 		}
-		lines = append(lines, remaining)
+		for {
+			line := wrappedPrefix(segment, width)
+			lines = append(lines, line)
+			if len(line) == len(segment) {
+				break
+			}
+			segment = trimWrapSpace(segment[len(line):])
+		}
 	}
 	return lines
 }
 
-// preferredWrapBreak returns the last usable break in a display-width prefix.
-func preferredWrapBreak(prefix string) (string, int) {
-	spaceLineEnd := 0
-	spaceConsumed := 0
-	separatorLineEnd := 0
-	separatorConsumed := 0
-	for index, character := range prefix {
-		next := index + utf8.RuneLen(character)
-		switch {
-		case unicode.IsSpace(character):
-			if trimmed := strings.TrimRightFunc(prefix[:index], unicode.IsSpace); trimmed != "" {
-				spaceLineEnd = len(trimmed)
-				spaceConsumed = next
+// wrappedPrefix finds the next physical line, preferring word and separator boundaries.
+// Each candidate ends at a complete grapheme. Only the current line and one lookahead
+// cluster are measured, so long cells do not repeatedly scan their unrendered suffix.
+func wrappedPrefix(text string, limit int) string {
+	width, wordBreak, separatorBreak, lastContent := 0, 0, 0, 0
+	clusters := graphemes.FromString(text)
+	for clusters.Next() {
+		cluster := clusters.Value()
+		width += displayWidth(cluster)
+		if width > limit {
+			if strings.TrimSpace(cluster) == "" {
+				return text[:clusters.Start()]
 			}
-		case strings.ContainsRune("/\\-_", character):
-			separatorLineEnd = next
-			separatorConsumed = next
+			if wordBreak > 0 {
+				return text[:wordBreak]
+			}
+			if separatorBreak > 0 {
+				return text[:separatorBreak]
+			}
+			return text[:clusters.Start()]
+		}
+		if strings.TrimSpace(cluster) == "" {
+			wordBreak = lastContent
+			continue
+		}
+		lastContent = clusters.End()
+		first, _ := utf8.DecodeRuneInString(cluster)
+		if strings.ContainsRune("/\\-_", first) {
+			separatorBreak = lastContent
 		}
 	}
-	if spaceConsumed > 0 {
-		return prefix[:spaceLineEnd], spaceConsumed
+	return text
+}
+
+// trimWrapSpace skips whitespace between wrapped lines without detaching combining marks.
+func trimWrapSpace(text string) string {
+	clusters := graphemes.FromString(text)
+	for clusters.Next() {
+		if strings.TrimSpace(clusters.Value()) != "" {
+			return text[clusters.Start():]
+		}
 	}
-	if separatorConsumed > 0 {
-		return prefix[:separatorLineEnd], separatorConsumed
-	}
-	return "", 0
+	return ""
 }
 
 // wrappedCellLine returns one physical line or an empty continuation cell.

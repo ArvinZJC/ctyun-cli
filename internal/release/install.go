@@ -9,12 +9,10 @@ import (
 	"archive/tar"
 	"compress/gzip"
 	"errors"
-	"fmt"
 	"io"
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 )
@@ -142,14 +140,18 @@ func InstallArtifact(opts InstallOptions) error {
 	if renamePath == nil {
 		renamePath = os.Rename
 	}
-	backup := opts.CurrentExecutable + ".old-" + fmt.Sprint(time.Now().UnixNano())
-	if err := renamePath(opts.CurrentExecutable, backup); err != nil {
+	return publishExecutable(opts.CurrentExecutable, newBinary, renamePath)
+}
+
+// replaceWithBackup moves the current image aside and restores it if publication fails.
+func replaceWithBackup(current, staged, backup string, renamePath func(string, string) error) error {
+	if err := renamePath(current, backup); err != nil {
 		return err
 	}
-	if err := renamePath(newBinary, opts.CurrentExecutable); err != nil {
-		return errors.Join(err, renamePath(backup, opts.CurrentExecutable))
+	if err := renamePath(staged, current); err != nil {
+		return errors.Join(err, renamePath(backup, current))
 	}
-	return os.Remove(backup)
+	return nil
 }
 
 // closeWithError preserves the primary error unless closing also fails.

@@ -192,6 +192,7 @@ func TestLocalizedExampleSelectorsCoversTableControlForms(t *testing.T) {
 		{name: "no columns", example: "ctyun ecs instance list --cols instance_id", want: "ctyun ecs instance list --cols instance_id"},
 		{name: "short cols", example: "ctyun ecs instance list -c instance_id,status", columns: columns, want: `ctyun ecs instance list -c "Instance ID,Status"`},
 		{name: "filter", example: "ctyun ecs instance list --filter status=running", columns: columns, want: "ctyun ecs instance list --filter Status=running"},
+		{name: "inline inequality", example: "ctyun ecs instance list --filter=instance_id!=a=b", columns: columns, want: `ctyun ecs instance list --filter="Instance ID!=a=b"`},
 		{name: "sort descending", example: "ctyun ecs instance list --sort -instance_id", columns: columns, want: `ctyun ecs instance list --sort "-Instance ID"`},
 		{name: "cols equals", example: "ctyun ecs instance list --cols=instance_id,status", columns: columns, want: `ctyun ecs instance list --cols="Instance ID,Status"`},
 		{name: "filter equals", example: "ctyun ecs instance list --filter=instance_id=ins-demo-1", columns: columns, want: `ctyun ecs instance list --filter="Instance ID=ins-demo-1"`},
@@ -622,12 +623,10 @@ func TestHelpShowsDoctorNetworkDetailAndRejectsUnknownSubcommands(t *testing.T) 
 		}
 	}
 	handled, err := printCoreHelp(io.Discard, []string{"doctor", "unknown"}, "en-US")
-	if err != nil {
-		t.Fatalf("printCoreHelp unknown doctor returned error: %v", err)
+	if !handled {
+		t.Fatal("core help did not diagnose its unknown subcommand")
 	}
-	if handled {
-		t.Fatal("printCoreHelp returned true for unknown doctor subcommand")
-	}
+	requireDiagnosticKey(t, err, "error.unknown_command")
 	handled, err = printCoreHelp(io.Discard, []string{"doctor", "network", "extra"}, "en-US")
 	if !handled {
 		t.Fatal("printCoreHelp did not classify extra doctor help argument")

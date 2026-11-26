@@ -63,7 +63,7 @@ func writeGiteePluginRegistry(outDir, downloadRoot string, privateKey ed25519.Pr
 	for i := range index.Plugins {
 		artifact := &index.Plugins[i]
 		archive := distribution.ArtifactBase(artifact.URL)
-		tag := "releases/plugins/" + artifact.Name + "/" + artifact.Version
+		tag := pluginReleaseTag(*artifact)
 		artifact.URL = giteePluginDownloadURL(downloadRoot, tag, archive)
 		manifest.Releases = append(manifest.Releases, giteePluginRelease{
 			Name: artifact.Name, Version: artifact.Version, Channel: artifact.Channel,
@@ -97,6 +97,11 @@ func writeGiteePluginRegistry(outDir, downloadRoot string, privateKey ed25519.Pr
 		return err
 	}
 	return os.WriteFile(filepath.Join(giteeDir, "releases.json"), manifestBytes, 0o644)
+}
+
+// pluginReleaseTag names the immutable version shared by the source tag and Gitee release.
+func pluginReleaseTag(artifact registry.Artifact) string {
+	return "releases/plugins/" + artifact.Name + "/" + artifact.Version
 }
 
 // giteePluginDownloadURL constructs one attachment URL while preserving the

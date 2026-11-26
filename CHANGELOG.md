@@ -1,18 +1,41 @@
 # Changelog
 
-## 0.5.2 - 2026-11-24
+## 0.5.2 - 2026-11-26
 
 ### Fixed
 
-- Direct users who run the Windows installer on another operating system to the Bash installation instructions.
-- Complete Bash inline option values such as `--output=j` without repeating the option name.
-- Reserve configuration backup names exclusively so simultaneous backups cannot overwrite one another.
-- Reject request timeouts and waiter polling intervals that overflow the supported duration.
-- Allow a renamed core executable to self-upgrade from the standard platform archive.
-- Report both the replacement and rollback errors when a core upgrade or plugin reinstall cannot restore the previous installation.
-- Bound hosted index, signature, and artifact requests to five minutes so stalled sources cannot block updates or mirror fallback indefinitely.
-- Preserve service-filtered live table results, including fuzzy matches, instead of applying fixture-only exact parameter filters to them.
-- Preserve equals and inequality characters inside table-filter values when parsing equality and inequality expressions.
+#### Commands, help and completion
+
+- Report the first unknown command or option, including in help requests with trailing arguments. Show the correct help for product command groups that follow a positional argument and for commands invoked with declared options and arguments.
+- Offer the same applicable options when completing an empty token or a partially typed option. This also works after a defaulted region, an argument beginning with a hyphen, a separate `--output-file` value, or a development fixture switch. Omit unsupported inline short options and stop suggesting completions after an extra plugin-management argument.
+- Complete Bash values such as `--output=j` without repeating the option name. Preserve empty and quoted arguments in PowerShell's legacy argument-passing mode. Read the plugin catalog once per completion request.
+- Make `ctyun doctor network` check origins independently even when their hostnames differ only by a dot or hyphen. Return a failure if any origin is unreachable and identify certificate hostname mismatches as TLS errors.
+- Cancel a prompted operation if an I/O error interrupts the answer, even after the user has typed `y`.
+
+#### Configuration and diagnostics
+
+- Make `ctyun config path` print the selected path without reading its contents. Allow local diagnostic help to return when the configuration path is a named pipe. Accept profile names such as `ak` and `secrets-team`.
+- Prevent simultaneous backups from overwriting each other. Publish new configuration files only when complete, restore the previous contents after a partial overwrite, and report any restoration failure. Reject a stale save or reset if another command has changed the file.
+- Make `ctyun config explain` report the warning settings actually used when a warning environment variable contains only whitespace.
+- Preserve the original arguments when parsing inline global options. Report a later option error in the language selected up to that point, including through a profile. Use the same configuration snapshot for diagnostics and credential redaction, and report argument errors without blocking on a named pipe.
+
+#### Installation, updates and plugins
+
+- Keep the existing executable if the Bash installer cannot finish copying its replacement. Verify downloaded archives correctly when the temporary path contains a backslash.
+- Allow the Windows PowerShell installer to download and verify archives when the temporary directory contains square brackets. Direct users on other operating systems to the Bash installer.
+- Allow a renamed executable to upgrade from the standard platform archive. On Windows, replace a running executable and rotate its verified backup on the next upgrade. Report both errors if a core upgrade or plugin reinstall fails and its rollback also fails.
+- Stream core and plugin archives to disk to bound memory use. Apply a five-minute deadline to each hosted index, signature, and archive request so a stalled source can time out and mirror fallback can proceed.
+- Keep a complete plugin inventory visible during concurrent installs, reinstalls, updates, and removals. Skip duplicate install targets, reject stale replacements, and count each installed plugin only once when removing it.
+- Report unreadable plugin inventories in management commands. Detect directory names that disagree with their manifests during discovery, installation, and local diagnostics. Honor the selected channel for development-bundled installs, reinstalls, and updates.
+- Show localized plugin names in registry listings and accept those names in searches before installation.
+
+#### Requests and table output
+
+- Honor an explicit resource pool in form requests. Check required region values separately in headers, query parameters, and request bodies.
+- Reject request timeouts and waiter polling intervals that exceed the supported duration. Reject a non-success API status when its required result field is `null`, while accepting `false` as a valid result.
+- Preserve fuzzy matches returned by the live service. When filtering fixtures, prefer the exact response field and accept a spelling with extra whitespace only when the table declares a single unambiguous alternative.
+- Distinguish overlapping localized column labels in tables, help, and examples. Accept labels containing commas in column lists or equals signs in filters. Preserve literal `=` and `!=` inside filter values.
+- Size multiline columns to their widest displayed line and keep combining marks with their characters when wrapping. Avoid repeatedly measuring the rest of a long cell after each line break.
 
 ## 0.5.1 - 2026-10-10
 

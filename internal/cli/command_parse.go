@@ -26,8 +26,7 @@ type parsedCommandTokens struct {
 	Positionals []string
 }
 
-// commandBoundaryError classifies an unresolved token at a command boundary
-// and reports the full visible path for command-shaped input.
+// commandBoundaryError classifies the last token of a path ending at the unresolved child.
 func commandBoundaryError(path []string) error {
 	token := path[len(path)-1]
 	if strings.HasPrefix(token, "-") {

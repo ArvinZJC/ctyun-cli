@@ -14,6 +14,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"slices"
 	"testing"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
@@ -56,15 +57,15 @@ func TestMergeReplacesOnlySelectedRelease(t *testing.T) {
 	if len(merged.Releases) != 2 || len(merged.Releases[0].Artifacts) != 3 || merged.Releases[0].Artifacts[0].URL != "replacement" || merged.Releases[0].Artifacts[1].URL != "retained" || merged.Releases[0].Artifacts[2].URL != "added" || merged.Releases[0].PublishedAt != "now" {
 		t.Fatalf("bad merge: %#v", merged)
 	}
-	updated := upsertCoreRelease(merged, corerelease.Release{Version: "0.2.0", Channel: "stable"})
-	if updated.Releases[0].Version != "0.2.0" || len(updated.Releases[0].Artifacts) != 0 || updated.Releases[1].Channel != "beta" {
+	updated := upsertCoreRelease(merged, corerelease.Release{Version: "0.2.0", Channel: "stable", Artifacts: slices.Clone(merged.Releases[0].Artifacts)})
+	if len(updated.Releases) != 2 || updated.Releases[0].Version != "0.2.0" || len(updated.Releases[0].Artifacts) != 3 || updated.Releases[1].Channel != "beta" {
 		t.Fatalf("bad replacement: %#v", updated)
 	}
 	registryIndex := upsertRegistryArtifact(registry.Index{Plugins: []registry.Artifact{{Name: "demo", Channel: "beta", Version: "0.1.0-beta.1"}, {Name: "demo", Channel: "stable", Version: "0.1.0"}}}, registry.Artifact{Name: "demo", Channel: "stable", Version: "0.2.0"})
 	if len(registryIndex.Plugins) != 2 || registryIndex.Plugins[0].Version != "0.1.0-beta.1" || registryIndex.Plugins[1].Version != "0.2.0" {
 		t.Fatalf("bad plugin replacement: %#v", registryIndex)
 	}
-	if got := pluginDisplayName(plugin.Bundle{Manifest: plugin.Manifest{Name: "demo"}}); got != "demo" {
+	if got := registry.ArtifactFromBundle(plugin.Bundle{Manifest: plugin.Manifest{Name: "demo"}}).DisplayName; got != "demo" {
 		t.Fatalf("fallback name %q", got)
 	}
 }
@@ -132,19 +133,19 @@ func TestArchiveFailurePaths(t *testing.T) {
 		}
 	})
 	t.Run("missing input", func(t *testing.T) {
-		if err := writeDirectoryArchive(filepath.Join(t.TempDir(), "out"), filepath.Join(t.TempDir(), "missing"), "plugin"); err == nil {
+		if _, err := writeDirectoryArchive(filepath.Join(t.TempDir(), "out"), filepath.Join(t.TempDir(), "missing"), "plugin", "missing"); err == nil {
 			t.Fatal("missing directory accepted")
 		}
 	})
 	t.Run("missing output parent", func(t *testing.T) {
-		if err := writeDirectoryArchive(filepath.Join(t.TempDir(), "missing", "out"), t.TempDir(), "plugin"); err == nil {
+		if _, err := writeDirectoryArchive(filepath.Join(t.TempDir(), "missing", "out"), t.TempDir(), "plugin", "missing"); err == nil {
 			t.Fatal("missing parent accepted")
 		}
 	})
 	t.Run("bad published gzip", func(t *testing.T) {
 		path := filepath.Join(t.TempDir(), "out")
 		releaseTestFile(t, path, "broken gzip")
-		if err := writeDirectoryArchive(path, t.TempDir(), "plugin"); err == nil {
+		if _, err := writeDirectoryArchive(path, t.TempDir(), "plugin", path); err == nil {
 			t.Fatal("corrupt published archive replaced")
 		}
 	})
@@ -153,7 +154,7 @@ func TestArchiveFailurePaths(t *testing.T) {
 		if err := os.Symlink("absent", filepath.Join(root, "link")); err != nil {
 			t.Fatal(err)
 		}
-		if err := writeDirectoryArchive(filepath.Join(t.TempDir(), "out"), root, "plugin"); err == nil {
+		if _, err := writeDirectoryArchive(filepath.Join(t.TempDir(), "out"), root, "plugin", "missing"); err == nil {
 			t.Fatal("symlink archived")
 		}
 	})
@@ -293,7 +294,7 @@ func TestPluginRegistryFilesystemFailures(t *testing.T) {
 			case "skip file":
 				releaseTestFile(t, filepath.Join(root, "plugins", "README.md"), "not a bundle")
 			}
-			err := writePluginRegistry(releaseOptions{OutDir: out, Version: "0.5.1"}, releaseTestKey())
+			err := writePluginRegistry(releaseOptions{OutDir: out, Version: "0.5.1"}, releaseTestKey(), out)
 			if kind == "skip file" {
 				if err != nil {
 					t.Fatal(err)
@@ -306,6 +307,21 @@ func TestPluginRegistryFilesystemFailures(t *testing.T) {
 				t.Fatal("filesystem failure ignored")
 			}
 		})
+	}
+}
+
+// TestPluginPackagingRejectsStablePrerelease prevents publishing a beta version in the stable plugin channel.
+func TestPluginPackagingRejectsStablePrerelease(t *testing.T) {
+	root := t.TempDir()
+	t.Chdir(root)
+	dir := filepath.Join(root, "plugins", "sample")
+	releaseTestFile(t, filepath.Join(dir, "plugin.json"), `{"name":"sample","version":"0.1.0-beta.1","channel":"stable","quality":"reviewed","requires":{"ctyun":">=0.3.1 <1.0.0"},"api":{"product":"sample","ctyun_product_id":1}}`)
+	releaseTestFile(t, filepath.Join(dir, "commands.json"), `{"commands":[]}`)
+	releaseTestFile(t, filepath.Join(dir, "tables.json"), `{"tables":{}}`)
+	out := t.TempDir()
+	err := writePluginRegistry(releaseOptions{OutDir: out, Version: "0.5.2"}, releaseTestKey(), out)
+	if err == nil {
+		t.Fatal("signed plugin prerelease into the stable channel")
 	}
 }
 
@@ -335,6 +351,44 @@ func TestReleaseOutputFailures(t *testing.T) {
 				t.Fatal("release ignored output failure")
 			}
 		})
+	}
+}
+
+// TestFailedRebuildKeepsSignedAssets checks a reusable release directory after a later platform fails.
+func TestFailedRebuildKeepsSignedAssets(t *testing.T) {
+	root := t.TempDir()
+	t.Chdir(root)
+	releaseTestDir(t, filepath.Join(root, "plugins"))
+	releaseTestFile(t, filepath.Join(root, "install.sh"), "sh")
+	releaseTestFile(t, filepath.Join(root, "install.ps1"), "ps")
+	options := releaseOptions{OutDir: t.TempDir(), Version: "0.5.2", Channel: "stable", Platforms: []string{"darwin/arm64"}}
+	payload := "original build"
+	defer patchBuildBinary(func(opts buildOptions) error {
+		if opts.GOOS == "windows" {
+			return io.ErrUnexpectedEOF
+		}
+		return os.WriteFile(opts.Output, []byte(payload), 0o755)
+	})()
+	if err := writeRelease(options, releaseTestKey()); err != nil {
+		t.Fatal(err)
+	}
+	raw, err := os.ReadFile(filepath.Join(options.OutDir, "core-index.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	idx, err := corerelease.LoadIndex(raw)
+	if err != nil {
+		t.Fatal(err)
+	}
+	artifact := idx.Releases[0].Artifacts[0]
+	payload = "rebuilt binary"
+	options.Platforms = append(options.Platforms, "windows/amd64")
+	if err := writeRelease(options, releaseTestKey()); !errors.Is(err, io.ErrUnexpectedEOF) {
+		t.Fatalf("later platform error = %v", err)
+	}
+	actual, _, err := checksumAndSize(filepath.Join(options.OutDir, artifact.URL))
+	if err != nil || actual != artifact.SHA256 {
+		t.Fatalf("previous signed archive checksum = %s, want %s: %v", actual, artifact.SHA256, err)
 	}
 }
 

@@ -13,6 +13,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"time"
 
@@ -22,6 +23,14 @@ import (
 // openArchiveOutput isolates archive destination writes for deterministic storage-failure tests.
 var openArchiveOutput = func(path string, flag int, mode os.FileMode) (io.WriteCloser, error) {
 	return os.OpenFile(path, flag, mode)
+}
+
+// installWorkDirName matches the private staging and rollback directories created next to installed bundles.
+var installWorkDirName = regexp.MustCompile(`^\..+-(tmp|old)-[0-9]+$`)
+
+// IsBundleDir reports whether a directory entry can be inspected as a plugin, skipping installation work in progress.
+func IsBundleDir(entry os.DirEntry) bool {
+	return entry.IsDir() && !installWorkDirName.MatchString(entry.Name())
 }
 
 // InstallLocalBundle installs a local plugin directory or archive after basic
@@ -44,12 +53,51 @@ func InstallLocalBundle(srcDir, destRoot string) (string, error) {
 		return "", diagnostic.New("error.plugin_name", manifest.Name)
 	}
 
-	return copyBundleIntoPlace(bundleRoot, destRoot, manifest.Name)
+	return copyBundleIntoPlace(bundleRoot, destRoot, manifest.Name, replaceDir)
 }
 
-// InstallVerifiedLocalBundle installs a local plugin directory or archive only
-// after full bundle validation against coreVersion.
+// InstallVerifiedLocalBundle installs or replaces a bundle after full validation against coreVersion.
 func InstallVerifiedLocalBundle(srcDir, destRoot, coreVersion string) (string, error) {
+	return installVerifiedBundle(srcDir, destRoot, coreVersion, replaceDir)
+}
+
+// ReplaceInstalledBundle publishes a validated replacement only if its destination
+// still contains the installed version observed when the operation began.
+func ReplaceInstalledBundle(source, root, coreVersion, expectedVersion string) (string, error) {
+	return installVerifiedBundle(source, root, coreVersion, func(src, dest string) error {
+		var current Manifest
+		if err := readJSON(filepath.Join(dest, "plugin.json"), &current); err != nil {
+			return err
+		}
+		if current.Version != expectedVersion || current.Name != filepath.Base(dest) {
+			return diagnostic.New("error.plugin_changed", filepath.Base(dest))
+		}
+		return replaceDir(src, dest)
+	})
+}
+
+// ErrAlreadyInstalled indicates another installation has already published a valid bundle at the destination.
+var ErrAlreadyInstalled = errors.New("plugin already installed")
+
+// InstallNewVerifiedLocalBundle publishes a validated bundle only if the target is still absent.
+func InstallNewVerifiedLocalBundle(srcDir, destRoot, coreVersion string) (string, error) {
+	return installVerifiedBundle(srcDir, destRoot, coreVersion, func(src, dest string) error {
+		// Renaming a directory cannot overwrite a populated bundle. Never move the winner aside.
+		err := renameBundlePath(src, dest)
+		if err != nil {
+			if current, loadErr := LoadBundle(dest, coreVersion); loadErr == nil {
+				if err := current.Manifest.ValidateDirectoryName(filepath.Base(dest)); err != nil {
+					return err
+				}
+				return ErrAlreadyInstalled
+			}
+		}
+		return err
+	})
+}
+
+// installVerifiedBundle normalizes and validates a bundle before applying the selected installation policy.
+func installVerifiedBundle(srcDir, destRoot, coreVersion string, publish func(src, dest string) error) (string, error) {
 	bundleRoot, cleanup, err := prepareLocalBundleSource(srcDir)
 	if err != nil {
 		return "", err
@@ -60,7 +108,7 @@ func InstallVerifiedLocalBundle(srcDir, destRoot, coreVersion string) (string, e
 	if err != nil {
 		return "", err
 	}
-	return copyBundleIntoPlace(bundleRoot, destRoot, bundle.Manifest.Name)
+	return copyBundleIntoPlace(bundleRoot, destRoot, bundle.Manifest.Name, publish)
 }
 
 // prepareLocalBundleSource returns the directory containing plugin.json for a
@@ -127,7 +175,7 @@ func findExtractedBundleRoot(root string) (string, error) {
 
 // copyBundleIntoPlace copies a validated bundle into its final plugin
 // directory.
-func copyBundleIntoPlace(srcDir, destRoot, name string) (string, error) {
+func copyBundleIntoPlace(srcDir, destRoot, name string, publish func(src, dest string) error) (string, error) {
 	if err := os.MkdirAll(destRoot, 0o755); err != nil {
 		return "", err
 	}
@@ -147,7 +195,7 @@ func copyBundleIntoPlace(srcDir, destRoot, name string) (string, error) {
 	}
 	// Copy into a sibling temp directory first so a failed installation does not
 	// leave a partially replaced plugin.
-	if err := replaceDir(tmpDir, destDir); err != nil {
+	if err := WithStoreLock(destRoot, true, func() error { return publish(tmpDir, destDir) }); err != nil {
 		return "", err
 	}
 	cleanupTmp = false
@@ -165,7 +213,7 @@ func replaceDir(src, dest string) error {
 		return err
 	}
 
-	backup := dest + ".old-" + fmt.Sprint(time.Now().UnixNano())
+	backup := filepath.Join(filepath.Dir(dest), "."+filepath.Base(dest)+"-old-"+fmt.Sprint(time.Now().UnixNano()))
 	if err := renameBundlePath(dest, backup); err != nil {
 		return err
 	}

@@ -106,7 +106,7 @@ func TestHiddenCompletionCoversCoreBranchesAndPluginOptions(t *testing.T) {
 	assertHasCompletions(t, doctorOptions, "--source", "--timeout")
 	assertNoCompletions(t, doctorOptions, "--offline", "--fixture", "-O")
 	assertHasCompletions(t, completeArgs([]string{"doctor", "network", "--source", ""}, pluginRoot), "auto", "gitee", "github")
-	assertEqualCompletions(t, completeArgs([]string{"completion", "bash", ""}, pluginRoot), nil)
+	assertHasCompletions(t, completeArgs([]string{"completion", "bash", ""}, pluginRoot), "--help")
 	assertHasCompletions(t, completeArgs([]string{"help", ""}, pluginRoot), "ecs", "plugin")
 	assertHasCompletions(t, completeArgs([]string{"help", "ecs", ""}, pluginRoot), "instance")
 	pluginCompletions := completeArgs([]string{"plugin", ""}, pluginRoot)
@@ -128,7 +128,7 @@ func TestHiddenCompletionCoversCoreBranchesAndPluginOptions(t *testing.T) {
 	assertHasCompletions(t, completeArgs([]string{"upgrade", "--source", ""}, pluginRoot), "auto", "gitee", "github")
 	assertHasCompletions(t, completeArgs([]string{"upgrade", "--channel", ""}, pluginRoot), "alpha", "beta", "stable")
 	assertEqualCompletions(t, completeArgs([]string{"plugin", "unknown", ""}, pluginRoot), nil)
-	assertEqualCompletions(t, completeArgs([]string{"version", ""}, pluginRoot), nil)
+	assertHasCompletions(t, completeArgs([]string{"version", ""}, pluginRoot), "--help")
 	assertHasCompletions(t, completeArgs([]string{"ecs", "instance", "show", "ins-demo-1", ""}, waitRoot), "--cols", "--wait")
 	assertEqualCompletions(t, completeArgs([]string{"ecs", "instance", "show", ""}, waitRoot), nil)
 	defaultInstanceChildren := completeArgs([]string{"ecs", "instance", ""}, pluginRoot)
@@ -172,17 +172,12 @@ func TestCompletionInternalsCoverNoSuggestionPaths(t *testing.T) {
 		t.Fatal("runComplete returned nil error for writer failure")
 	}
 	assertEqualCompletions(t, completeArgs([]string{"ecs"}, pluginRoot), []string{"ecs"})
-	assertEqualCompletions(t, completeArgs([]string{"--output=table", "ecs", ""}, pluginRoot), []string{"instance"})
+	group := completeArgs([]string{"--output=table", "ecs", ""}, pluginRoot)
+	assertHasCompletions(t, group, "instance", "--help")
+	assertNoCompletions(t, group, "--output", "-o")
 	assertNoCompletions(t, completeArgs([]string{"ecs", "instance", "list", "--name", "demo", ""}, pluginRoot), "--name")
-	if got, ok := pendingOptionValueCompletions([]string{"--output=table"}, "", completionContext{}); ok || len(got) != 0 {
-		t.Fatalf("pendingOptionValueCompletions inline option = %v, %v; want no match", got, ok)
-	}
-	if got, ok := pendingOptionValueCompletions(nil, "", completionContext{}); ok || len(got) != 0 {
-		t.Fatalf("pendingOptionValueCompletions nil tokens = %v, %v; want no match", got, ok)
-	}
 	assertEqualCompletions(t, tableColumnKeys(completionContext{}, ""), nil)
 	assertEqualCompletions(t, tableColumnKeys(completionContext{CommandFound: true}, ""), nil)
-	assertNoCompletions(t, usedOptionKeysForTest([]string{"value"}), "value")
 	if completionPathMatches([]string{"ecs"}, []string{"ecs", "instance"}) {
 		t.Fatal("completionPathMatches matched a path longer than the pattern")
 	}
@@ -198,21 +193,7 @@ func TestCompletionInternalsCoverNoSuggestionPaths(t *testing.T) {
 	if _, ok := inlineOptionValueCompletions("--unknown=value", completionContext{}); !ok {
 		t.Fatal("inlineOptionValueCompletions should handle unknown inline options")
 	}
-	if _, ok := pendingOptionValueCompletions([]string{"plain"}, "", completionContext{}); ok {
-		t.Fatal("pendingOptionValueCompletions treated a plain word as an option")
-	}
 	assertHasCompletions(t, allCompletionWords(pluginRoot), "--all", "--updates", "ecs")
-}
-
-// usedOptionKeysForTest returns sorted canonical option keys consumed by completion.
-func usedOptionKeysForTest(tokens []string) []string {
-	used := usedCompletionOptions(tokens)
-	keys := make([]string, 0, len(used))
-	for key := range used {
-		keys = append(keys, key)
-	}
-	slices.Sort(keys)
-	return keys
 }
 
 // assertHasCompletions requires every requested candidate in a completion result.
@@ -269,4 +250,99 @@ func TestCompletionConfigSecretOptionPrefix(t *testing.T) {
 			t.Fatalf("used option repeated: %v", got)
 		}
 	}
+}
+
+// TestCompletionPreservesProductOperands checks paths and option values against the executable command grammar.
+func TestCompletionPreservesProductOperands(t *testing.T) {
+	root := t.TempDir()
+	dir := filepath.Join(root, "region")
+	writeArgumentRegionOptionBundle(t, dir)
+	mustWrite(t, filepath.Join(dir, "commands.json"), `{"commands":[
+		{"id":"region.show","path":["region","show","{region_id}"],"operation":"v4.region.show","table":"region.show","parameters":[{"name":"view","flag":"view","target":"view","allowed_values":["short","long"]}]},
+		{"id":"resource.show","path":["region","resource","{id}","show"],"operation":"v4.region.show","table":"region.show","parameters":[{"name":"view","flag":"view","target":"view","allowed_values":["short","long"]}]},
+		{"id":"resource","path":["region","resource","{id}"],"operation":"v4.region.show","table":"region.show","parameters":[{"name":"view","flag":"view","target":"view","allowed_values":["short","long"]},{"name":"label","flag":"label","target":"label"}]}
+	]}`)
+	for _, tc := range []struct {
+		args []string
+		want string
+	}{
+		{[]string{"region", "show", "--vi"}, "--view"},
+		{[]string{"region", "show", ""}, "--view"},
+		{[]string{"region", "show", "--view", "l"}, "long"},
+		{[]string{"region", "show", "id", "--view=s"}, "--view=short"},
+		{[]string{"region", "resource", "-12", "--vi"}, "--view"},
+		{[]string{"region", "resource", "--view", "--vi"}, "--view"},
+		{[]string{"region", "resource", "--view", ""}, "show"},
+		{[]string{"region", "resource", "plain", "s"}, "show"},
+		{[]string{"help", "region", "resource", "--view", "s"}, "show"},
+		{[]string{"region", "resource", "--view", "show", "--view", "l"}, "long"},
+		{[]string{"region", "resource", "id", "--label", "--view", "--vi"}, "--view"},
+		{[]string{"region", "resource", "id", "--label", "--view", ""}, "--view"},
+		{[]string{"--config", "--view", "region", "resource", "id", "--vi"}, "--view"},
+		{[]string{"region", "resource", "id", "--label", "--view", "--view", "s"}, "short"},
+	} {
+		t.Run(strings.Join(tc.args, "_"), func(t *testing.T) {
+			var out bytes.Buffer
+			if err := Run(Config{PluginRoot: root, Args: append([]string{"__complete"}, tc.args...), Stdout: &out}); err != nil {
+				t.Fatal(err)
+			}
+			if !slices.Contains(strings.Fields(out.String()), tc.want) {
+				t.Errorf("%q: missing %q in %q", tc.args, tc.want, out.String())
+			}
+		})
+	}
+	for _, args := range [][]string{
+		{"region", "resource", "id", "extra", "--vi"},
+		{"region", "resource", "id", "--view=long", "--vi"},
+		{"region", "resource", "id", "--label", "--view", "s"},
+	} {
+		assertEqualCompletions(t, completeArgs(args, root), nil)
+	}
+}
+
+// TestCompletionUsesOnlyExecutableOptionForms checks inline spelling and irreparable plugin command tails.
+func TestCompletionUsesOnlyExecutableOptionForms(t *testing.T) {
+	root := t.TempDir()
+	disableDevelopmentBundledPluginsForTest(t)
+	for _, args := range [][]string{
+		{"version", "-l=en"}, {"version", "-l=en-US", ""},
+		{"plugin", "list", "extra", "--"}, {"plugin", "list", "extra", "--channel", ""},
+		{"plugins", "search", "first", "second", ""}, {"plugin", "upgrade", "first", "second", "--"},
+		{"plugin", "install", "--unknown", ""}, {"plugin", "list", "--available=true", ""},
+	} {
+		t.Run(strings.Join(args, "_"), func(t *testing.T) {
+			assertEqualCompletions(t, completeArgs(args, root), nil)
+		})
+	}
+	for _, args := range [][]string{{"version", "--lang=en"}, {"version", "-l", "en"}} {
+		got := completeArgs(args, root)
+		if len(got) != 2 || !strings.HasSuffix(got[1], "en-US") {
+			t.Fatalf("valid inline or separate spelling %q: %q", args, got)
+		}
+	}
+	for _, subcommand := range []string{"install", "reinstall", "remove"} {
+		assertHasCompletions(t, completeArgs([]string{"plugins", subcommand, "a", "b", "--"}, root), "--help")
+	}
+	assertHasCompletions(t, completeArgs([]string{"plugins", "list", "--bundled", "--"}, root), "--channel")
+	assertHasCompletions(t, completeArgs([]string{"plugin", "search", "--channel", ""}, root), "beta")
+	t.Cleanup(patchVersion(testCoreVersion()))
+	assertEqualCompletions(t, completeArgs([]string{"plugins", "list", "--bundled", "--"}, root), nil)
+}
+
+// TestProductCompletionAfterDevelopmentSwitch keeps normal options available after an accepted hidden switch.
+func TestProductCompletionAfterDevelopmentSwitch(t *testing.T) {
+	root := t.TempDir()
+	writeValidationBundle(t, filepath.Join(root, "ecs"))
+	for _, option := range []string{"--offline", "--fixture"} {
+		for _, prefix := range []string{"", "--"} {
+			got := completeArgs([]string{"ecs", "instance", "list", option, prefix}, root)
+			assertHasCompletions(t, got, "--status", "--output")
+			assertNoCompletions(t, got, "--offline", "--fixture")
+		}
+	}
+	for _, path := range [][]string{{"--offline", "ecs", "instance", "list", "--"}, {"ecs", "--fixture", "instance", "list", "--"}} {
+		assertEqualCompletions(t, completeArgs(path, root), nil)
+	}
+	t.Cleanup(patchVersion(testCoreVersion()))
+	assertEqualCompletions(t, completeArgs([]string{"ecs", "instance", "list", "--fixture", "--"}, root), nil)
 }

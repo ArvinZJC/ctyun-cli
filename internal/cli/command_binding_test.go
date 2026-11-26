@@ -84,3 +84,22 @@ func TestMultipartInputsDoNotOverrideHeaders(t *testing.T) {
 		t.Fatalf("multipart input leaked into headers: %v", got)
 	}
 }
+
+// TestQueryRegionCannotSatisfyRequiredRegionHeader keeps local preflight aligned with wire bindings.
+func TestQueryRegionCannotSatisfyRequiredRegionHeader(t *testing.T) {
+	params := []plugin.Parameter{{Name: "query_region", Target: "regionId"}, {Name: "region", Target: "regionId"}}
+	op := plugin.Operation{Method: "GET", Path: "/resource", Query: map[string]string{"regionId": "$param.query_region"}, Headers: map[string]string{"regionId": "$profile.region"}}
+	bundle := plugin.Bundle{Manifest: plugin.Manifest{API: plugin.APIInfo{EndpointURL: "https://example.test"}}, APIs: plugin.APIs{Operations: map[string]plugin.Operation{"read": op}}}
+	command := plugin.Command{Operation: "read", Parameters: params}
+	values := map[string]string{"query_region": "search-area"}
+	_, err := buildAPIRequest(bundle, command, nil, values, coreconfig.Profile{}, regionTestCredentials, nil, nil, "en-US")
+	requireDiagnosticKey(t, err, "error.missing_profile_region")
+
+	spec, err := buildAPIRequest(bundle, command, nil, values, coreconfig.Profile{Region: "header-area"}, regionTestCredentials, nil, nil, "en-US")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if spec.Query != "regionId=search-area" || spec.Headers["regionId"] != "header-area" {
+		t.Fatalf("separate query and header regions: %q, %v", spec.Query, spec.Headers)
+	}
+}

@@ -15,7 +15,13 @@ function Fail($Message) {
 }
 
 function Get-Download($Uri, $OutFile) {
-    Invoke-WebRequest -Uri $Uri -OutFile $OutFile -UseBasicParsing
+    # Windows PowerShell interprets brackets in -OutFile as wildcard characters.
+    Push-Location -LiteralPath ([IO.Path]::GetDirectoryName($OutFile))
+    try {
+        Invoke-WebRequest -Uri $Uri -OutFile ([IO.Path]::GetFileName($OutFile)) -UseBasicParsing
+    } finally {
+        Pop-Location
+    }
 }
 
 function Join-DownloadUrl($Root, $Path) {
@@ -64,7 +70,7 @@ try {
         Fail "could not download core-index.json"
     }
 
-    $Index = Get-Content -Raw -Path $IndexPath | ConvertFrom-Json
+    $Index = Get-Content -Raw -LiteralPath $IndexPath | ConvertFrom-Json
     $Release = $null
     $Artifact = $null
     $ChannelOrder = if ($Channel) { @($Channel) } else { @("stable", "beta", "alpha") }
@@ -96,7 +102,7 @@ try {
     } catch {
         Fail "could not download $($Artifact.url). Check your connection to the release source and retry. $($_.Exception.Message)"
     }
-    $ActualSHA = (Get-FileHash -Algorithm SHA256 -Path $ArchivePath).Hash.ToLowerInvariant()
+    $ActualSHA = (Get-FileHash -Algorithm SHA256 -LiteralPath $ArchivePath).Hash.ToLowerInvariant()
     if ($ActualSHA -ne $Artifact.sha256) {
         Fail "checksum mismatch for $($Artifact.url). Retry from a trusted release source. If it fails again, report the version and source."
     }

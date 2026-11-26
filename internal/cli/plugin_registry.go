@@ -29,7 +29,7 @@ func searchPlugins(stdout io.Writer, root string, source any, channel, query str
 	if err != nil {
 		return err
 	}
-	rows, err := availablePluginRows(root, idx.Search(query, channel))
+	rows, err := availablePluginRows(root, idx.Search(query, channel), opts.Language)
 	if err != nil {
 		return err
 	}
@@ -62,7 +62,7 @@ func reinstallPluginsFromHostedSourceWithProgress(stdout, stderr io.Writer, root
 				if !ok {
 					return operationResult{Target: target.Name, Err: diagnostic.New("error.plugin_not_found_registry", target.Name)}
 				}
-				if err := installVerifiedRegistryArtifact(root, selectedSource, artifact, transport); err != nil {
+				if err := installVerifiedRegistryArtifact(root, selectedSource, artifact, transport, target.Bundle.Manifest.Version); err != nil {
 					return operationResult{Target: target.Name, Err: err}
 				}
 				return operationResult{Target: target.Name, Outcome: operationChanged, OldVersion: target.Bundle.Manifest.Version, NewVersion: artifact.Version}
@@ -113,7 +113,7 @@ func updatePluginsFromHostedSourceWithProgress(stdout, stderr io.Writer, root st
 				if version.CompareSemanticVersions(artifact.Version, target.Bundle.Manifest.Version) <= 0 {
 					return operationResult{Target: target.Name, Outcome: operationUnchanged, OldVersion: target.Bundle.Manifest.Version, NewVersion: artifact.Version}
 				}
-				if err := installVerifiedRegistryArtifact(root, selectedSource, artifact, transport); err != nil {
+				if err := installVerifiedRegistryArtifact(root, selectedSource, artifact, transport, target.Bundle.Manifest.Version); err != nil {
 					return operationResult{Target: target.Name, Err: err}
 				}
 				return operationResult{Target: target.Name, Outcome: operationChanged, OldVersion: target.Bundle.Manifest.Version, NewVersion: artifact.Version}
@@ -126,7 +126,10 @@ func updatePluginsFromHostedSourceWithProgress(stdout, stderr io.Writer, root st
 // prepareHostedPluginTargets resolves installed targets and loads the registry
 // only when at least one target can use it.
 func prepareHostedPluginTargets(root string, source any, names []string, all bool, transport http.RoundTripper, publicKey string) ([]installedPluginTarget, distribution.Source, registry.Index, error) {
-	targets := installedPluginTargets(root, names, all)
+	targets, err := installedPluginTargets(root, names, all)
+	if err != nil {
+		return nil, distribution.Source{}, registry.Index{}, err
+	}
 	for _, target := range targets {
 		if target.Err != nil {
 			continue
@@ -159,21 +162,11 @@ func listPluginUpdates(stdout io.Writer, root string, source any, channel string
 
 // listPluginUpdatesFromIndex prints updates from an already loaded index.
 func listPluginUpdatesFromIndex(stdout io.Writer, root string, idx registry.Index, channel string, language string) error {
-	entries, err := os.ReadDir(root)
-	if os.IsNotExist(err) {
-		return nil
-	}
+	bundles, err := loadInstalledBundles(root)
 	if err != nil {
 		return err
 	}
-	for _, entry := range entries {
-		if !entry.IsDir() {
-			continue
-		}
-		bundle, err := plugin.LoadBundle(filepath.Join(root, entry.Name()), version.Version)
-		if err != nil {
-			return err
-		}
+	for _, bundle := range bundles {
 		artifact, ok := idx.Find(bundle.Manifest.Name, channel)
 		if !ok || version.CompareSemanticVersions(artifact.Version, bundle.Manifest.Version) <= 0 {
 			continue
@@ -255,10 +248,10 @@ func installPluginsFromHostedSourceWithProgress(stdout, stderr io.Writer, root s
 				if !ok {
 					return operationResult{Target: name, Err: diagnostic.New("error.plugin_not_found_registry", name)}
 				}
-				if err := installVerifiedRegistryArtifact(root, selectedSource, artifact, transport); err != nil {
-					return operationResult{Target: name, Err: err}
-				}
-				return operationResult{Target: name, Outcome: operationChanged}
+				err := installVerifiedRegistryArtifact(root, selectedSource, artifact, transport, "")
+				result := pluginInstallResult(name, err)
+				installed[name] = result.Err == nil
+				return result
 			},
 		})
 	}
@@ -267,7 +260,7 @@ func installPluginsFromHostedSourceWithProgress(stdout, stderr io.Writer, root s
 
 // installVerifiedRegistryArtifact prepares, verifies, and installs one selected
 // registry artifact.
-func installVerifiedRegistryArtifact(root string, selectedSource distribution.Source, artifact registry.Artifact, transport http.RoundTripper) error {
+func installVerifiedRegistryArtifact(root string, selectedSource distribution.Source, artifact registry.Artifact, transport http.RoundTripper, expectedVersion string) error {
 	artifactSource, cleanup, err := prepareRegistryArtifact(selectedSource.URL, artifact, transport)
 	if err != nil {
 		return err
@@ -289,7 +282,11 @@ func installVerifiedRegistryArtifact(root string, selectedSource distribution.So
 	if err := verifyRegistryBundleIdentity(staged, artifact); err != nil {
 		return err
 	}
-	_, err = plugin.InstallVerifiedLocalBundle(staged, root, version.Version)
+	if expectedVersion == "" {
+		_, err = plugin.InstallNewVerifiedLocalBundle(staged, root, version.Version)
+	} else {
+		_, err = plugin.ReplaceInstalledBundle(staged, root, version.Version, expectedVersion)
+	}
 	return err
 }
 

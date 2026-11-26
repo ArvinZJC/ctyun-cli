@@ -15,11 +15,15 @@ import (
 )
 
 // doctorLocalDependenciesFactory creates read-only production dependencies.
-var doctorLocalDependenciesFactory = localdoctor.DefaultDependencies
+var doctorLocalDependenciesFactory = func() localdoctor.Dependencies {
+	dependencies := localdoctor.DefaultDependencies()
+	dependencies.ReadFile = readLockedConfig
+	return dependencies
+}
 
 // doctorLocalHelpLanguage resolves help language without requiring valid local state.
 func doctorLocalHelpLanguage(cfg Config, opts globalOptions, path string, pathSource coreconfig.Source, getenv func(string) string) string {
-	raw, err := loadConfigBytes(cfg.Config, path)
+	raw, err := diagnosticConfigBytes(cfg.Config, path)
 	if err != nil {
 		raw = nil
 	}

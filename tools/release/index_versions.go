@@ -6,10 +6,25 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/ArvinZJC/ctyun-cli/internal/registry"
 	corerelease "github.com/ArvinZJC/ctyun-cli/internal/release"
 	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
 )
+
+// validateTagChannels checks that a version tag and its archive names have only one publishing channel.
+func validateTagChannels[T any](entries []T, identity func(T) (tag, channel string)) error {
+	channels := make(map[string]string, len(entries))
+	for _, entry := range entries {
+		tag, channel := identity(entry)
+		if previous, ok := channels[tag]; ok && previous != channel {
+			return fmt.Errorf("release tag %q cannot be published in both channels %q and %q", tag, previous, channel)
+		}
+		channels[tag] = channel
+	}
+	return nil
+}
 
 // corePublicationIndex adds channel-keyed badge versions to the signed index.
 // Runtime readers continue to select artifacts from the embedded release array.

@@ -112,7 +112,8 @@ func (builder *planBuilder) addCTyunEndpoints(endpoints []string) error {
 			return err
 		}
 		httpsID := builder.ensureHTTPSForSubject(baseURL, target, "ctyun", routeID)
-		capabilityID := "ctyun-" + stableID(target)
+		// The check ID distinguishes origins whose readable labels normalize to the same text.
+		capabilityID := stableID("ctyun", target, httpsID)
 		builder.capabilities[capabilityID] = []string{httpsID}
 	}
 	return nil

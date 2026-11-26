@@ -34,14 +34,39 @@ type Index struct {
 
 // Artifact describes one downloadable plugin bundle in a registry index.
 type Artifact struct {
-	Name        string `json:"name"`
-	Product     string `json:"product,omitempty"`
-	DisplayName string `json:"display_name,omitempty"`
-	Version     string `json:"version"`
-	Channel     string `json:"channel"`
-	Quality     string `json:"quality"`
-	URL         string `json:"url"`
-	SHA256      string `json:"sha256"`
+	Name         string            `json:"name"`
+	Product      string            `json:"product,omitempty"`
+	DisplayName  string            `json:"display_name,omitempty"`
+	DisplayNames map[string]string `json:"display_names,omitempty"`
+	Version      string            `json:"version"`
+	Channel      string            `json:"channel"`
+	Quality      string            `json:"quality"`
+	URL          string            `json:"url"`
+	SHA256       string            `json:"sha256"`
+}
+
+// ArtifactFromBundle builds storefront metadata from a bundle's manifest and localized names.
+func ArtifactFromBundle(bundle plugin.Bundle) Artifact {
+	names := make(map[string]string)
+	for _, language := range []string{"en-US", "en-GB", "zh-CN"} {
+		if name := bundle.I18N[language]["name"]; name != "" {
+			names[language] = name
+		}
+	}
+	return Artifact{
+		Name:         bundle.Manifest.Name,
+		Product:      bundle.Manifest.API.Product,
+		DisplayName:  cmp.Or(names["en-US"], names["en-GB"], names["zh-CN"], bundle.Manifest.Name),
+		DisplayNames: names,
+		Version:      bundle.Manifest.Version,
+		Channel:      bundle.Manifest.Channel,
+		Quality:      bundle.Manifest.Quality,
+	}
+}
+
+// LocalizedDisplayName falls back to the single display name or identifier used by older indexes.
+func (a Artifact) LocalizedDisplayName(language string) string {
+	return cmp.Or(a.DisplayNames[language], a.DisplayName, a.Name)
 }
 
 // LoadIndex decodes and validates a registry index document.
@@ -89,18 +114,19 @@ func validateIndex(idx Index) error {
 	return nil
 }
 
-// Find returns the newest acceptable artifact for name and channel.
-func (i Index) Find(name, channel string) (Artifact, bool) {
+// MatchesChannel applies release channel and stable quality eligibility for registry and bundled sources.
+func (a Artifact) MatchesChannel(channel string) bool {
 	if channel == "" {
 		channel = "stable"
 	}
+	return (channel == "all" || a.Channel == channel) && (a.Channel != "stable" || a.Quality == "reviewed" || a.Quality == "curated")
+}
 
+// Find returns the newest acceptable artifact for name and channel.
+func (i Index) Find(name, channel string) (Artifact, bool) {
 	candidates := make([]Artifact, 0)
 	for _, artifact := range i.Plugins {
-		if artifact.Name != name || artifact.Channel != channel {
-			continue
-		}
-		if channel == "stable" && artifact.Quality != "reviewed" && artifact.Quality != "curated" {
+		if artifact.Name != name || channel == "all" || !artifact.MatchesChannel(channel) {
 			continue
 		}
 		candidates = append(candidates, artifact)
@@ -125,10 +151,7 @@ func (i Index) Search(query, channel string) []Artifact {
 
 	latestByKey := make(map[string]Artifact)
 	for _, artifact := range i.Plugins {
-		if channel != "all" && artifact.Channel != channel {
-			continue
-		}
-		if artifact.Channel == "stable" && artifact.Quality != "reviewed" && artifact.Quality != "curated" {
+		if !artifact.MatchesChannel(channel) {
 			continue
 		}
 		if query != "" && !artifactMatchesQuery(artifact, query) {
@@ -168,9 +191,15 @@ func channelRank(channel string) int {
 // artifactMatchesQuery reports whether query fuzzily matches searchable
 // registry storefront fields.
 func artifactMatchesQuery(artifact Artifact, query string) bool {
-	for _, value := range []string{artifact.Name, artifact.Product, artifact.DisplayName} {
+	matches := func(value string) bool {
 		value = strings.ToLower(value)
-		if strings.Contains(value, query) || isSubsequence(query, value) {
+		return strings.Contains(value, query) || isSubsequence(query, value)
+	}
+	if matches(artifact.Name) || matches(artifact.Product) || matches(artifact.DisplayName) {
+		return true
+	}
+	for _, name := range artifact.DisplayNames {
+		if matches(name) {
 			return true
 		}
 	}

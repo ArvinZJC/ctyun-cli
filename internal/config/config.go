@@ -7,7 +7,6 @@
 package config
 
 import (
-	"bytes"
 	"encoding/json"
 	"strings"
 
@@ -205,15 +204,16 @@ func valueContainsSecretKey(value any, path []string) bool {
 	}
 
 	for key, item := range object {
-		normalized := strings.ToLower(strings.ReplaceAll(key, "_", ""))
-		if normalized == "ak" || normalized == "sk" {
-			if !allowedCredentialPath(path) {
+		// Direct children of profiles are user-selected names. Their fields still need validation.
+		if len(path) != 1 || path[0] != "profiles" {
+			normalized := strings.ToLower(strings.ReplaceAll(key, "_", ""))
+			if normalized == "ak" || normalized == "sk" {
+				if !allowedCredentialPath(path) {
+					return true
+				}
+			} else if normalized == "accesskey" || strings.Contains(normalized, "secret") {
 				return true
 			}
-		} else if normalized == "accesskey" || normalized == "secretkey" {
-			return true
-		} else if bytes.Contains([]byte(normalized), []byte("secret")) {
-			return true
 		}
 		if valueContainsSecretKey(item, append(path, key)) {
 			return true

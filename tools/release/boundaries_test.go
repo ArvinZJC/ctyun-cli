@@ -13,6 +13,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	corerelease "github.com/ArvinZJC/ctyun-cli/internal/release"
 )
 
 // TestMainReportsExitStatus invokes the real entry point while intercepting only
@@ -87,9 +89,9 @@ func TestReleaseEncodingAndWriteFailures(t *testing.T) {
 				var err error
 				opts := releaseOptions{Version: "0.5.1", Channel: "stable", OutDir: out}
 				if pluginIndex {
-					err = writePluginRegistry(opts, releaseTestKey())
+					err = writePluginRegistry(opts, releaseTestKey(), out)
 				} else {
-					err = writeRelease(opts, releaseTestKey())
+					err = writeReleaseMetadata(opts, releaseTestKey(), out, corerelease.Index{})
 				}
 				if err == nil {
 					t.Fatal("publication ignored encoder/output failure")
@@ -124,7 +126,7 @@ func TestCandidateArchiveReadFailurePreservesPublishedArchive(t *testing.T) {
 	root := t.TempDir()
 	releaseTestFile(t, filepath.Join(root, "plugin.json"), "{}")
 	path := filepath.Join(t.TempDir(), "published.gz")
-	if err := writeDirectoryArchive(path, root, "demo"); err != nil {
+	if _, err := writeDirectoryArchive(path, root, "demo", path); err != nil {
 		t.Fatal(err)
 	}
 	before, err := os.ReadFile(path)
@@ -139,7 +141,7 @@ func TestCandidateArchiveReadFailurePreservesPublishedArchive(t *testing.T) {
 		}
 		return readArchivePayload(candidate)
 	}
-	if err := writeDirectoryArchive(path, root, "demo"); !errors.Is(err, io.ErrUnexpectedEOF) {
+	if _, err := writeDirectoryArchive(path, root, "demo", path); !errors.Is(err, io.ErrUnexpectedEOF) {
 		t.Fatalf("lost candidate read error: %v", err)
 	}
 	after, err := os.ReadFile(path)
@@ -172,7 +174,7 @@ func TestPluginArchiveFailuresStopIndexPublication(t *testing.T) {
 				t.Cleanup(func() { checksumArchive = original })
 				checksumArchive = func(string) (string, int64, error) { return "", 0, io.ErrUnexpectedEOF }
 			}
-			if err := writePluginRegistry(releaseOptions{Version: "0.5.1", OutDir: out}, releaseTestKey()); err == nil {
+			if err := writePluginRegistry(releaseOptions{Version: "0.5.1", OutDir: out}, releaseTestKey(), out); err == nil {
 				t.Fatal("failed artifact entered index")
 			}
 			if _, err := os.Stat(filepath.Join(out, "index.json")); !os.IsNotExist(err) {

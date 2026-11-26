@@ -20,6 +20,16 @@ type subcommandHelp struct {
 	Options        []pluginOptionSummary
 }
 
+// tokenOptions derives command-owned option names and arity from their help declarations.
+func (command subcommandHelp) tokenOptions() []commandOption {
+	options := make([]commandOption, 0, len(command.Options))
+	for _, option := range command.Options {
+		name, _, takesValue := strings.Cut(option.Name, " ")
+		options = append(options, commandOption{Name: strings.TrimPrefix(name, "--"), TakesValue: takesValue})
+	}
+	return options
+}
+
 // writeSubcommandHelpPage writes the shared description, usage, argument, and
 // command-option sections for one built-in subcommand.
 func writeSubcommandHelpPage(writer *outputWriter, command subcommandHelp, language string) {

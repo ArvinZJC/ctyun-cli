@@ -13,6 +13,28 @@ import (
 	"testing"
 )
 
+// TestNewInstallRejectsUnrelatedWinner keeps a different manifest from satisfying a pending installation.
+func TestNewInstallRejectsUnrelatedWinner(t *testing.T) {
+	root := t.TempDir()
+	requested := writeBundle(t, "requested", testCompatibleCoreConstraint())
+	other := writeBundle(t, "other", testCompatibleCoreConstraint())
+	target := filepath.Join(root, "requested")
+	if err := os.Rename(other, target); err != nil {
+		t.Fatal(err)
+	}
+	_, err := InstallNewVerifiedLocalBundle(requested, root, testCoreVersion())
+	if err == nil || errors.Is(err, ErrAlreadyInstalled) {
+		t.Fatalf("unrelated bundle was accepted as the installed target: %v", err)
+	}
+	manifest, err := LoadManifest(target)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if manifest.Name != "other" {
+		t.Fatalf("existing bundle was changed: %q", manifest.Name)
+	}
+}
+
 // archiveCloseFailure closes the real destination while reporting a storage error.
 type archiveCloseFailure struct {
 	io.WriteCloser
@@ -54,7 +76,7 @@ func TestCopyBundleReplacementFailureCleansStaging(t *testing.T) {
 	if err := os.Symlink(filepath.Join(root, "missing"), dest); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := copyBundleIntoPlace(source, root, "ecs"); err == nil {
+	if _, err := copyBundleIntoPlace(source, root, "ecs", replaceDir); err == nil {
 		t.Fatal("replacement succeeded over broken link")
 	}
 	entries, err := os.ReadDir(root)
@@ -63,6 +85,37 @@ func TestCopyBundleReplacementFailureCleansStaging(t *testing.T) {
 	}
 	if target, err := os.Readlink(dest); err != nil || target != filepath.Join(root, "missing") {
 		t.Fatalf("destination changed: %q, %v", target, err)
+	}
+}
+
+// TestConcurrentNewBundleInstall publishes one complete bundle and leaves the winner in place.
+func TestConcurrentNewBundleInstall(t *testing.T) {
+	source, root := writeBundle(t, "demo", testCompatibleCoreConstraint()), t.TempDir()
+	results := make(chan error, 2)
+	for range 2 {
+		go func() {
+			_, err := InstallNewVerifiedLocalBundle(source, root, testCoreVersion())
+			results <- err
+		}()
+	}
+	installed, skipped := 0, 0
+	for range 2 {
+		err := <-results
+		switch {
+		case err == nil:
+			installed++
+		case errors.Is(err, ErrAlreadyInstalled):
+			skipped++
+		default:
+			t.Errorf("install error: %v", err)
+		}
+	}
+	if installed != 1 || skipped != 1 {
+		t.Fatalf("installed=%d skipped=%d", installed, skipped)
+	}
+	entries, err := os.ReadDir(root)
+	if err != nil || len(entries) != 1 || entries[0].Name() != "demo" {
+		t.Fatalf("unexpected remaining entries: %v, %v", entries, err)
 	}
 }
 
@@ -77,6 +130,9 @@ func TestReplaceDirReportsRollbackFailure(t *testing.T) {
 	replaceErr, restoreErr := errors.New("replacement failed"), errors.New("rollback failed")
 	renameBundlePath = func(from, to string) error {
 		if from == dest {
+			if ValidName(filepath.Base(to)) {
+				t.Errorf("backup %q can be mistaken for an installed plugin", filepath.Base(to))
+			}
 			return os.Rename(from, to)
 		}
 		if from == src {
@@ -87,5 +143,36 @@ func TestReplaceDirReportsRollbackFailure(t *testing.T) {
 	err := replaceDir(src, dest)
 	if !errors.Is(err, replaceErr) || !errors.Is(err, restoreErr) {
 		t.Fatalf("missing replacement or rollback cause: %v", err)
+	}
+	entries, err := os.ReadDir(filepath.Dir(dest))
+	if err != nil || len(entries) != 1 || IsBundleDir(entries[0]) {
+		t.Fatalf("expected one recoverable backup outside plugin discovery, got %v, %v", entries, err)
+	}
+}
+
+// TestReplacementChecksInstalledManifest rejects missing or changed targets under the store lock.
+func TestReplacementChecksInstalledManifest(t *testing.T) {
+	source, root := writeBundle(t, "demo", testCompatibleCoreConstraint()), t.TempDir()
+	replace := func(expected string) error {
+		_, err := ReplaceInstalledBundle(source, root, testCoreVersion(), expected)
+		return err
+	}
+	if err := replace("0.1.0"); !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("missing installation: %v", err)
+	}
+	if _, err := InstallNewVerifiedLocalBundle(source, root, testCoreVersion()); err != nil {
+		t.Fatal(err)
+	}
+	if err := replace("0.0.1"); err == nil {
+		t.Fatal("replaced an installation whose version had changed")
+	}
+	if err := replace("0.1.0"); err != nil {
+		t.Fatalf("matching install: %v", err)
+	}
+	if err := WithStoreLock(filepath.Join(root, "demo", "plugin.json", "invalid"), false, func() error { return nil }); err == nil {
+		t.Fatal("accepted non-directory parent")
+	}
+	if err := WithStoreLock(filepath.Join(root, "absent"), false, func() error { return os.ErrNotExist }); !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("empty inventory: %v", err)
 	}
 }

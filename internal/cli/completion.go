@@ -81,20 +81,39 @@ complete -F _ctyun_completion ctyun`)
 			"complete -c ctyun -f -a '(__ctyun_complete)'",
 		)
 	case "powershell":
-		return writeLines(stdout,
-			"Register-ArgumentCompleter -Native -CommandName ctyun -ScriptBlock {",
-			"  param($wordToComplete, $commandAst, $cursorPosition)",
-			"  $arguments = @()",
-			"  foreach ($element in @($commandAst.CommandElements | Select-Object -Skip 1)) {",
-			"    if ($element.Extent.EndOffset -ge $cursorPosition) { break }",
-			"    if ($element -is [System.Management.Automation.Language.StringConstantExpressionAst]) { $arguments += $element.Value } else { $arguments += $element.Extent.Text }",
-			"  }",
-			"  $arguments += $wordToComplete",
-			"  ctyun __complete @arguments | Where-Object { $_ -like \"$wordToComplete*\" } | ForEach-Object {",
-			"    [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)",
-			"  }",
-			"}",
-		)
+		return writeLines(stdout, `Register-ArgumentCompleter -Native -CommandName ctyun -ScriptBlock {
+  param($wordToComplete, $commandAst, $cursorPosition)
+  $arguments = @()
+  foreach ($element in @($commandAst.CommandElements | Select-Object -Skip 1)) {
+    if ($element.Extent.EndOffset -ge $cursorPosition) { break }
+    if ($element -is [System.Management.Automation.Language.StringConstantExpressionAst]) { $arguments += $element.Value } else { $arguments += $element.Extent.Text }
+  }
+  $arguments += $wordToComplete
+  $passing = $ExecutionContext.SessionState.PSVariable.GetValue('PSNativeCommandArgumentPassing')
+  $candidates = if ($null -eq $passing -or $passing -eq 'Legacy') {
+    # Bypass the legacy binder, which drops empty strings and reparses embedded quotes.
+    $start = New-Object System.Diagnostics.ProcessStartInfo
+    $start.FileName = @(Get-Command ctyun -CommandType Application)[0].Path
+    $start.WorkingDirectory = $ExecutionContext.SessionState.Path.CurrentFileSystemLocation.ProviderPath
+    $start.UseShellExecute = $false
+    $start.RedirectStandardOutput = $true
+    $start.StandardOutputEncoding = [System.Text.Encoding]::UTF8
+    $quoted = foreach ($argument in $arguments) {
+      # In a quoted native argument, double backslashes before a quote or the closing delimiter.
+      $escaped = [regex]::Replace([string]$argument, '(\\*)"', '$1$1\"')
+      '"' + [regex]::Replace($escaped, '(\\+)\z', '$1$1') + '"'
+    }
+    $start.Arguments = '__complete ' + ($quoted -join ' ')
+    $process = [System.Diagnostics.Process]::Start($start)
+    try {
+      while ($null -ne ($line = $process.StandardOutput.ReadLine())) { $line }
+      $process.WaitForExit()
+    } finally { $process.Dispose() }
+  } else { ctyun __complete @arguments }
+  $candidates | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
+    [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
+  }
+}`)
 	default:
 		return diagnostic.New("error.unsupported_shell", args[0])
 	}
@@ -116,26 +135,36 @@ func runComplete(stdout io.Writer, args []string, installedRoot string) error {
 func completeArgs(args []string, installedRoot string) []string {
 	tokens, prefix := splitCompletionInput(args)
 	context := completionContextFor(tokens, installedRoot)
+	if context.PluginSubcommand != "" {
+		if _, err := subcommandInvocationHelpPath(context.Path, 1, pluginSubcommandSummaries()); err != nil {
+			return nil
+		}
+	}
+	if context.PendingOption != "" {
+		option, ok := findCompletionOption(context.PendingOption, context)
+		if !ok || option.Values == nil {
+			return nil
+		}
+		return filterByPrefix(option.Values(context), prefix)
+	}
+	candidates := commandCompletions(context.Path, context)
+	if candidates == nil {
+		return nil
+	}
 	if values, ok := inlineOptionValueCompletions(prefix, context); ok {
 		return values
 	}
-	if values, ok := pendingOptionValueCompletions(tokens, prefix, context); ok {
-		return values
+	if prefix == "" || strings.HasPrefix(prefix, "-") {
+		candidates = append(candidates, optionCompletions(prefix, context)...)
 	}
-	if strings.HasPrefix(prefix, "-") {
-		return optionCompletions(tokens, prefix, context)
-	}
-	path := completionPathTokens(tokens, installedRoot)
-	return filterByPrefix(commandCompletions(path, context), prefix)
+	return filterByPrefix(candidates, prefix)
 }
 
-// completionContext keeps the original tokens and the option-stripped command
-// path together, because option de-duplication and command matching need
-// different views of the same partial argv.
+// completionContext records command operands separately from consumed options and their values.
 type completionContext struct {
-	InstalledRoot    string
 	Bundles          []plugin.Bundle
-	Tokens           []string
+	UsedOptions      map[string]bool
+	PendingOption    string
 	Path             []string
 	Bundle           plugin.Bundle
 	Command          plugin.Command
@@ -164,8 +193,9 @@ func splitCompletionInput(args []string) ([]string, string) {
 // completionContextFor builds the command and option context for tokens.
 func completionContextFor(tokens []string, installedRoot string) completionContext {
 	bundles := mustLoadBundlesForCompletion(installedRoot)
-	path := completionPathTokens(tokens, installedRoot)
-	context := completionContext{InstalledRoot: installedRoot, Bundles: bundles, Tokens: tokens, Path: path}
+	context := completionContext{Bundles: bundles, UsedOptions: make(map[string]bool)}
+	path := context.consumeOptions(tokens, completionOptions(context))
+	context.Path = path
 	if len(path) >= 2 && (path[0] == "plugin" || path[0] == "plugins") {
 		for _, command := range pluginSubcommandSummaries() {
 			if subcommandMatches(command, path[1]) {
@@ -174,12 +204,19 @@ func completionContextFor(tokens []string, installedRoot string) completionConte
 			}
 		}
 	}
-	for _, bundle := range bundles {
-		if command, _, ok := plugin.FindCommandWithArgs(bundle, path); ok {
-			context.Bundle = bundle
-			context.Command = command
-			context.CommandFound = true
-			break
+	if len(path) == 0 {
+		return context
+	}
+	if slices.Contains(coreCompletionCommands(), path[0]) {
+		context.Path = context.consumeOptions(path, completionOptions(context))
+	} else if bundle, command, _, rest, ok := matchProductCommand(bundles, path); ok {
+		context.Bundle = bundle
+		context.Command = command
+		context.CommandFound = true
+		if operands := context.consumeOptions(rest, completionOptions(context)); len(operands) != 0 {
+			// The execution parser also recognizes build-specific switches omitted from completion.
+			_, err := parseSuppliedCommandParameters(command, operands, "")
+			context.CommandFound = err == nil
 		}
 	}
 	return context
@@ -188,7 +225,7 @@ func completionContextFor(tokens []string, installedRoot string) completionConte
 // inlineOptionValueCompletions completes values for --flag=value prefixes.
 func inlineOptionValueCompletions(prefix string, context completionContext) ([]string, bool) {
 	name, valuePrefix, ok := strings.Cut(prefix, "=")
-	if !ok || !strings.HasPrefix(name, "-") {
+	if !ok || !strings.HasPrefix(name, "--") {
 		return nil, false
 	}
 	option, ok := findCompletionOption(name, context)
@@ -205,33 +242,13 @@ func inlineOptionValueCompletions(prefix string, context completionContext) ([]s
 	return values, true
 }
 
-// pendingOptionValueCompletions completes values after a separate --flag token.
-func pendingOptionValueCompletions(tokens []string, prefix string, context completionContext) ([]string, bool) {
-	if len(tokens) == 0 {
-		return nil, false
-	}
-	last := tokens[len(tokens)-1]
-	if strings.Contains(last, "=") {
-		return nil, false
-	}
-	option, ok := findCompletionOption(last, context)
-	if !ok || !option.RequiresValue {
-		return nil, false
-	}
-	if option.Values == nil {
-		return nil, true
-	}
-	return filterByPrefix(option.Values(context), prefix), true
-}
-
 // optionCompletions returns unused options matching prefix.
-func optionCompletions(tokens []string, prefix string, context completionContext) []string {
-	used := usedCompletionOptions(tokens)
+func optionCompletions(prefix string, context completionContext) []string {
 	candidates := make([]string, 0)
 	for _, option := range completionOptions(context) {
 		skip := false
 		for _, name := range option.Names {
-			if used[name] {
+			if context.UsedOptions[name] {
 				skip = true
 				break
 			}
@@ -244,73 +261,88 @@ func optionCompletions(tokens []string, prefix string, context completionContext
 	return filterByPrefix(candidates, prefix)
 }
 
-// commandCompletions returns command words or option names for the current path.
+// commandCompletions returns command words for a valid cursor position. An empty slice
+// allows applicable options at a leaf; nil means the path is unknown or still needs a positional value.
 func commandCompletions(path []string, context completionContext) []string {
+	help := len(path) > 0 && path[0] == "help"
+	if help {
+		path = path[1:]
+	}
 	if len(path) == 0 {
 		return topLevelCompletionCommands(context.Bundles)
 	}
 	switch path[0] {
 	case "config":
-		candidates := configCommandCompletions(path)
-		if len(path) > 1 && (path[1] != "profile" && path[1] != "profiles" || len(path) > 2) {
-			// Resolve options through the same applicability and de-duplication
-			// path used for a partially typed option.
-			candidates = append(candidates, optionCompletions(context.Tokens, "", context)...)
-		}
-		return candidates
+		return configCommandCompletions(path, help)
 	case "completion":
-		if len(path) == 1 {
+		if !help && len(path) == 1 {
 			return completionShells()
 		}
-		return nil
+		if help && len(path) == 1 || !help && len(path) == 2 && slices.Contains(completionShells(), path[1]) {
+			return []string{}
+		}
 	case "doctor":
+		subcommands := []string{"local", "network"}
 		if len(path) == 1 {
-			return []string{"local", "network"}
+			return subcommands
 		}
-		if len(path) == 2 && (path[1] == "local" || path[1] == "network") {
-			return optionCompletions(context.Tokens, "", context)
+		if len(path) == 2 && slices.Contains(subcommands, path[1]) {
+			return []string{}
 		}
-		return nil
-	case "help":
-		return helpCompletionCommands(path[1:], context)
 	case "plugin", "plugins":
+		subcommands := pluginCompletionSubcommands()
 		if len(path) == 1 {
-			return pluginCompletionSubcommands()
+			return subcommands
 		}
-		if context.PluginSubcommand != "" {
-			return optionCompletions(context.Tokens, "", context)
+		if slices.Contains(subcommands, path[1]) && (!help || len(path) == 2) {
+			return []string{}
 		}
-		return nil
-	case "update", "upgrade":
-		return optionCompletions(context.Tokens, "", context)
-	case "version":
-		return nil
+	case "help", "update", "upgrade", "version":
+		if len(path) == 1 {
+			return []string{}
+		}
+	default:
+		words := nextPluginPathCompletions(path, context.Bundles)
+		if len(words) != 0 || context.CommandFound {
+			return words
+		}
+		if help {
+			if _, _, ok := matchPluginCommandForHelp(path, context.Bundles); ok {
+				return []string{}
+			}
+		}
 	}
-	if context.CommandFound {
-		return optionCompletions(context.Tokens, "", context)
-	}
-	return nextPluginPathCompletions(path, context.Bundles)
+	return nil
 }
 
-// configCommandCompletions returns static completions for config subcommands.
-func configCommandCompletions(path []string) []string {
-	if len(path) == 1 {
-		return configCompletionSubcommands()
+// configCommandCompletions resolves config groups, declared operands and supported value choices.
+func configCommandCompletions(path []string, help bool) []string {
+	commands := configSubcommandSummaries()
+	index := 1
+	if len(path) > 1 && (path[1] == "profile" || path[1] == "profiles") {
+		commands = configProfileSubcommandSummaries()
+		index++
 	}
-	switch path[1] {
-	case "explain":
-		if len(path) == 2 {
+	if len(path) == index {
+		return configCompletionNames(commands)
+	}
+	for _, command := range commands {
+		if !subcommandMatches(command, path[index]) {
+			continue
+		}
+		arguments := len(path) - index - 1
+		if arguments > len(command.Arguments) || help && arguments > 0 {
+			return nil
+		}
+		if !help && command.Name == "explain" && arguments == 0 {
 			keys := coreconfig.SettingKeys()
 			slices.Sort(keys)
 			return keys
 		}
-	case "profile", "profiles":
-		if len(path) == 2 {
-			return configProfileCompletionSubcommands()
-		}
-		if len(path) == 4 && path[2] == "set-secret" {
+		if !help && command.Name == "set-secret" && arguments == 1 {
 			return configSecretKeys()
 		}
+		return []string{}
 	}
 	return nil
 }
@@ -365,28 +397,6 @@ func configOptionNames(options []pluginOptionSummary) []string {
 	return names
 }
 
-// helpCompletionCommands returns command paths valid after ctyun help.
-func helpCompletionCommands(path []string, context completionContext) []string {
-	if len(path) == 0 {
-		return topLevelCompletionCommands(context.Bundles)
-	}
-	switch path[0] {
-	case "config":
-		return configCommandCompletions(path)
-	case "doctor":
-		if len(path) == 1 {
-			return []string{"local", "network"}
-		}
-		return nil
-	case "plugin", "plugins":
-		if len(path) == 1 {
-			return pluginCompletionSubcommands()
-		}
-		return nil
-	}
-	return nextPluginPathCompletions(path, context.Bundles)
-}
-
 // topLevelCompletionCommands returns core commands plus top-level plugin words.
 func topLevelCompletionCommands(bundles []plugin.Bundle) []string {
 	seen := completionSet(coreCompletionCommands()...)
@@ -436,53 +446,33 @@ func completionPathMatches(pattern, path []string) bool {
 	return true
 }
 
-// completionPathTokens strips options and option values from completion tokens.
-func completionPathTokens(tokens []string, installedRoot string) []string {
-	requiresValue := completionOptionValueNames(installedRoot)
-	path := make([]string, 0, len(tokens))
-	for i := 0; i < len(tokens); i++ {
-		token := tokens[i]
-		if strings.HasPrefix(token, "-") {
-			name := completionOptionName(token)
-			if requiresValue[name] && !strings.Contains(token, "=") && i+1 < len(tokens) {
-				i++
-			}
+// consumeOptions returns operands in order, recording only options recognized at this parsing stage.
+// As in execution, global options are consumed first and product options only after the matched command path.
+func (context *completionContext) consumeOptions(tokens []string, options []completionOption) []string {
+	byName := make(map[string]completionOption)
+	for _, option := range options {
+		for _, name := range option.Names {
+			byName[name] = option
+		}
+	}
+	var operands []string
+	for index := 0; index < len(tokens); index++ {
+		token := tokens[index]
+		name, _, inline := strings.Cut(token, "=")
+		option, ok := byName[name]
+		if !ok || inline && (!option.RequiresValue || !strings.HasPrefix(name, "--")) {
+			operands = append(operands, token)
 			continue
 		}
-		path = append(path, token)
-	}
-	return path
-}
-
-// completionOptionValueNames returns option names that consume a following
-// value.
-func completionOptionValueNames(installedRoot string) map[string]bool {
-	context := completionContext{Bundles: mustLoadBundlesForCompletion(installedRoot)}
-	names := make(map[string]bool)
-	for _, option := range completionOptions(context) {
-		if option.RequiresValue {
-			for _, name := range option.Names {
-				names[name] = true
+		context.UsedOptions[name] = true
+		if option.RequiresValue && !inline {
+			index++
+			if index == len(tokens) && context.PendingOption == "" {
+				context.PendingOption = name
 			}
 		}
 	}
-	for _, subcommand := range pluginCompletionSubcommands() {
-		for _, option := range pluginCompletionOptions(subcommand) {
-			if option.RequiresValue {
-				for _, name := range option.Names {
-					names[name] = true
-				}
-			}
-		}
-	}
-	for _, bundle := range context.Bundles {
-		for _, command := range bundle.Commands.Commands {
-			for _, parameter := range command.Parameters {
-				names["--"+parameter.Flag] = true
-			}
-		}
-	}
-	return names
+	return operands
 }
 
 // completionOptions returns global, plugin-manager, and product-command options
@@ -661,31 +651,13 @@ func tableColumnKeys(context completionContext, suffix string) []string {
 
 // findCompletionOption looks up an option by any accepted name.
 func findCompletionOption(name string, context completionContext) (completionOption, bool) {
-	name = completionOptionName(name)
+	name, _, _ = strings.Cut(name, "=")
 	for _, option := range completionOptions(context) {
 		if slices.Contains(option.Names, name) {
 			return option, true
 		}
 	}
 	return completionOption{}, false
-}
-
-// usedCompletionOptions records options already present in the current command
-// line.
-func usedCompletionOptions(tokens []string) map[string]bool {
-	used := make(map[string]bool)
-	for _, token := range tokens {
-		if strings.HasPrefix(token, "-") {
-			used[completionOptionName(token)] = true
-		}
-	}
-	return used
-}
-
-// completionOptionName strips an inline value from an option token.
-func completionOptionName(token string) string {
-	name, _, _ := strings.Cut(token, "=")
-	return name
 }
 
 // coreCompletionCommands returns built-in command words.

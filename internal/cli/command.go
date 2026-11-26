@@ -7,6 +7,7 @@ package cli
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -38,7 +39,7 @@ func runPluginCommand(stdout, stderr io.Writer, stdin io.Reader, opts globalOpti
 		return err
 	}
 	if !ok {
-		return runHelp(stdout, args, installedRoot, opts.Language)
+		return runHelp(stdout, args, installedRoot, opts.Language, false)
 	}
 	if parameterValues[fixtureModeParameter] != "" {
 		opts.Fixture = true
@@ -152,42 +153,6 @@ func renderCommandPayload(stdout, stderr io.Writer, bundle plugin.Bundle, comman
 	}
 }
 
-// filterRowsByParameters applies parameter-derived filters to fixture rows.
-func filterRowsByParameters(rows []map[string]string, table plugin.Table, parameters []plugin.Parameter, values map[string]string) []map[string]string {
-	if len(rows) == 0 || len(parameters) == 0 || len(values) == 0 {
-		return rows
-	}
-	columnKeyByPath := make(map[string]string, len(table.Columns))
-	for _, column := range table.Columns {
-		columnKeyByPath[column.Path] = column.Key
-	}
-	targetByName := make(map[string]string, len(parameters))
-	for _, parameter := range parameters {
-		targetByName[parameter.Name] = columnKeyByPath[parameter.Target]
-	}
-	filtered := make([]map[string]string, 0, len(rows))
-	for _, row := range rows {
-		matches := true
-		for name, value := range values {
-			if value == "" {
-				continue
-			}
-			target := targetByName[name]
-			if target == "" {
-				continue
-			}
-			if row[target] != value {
-				matches = false
-				break
-			}
-		}
-		if matches {
-			filtered = append(filtered, row)
-		}
-	}
-	return filtered
-}
-
 // findPluginCommand matches command arguments to a plugin command and parses
 // command-specific flags.
 func findPluginCommand(args []string, installedRoot, language string) (plugin.Bundle, plugin.Command, map[string]string, map[string]string, bool, error) {
@@ -195,23 +160,13 @@ func findPluginCommand(args []string, installedRoot, language string) (plugin.Bu
 	if err != nil {
 		return plugin.Bundle{}, plugin.Command{}, nil, nil, false, err
 	}
-	for _, bundle := range bundles {
-		optionalCommand, optionalCommandArgs, optionalRest, ok := findOptionalRegionCommand(bundle, args)
-		if ok {
-			parameterValues, err := parseCommandParameters(optionalCommand, optionalRest, language)
-			if err != nil {
-				return plugin.Bundle{}, plugin.Command{}, nil, nil, false, err
-			}
-			return bundle, optionalCommand, optionalCommandArgs, parameterValues, true, nil
+	bundle, command, commandArgs, rest, ok := matchProductCommand(bundles, args)
+	if ok {
+		parameterValues, err := parseCommandParameters(command, rest, language)
+		if err != nil {
+			return plugin.Bundle{}, plugin.Command{}, nil, nil, false, err
 		}
-		command, commandArgs, rest, ok := plugin.FindCommandPrefixWithArgs(bundle, args)
-		if ok {
-			parameterValues, err := parseCommandParameters(command, rest, language)
-			if err != nil {
-				return plugin.Bundle{}, plugin.Command{}, nil, nil, false, err
-			}
-			return bundle, command, commandArgs, parameterValues, true, nil
-		}
+		return bundle, command, commandArgs, parameterValues, true, nil
 	}
 	for _, bundle := range bundles {
 		_, missing, ok := plugin.FindCommandMissingPathArgs(bundle, args)
@@ -222,6 +177,22 @@ func findPluginCommand(args []string, installedRoot, language string) (plugin.Bu
 	return plugin.Bundle{}, plugin.Command{}, nil, nil, false, nil
 }
 
+// matchProductCommand resolves the executable command path before parsing its options.
+func matchProductCommand(bundles []plugin.Bundle, args []string) (plugin.Bundle, plugin.Command, map[string]string, []string, bool) {
+	_, _, matched := matchPluginCommandGroup(args, bundles)
+	for _, bundle := range bundles {
+		command, commandArgs, rest, ok := findOptionalRegionCommand(bundle, args)
+		if !ok || len(command.Path) < matched {
+			command, commandArgs, rest, ok = plugin.FindCommandPrefixWithArgs(bundle, args)
+		}
+		if !ok || len(command.Path) < matched {
+			continue
+		}
+		return bundle, command, commandArgs, rest, true
+	}
+	return plugin.Bundle{}, plugin.Command{}, nil, nil, false
+}
+
 // findOptionalRegionCommand matches commands whose trailing region_id argument
 // can come from a profile instead of the positional path.
 func findOptionalRegionCommand(bundle plugin.Bundle, args []string) (plugin.Command, map[string]string, []string, bool) {
@@ -230,7 +201,7 @@ func findOptionalRegionCommand(bundle plugin.Bundle, args []string) (plugin.Comm
 			continue
 		}
 		operation, ok := bundle.APIs.Operations[command.Operation]
-		if !ok || len(argRegionTargets(operation)) == 0 {
+		if !ok || !operationUsesRegionArgument(operation) {
 			continue
 		}
 		prefix := command.Path[:len(command.Path)-1]
@@ -281,6 +252,23 @@ func commandDisplayPath(command plugin.Command) string {
 
 // parseCommandParameters parses metadata-defined command flags.
 func parseCommandParameters(command plugin.Command, args []string, language string) (map[string]string, error) {
+	values, err := parseSuppliedCommandParameters(command, args, language)
+	if err != nil {
+		return nil, err
+	}
+	for _, parameter := range command.Parameters {
+		if parameter.Required && values[parameter.Name] == "" {
+			return nil, localizedMissingRequiredFlag(command.ID, parameter.Flag, language)
+		}
+	}
+	if err := validateConditionalParameterValues(command, values, language); err != nil {
+		return nil, err
+	}
+	return values, nil
+}
+
+// parseSuppliedCommandParameters validates the supplied command options without requiring a complete request.
+func parseSuppliedCommandParameters(command plugin.Command, args []string, language string) (map[string]string, error) {
 	byFlag := make(map[string]plugin.Parameter, len(command.Parameters))
 	for _, parameter := range command.Parameters {
 		byFlag[parameter.Flag] = parameter
@@ -355,15 +343,6 @@ func parseCommandParameters(command plugin.Command, args []string, language stri
 			return nil, err
 		}
 		values[parameter.Name] = value
-	}
-
-	for _, parameter := range command.Parameters {
-		if parameter.Required && values[parameter.Name] == "" {
-			return nil, localizedMissingRequiredFlag(command.ID, parameter.Flag, language)
-		}
-	}
-	if err := validateConditionalParameterValues(command, values, language); err != nil {
-		return nil, err
 	}
 	return values, nil
 }
@@ -493,46 +472,75 @@ func validateConditionalParameterValues(command plugin.Command, values map[strin
 // loadBundles loads user-installed bundles and, for development builds, bundled
 // repo plugins.
 func loadBundles(installedRoot string) ([]plugin.Bundle, error) {
-	dirs := pluginDirs(installedRoot)
+	var bundles []plugin.Bundle
 	if developmentBundledPluginsEnabled() {
-		dirs = append(pluginDirs(defaultPluginRoot()), dirs...)
+		var err error
+		bundles, err = readBundleMetadata(pluginDirs(defaultPluginRoot()))
+		if err != nil {
+			return nil, err
+		}
 	}
-	bundles := make([]plugin.Bundle, 0, len(dirs))
-	seen := make(map[string]bool, len(dirs))
+	installed, err := loadInstalledBundles(installedRoot)
+	if err != nil {
+		// Help and command discovery tolerate an inaccessible inventory, but
+		// malformed metadata within a visible bundle must still be reported.
+		if pathErr, ok := errors.AsType[*os.PathError](err); !ok || pathErr.Path != installedRoot {
+			return nil, err
+		}
+	}
+	bundles = append(bundles, installed...)
+	seen := make(map[string]bool, len(bundles))
+	// In a development build, worktree metadata precedes installed bundles.
+	unique := bundles[:0]
+	for _, bundle := range bundles {
+		if name := bundle.Manifest.Name; !seen[name] {
+			unique = append(unique, bundle)
+			seen[name] = true
+		}
+	}
+	return unique, nil
+}
 
+// readBundleMetadata loads and validates each visible plugin from the selected directories.
+func readBundleMetadata(dirs []string) ([]plugin.Bundle, error) {
+	bundles := make([]plugin.Bundle, 0, len(dirs))
 	for _, dir := range dirs {
 		bundle, err := plugin.LoadBundle(dir, version.Version)
 		if err != nil {
 			return nil, err
 		}
-		// Development builds scan bundled plugins first so worktree metadata
-		// remains visible even when released plugins are installed.
-		if seen[bundle.Manifest.Name] {
-			continue
+		if err := bundle.Manifest.ValidateDirectoryName(filepath.Base(dir)); err != nil {
+			return nil, err
 		}
-		seen[bundle.Manifest.Name] = true
 		bundles = append(bundles, bundle)
 	}
 	return bundles, nil
 }
 
-// pluginDirs lists plugin bundle directories under root.
+// pluginDirs discovers bundles for command help and completion when the root can be read.
 func pluginDirs(root string) []string {
+	dirs, _ := readPluginDirs(root)
+	return dirs
+}
+
+// readPluginDirs lists visible bundle directories, treating a missing inventory as empty.
+// Callers reading installed metadata hold the store lock for their snapshot.
+func readPluginDirs(root string) ([]string, error) {
 	entries, err := os.ReadDir(root)
 	if os.IsNotExist(err) {
-		return nil
+		return nil, nil
 	}
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
 	dirs := make([]string, 0, len(entries))
 	for _, entry := range entries {
-		if entry.IsDir() {
+		if plugin.IsBundleDir(entry) {
 			dirs = append(dirs, filepath.Join(root, entry.Name()))
 		}
 	}
-	return dirs
+	return dirs, nil
 }
 
 // loadCommandResponse chooses live API execution or fixture loading.
@@ -626,10 +634,11 @@ func buildAPIRequest(bundle plugin.Bundle, command plugin.Command, commandArgs, 
 	// Operation metadata is the single source of truth for translating CLI
 	// arguments and flags into the CTyun request.
 	var bodyMap map[string]any
+	bodyParameters := requestLocationParameters(operation, operation.Body, command.Parameters)
 	if operation.Request != nil {
-		bodyMap, err = resolveExplicitBody(operation.Body, profile, commandArgs, parameterValues, command.Parameters, language)
+		bodyMap, err = resolveExplicitBody(operation.Body, profile, commandArgs, parameterValues, bodyParameters, language)
 	} else {
-		bodyMap, err = resolveRequestBody(operation.Body, profile, commandArgs, parameterValues, requestLocationParameters(operation, operation.Body, command.Parameters), language)
+		bodyMap, err = resolveRequestBody(operation.Body, profile, commandArgs, parameterValues, bodyParameters, language)
 	}
 	if err != nil {
 		return client.RequestSpec{}, err
@@ -711,50 +720,39 @@ func buildAPIRequest(bundle plugin.Bundle, command plugin.Command, commandArgs, 
 // operationMissingProfileRegion reports whether an operation needs a profile
 // region and no command option overrides that request field.
 func operationMissingProfileRegion(operation plugin.Operation, commandArgs map[string]string, parameters []plugin.Parameter, parameterValues map[string]string) bool {
-	for _, target := range profileRegionTargets(operation) {
-		if !parameterTargetHasValue(parameters, parameterValues, target) {
-			return true
-		}
-	}
-	for range argRegionTargets(operation) {
-		if commandArgs["region_id"] == "" {
-			return true
-		}
-	}
-	return false
-}
-
-// profileRegionTargets returns request field names sourced from profile region.
-func profileRegionTargets(operation plugin.Operation) []string {
-	return operationTargetsBySource(operation, "$profile.region")
-}
-
-// argRegionTargets returns request field names sourced from region_id argument.
-func argRegionTargets(operation plugin.Operation) []string {
-	return operationTargetsBySource(operation, "$arg.region_id")
-}
-
-// operationTargetsBySource returns request field names using source.
-func operationTargetsBySource(operation plugin.Operation, source string) []string {
-	var targets []string
-	for _, values := range []map[string]string{operation.Body, operation.Query, operation.Headers} {
-		for target, value := range values {
-			if value == source {
-				targets = append(targets, target)
+	for _, bindings := range []map[string]string{operation.Body, operation.Query, operation.Headers} {
+		for target, source := range bindings {
+			if source == "$profile.region" {
+				bound := requestLocationParameters(operation, bindings, parameters)
+				if regionForTarget(target, "", bound, parameterValues) == "" {
+					return true
+				}
 			}
 		}
 	}
-	return targets
+	return commandArgs["region_id"] == "" && operationUsesRegionArgument(operation)
 }
 
-// parameterTargetHasValue reports whether command option values can fill target.
-func parameterTargetHasValue(parameters []plugin.Parameter, parameterValues map[string]string, target string) bool {
-	for _, parameter := range parameters {
-		if parameter.Target == target && parameterValues[parameter.Name] != "" {
-			return true
+// operationUsesRegionArgument reports whether any request field uses the optional region_id argument.
+func operationUsesRegionArgument(operation plugin.Operation) bool {
+	for _, values := range []map[string]string{operation.Body, operation.Query, operation.Headers} {
+		for _, source := range values {
+			if source == "$arg.region_id" {
+				return true
+			}
 		}
 	}
 	return false
+}
+
+// regionForTarget resolves an explicit command input before the configured resource pool.
+func regionForTarget(target, profileRegion string, parameters []plugin.Parameter, parameterValues map[string]string) string {
+	for _, parameter := range parameters {
+		if parameter.Target == target && parameterValues[parameter.Name] != "" {
+			return parameterValues[parameter.Name]
+		}
+	}
+	return profileRegion
 }
 
 // acceptedStatusRules converts plugin metadata into client request rules.

@@ -127,7 +127,7 @@ func parseDoctorNetworkOptions(args []string) (doctorNetworkOptions, error) {
 		return opts, nil
 	}
 	if args[0] != "network" {
-		return opts, commandBoundaryError(append([]string{"doctor"}, args...))
+		return opts, commandBoundaryError([]string{"doctor", args[0]})
 	}
 	parsed, err := parseCommandTokens(args[1:], []commandOption{{Name: "source", TakesValue: true}})
 	if err != nil {

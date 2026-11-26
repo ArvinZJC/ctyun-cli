@@ -52,8 +52,8 @@ type RequestSpec struct {
 	AcceptedStatuses []AcceptedStatusRule
 }
 
-// AcceptedStatusRule declares one non-default CTyun application status that
-// can be treated as successful when its optional response path is present.
+// AcceptedStatusRule declares a non-default CTyun application status that
+// can be treated as successful when the required response path has a value.
 type AcceptedStatusRule struct {
 	Code         string
 	RequiredPath string
@@ -225,7 +225,7 @@ func validateCTyunStatusCode(payload map[string]any, body []byte, spec RequestSp
 		if status != "900" || rule.Code != "900" || rule.RequiredPath == "" {
 			continue
 		}
-		if responsePathExists(payload, rule.RequiredPath) {
+		if responsePathHasValue(payload, rule.RequiredPath) {
 			return nil
 		}
 	}
@@ -246,8 +246,8 @@ func ctyunStatusCode(value any) string {
 	}
 }
 
-// responsePathExists reports whether a dotted JSON object path exists.
-func responsePathExists(payload map[string]any, path string) bool {
+// responsePathHasValue reports whether a dotted JSON path ends in a non-null value.
+func responsePathHasValue(payload map[string]any, path string) bool {
 	var current any = payload
 	for part := range strings.SplitSeq(path, ".") {
 		object, ok := current.(map[string]any)
@@ -260,7 +260,7 @@ func responsePathExists(payload map[string]any, path string) bool {
 		}
 		current = next
 	}
-	return true
+	return current != nil
 }
 
 // isRetryableStatus reports whether an HTTP status code is transient enough for

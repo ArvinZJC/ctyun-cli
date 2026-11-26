@@ -12,10 +12,25 @@ import (
 	"slices"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/doctor"
+	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
-// evaluatePlugins inspects an installed-plugin root and every immediate bundle independently.
+// evaluatePlugins checks installed bundles independently and skips installer work directories.
 func evaluatePlugins(input Input, dependencies Dependencies) []Finding {
+	var findings []Finding
+	err := plugin.WithStoreLock(input.PluginRoot, false, func() error {
+		findings = inspectPluginDirectory(input, dependencies)
+		return nil
+	})
+	if err != nil {
+		return []Finding{{Key: CheckPluginDirectory, Target: input.PluginRoot, Status: doctor.StatusFailed,
+			Category: FailureFilesystem, DetailKey: "doctor.local.detail.plugin_directory_unreadable"}}
+	}
+	return findings
+}
+
+// inspectPluginDirectory examines one consistent inventory under the store lock.
+func inspectPluginDirectory(input Input, dependencies Dependencies) []Finding {
 	rootFinding := Finding{Key: CheckPluginDirectory, Target: input.PluginRoot}
 	info, err := dependencies.Stat(input.PluginRoot)
 	if errors.Is(err, fs.ErrNotExist) {
@@ -46,7 +61,7 @@ func evaluatePlugins(input Input, dependencies Dependencies) []Finding {
 	rootFinding.DetailKey = "doctor.local.detail.plugin_directory_passed"
 	directories := make([]string, 0, len(entries))
 	for _, entry := range entries {
-		if entry.IsDir() {
+		if plugin.IsBundleDir(entry) {
 			directories = append(directories, entry.Name())
 		}
 	}
@@ -55,7 +70,7 @@ func evaluatePlugins(input Input, dependencies Dependencies) []Finding {
 	for _, name := range directories {
 		bundle, loadErr := dependencies.LoadBundle(filepath.Join(input.PluginRoot, name), input.CoreVersion)
 		finding := Finding{Key: CheckPlugin, Target: name}
-		if loadErr != nil {
+		if loadErr != nil || bundle.Manifest.ValidateDirectoryName(name) != nil {
 			finding.Status = doctor.StatusFailed
 			finding.Category = FailurePlugin
 			finding.DetailKey = "doctor.local.detail.plugin_invalid"

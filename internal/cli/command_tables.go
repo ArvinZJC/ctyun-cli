@@ -79,6 +79,75 @@ func rowsFromPayload(payload map[string]any, table plugin.Table) ([]map[string]s
 	return rows, nil
 }
 
+// filterRowsByParameters applies parameter-derived filters to fixture rows.
+func filterRowsByParameters(rows []map[string]string, table plugin.Table, parameters []plugin.Parameter, values map[string]string) []map[string]string {
+	if len(rows) == 0 || len(parameters) == 0 || len(values) == 0 {
+		return rows
+	}
+	columnKeyByPath := make(map[string]string, len(table.Columns))
+	var alternateKeys map[string][]string
+	for _, column := range table.Columns {
+		columnKeyByPath[column.Path] = column.Key
+		if trimmed := strings.TrimSpace(column.Path); trimmed != column.Path {
+			if alternateKeys == nil {
+				alternateKeys = make(map[string][]string)
+			}
+			alternateKeys[trimmed] = append(alternateKeys[trimmed], column.Key)
+		}
+	}
+	var filters []fixtureParameterFilter
+	for _, parameter := range parameters {
+		value := values[parameter.Name]
+		key := columnKeyByPath[parameter.Target]
+		if value != "" && key != "" {
+			filters = append(filters, fixtureParameterFilter{key: key, value: value, alternates: alternateKeys[parameter.Target]})
+		}
+	}
+	if len(filters) == 0 {
+		return rows
+	}
+	filtered := make([]map[string]string, 0, len(rows))
+	for _, row := range rows {
+		matches := true
+		for _, filter := range filters {
+			if !filter.matches(row) {
+				matches = false
+				break
+			}
+		}
+		if matches {
+			filtered = append(filtered, row)
+		}
+	}
+	return filtered
+}
+
+// fixtureParameterFilter holds one supplied input and its declared response columns.
+type fixtureParameterFilter struct {
+	key, value string
+	alternates []string
+}
+
+// matches gives the exact response field precedence. When the table
+// declares a padded spelling from a published example, match its value only if
+// it is the sole spelling present. The displayed cell retains the original text.
+func (filter fixtureParameterFilter) matches(row map[string]string) bool {
+	if value, present := row[filter.key]; present {
+		return value == filter.value
+	}
+	var candidate string
+	found := false
+	for _, alternate := range filter.alternates {
+		if value, present := row[alternate]; present {
+			if found {
+				return false
+			}
+			candidate, found = value, true
+		}
+	}
+	return found && (candidate == filter.value || strings.TrimSpace(candidate) == filter.value)
+}
+
 // formatTableCell converts decoded JSON values into readable table cells.
 func formatTableCell(value any) string {
 	if value == nil {
@@ -126,15 +195,28 @@ func sortedMapCellParts(value map[string]any) []string {
 	return parts
 }
 
-// tableColumns localizes table column labels for rendering.
+// tableColumns gives each localized header a selector that resolves back to its own column.
 func tableColumns(table plugin.Table, language string) []output.Column {
 	columns := make([]output.Column, 0, len(table.Columns))
+	names := make(map[string]int, len(table.Columns))
 	for _, column := range table.Columns {
 		catalog := i18n.Catalog{column.Key: column.Labels}
-		columns = append(columns, output.Column{
-			Key:   column.Key,
-			Label: catalog.Text(column.Key, language),
-		})
+		label := catalog.Text(column.Key, language)
+		columns = append(columns, output.Column{Key: column.Key, Label: label})
+		names[column.Key]++
+		if label != column.Key {
+			names[label]++
+		}
+	}
+	for i, column := range columns {
+		if column.Label != column.Key && names[column.Label] > 1 {
+			label := column.Label + " (" + column.Key + ")"
+			if names[label] > 0 {
+				label = column.Key
+			}
+			columns[i].Label = label
+			names[label]++
+		}
 	}
 	return columns
 }

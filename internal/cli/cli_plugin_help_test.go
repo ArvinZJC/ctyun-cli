@@ -246,7 +246,7 @@ func TestHelpShowsDeprecatedCommandOptionAndColumnMetadata(t *testing.T) {
 	writeDeprecatedWarningBundle(t, filepath.Join(root, "demo"))
 
 	var stdout bytes.Buffer
-	if err := runHelp(&stdout, []string{"demo", "list"}, root, "en-US"); err != nil {
+	if err := runHelp(&stdout, []string{"demo", "list"}, root, "en-US", false); err != nil {
 		t.Fatalf("runHelp returned error: %v", err)
 	}
 	got := stdout.String()

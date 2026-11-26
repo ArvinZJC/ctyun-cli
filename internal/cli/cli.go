@@ -20,6 +20,7 @@ import (
 	"slices"
 	"strconv"
 	"strings"
+	"unicode"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/client"
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
@@ -111,6 +112,11 @@ var globalOptionsHelp = []globalOptionHelp{
 
 // Run executes one CLI invocation and returns a user-facing error on failure.
 func Run(cfg Config) error {
+	return cfg.run()
+}
+
+// run preserves the configuration snapshot used by this invocation for any subsequent diagnostic.
+func (cfg *Config) run() error {
 	stdout := cfg.Stdout
 	if stdout == nil {
 		stdout = os.Stdout
@@ -152,13 +158,17 @@ func Run(cfg Config) error {
 		Environment: getenv("CTYUN_CONFIG"),
 		Default:     defaultConfigPath(),
 	})
+	// Reporting the location requires no config contents, including when the path is a pipe.
+	if !opts.Help && len(args) >= 2 && args[0] == "config" && args[1] == "path" {
+		return runConfigCommand(stdout, stderr, stdin, args[1:], opts, configCommandInput{Path: resolvedConfigPath})
+	}
 	if (opts.Help && isDoctorLocalCommand(args)) || isDoctorLocalHelpTarget(args) {
 		helpArgs := args
 		if isDoctorLocalHelpTarget(args) {
 			helpArgs = args[1:]
 		}
-		language := doctorLocalHelpLanguage(cfg, opts, resolvedConfigPath, configPathSource, getenv)
-		return runHelp(stdout, helpArgs, pluginRoot(cfg.PluginRoot), language)
+		language := doctorLocalHelpLanguage(*cfg, opts, resolvedConfigPath, configPathSource, getenv)
+		return runHelp(stdout, helpArgs, pluginRoot(cfg.PluginRoot), language, false)
 	}
 	if isDoctorLocalCommand(args) {
 		return runDoctorLocalCommand(stdout, args[2:], localdoctor.Input{
@@ -170,6 +180,11 @@ func Run(cfg Config) error {
 		}, opts)
 	}
 	configBytes, err := loadConfigBytes(cfg.Config, resolvedConfigPath)
+	cfg.Config = configBytes
+	if cfg.Config == nil {
+		// An empty snapshot also records a missing or unreadable config so diagnostics do not reopen it.
+		cfg.Config = []byte{}
+	}
 	if err != nil {
 		return err
 	}
@@ -200,7 +215,7 @@ func Run(cfg Config) error {
 	}
 
 	if opts.Help {
-		return runHelp(stdout, args, pluginRoot(cfg.PluginRoot), opts.Language)
+		return runHelp(stdout, args, pluginRoot(cfg.PluginRoot), opts.Language, true)
 	}
 
 	if len(args) == 0 {
@@ -217,7 +232,7 @@ func Run(cfg Config) error {
 		}
 		return printVersion(stdout)
 	case "help":
-		return runHelp(stdout, args[1:], pluginRoot(cfg.PluginRoot), opts.Language)
+		return runHelp(stdout, args[1:], pluginRoot(cfg.PluginRoot), opts.Language, false)
 	case "completion":
 		return runCompletion(stdout, args[1:])
 	case "doctor":
@@ -265,7 +280,7 @@ func Execute(cfg Config) int {
 	cfg.Stderr = stderr
 	cfg.Env = getenv
 
-	if err := Run(cfg); err != nil {
+	if err := cfg.run(); err != nil {
 		if _, ok := errors.AsType[interface {
 			error
 			silentExit()
@@ -281,22 +296,24 @@ func Execute(cfg Config) int {
 	return 0
 }
 
-// errorLanguage resolves the best language to use after command execution
-// fails.
+// errorLanguage honors language and profile options parsed before a command failed.
 func errorLanguage(cfg Config, getenv func(string) string) string {
-	opts, args, err := parseGlobalOptions(cfg.Args)
-	if err != nil {
-		return i18n.ResolveLanguage(i18n.LanguageOptions{Env: getenv("CTYUN_LANGUAGE"), OSLocale: detectOSLocale(getenv)})
+	// A later parse error preserves options already consumed, including the diagnostic language.
+	opts, _, _ := parseGlobalOptions(cfg.Args)
+	for _, hint := range []string{opts.Language, getenv("CTYUN_LANGUAGE")} {
+		if language := i18n.MatchLanguage(hint); language != "" {
+			return language
+		}
 	}
+	osLocale := detectOSLocale(getenv)
 	path, pathSource := coreconfig.ResolvePath(coreconfig.PathInput{Option: opts.Config, Process: cfg.ConfigPath, Environment: getenv("CTYUN_CONFIG"), Default: defaultConfigPath()})
-	configBytes, err := loadConfigBytes(cfg.Config, path)
+	configBytes, err := diagnosticConfigBytes(cfg.Config, path)
 	if err != nil {
-		return i18n.ResolveLanguage(i18n.LanguageOptions{Flag: opts.Language, Env: getenv("CTYUN_LANGUAGE"), OSLocale: detectOSLocale(getenv)})
+		return i18n.ResolveLanguage(i18n.LanguageOptions{OSLocale: osLocale})
 	}
 	inspection := coreconfig.Inspect(coreconfig.ResolveInput{
 		Raw: configBytes, ConfigPath: path, ConfigPathSource: pathSource,
-		ProfileOption: opts.Profile, LanguageOption: opts.Language,
-		Getenv: configResolutionGetenv(args, getenv), OSLocale: detectOSLocale(getenv),
+		ProfileOption: opts.Profile, OSLocale: osLocale,
 	})
 	language, _ := inspection.Resolution.Setting("language")
 	return language.Value
@@ -330,7 +347,7 @@ func errorCredentials(cfg Config, getenv func(string) string) coreconfig.Credent
 		return fallback
 	}
 	path, pathSource := coreconfig.ResolvePath(coreconfig.PathInput{Option: opts.Config, Process: cfg.ConfigPath, Environment: getenv("CTYUN_CONFIG"), Default: defaultConfigPath()})
-	configBytes, err := loadConfigBytes(cfg.Config, path)
+	configBytes, err := diagnosticConfigBytes(cfg.Config, path)
 	if err != nil {
 		return fallback
 	}
@@ -644,8 +661,11 @@ func withAPIErrorHint(message, language string) string {
 	return message + "\n" + messageText("notice.api_support", language)
 }
 
-// parseGlobalOptions separates leading global options from command arguments.
+// parseGlobalOptions separates global options from command arguments. On failure
+// it returns the options consumed so far for use in diagnostics.
 func parseGlobalOptions(args []string) (globalOptions, []string, error) {
+	// Inline-value insertion must not alter the caller's argument vector when it has spare capacity.
+	args = slices.Clip(args)
 	var opts globalOptions
 	rest := make([]string, 0, len(args))
 	for i := 0; i < len(args); i++ {
@@ -676,7 +696,12 @@ func parseGlobalOptions(args []string) (globalOptions, []string, error) {
 			if i >= len(args) {
 				return opts, nil, diagnostic.New("error.requires_value", arg)
 			}
-			opts.Columns = splitCSV(args[i])
+			// Commas can also occur in a localized label. Split nonempty lists
+			// once the command's columns are known.
+			opts.Columns = nil
+			if strings.ContainsFunc(args[i], func(r rune) bool { return r != ',' && !unicode.IsSpace(r) }) {
+				opts.Columns = []string{args[i]}
+			}
 		case "--no-header", "-H":
 			opts.NoHeader = true
 		case "--debug", "-d":
@@ -847,8 +872,8 @@ func loadConfigBytes(injected []byte, path string) ([]byte, error) {
 	if path == "" {
 		return nil, nil
 	}
-	data, err := os.ReadFile(path)
-	if os.IsNotExist(err) {
+	data, err := readLockedConfig(path)
+	if errors.Is(err, os.ErrNotExist) {
 		return nil, nil
 	}
 	if err != nil {
@@ -901,17 +926,4 @@ func defaultPluginRoot() string {
 		}
 		dir = parent
 	}
-}
-
-// splitCSV parses comma-separated CLI values while dropping empty items.
-func splitCSV(value string) []string {
-	parts := strings.Split(value, ",")
-	result := make([]string, 0, len(parts))
-	for _, part := range parts {
-		part = strings.TrimSpace(part)
-		if part != "" {
-			result = append(result, part)
-		}
-	}
-	return result
 }

@@ -9,8 +9,34 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
 )
+
+// TestBundleStorefrontNames verifies the legacy name fallback and discovery across partial translations.
+func TestBundleStorefrontNames(t *testing.T) {
+	bundle := plugin.Bundle{Manifest: plugin.Manifest{Name: "demo", Channel: "stable", Quality: "reviewed"}, I18N: map[string]map[string]string{}}
+	for _, test := range []struct{ language, name string }{{"", "demo"}, {"zh-CN", "示例服务"}, {"en-GB", "Colour Example"}, {"en-US", "Color Example"}} {
+		if test.language != "" {
+			bundle.I18N[test.language] = map[string]string{"name": test.name}
+		}
+		artifact := ArtifactFromBundle(bundle)
+		if got := artifact.DisplayName; got != test.name {
+			t.Errorf("legacy display name = %q, want %q", got, test.name)
+		}
+		if got := artifact.LocalizedDisplayName("en-US"); got != test.name {
+			t.Errorf("en-US display name = %q, want %q", got, test.name)
+		}
+	}
+	artifact := ArtifactFromBundle(bundle)
+	index := Index{Plugins: []Artifact{artifact}}
+	for _, query := range []string{"示服", "COLOUR", "unrelated"} {
+		rows := index.Search(query, "stable")
+		if found := len(rows) == 1; found != (query != "unrelated") {
+			t.Errorf("search %q returned %v", query, rows)
+		}
+	}
+}
 
 func TestFindArtifactDefaultsToStableReviewedOrCurated(t *testing.T) {
 	idx, err := LoadIndex([]byte(`{

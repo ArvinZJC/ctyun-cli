@@ -5,7 +5,10 @@
 
 package config
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestResolveCredentialsUsesOfficialEnvNames(t *testing.T) {
 	env := map[string]string{
@@ -415,5 +418,23 @@ func TestLoadConfigInitializesMissingProfiles(t *testing.T) {
 	}
 	if _, ok := cfg.ActiveProfile(); ok {
 		t.Fatal("ActiveProfile returned true without profiles")
+	}
+}
+
+// TestCredentialSpellingInProfileNames distinguishes arbitrary names from secret-bearing settings in those profiles.
+func TestCredentialSpellingInProfileNames(t *testing.T) {
+	for _, name := range []string{"ak", "sk", "access_key", "secrets-team", "secretariat"} {
+		raw := []byte(fmt.Sprintf(`{"profiles":{%q:{"region":"selected","ak":"sample","sk":"placeholder"}}}`, name))
+		cfg, err := Load(raw)
+		if err != nil {
+			t.Fatalf("load profile %q: %v", name, err)
+		}
+		if cfg.Profiles[name].Region != "selected" {
+			t.Errorf("profile %q: %v", name, cfg.Profiles[name])
+		}
+		_, err = Load([]byte(fmt.Sprintf(`{"profiles":{%q:{"region":"selected","nested":{"secret_key":"sample"}}}}`, name)))
+		if err == nil {
+			t.Errorf("accepted an unsupported secret field within profile %q", name)
+		}
 	}
 }

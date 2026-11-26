@@ -65,9 +65,9 @@ func runConfigCommand(stdout, stderr io.Writer, stdin io.Reader, args []string, 
 		if err := validatePositionalArguments(args[1:], nil, 0, 0); err != nil {
 			return err
 		}
-		return runConfigReset(stdout, stderr, stdin, input.Path, opts)
+		return runConfigReset(stdout, stderr, stdin, input.Raw, input.Path, opts)
 	default:
-		return commandBoundaryError(append([]string{"config"}, args...))
+		return commandBoundaryError([]string{"config", args[0]})
 	}
 }
 
@@ -98,7 +98,7 @@ func printConfigHelp(stdout io.Writer, args []string, language string) (bool, er
 			return true, printConfigSubcommandHelp(stdout, command, false, language)
 		}
 	}
-	return false, nil
+	return true, commandBoundaryError(args[:2])
 }
 
 // printConfigProfileHelp writes structured help for profile config commands.
@@ -124,7 +124,7 @@ func printConfigProfileHelp(stdout io.Writer, args []string, language string) (b
 			return true, printConfigSubcommandHelp(stdout, command, true, language)
 		}
 	}
-	return false, nil
+	return true, commandBoundaryError(args[:3])
 }
 
 // writeConfigSubcommandList writes aligned config subcommand help rows.
@@ -281,7 +281,7 @@ func runConfigSet(stdout io.Writer, raw []byte, path, profileName string, args [
 	} else if err := setGlobalConfigValue(&cfg, args[0], args[1]); err != nil {
 		return err
 	}
-	if err := writeConfigFile(path, cfg); err != nil {
+	if err := writeConfigFile(path, cfg, raw); err != nil {
 		return err
 	}
 	_, err = fmt.Fprintln(stdout, configUpdatedMessage(language, args[0]))
@@ -304,7 +304,7 @@ func runConfigUnset(stdout io.Writer, raw []byte, path, profileName string, args
 	} else if err := unsetGlobalConfigValue(&cfg, args[0]); err != nil {
 		return err
 	}
-	if err := writeConfigFile(path, cfg); err != nil {
+	if err := writeConfigFile(path, cfg, raw); err != nil {
 		return err
 	}
 	_, err = fmt.Fprintln(stdout, configUnsetMessage(language, args[0]))
@@ -334,7 +334,7 @@ func runConfigProfile(stdout, stderr io.Writer, stdin io.Reader, raw []byte, pat
 	case "reset":
 		return runConfigProfileReset(stdout, stderr, stdin, raw, path, opts, args[1:])
 	default:
-		return commandBoundaryError(append([]string{"config", group}, args...))
+		return commandBoundaryError([]string{"config", group, args[0]})
 	}
 }
 
@@ -374,7 +374,7 @@ func runConfigProfileUse(stdout io.Writer, raw []byte, path string, args []strin
 		return diagnostic.New("error.profile_not_found", args[0])
 	}
 	cfg.ActiveProfileName = args[0]
-	if err := writeConfigFile(path, cfg); err != nil {
+	if err := writeConfigFile(path, cfg, raw); err != nil {
 		return err
 	}
 	_, err = fmt.Fprintln(stdout, configActiveProfileMessage(language, args[0]))
@@ -398,7 +398,7 @@ func runConfigProfileSet(stdout io.Writer, raw []byte, path string, args []strin
 	if err := setProfileValue(&cfg, name, key, value); err != nil {
 		return err
 	}
-	if err := writeConfigFile(path, cfg); err != nil {
+	if err := writeConfigFile(path, cfg, raw); err != nil {
 		return err
 	}
 	_, err = fmt.Fprintln(stdout, configProfileUpdatedMessage(language, name, key))
@@ -417,7 +417,7 @@ func runConfigProfileUnset(stdout io.Writer, raw []byte, path string, args []str
 	if err := unsetProfileValue(&cfg, args[0], args[1]); err != nil {
 		return err
 	}
-	if err := writeConfigFile(path, cfg); err != nil {
+	if err := writeConfigFile(path, cfg, raw); err != nil {
 		return err
 	}
 	_, err = fmt.Fprintln(stdout, configProfileUnsetMessage(language, args[0], args[1]))
@@ -450,7 +450,7 @@ func runConfigProfileSetSecret(stdout io.Writer, stdin io.Reader, raw []byte, pa
 		return err
 	}
 	_ = setProfileValue(&cfg, name, secretKey, value)
-	if err := writeConfigFile(path, cfg); err != nil {
+	if err := writeConfigFile(path, cfg, raw); err != nil {
 		return err
 	}
 	_, err = fmt.Fprintln(stdout, configProfileUpdatedMessage(language, name, secretKey))
@@ -473,33 +473,45 @@ func runConfigProfileReset(stdout, stderr io.Writer, stdin io.Reader, raw []byte
 	if cfg.ActiveProfileName == args[0] {
 		cfg.ActiveProfileName = ""
 	}
-	if err := writeConfigFile(path, cfg); err != nil {
+	if err := writeConfigFile(path, cfg, raw); err != nil {
 		return err
 	}
 	_, err = fmt.Fprintln(stdout, configProfileResetMessage(opts.Language, args[0]))
 	return err
 }
 
-// runConfigReset removes the config file after backing it up.
-func runConfigReset(stdout, stderr io.Writer, stdin io.Reader, path string, opts globalOptions) error {
+// runConfigReset backs up and removes the confirmed snapshot while holding its file lock.
+func runConfigReset(stdout, stderr io.Writer, stdin io.Reader, expected []byte, path string, opts globalOptions) error {
 	if err := confirmDangerousOperation(stderr, stdin, opts, "config reset"); err != nil {
 		return err
 	}
 	if path == "" {
 		return diagnostic.New("error.config_path_unavailable")
 	}
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		_, writeErr := fmt.Fprintln(stdout, configAlreadyResetMessage(opts.Language))
-		return writeErr
-	} else if err != nil {
-		return err
-	}
-	backupPath, err := backupConfigFile(path)
-	if err != nil {
-		return err
-	}
-	err = os.Remove(path)
-	if err == nil {
+	var backupPath string
+	err := withLockedConfig(path, os.O_RDONLY, true, func(file *os.File) error {
+		if expected == nil {
+			return errConfigChanged
+		}
+		if err := checkConfigSnapshot(file, path, expected); err != nil {
+			return err
+		}
+		var err error
+		backupPath, err = backupConfigFile(path, expected)
+		if err != nil {
+			return err
+		}
+		if err := checkConfigSnapshot(file, path, expected); err != nil {
+			return err
+		}
+		return os.Remove(path)
+	})
+	if errors.Is(err, os.ErrNotExist) {
+		if expected != nil {
+			return errConfigChanged
+		}
+		_, err = fmt.Fprintln(stdout, configAlreadyResetMessage(opts.Language))
+	} else if err == nil {
 		_, err = fmt.Fprintln(stdout, configResetMessage(opts.Language, backupPath))
 	}
 	return err
@@ -513,8 +525,8 @@ func mutableConfig(raw []byte) (coreconfig.Config, error) {
 	return coreconfig.Load(raw)
 }
 
-// writeConfigFile persists config JSON with owner-only default permissions.
-func writeConfigFile(path string, cfg coreconfig.Config) error {
+// writeConfigFile publishes the first complete config or updates an existing locked file in place.
+func writeConfigFile(path string, cfg coreconfig.Config, expected []byte) error {
 	if path == "" {
 		return diagnostic.New("error.config_path_unavailable")
 	}
@@ -525,7 +537,36 @@ func writeConfigFile(path string, cfg coreconfig.Config) error {
 	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
 		return err
 	}
-	return os.WriteFile(path, data, 0o600)
+	if expected == nil {
+		return createConfigFile(path, data)
+	}
+	err = withLockedConfig(path, os.O_RDWR, true, func(file *os.File) error {
+		if err := checkConfigSnapshot(file, path, expected); err != nil {
+			return err
+		}
+		return replaceConfigContents(file, data, expected)
+	})
+	if errors.Is(err, os.ErrNotExist) {
+		return errConfigChanged
+	}
+	return err
+}
+
+// writeConfigAt is the filesystem write boundary for config replacement and recovery.
+var writeConfigAt = (*os.File).WriteAt
+
+// replaceConfigContents restores overwritten bytes when a write or final truncation fails.
+func replaceConfigContents(file *os.File, data, original []byte) error {
+	_, err := writeConfigAt(file, data, 0)
+	if err == nil && len(data) < len(original) {
+		err = file.Truncate(int64(len(data)))
+	}
+	if err == nil {
+		return nil
+	}
+	// A failed filesystem write can change the file even when WriteAt reports zero bytes.
+	_, restoreErr := writeConfigAt(file, original, 0)
+	return errors.Join(err, restoreErr, file.Truncate(int64(len(original))))
 }
 
 // validatedConfigJSON marshals config and verifies it can be loaded before
@@ -798,11 +839,7 @@ func profileSetPair(args []string) (string, string, error) {
 }
 
 // backupConfigFile copies the config file to a non-overwriting backup path.
-func backupConfigFile(path string) (string, error) {
-	data, err := os.ReadFile(path)
-	if err != nil {
-		return "", err
-	}
+func backupConfigFile(path string, data []byte) (string, error) {
 	backupPath := path + ".bak"
 	for i := 2; ; i++ {
 		file, err := os.OpenFile(backupPath, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o600)
