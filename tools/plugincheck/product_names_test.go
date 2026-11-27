@@ -19,10 +19,10 @@ import (
 )
 
 // TestProductDisplayNamesStayAligned verifies official naming policy on both
-// tracked snapshots and keeps promoted localization synchronized with README.
+// tracked snapshots and keeps promoted localization aligned with the published plugin catalogues.
 func TestProductDisplayNamesStayAligned(t *testing.T) {
-	readmeZH := readRepoText(t, "README.md")
-	readmeEN := readRepoText(t, "README-EN.md")
+	catalogueZH := readRepoText(t, "docs/zh-CN/catalogue.md")
+	catalogueEN := readRepoText(t, "docs/en/catalogue.md")
 	catalogRoot := repoPath(t, "openapi-catalogs")
 	pluginsRoot := repoPath(t, "plugins")
 	entries, err := os.ReadDir(catalogRoot)
@@ -54,8 +54,8 @@ func TestProductDisplayNamesStayAligned(t *testing.T) {
 					t.Errorf("%s plugin name = %q, baseline = %q", language, got, want)
 				}
 			}
-			assertREADMEProductName(t, readmeZH, baseline.Product.DisplayName["zh-CN"], product)
-			assertREADMEProductName(t, readmeEN, baseline.Product.DisplayName["en-US"], product)
+			assertCatalogueProductName(t, catalogueZH, baseline.Product.DisplayName["zh-CN"], product)
+			assertCatalogueProductName(t, catalogueEN, baseline.Product.DisplayName["en-US"], product)
 		})
 	}
 }
@@ -68,8 +68,12 @@ func TestProductDisplayNameReviewLifecycle(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, name := range []string{"README.md", "README-EN.md"} {
-		if err := os.WriteFile(filepath.Join(root, name), []byte(readRepoText(t, name)), 0o600); err != nil {
+	for _, name := range []string{"docs/zh-CN/catalogue.md", "docs/en/catalogue.md"} {
+		path := filepath.Join(root, name)
+		if err := os.MkdirAll(filepath.Dir(path), 0o700); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(path, []byte(readRepoText(t, name)), 0o600); err != nil {
 			t.Fatal(err)
 		}
 	}
@@ -150,21 +154,21 @@ func readRepoText(t *testing.T, name string) string {
 	return string(data)
 }
 
-// assertREADMEProductName checks one plugin-table row by its stable plugin ID.
-func assertREADMEProductName(t *testing.T, readme, displayName, product string) {
+// assertCatalogueProductName checks one plugin-table row by its stable plugin ID.
+func assertCatalogueProductName(t *testing.T, catalogue, displayName, product string) {
 	t.Helper()
-	for line := range strings.SplitSeq(readme, "\n") {
+	for line := range strings.SplitSeq(catalogue, "\n") {
 		if !strings.Contains(line, "| `"+product+"`") {
 			continue
 		}
 		columns := strings.Split(line, "|")
 		if len(columns) < 3 {
-			t.Fatalf("malformed README row for %s: %s", product, line)
+			t.Fatalf("malformed catalogue row for %s: %s", product, line)
 		}
 		if got := strings.TrimSpace(columns[1]); got != displayName {
-			t.Fatalf("README name for %s = %q, want %q", product, got, displayName)
+			t.Fatalf("catalogue name for %s = %q, want %q", product, got, displayName)
 		}
 		return
 	}
-	t.Fatalf("README row for plugin %s is missing", product)
+	t.Fatalf("catalogue row for plugin %s is missing", product)
 }

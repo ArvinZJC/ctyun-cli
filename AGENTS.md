@@ -53,7 +53,7 @@
 
 ### Localization boundaries
 
-- Before adding or changing user-facing CLI text, check the i18n support bullet in `README.md`/`README-EN.md` for the public localization scope.
+- Before adding or changing user-facing CLI text, check the language-support statement in `README.md`/`README-EN.md` for the public localization scope.
 - Use `helpText`/`helpf` only for help pages, help labels, option descriptions, and help-only hints.
 - Use `messageText`/`messagef` for runtime warnings, notices, status lines, diagnostics, and error templates.
 - Use `commonText` only for shared formatting tokens that are neither help nor runtime copy.
@@ -94,7 +94,7 @@
 
 - Add product coverage by adding/reviewing plugin metadata and tests, not by adding `case "ecs"`-style dispatch. Command paths may use simple words and `{argument}` placeholders.
 - `plugin.json` requires `stable|beta|alpha` channels, `generated|reviewed|curated` quality, CTyun version constraints, product metadata, and an HTTPS `api.endpoint_url` when live execution is supported.
-- Choose the highest truthful quality level; use the README plugin table for the public meaning of each quality value.
+- Choose the highest truthful quality level; use the bilingual plugin catalogues in `docs/{en,zh-CN}/catalogue.md` for the public meaning of each quality value.
 - Record official product-title style in each OpenAPI catalog's `product.display_name_policy`: use `descriptive` when the published title has no displayed short token, `abbreviation` with the official token when Chinese ends with that abbreviation and English expands it, and `brand` with the official token when English uses the brand itself. Do not derive a display abbreviation mechanically from the plugin ID.
 - Keep all three `product.display_name` locales consistent with that policy. Chinese abbreviation and brand titles end with the official token after a space; English abbreviation titles do not repeat or append the abbreviation.
 - In plugin and OpenAPI catalog metadata, `api.ctyun_product_id` / `product.ctyun_product_id` comes from the CTyun OpenAPI docs `sid` query parameter, while `api.source_revision` / `product.source_revision` comes from `vid` when upstream exposes it. Treat `source_revision` as weak provenance.
@@ -111,7 +111,7 @@
 - Track durable evidence (`source.json` and promoted `baseline.json`).
 - Validate promoted plugin provenance against `baseline.json`, not a potentially newer `source.json`, because source drift can intentionally await review and promotion.
 - Leave reproducible local review outputs (`draft/`, `changes.md`, and `review.md`) ignored and regenerate them when reviewing.
-- Keep durable API review evidence and coverage blockers in the machine-readable catalog records. Summarize shipped changes in the appropriate changelog and keep both READMEs current; do not add a standalone prose API-review report unless explicitly requested.
+- Keep durable API review evidence and coverage blockers in the machine-readable catalog records. Summarize shipped changes in the appropriate changelog and keep both language editions of the affected documentation current; do not add a standalone prose API-review report unless explicitly requested.
 - Review the runnable draft bundle and compare its API execution contract, command bindings, and manifest provenance against the tracked source before promotion. Drift reports must expose changes to request validation, safety metadata, and response presentation as well as operation paths.
 - Do not expose this pipeline as a public `ctyun` command or package OpenAPI catalog artifacts into core/plugin release outputs.
 
@@ -159,10 +159,10 @@
 
 ### Go version policy
 
-- Keep the public Go support policy and current minimum in the developer workflow in `README.md`/`README-EN.md`. Use the two release families supported by upstream Go as the default support window, normally selecting the older family's `.0` release as the minimum.
+- Keep the public Go support policy and current minimum in the development guides in `docs/{en,zh-CN}/development.md`. Use the two release families supported by upstream Go as the default support window, normally selecting the older family's `.0` release as the minimum.
 - Raise the minimum when language features, standard-library APIs, dependencies, or a required compiler/runtime fix need a newer version. Prefer maintained dependencies and supported Go releases over preserving compatibility with end-of-life Go versions.
 - Treat the `go` directive in `go.mod` as the minimum requirement. A newer local installation alone does not require changing it or adding a `toolchain` directive. Use the latest stable patched toolchain for development and release builds; add a toolchain preference only for a documented project need.
-- When reviewing Go or dependency updates, check upstream support status and dependency Go requirements, keep `go.mod`, `go.sum`, both READMEs, and the applicable changelog aligned, and state which toolchain versions were actually tested.
+- When reviewing Go or dependency updates, check upstream support status and dependency Go requirements, keep `go.mod`, `go.sum`, both development guides, and the applicable changelog aligned, and state which toolchain versions were actually tested.
 
 ### Source changes
 
@@ -173,9 +173,9 @@
 
 ### Required verification
 
-- Keep development, debug, test, coverage, plugin-lint, and line-limit commands in the developer workflow in `README.md`/`README-EN.md`; do not duplicate those command lists here.
-- After every source or test change, run the formatting, `go vet`, source-file line-limit, and coverage checks from the README workflow before handoff. Treat all four as required source-change verification steps.
-- Follow the README cache workflow for bulk verification, cross-platform builds, or a read-only shared Go cache. Remove task-owned temporary caches after the run.
+- Keep development, debug, test, coverage, plugin-lint, and line-limit commands in the development guides in `docs/{en,zh-CN}/development.md`; do not duplicate those command lists here.
+- After every source or test change, run the formatting, `go vet`, source-file line-limit, and coverage checks from the development guides before handoff. Treat all four as required source-change verification steps.
+- Follow the build-cache workflow in the development guides for bulk verification, cross-platform builds, or a read-only shared Go cache. Remove task-owned temporary caches after the run.
 - For docs-only or config-only changes, run lightweight checks such as `git diff --check` unless the change affects runtime behaviour or developer commands.
 - Require 100% statement coverage from the unfiltered Go coverage profile for the current platform. Do not add file or line exclusions or accept rounded percentages that conceal uncovered statements. Exercise meaningful success, failure, cleanup, and process-status behaviour through tests.
 - Cross-compilation checks must pass `-o` with an artifact path under a temporary directory created with `mktemp -d`, then clean that directory after the check.
@@ -185,8 +185,8 @@
 
 ### Documentation
 
-- Keep public usage, installation, auth/config/language, registry/plugin/update, fixture/offline, and contributor workflow wording in `README.md`/`README-EN.md`.
-- `README.md` is Simplified Chinese and `README-EN.md` is the English counterpart; when changing user-facing README content, keep both files semantically in sync.
+- Keep the project scope, installation commands, first query and links by audience in the two root READMEs. Maintain detailed public guidance in paired topic files under `docs/zh-CN/` and `docs/en/`. Write end-user guides for people using the released CLI. Put development-only options, internal metadata, verification commands and release procedures in the contributor guides.
+- `README.md` is Simplified Chinese and `README-EN.md` is the English counterpart; keep the README pair and each pair of topic guides semantically in sync. Use relative repository links and include a route to the online guides for readers of packaged READMEs.
 - When the user asks for detailed user, developer, or plugin-author documentation, create it under the project-root `docs/` directory unless they specify another tracked path. Do not use ignored planning folders for public docs unless explicitly asked.
 - Write prose as natural Markdown paragraphs and list items.
 - Do not hard-wrap prose at a fixed column; preserve line breaks only where Markdown structure or readability requires them, such as headings, lists, tables, block quotes, and code blocks.
@@ -194,10 +194,10 @@
 
 ### Releases and changelogs
 
-- Versioning and release publication policies are public README content. Treat `README.md`/`README-EN.md` as authoritative, and keep release tooling, core and plugin metadata, and examples aligned with them.
-- README release badges must use Shields.io dynamic JSON badges backed by the published signed indexes: `versions.<channel>` in `core-index.json` and `versions.<name>.<channel>` in the plugin `index.json`. Match each plugin badge to its table channel, use blue for `stable` and orange for `alpha`/`beta`, and link to the corresponding fixed Release page. Keep both READMEs aligned. Avoid tag-filter badges, JSONPath filters, and array positions; tag lookups are limited and Shields disables filter expressions. Generate version maps from the final merged index entries using the highest semantic version per channel, and re-sign indexes whenever their bytes change.
-- Preserve the mirror-specific physical layout documented in the READMEs: GitHub keeps the two fixed Release pages, while Gitee's fixed `plugins` Release carries only its signed index and plugin archives live on immutable version-tag Releases referenced by absolute index URLs. Treat `gitee/releases.json` as a publication manifest rather than a downloadable release asset.
-- Verify installer behaviour on its target operating system using the installer validation commands in both READMEs. A Linux container exercises the Linux Bash path. Use Windows PowerShell on a Windows host, guest, or CI runner for `install.ps1`, and a macOS host or runner for macOS-specific behaviour. Record the OS, architecture, and whether you used fixture or published archives. Report cross-builds, archive checks, and non-native shell runs separately from target-OS execution. Keep workstation-specific VM instructions local.
+- The release guides in `docs/{en,zh-CN}/releases.md` are authoritative for public versioning and publication policies. Keep release tooling, core and plugin metadata, and examples aligned with them.
+- Core release badges in the READMEs and plugin badges in the catalogues must use Shields.io dynamic JSON badges backed by the published signed indexes: `versions.<channel>` in `core-index.json` and `versions.<name>.<channel>` in the plugin `index.json`. Match each plugin badge to its table channel, use blue for `stable` and orange for `alpha`/`beta`, and link to the corresponding fixed Release page. Keep both language editions aligned. Avoid tag-filter badges, JSONPath filters, and array positions; tag lookups are limited and Shields disables filter expressions. Generate version maps from the final merged index entries using the highest semantic version per channel, and re-sign indexes whenever their bytes change.
+- Preserve the mirror-specific physical layout documented in the release guides: GitHub keeps the two fixed Release pages, while Gitee's fixed `plugins` Release carries only its signed index and plugin archives live on immutable version-tag Releases referenced by absolute index URLs. Treat `gitee/releases.json` as a publication manifest rather than a downloadable release asset.
+- Verify installer behaviour on its target operating system using the installer validation commands in the release guides. A Linux container exercises the Linux Bash path. Use Windows PowerShell on a Windows host, guest, or CI runner for `install.ps1`, and a macOS host or runner for macOS-specific behaviour. Record the OS, architecture, and whether you used fixture or published archives. Report cross-builds, archive checks, and non-native shell runs separately from target-OS execution. Keep workstation-specific VM instructions local.
 - Before preparing versions, compare each shipped bundle with its existing version tag, including new files and manifest provenance. Assign a fresh version to each changed bundle and verify that its target tag is unused. Check shipped core changes independently.
 - Maintain canonical changelogs in this repo. Use the root `CHANGELOG.md` for core `ctyun` releases, and plugin-local `plugins/<name>/CHANGELOG.md` files for independently tracked plugin release history.
 - Write all changelog headings and prose in English, including core, plugin, and archived changelogs. Preserve original-language names or quoted text only when needed to describe the change accurately.
@@ -207,8 +207,8 @@
 - Each `Unreleased` or version section must describe changes relative to the immediately preceding release of that core or plugin; do not restate cumulative capabilities or unchanged behaviour.
 - Describe version updates in changelog entries as `<old_version> → <new_version>`, naming the affected dependency, toolchain, or compatibility requirement. For successive updates before a release, use the immediately preceding release's version as the old value and the final unreleased version as the new value. Keep release headings in their existing version/date format.
 - Consolidate successive edits to the same unreleased feature into one final entry under the existing change categories. Put compatibility increases under `Changed`, avoid duplicate feature summaries, and describe only metadata features that the affected plugin actually uses. Do not describe an earlier unreleased iteration as an already released capability.
-- When core or plugin release metadata changes, update the matching changelog and public README tables/examples in the same pass.
-- For plugin manifest or command-surface changes, keep `plugins/<name>/plugin.json`, `plugins/<name>/CHANGELOG.md`, and the README/README-EN plugin table channel, quality, command count, and operation count aligned.
+- When core or plugin release metadata changes, update the matching changelog and affected public catalogue rows and documentation examples in the same pass.
+- For plugin manifest or command-surface changes, keep `plugins/<name>/plugin.json`, `plugins/<name>/CHANGELOG.md`, and the bilingual plugin catalogues’ channel, quality, command count, and operation count aligned.
 - For core version changes, keep `internal/version/version.go`, `CHANGELOG.md`, release-tool examples, and compatibility-sensitive tests aligned.
 
 ### Git-facing text
@@ -220,7 +220,7 @@
 
 ## Safety, Credentials, and Live Calls
 
-- Public CLI behaviour for auth/config/language, config commands, registry use, plugin installation, and fixture/offline modes lives in `README.md`/`README-EN.md`; consult those sections before related changes instead of copying those rules here.
+- Consult `configuration.md` for auth, profiles and language, `plugins.md` for registry and installation behaviour, and `development.md` for fixture/offline modes in the bilingual documentation directories before related changes.
 - Live verification should stay on safe retrieval paths such as `region list` or ECS list/show, using ephemeral credentials when possible.
 - Use `--offline` or `--fixture` when testing bundled fixtures.
 - `--debug` writes redacted HTTP diagnostics to stderr; preserve the existing redaction path for AK/SK, request IDs, and signatures. Generate request metadata once so redaction uses the identifiers actually sent on the wire.
