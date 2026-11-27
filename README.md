@@ -507,6 +507,28 @@ go test -timeout=30m ./tools/plugincheck
 go test ./internal/cli ./internal/plugin ./internal/output
 ```
 
+### 验证安装脚本
+
+在仓库根目录运行以下测试。可使用目标操作系统或对应的 CI 运行器，例如 GitHub Actions 的 `ubuntu-latest`、`macos-latest` 或 `windows-latest`。测试通过本地 HTTP 服务提供归档，并将文件安装到临时目录。
+
+```sh
+go test -count=1 -v -run '^(TestBashInstallerSelection|TestWindowsInstallerLiteralPaths)$' ./tools/release
+```
+
+在 macOS、Linux 或 WSL 上，确认 `TestBashInstallerSelection` 通过。该测试覆盖紧凑和缩进两种索引格式、通道选择和失败诊断。在 Windows 上，`TestWindowsInstallerLiteralPaths` 使用 Windows PowerShell 验证含空格和方括号的路径。
+
+要用已发布的 Linux 二进制文件验证当前工作区的 Bash 脚本，可在 Bash 或 Zsh 中运行以下命令。本机的 Docker 引擎需使用 Linux 容器。基于 Alpine 的 Bash 镜像使用 BusyBox 的 `awk` 解析索引，无需额外安装 JSON 解析器。容器以普通用户身份运行，只读挂载安装脚本，默认安装目录随容器一起删除。
+
+```sh
+docker run --rm --user 65534:65534 -e HOME=/tmp -v "$PWD/install.sh:/work/install.sh:ro" \
+  bash:5.2 bash -ec '
+    bash /work/install.sh
+    "$HOME/.local/bin/ctyun" --version
+    "$HOME/.local/bin/ctyun" --help'
+```
+
+核对可执行文件输出的版本与安装成功提示是否一致。要单独验证某个发布源，可在容器镜像名称前加入 `-e CTYUN_INSTALL_SOURCE=github` 或 `-e CTYUN_INSTALL_SOURCE=gitee`。要在 macOS 或 Windows 上验证已发布的安装脚本，可将 `CTYUN_INSTALL_DIR` 指向新建的临时目录，运行“安装”一节中对应平台的命令，再用该目录中的可执行文件运行 `--version` 和 `--help`。
+
 ### 维护插件目录
 
 OpenAPI 证据目录流水线是开发工具，不会暴露为用户命令，也不会进入核心或插件发布包。它从规范化 JSON 输入开始，并把上游证据保存在 `openapi-catalogs/<name>/source.json`：

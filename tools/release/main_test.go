@@ -10,6 +10,9 @@ import (
 	"crypto/ed25519"
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -267,113 +270,102 @@ func TestReleaseToolMergesExistingIndexes(t *testing.T) {
 	}
 }
 
-// TestInstallScriptPrefersStableByDefault checks installer channel selection with a local download fixture.
-func TestInstallScriptPrefersStableByDefault(t *testing.T) {
-	if runtime.GOOS != "darwin" && runtime.GOOS != "linux" {
-		t.Skipf("install.sh does not support %s", runtime.GOOS)
+// TestBashInstallerSelection exercises JSON decoding and platform/channel selection against a local release source.
+func TestBashInstallerSelection(t *testing.T) {
+	if runtime.GOOS != "darwin" && runtime.GOOS != "linux" || runtime.GOARCH != "amd64" && runtime.GOARCH != "arm64" {
+		t.Skipf("install.sh does not support %s/%s", runtime.GOOS, runtime.GOARCH)
 	}
-	if runtime.GOARCH != "amd64" && runtime.GOARCH != "arm64" {
-		t.Skipf("install.sh does not support %s", runtime.GOARCH)
+	// Expose only the bootstrap tools. Extra JSON parsers on a developer machine
+	// must not mask an undeclared installer dependency.
+	bin := t.TempDir()
+	for _, name := range strings.Fields("bash uname tr mktemp rm awk mkdir tar gzip cp chmod mv sed curl wget sha256sum shasum") {
+		if path, err := exec.LookPath(name); err == nil {
+			if err := os.Symlink(path, filepath.Join(bin, name)); err != nil {
+				t.Fatal(err)
+			}
+		}
 	}
+	t.Setenv("PATH", bin)
 	root := t.TempDir()
-	stableArchive := filepath.Join(root, "stable.tar.gz")
-	betaArchive := filepath.Join(root, "beta.tar.gz")
-	writeTestArchive(t, stableArchive, "stable")
-	writeTestArchive(t, betaArchive, "beta")
-	stableSHA, _, err := checksumAndSize(stableArchive)
-	if err != nil {
-		t.Fatal(err)
-	}
-	betaSHA, _, err := checksumAndSize(betaArchive)
-	if err != nil {
-		t.Fatal(err)
-	}
-	index := `{
-  "schema": 1,
-  "releases": [
-    {
-      "version": "0.2.0-beta.1",
-      "channel": "beta",
-      "artifacts": [
-        {
-          "os": "` + runtime.GOOS + `",
-          "arch": "` + runtime.GOARCH + `",
-          "url": "beta.tar.gz",
-          "sha256": "` + betaSHA + `"
-        }
-      ]
-    },
-    {
-      "version": "0.1.0",
-      "channel": "stable",
-      "artifacts": [
-        {
-          "os": "` + runtime.GOOS + `",
-          "arch": "` + runtime.GOARCH + `",
-          "url": "stable.tar.gz",
-          "sha256": "` + stableSHA + `"
-        }
-      ]
-    }
-  ]
-}`
-	if err := os.WriteFile(filepath.Join(root, "core-index.json"), []byte(index), 0o644); err != nil {
-		t.Fatal(err)
-	}
+	server := httptest.NewServer(http.FileServer(http.Dir(root)))
+	defer server.Close()
 
-	fakeBin := filepath.Join(t.TempDir(), "bin")
-	if err := os.MkdirAll(fakeBin, 0o755); err != nil {
+	artifact := func(channel, arch string) string {
+		path := filepath.Join(root, channel+".tar.gz")
+		writeTestArchive(t, path, channel)
+		sum, _, err := checksumAndSize(path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		return fmt.Sprintf(`{"sha256":%q,"url":%q,"arch":%q,"os":%q}`, sum, channel+".tar.gz", arch, runtime.GOOS)
+	}
+	// Object keys may appear in any order; release and artifact arrays retain their order.
+	const releaseIndex = `{"schema":1,"releases":[{"artifacts":[%s],"version":"0.2.0-beta.1","channel":"beta"},{"artifacts":[%s],"version":"0.1.0","channel":"stable"}]}`
+	beta := artifact("beta", runtime.GOARCH)
+	compact := fmt.Sprintf(releaseIndex, beta, artifact("stable", runtime.GOARCH))
+	otherPlatform := fmt.Sprintf(releaseIndex, beta, artifact("other", "other"))
+	escaped := strings.NewReplacer(
+		`"releases"`, `"rele\u0061ses"`,
+		`"stable.tar.gz"`, `"\u0073table.tar.gz?tag=a\u0026b=c"`,
+		`"schema":1`, `"metadata":{"releases":[],"note":"\uD83D\uDE80 {,} \"url\"","values":[true,null,-1.2e+3]},"schema":1`,
+	).Replace(compact)
+	unicodeURL := fmt.Sprintf(releaseIndex, beta, artifact("镜像🚀", runtime.GOARCH))
+	unicodeURL = strings.Replace(unicodeURL, "镜像🚀.tar.gz", `\u955c\u50cf\ud83d\ude80.tar.gz`, 1)
+	var pretty bytes.Buffer
+	if err := json.Indent(&pretty, []byte(compact), "", "  "); err != nil {
 		t.Fatal(err)
 	}
-	fakeCurl := `#!/bin/sh
-out=""
-url=""
-while [ "$#" -gt 0 ]; do
-  case "$1" in
-    -o) shift; out="$1" ;;
-    https://*) url="$1" ;;
-  esac
-  shift
-done
-case "$url" in
-  */core-index.json) cp "$CTYUN_TEST_ROOT/core-index.json" "$out" ;;
-  */stable.tar.gz) cp "$CTYUN_TEST_ROOT/stable.tar.gz" "$out" ;;
-  */beta.tar.gz) cp "$CTYUN_TEST_ROOT/beta.tar.gz" "$out" ;;
-  *) exit 22 ;;
-esac
-`
-	if err := os.WriteFile(filepath.Join(fakeBin, "curl"), []byte(fakeCurl), 0o755); err != nil {
-		t.Fatal(err)
-	}
-
-	scriptPath, err := projectFilePath("install.sh")
+	script, err := projectFilePath("install.sh")
 	if err != nil {
 		t.Fatal(err)
 	}
-	installDir := filepath.Join(t.TempDir(), "install")
-	// GNU checksum tools escape the printed digest when a filename contains a backslash.
-	tmpDir := filepath.Join(t.TempDir(), `temporary\path`)
-	if err := os.Mkdir(tmpDir, 0o700); err != nil {
-		t.Fatal(err)
-	}
-	cmd := exec.Command("bash", scriptPath)
-	cmd.Env = append(os.Environ(),
-		"TMPDIR="+tmpDir,
-		"CTYUN_INSTALL_BASE_URL=https://example.test/core",
-		"CTYUN_INSTALL_DIR="+installDir,
-		"CTYUN_TEST_ROOT="+root,
-		"PATH="+fakeBin+string(os.PathListSeparator)+os.Getenv("PATH"),
-	)
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		t.Fatalf("install.sh failed: %v\n%s", err, output)
-	}
-	installed, err := os.ReadFile(filepath.Join(installDir, "ctyun"))
-	if err != nil {
-		t.Fatal(err)
-	}
-	if string(installed) != "stable" {
-		t.Fatalf("installed binary = %q, want stable\n%s", installed, output)
+	for _, tc := range []struct {
+		name, index, channel, want, diagnostic string
+	}{
+		{name: "pretty", index: pretty.String(), want: "stable"},
+		{name: "compact", index: compact, want: "stable"},
+		{name: "escaped and nested", index: escaped, want: "stable"},
+		{name: "Unicode URL", index: unicodeURL, want: "镜像🚀"},
+		{name: "pinned", index: compact, channel: "beta", want: "beta"},
+		{name: "fallback", index: otherPlatform, want: "beta"},
+		{name: "unavailable", index: compact, channel: "alpha", diagnostic: "no ctyun release found"},
+		{name: "invalid JSON", index: compact + "!", diagnostic: "invalid core-index.json"},
+		{name: "truncated", index: compact[:len(compact)-2], diagnostic: "invalid core-index.json"},
+		{name: "trailing comma", index: strings.Replace(compact, "]}", ",]}", 1), diagnostic: "invalid core-index.json"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			if err := os.WriteFile(filepath.Join(root, "core-index.json"), []byte(tc.index), 0o600); err != nil {
+				t.Fatal(err)
+			}
+			// Some checksum tools escape printed filenames containing a backslash.
+			tmp := filepath.Join(t.TempDir(), `temporary\path`)
+			if err := os.Mkdir(tmp, 0o700); err != nil {
+				t.Fatal(err)
+			}
+			dest := t.TempDir()
+			t.Setenv("TMPDIR", tmp)
+			t.Setenv("CTYUN_INSTALL_BASE_URL", server.URL)
+			t.Setenv("CTYUN_INSTALL_DIR", dest)
+			t.Setenv("CTYUN_INSTALL_CHANNEL", tc.channel)
+			t.Setenv("CTYUN_INSTALL_SOURCE", "auto")
+			out, err := exec.CommandContext(t.Context(), "bash", script).CombinedOutput()
+			if tc.diagnostic != "" {
+				if err == nil || !strings.Contains(string(out), tc.diagnostic) {
+					t.Fatalf("expected %q, got %v\n%s", tc.diagnostic, err, out)
+				}
+				if _, err := os.Stat(filepath.Join(dest, "ctyun")); !os.IsNotExist(err) {
+					t.Fatalf("unexpected install target after failure: %v", err)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("install.sh: %v\n%s", err, out)
+			}
+			got, err := os.ReadFile(filepath.Join(dest, "ctyun"))
+			if err != nil || string(got) != tc.want {
+				t.Fatalf("installed %q, want %q: %v\n%s", got, tc.want, err, out)
+			}
+		})
 	}
 }
 

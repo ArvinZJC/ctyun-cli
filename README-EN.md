@@ -507,6 +507,28 @@ go test -timeout=30m ./tools/plugincheck
 go test ./internal/cli ./internal/plugin ./internal/output
 ```
 
+### Validating the installers
+
+From the repository root, run the fixture test on each target OS or on a matching CI runner (for example, `ubuntu-latest`, `macos-latest`, or `windows-latest` in GitHub Actions). The tests serve release archives over local HTTP and install into temporary directories.
+
+```sh
+go test -count=1 -v -run '^(TestBashInstallerSelection|TestWindowsInstallerLiteralPaths)$' ./tools/release
+```
+
+On macOS, Linux, or WSL, look for a pass from `TestBashInstallerSelection`. It exercises compact and indented indexes, channel selection and failure diagnostics. On Windows, `TestWindowsInstallerLiteralPaths` runs Windows PowerShell on paths containing spaces and brackets.
+
+To test the checkout’s Bash script with a published Linux binary, run this from Bash or Zsh with a local Docker Engine configured for Linux containers. The Alpine-based Bash image exercises BusyBox `awk` without a separate JSON parser. The container runs as an unprivileged user and mounts the script read-only. Its default installation directory is removed with the container.
+
+```sh
+docker run --rm --user 65534:65534 -e HOME=/tmp -v "$PWD/install.sh:/work/install.sh:ro" \
+  bash:5.2 bash -ec '
+    bash /work/install.sh
+    "$HOME/.local/bin/ctyun" --version
+    "$HOME/.local/bin/ctyun" --help'
+```
+
+Compare the installed version with the installer’s success message. To test a specific mirror, add `-e CTYUN_INSTALL_SOURCE=github` or `-e CTYUN_INSTALL_SOURCE=gitee` before the image name. For a published-release check on macOS or Windows, use the corresponding **Installation** command with `CTYUN_INSTALL_DIR` set to a fresh temporary directory, then run that directory’s executable with `--version` and `--help`.
+
 ### Maintaining plugin catalogs
 
 The OpenAPI catalog pipeline is a developer tool. It is not exposed as a user command and is not included in core or plugin release artifacts. It starts from normalized JSON input and stores upstream evidence in `openapi-catalogs/<name>/source.json`:
