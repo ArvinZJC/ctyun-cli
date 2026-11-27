@@ -89,14 +89,20 @@ func TestRepositoryDiscovery(t *testing.T) {
 }
 
 // TestRunGoUsesWorkspaceAndCache exercises the real child process, checking
-// repository selection, writable-cache defaults, overrides, and failure output.
+// repository selection, Go configuration, environment overrides, and failure output.
 func TestRunGoUsesWorkspaceAndCache(t *testing.T) {
 	root := coverageWorkspace(t)
+	configuredCache := t.TempDir()
+	goConfig := filepath.Join(t.TempDir(), "goenv")
+	if err := os.WriteFile(goConfig, []byte("GOCACHE="+configuredCache+"\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	t.Setenv("GOENV", goConfig)
 	t.Setenv("GOCACHE", "")
 	if err := os.Unsetenv("GOCACHE"); err != nil {
 		t.Fatal(err)
 	}
-	for index, cache := range []string{filepath.Join(root, ".cache", "go-build"), t.TempDir()} {
+	for index, cache := range []string{configuredCache, t.TempDir()} {
 		if index > 0 {
 			if err := os.Setenv("GOCACHE", cache); err != nil {
 				t.Fatal(err)

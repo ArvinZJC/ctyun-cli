@@ -83,6 +83,7 @@ func TestStagedReleaseKeepsEachPlatformsNewestBuild(t *testing.T) {
 		return os.WriteFile(opts.Output, []byte(opts.Version), 0o755)
 	})()
 	key, output := releaseTestKey(), t.TempDir()
+	releaseTestFile(t, filepath.Join(output, "ctyun_0.0.1_linux_arm64.tar.gz"), "unrelated local archive")
 	publish := func(version, bundleVersion string, targets []string, want map[string]string, latestCore, latestBundle string, wantReleases int) {
 		t.Helper()
 		manifest := fmt.Sprintf(`{"name":"demo","version":%q,"channel":"stable","quality":"reviewed","requires":{"ctyun":">=0.3.1 <1.0.0"},"api":{"product":"demo","ctyun_product_id":1}}`, bundleVersion)
@@ -100,9 +101,26 @@ func TestStagedReleaseKeepsEachPlatformsNewestBuild(t *testing.T) {
 			t.Fatal(err)
 		}
 		assertPublishedVersion(t, raw, []string{"stable"}, latestCore)
+		manifestData, err := os.ReadFile(filepath.Join(output, "gitee", "releases.json"))
+		if err != nil {
+			t.Fatal(err)
+		}
+		var mirror giteeReleaseManifest
+		if err := json.Unmarshal(manifestData, &mirror); err != nil || len(mirror.Releases) != 1 || mirror.Releases[0].Version != latestBundle {
+			t.Fatalf("Gitee upload manifest = %s, %v", manifestData, err)
+		}
+		upload := mirror.Releases[0]
+		if err := distribution.VerifySHA256(filepath.Join(output, upload.Archive), upload.SHA256); err != nil {
+			t.Fatal(err)
+		}
+		expected := map[string]bool{upload.Archive: true, "ctyun_0.0.1_linux_arm64.tar.gz": true}
 		first := make(map[string]string)
 		for _, rel := range index.Releases {
 			for _, art := range rel.Artifacts {
+				expected[art.URL] = true
+				if err := distribution.VerifySHA256(filepath.Join(output, art.URL), art.SHA256); err != nil {
+					t.Fatal(err)
+				}
 				if first[art.OS] == "" {
 					first[art.OS] = rel.Version
 				}
@@ -116,6 +134,15 @@ func TestStagedReleaseKeepsEachPlatformsNewestBuild(t *testing.T) {
 		}
 		if len(index.Releases) != wantReleases {
 			t.Fatalf("after %s, retained %d releases, want %d", version, len(index.Releases), wantReleases)
+		}
+		archives, err := filepath.Glob(filepath.Join(output, "*.tar.gz"))
+		if err != nil || len(archives) != len(expected) {
+			t.Fatalf("after %s: got %v, want %v", version, archives, expected)
+		}
+		for _, archive := range archives {
+			if !expected[filepath.Base(archive)] {
+				t.Fatalf("unexpected release archive %s", archive)
+			}
 		}
 		for _, dir := range []string{output, filepath.Join(output, "gitee")} {
 			data, err := os.ReadFile(filepath.Join(dir, "index.json"))

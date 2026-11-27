@@ -455,10 +455,15 @@ The minimum Go version for development and builds is 1.26.0.
 
 The project follows the [upstream Go support window](https://go.dev/doc/devel/release#policy) by default, supporting the two latest Go release families and normally using the older family's `.0` release as the minimum. Language features, standard-library APIs, dependencies, or necessary compiler/runtime fixes may require a higher minimum; outdated dependencies should not be retained indefinitely to support end-of-life Go versions. The `go` directive in `go.mod` records the minimum requirement; development and release builds use the latest patch of the latest stable Go release. A local toolchain upgrade alone does not require raising the minimum or adding a `toolchain` directive.
 
-If the default Go build cache is not writable, for example in a sandbox, use a repo-local cache first:
+Use Go’s shared build and module caches for routine development. The coverage tool honours the same cache settings as other Go commands. For multi-platform releases, repeated instrumented builds, or a read-only shared build cache, use a temporary build cache for the batch. The following example removes it when the subshell exits:
 
 ```sh
-export GOCACHE="$PWD/.cache/go-build"
+(
+  build_cache=$(mktemp -d) || exit 1
+  trap 'rm -rf "$build_cache"' EXIT
+  export GOCACHE="$build_cache"
+  go run ./tools/coverage
+)
 ```
 
 Positional argument placeholders use braces, such as `{instance_id}`; option values and developer shorthand such as `<name>` and `<plugin-command>` use angle brackets. Replace placeholders with actual values, commands, or paths before running the examples.
@@ -631,7 +636,7 @@ The release packaging tool writes core binary archives, `core-index.json`, `core
 - When reusing an output directory, the packager advances each core operating system and architecture pair independently within its channel. A partial release keeps the previous build available for each omitted platform until its replacement is published. The signed core index lists releases in descending SemVer order so installers select the newest available build for their platform. When two versions differ only in build metadata, the newly published build takes precedence for the platforms it supplies.
 - Rebuilding an indexed core or plugin version refreshes that entry. A previously unindexed older core version can supply a platform that has no newer build. Packaging an older plugin version preserves the newer version advertised for that plugin and channel. Other channels keep their own entries.
 - Each core version and each version of a given plugin belongs to one channel. The packager rejects a merged index that assigns the same version tag to multiple channels.
-- Reuse an output directory containing the current published indexes and plugin archives. When a plugin's archive contents are unchanged, packaging retains its existing compressed bytes and checksum across Go toolchain updates.
+- Use `--out dist` for persistent local release builds. Reuse the current published indexes and plugin archives there so unchanged plugins retain their original compressed bytes and checksums across Go toolchain updates. The packager verifies the new core, GitHub plugin and Gitee plugin indexes, then removes superseded local archives whose names and SHA-256 checksums match the previous signed indexes. It keeps the archives needed for every indexed platform and channel. Finish uploading a release to both hosts before reusing its output directory for the next release.
 - After updating fixed release assets, keep archives referenced by the current signed indexes, index signatures, and core installation scripts, and remove old archives that are no longer referenced; prerelease channel archives should stay when the index still advertises them.
 
 The plugin index and archives at the output root are for GitHub. Use `gitee/index.json` and `gitee/index.sig` to replace the same-named files on Gitee's fixed `plugins` Release. `gitee/releases.json` is a publication manifest, not a user download: it records each archive's plugin, version, channel, target tag, checksum, and expected download URL. Publish every listed immutable Gitee version Release and archive before replacing the fixed `plugins` index.

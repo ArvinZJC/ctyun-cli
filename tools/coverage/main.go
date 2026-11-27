@@ -77,27 +77,11 @@ func repoRoot() (string, error) {
 	}
 }
 
-// runGo executes a go command from the repository root.
+// runGo executes a Go command from the repository root with the caller’s cache settings.
 func runGo(root string, stdout, stderr io.Writer, args ...string) error {
 	cmd := exec.Command("go", args...)
 	cmd.Dir = root
 	cmd.Stdout = stdout
 	cmd.Stderr = stderr
-	cmd.Env = goEnv(root)
 	return cmd.Run()
-}
-
-// goEnv ensures Go commands have a writable repository-local build cache.
-func goEnv(root string) []string {
-	env := os.Environ()
-	hasGoCache := false
-	for _, item := range env {
-		if strings.HasPrefix(item, "GOCACHE=") {
-			hasGoCache = true
-		}
-	}
-	if !hasGoCache {
-		env = append(env, "GOCACHE="+filepath.Join(root, ".cache", "go-build"))
-	}
-	return env
 }

@@ -108,7 +108,7 @@ func TestPublicationRollsBackFiles(t *testing.T) {
 				}
 				return os.Rename(from, to)
 			}
-			err := publishReleaseFiles(stage, output)
+			err := publishReleaseFiles(stage, output, archiveRetention{})
 			if err == nil || fail != "directory" && !errors.Is(err, io.ErrClosedPipe) {
 				t.Fatalf("unexpected publication result: %v", err)
 			}
@@ -148,10 +148,10 @@ func TestPublicationRollsBackFiles(t *testing.T) {
 // TestPublicationStorageFailures checks failures creating staging, reading files or traversing a destination.
 func TestPublicationStorageFailures(t *testing.T) {
 	missing := filepath.Join(t.TempDir(), "missing")
-	if err := publishReleaseFiles(t.TempDir(), missing); err == nil {
+	if err := publishReleaseFiles(t.TempDir(), missing, archiveRetention{}); err == nil {
 		t.Fatal("created backups without output directory")
 	}
-	if err := publishReleaseFiles(missing, t.TempDir()); err == nil {
+	if err := publishReleaseFiles(missing, t.TempDir(), archiveRetention{}); err == nil {
 		t.Fatal("published missing stage")
 	}
 	t.Run("staging", func(t *testing.T) {
@@ -182,7 +182,7 @@ func TestPublicationStorageFailures(t *testing.T) {
 			}
 			return nil
 		}
-		if err := publishReleaseFiles(stage, output); err == nil {
+		if err := publishReleaseFiles(stage, output, archiveRetention{}); err == nil {
 			t.Fatal("ignored replaced destination directory")
 		}
 	})

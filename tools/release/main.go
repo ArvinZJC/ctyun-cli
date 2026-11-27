@@ -226,7 +226,12 @@ func writeRelease(opts releaseOptions, privateKey ed25519.PrivateKey) (err error
 		if err := writeReleaseMetadata(opts, privateKey, output, index); err != nil {
 			return err
 		}
-		return publishReleaseFiles(stage, output)
+		publicKey := base64.StdEncoding.EncodeToString(privateKey.Public().(ed25519.PublicKey))
+		plan, err := planArchiveRetention(stage, output, publicKey)
+		if err != nil {
+			return err
+		}
+		return publishReleaseFiles(stage, output, plan)
 	})
 }
 
